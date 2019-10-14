@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../BDDL"
+		},
+		{
+			"path": "../RFP"
+		}
+	],
+	"settings": {}
+}
