@@ -5,34 +5,34 @@ The intention of this project is to create an open facility scale orchestration 
 
 ## State
 ### Functionality
-- [] Device Definitions
-- - [] Broadcast Device Definition Language
-- [] Actions
-- - [] Mutatable Actions
-- [] Web Management
-- [] User Auth
-- [] Time Based Automation
-- [] State Based Automation
-- [] Streamdeck Integration
+- [ ] Device Definitions
+- - [ ] Broadcast Device Definition Language
+- [ ] Actions
+- - [ ] Mutatable Actions
+- [ ] Web Management
+- [ ] User Auth
+- [ ] Time Based Automation
+- [ ] State Based Automation
+- [ ] Streamdeck Integration
 
 ### Software Control
-- [] HTTP
-- [] TCP
-- [] UDP
-- [] OSC
-- [] Artnet
-- [] MIDI
-- [] RossTalk
-- [] Ember+
-- [] RFP
+- [ ] HTTP
+- [ ] TCP
+- [ ] UDP
+- [ ] OSC
+- [ ] Artnet
+- [ ] MIDI
+- [ ] RossTalk
+- [ ] Ember+
+- [ ] RFP
 
 ### Hardware Control
-- [] Elgato Streamdeck
-- [] Blackmagic Design Router Panels
-- [] Ross Ultrix RCP
-- [] Aja Kuma Router Panels
-- [] Lawo vsmGEAR
-- [] L-S-B Panels (Mostly the same as vsmGEAR)
+- [ ] Elgato Streamdeck
+- [ ] Blackmagic Design Router Panels
+- [ ] Ross Ultrix RCP
+- [ ] Aja Kuma Router Panels
+- [ ] Lawo vsmGEAR
+- [ ] L-S-B Panels (Mostly the same as vsmGEAR)
 
 ## Ancilary Projects
 
