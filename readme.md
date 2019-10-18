@@ -9,11 +9,11 @@ The intention of this project is to create an open facility scale orchestration 
 - - [ ] Broadcast Device Definition Language
 - [ ] Actions
 - - [ ] Mutatable Actions
+- [ ] Feedbacks
 - [ ] Web Management
 - [ ] User Auth
 - [ ] Time Based Automation
 - [ ] State Based Automation
-- [ ] Streamdeck Integration
 
 ### Software Control
 - [ ] HTTP
