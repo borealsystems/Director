@@ -7,11 +7,11 @@
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
   "scripts": {
-    "dev": "DEBUG=* node . && yarn ui",
-    "ui": "cd src/ui && yarn start"
+    "dev": "DEBUG=* node ."
   },
   "dependencies": {
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "esm": "^3.2.25"
   },
   "devDependencies": {
     "eslint": "^6.5.1",
