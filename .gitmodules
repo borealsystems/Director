@@ -4,6 +4,3 @@
 [submodule "RFP"]
 	path = RFP
 	url = https://github.com/boreal-systems/RFP.git
-[submodule "mutableconf"]
-	path = src/libs/mutableconf
-	url = https://github.com/monoxane/mutableconf.git
