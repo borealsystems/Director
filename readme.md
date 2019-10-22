@@ -12,6 +12,8 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] Feedbacks
 - [ ] Web Management
 - [ ] User Auth
+- [ ] User segmentation and access control (Playout, Edit Bay, Master Control, etc)
+- [ ] External auth providers
 - [ ] Time Based Automation
 - [ ] State Based Automation
 
@@ -21,6 +23,7 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] UDP
 - [ ] OSC
 - [ ] Artnet
+- [ ] sACN
 - [ ] MIDI
 - [ ] RossTalk
 - [ ] Ember+
