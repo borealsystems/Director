@@ -1,3 +1,3 @@
-import dbload from '../libs/db'
-const debug = require('debug')('src/core')
+import dbload from '../libs/dbUtils'
+// const debug = require('debug')('src/core')
 dbload()
