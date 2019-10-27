@@ -1,6 +1,6 @@
 [submodule "BDDL"]
-	path = BDDL
+	path = RFC/BDDL
 	url = https://github.com/boreal-systems/BDDL.git
 [submodule "RFP"]
-	path = RFP
+	path = RFC/RFP
 	url = https://github.com/boreal-systems/RFP.git

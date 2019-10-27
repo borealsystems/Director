@@ -1,0 +1,2 @@
+# Breadcast Device Definition Language
+The BDDL is a JSON based configuration standard for the definition of device control points for the use in broadcast control and orchestration systems such as Boreal Director and Bitfocus Companion.

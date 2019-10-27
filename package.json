@@ -2,7 +2,7 @@
   "name": "director",
   "version": "1.0.0",
   "description": "Boreal Systems Director",
-  "main": "src/index.js",
+  "main": "./index.js",
   "repository": "https://github.com/borealsystems/director",
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
@@ -12,7 +12,11 @@
   "dependencies": {
     "debug": "^4.1.1",
     "esm": "^3.2.25",
-    "level": "^6.0.0"
+    "express": "^4.17.1",
+    "level": "^6.0.0",
+    "react": "^16.11.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "eslint": "^6.5.1",
