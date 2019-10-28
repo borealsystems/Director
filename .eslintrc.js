@@ -6,6 +6,7 @@ module.exports = {
   },
   extends: [
     'standard'
+    
   ],
   globals: {
     Atomics: 'readonly',
@@ -15,6 +16,11 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
+  plugins: [
+    'react'
+  ],
   rules: {
+    'react/jsx-uses-react': 'error', 
+    'react/jsx-uses-vars': 'error'
   }
 }
