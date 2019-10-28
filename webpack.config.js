@@ -15,7 +15,33 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        loader: 'file-loader',
+        options: {
+          name (file) {
+            if (process.env.NODE_ENV === 'development') {
+              return '[path][name].[ext]'
+            }
+
+            return '[contenthash].[ext]'
+          }
+        }
       }
+      // {
+      //   test: /\.(gif|png|jpe?g|svg)$/i,
+      //   use: [
+      //     'file-loader',
+      //     {
+      //       loader: 'image-webpack-loader',
+      //       options: {
+      //         bypassOnDebug: true, // webpack@1.x
+      //         disable: true // webpack@2.x and newer
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   },
   resolve: { extensions: ['*', '.js', '.jsx'] },
