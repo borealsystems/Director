@@ -1,15 +1,23 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
-import './App.css'
+
+import Login from './views/Login.jsx'
+import ControlPanel from './views/ControlPanel.jsx'
+
+const authState = 0
 
 class App extends Component {
   render () {
-    return (
-      <div className="App">
-        <h1> Hello, Engineers! </h1>
-      </div>
-    )
+    if (authState === 1) {
+      return (
+        <ControlPanel />
+      )
+    } else {
+      return (
+        <Login />
+      )
+    }
   }
 }
 

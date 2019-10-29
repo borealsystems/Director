@@ -1,7 +1,7 @@
 import db from './db'
 import system from './system'
 const { version, name } = require('../../package.json')
-const debug = require('debug')('src/libs/dbUtils')
+const debug = require('debug')('BorealDirector:src/libs/dbUtils')
 
 const dbload = () => {
   debug('Loading DB')

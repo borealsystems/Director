@@ -1,6 +1,6 @@
 const level = require('level')
 const path = require('path')
-const debug = require('debug')('src/libs/db')
+const debug = require('debug')('BorealDirector:src/libs/db')
 const fs = require('fs')
 
 const osConfigDir = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME + '/.config')

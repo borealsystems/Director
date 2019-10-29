@@ -7,19 +7,26 @@
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
   "scripts": {
-    "dev": "DEBUG=* node .",
-    "webpack-dev": "webpack-dev-server --mode development",
+    "dev": "DEBUG=BorealDirector:* node .",
+    "wp-dev": "webpack-dev-server --mode development",
     "webpack": "rm -rf ui/dist/* && webpack --mode production"
   },
   "dependencies": {
+    "autoprefixer": "^9.7.0",
     "debug": "^4.1.1",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.8",
     "level": "^6.0.0",
+    "lodash": "^4.17.15",
+    "path": "^0.12.7",
+    "postcss-loader": "^3.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-hot-loader": "^4.12.15",
-    "style-loader": "^1.0.0"
+    "style-loader": "^1.0.0",
+    "tailwindcss": "^1.1.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",

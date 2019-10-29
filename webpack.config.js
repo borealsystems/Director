@@ -14,10 +14,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          'style-loader', {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [
+                require('tailwindcss'),
+                require('autoprefixer')
+              ]
+            }
+          }
+        ]
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         loader: 'file-loader',
         options: {
           name (file) {
@@ -29,19 +40,6 @@ module.exports = {
           }
         }
       }
-      // {
-      //   test: /\.(gif|png|jpe?g|svg)$/i,
-      //   use: [
-      //     'file-loader',
-      //     {
-      //       loader: 'image-webpack-loader',
-      //       options: {
-      //         bypassOnDebug: true, // webpack@1.x
-      //         disable: true // webpack@2.x and newer
-      //       }
-      //     }
-      //   ]
-      // }
     ]
   },
   resolve: { extensions: ['*', '.js', '.jsx'] },
@@ -56,5 +54,9 @@ module.exports = {
     publicPath: 'http://localhost:3000/dist/',
     hotOnly: true
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    require('tailwindcss'),
+    require('autoprefixer')
+  ]
 }
