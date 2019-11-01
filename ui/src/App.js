@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-import Login from './views/Login.jsx'
+import LoginPage from './views/LoginPage.jsx'
 import ControlPanel from './views/ControlPanel.jsx'
 
 const authState = 0
@@ -15,7 +15,7 @@ class App extends Component {
       )
     } else {
       return (
-        <Login />
+        <LoginPage />
       )
     }
   }

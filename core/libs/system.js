@@ -2,6 +2,6 @@ const EventEmitter = require('events')
 
 class EmitterClass extends EventEmitter {}
 
-const emitterCore = new EmitterClass()
+const system = new EmitterClass()
 
-module.exports = emitterCore
+export default system

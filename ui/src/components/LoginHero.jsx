@@ -6,7 +6,7 @@ import logo from '../../public/assets/logo.png'
 class Hero extends Component {
   render () {
     return (
-      <div className="block w-2/3 mx-auto">
+      <div className="block w-2/3 mx-auto px-10 py-10">
         <img src={logo} />
       </div>
     )

@@ -1,4 +1,4 @@
-const level = require('level')
+const Storage = require('node-storage')
 const path = require('path')
 const debug = require('debug')('BorealDirector:src/libs/db')
 const fs = require('fs')
@@ -10,9 +10,9 @@ if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir)
 }
 
-const dbLocation = path.join(dbDir, 'database')
+const dbLocation = (process.env.NODE_ENV === 'development' ? path.join('database.json') : path.join(dbDir, 'database.json'))
 
 debug(`DB Location: ${dbLocation}`)
-const db = level(dbLocation, { valueEncoding: 'json' })
+const db = new Storage(dbLocation)
 
 export default db
