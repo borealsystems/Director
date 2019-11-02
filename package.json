@@ -1,6 +1,6 @@
 {
   "name": "director",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Boreal Systems Director",
   "main": "./index.js",
   "repository": "https://github.com/borealsystems/director",
@@ -26,6 +26,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-hot-loader": "^4.12.15",
+    "react-tabs": "^3.0.0",
     "style-loader": "^1.0.0",
     "tailwindcss": "^1.1.3"
   },
