@@ -5,19 +5,18 @@ import { hot } from 'react-hot-loader'
 import LoginPage from './views/LoginPage.jsx'
 import ControlPanel from './views/ControlPanel.jsx'
 
-const authState = 0
-
 class App extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { isLoggedIn: 1 }
+  }
+
   render () {
-    if (authState === 1) {
-      return (
-        <ControlPanel />
-      )
-    } else {
-      return (
-        <LoginPage />
-      )
+    const isLoggedIn = this.state.isLoggedIn
+    if (isLoggedIn === 1) {
+      return <ControlPanel />
     }
+    return <LoginPage />
   }
 }
 

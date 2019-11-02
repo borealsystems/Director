@@ -11,7 +11,7 @@ class LoginForm extends Component {
           <br />
           <input className="text-input" type="password" placeholder="Password" name="psw" required />
           <br />
-          <button className="btn btn-blue mt-2" type="submit" >Login</button>
+          <button className="btn btn-blue mt-6" type="submit">Login</button>
         </form>
       </div>
     )
