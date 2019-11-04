@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-// Tabs Stuff
+// Stuff
 import logo from '../../public/assets/logo.png'
 import Clock from '../components/Clock.jsx'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
@@ -32,8 +32,8 @@ class ControlPanel extends Component {
         <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
           <nav className="bg-teal-300 shadow" role="navigation">
             <div className="container mx-auto p-4 flex flex-wrap items-center md:flex-no-wrap">
-              <div className="mr-4 md:mr-8">
-                <a href="https://github.com/boreal_systems/Director" rel="home">
+              <div className="mr-4 md:invisible lg:visible">
+                <a href="https://github.com/boreal-systems/Director" rel="home">
                   <img className="h-10" src={logo} />
                 </a>
               </div>
@@ -46,7 +46,7 @@ class ControlPanel extends Component {
                 </button>
               </div>
               <div className="w-full md:w-auto md:flex-grow md:flex md:items-center">
-                <TabList className="flex flex-col mt-4 -mx-4 pt-4 border-t md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
+                <TabList className="flex flex-col mt-4 pt-4 border-t md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
                   <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
                     <a href="#">Status</a>
                   </Tab>
@@ -65,31 +65,33 @@ class ControlPanel extends Component {
                   <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
                     <a href="#">Configuration</a>
                   </Tab>
-                  <li>
+                  <li className="sm:invisible xl:visible">
                     <Clock className={this.styleTabInactive} />
                   </li>
                 </TabList>
               </div>
             </div>
           </nav>
-          <TabPanel>
-            <Status />
-          </TabPanel>
-          <TabPanel>
-            <Actions />
-          </TabPanel>
-          <TabPanel>
-            <Variables />
-          </TabPanel>
-          <TabPanel>
-            <Automation />
-          </TabPanel>
-          <TabPanel>
-            <Devices />
-          </TabPanel>
-          <TabPanel>
-            <Configuration />
-          </TabPanel>
+          <div className="container mx-auto px-4">
+            <TabPanel>
+              <Status />
+            </TabPanel>
+            <TabPanel>
+              <Actions />
+            </TabPanel>
+            <TabPanel>
+              <Variables />
+            </TabPanel>
+            <TabPanel>
+              <Automation />
+            </TabPanel>
+            <TabPanel>
+              <Devices />
+            </TabPanel>
+            <TabPanel>
+              <Configuration />
+            </TabPanel>
+          </div>
         </Tabs>
       </div>
     )

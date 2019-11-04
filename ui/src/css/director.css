@@ -28,3 +28,20 @@
   @apply py-2; 
   @apply mt-2;
 }
+
+/* Scroll Bars */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7FAFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #A0AEC0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4A5568;
+}

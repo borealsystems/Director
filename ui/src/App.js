@@ -12,8 +12,7 @@ class App extends Component {
   }
 
   render () {
-    const isLoggedIn = this.state.isLoggedIn
-    if (isLoggedIn === 1) {
+    if (this.state.isLoggedIn === 1) {
       return <ControlPanel />
     }
     return <LoginPage />
