@@ -7,19 +7,22 @@ import logo from '../../public/assets/logo.png'
 import Clock from '../components/Clock.jsx'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
-// SUbviews
-import Status from './subviews/Status.jsx'
-import Actions from './subviews/Actions.jsx'
-import Configuration from './subviews/Configuration.jsx'
-import Variables from './subviews/Variables.jsx'
-import Devices from './subviews/Devices.jsx'
+// Subviews
+import Status from './Status.jsx'
+import Actions from './Actions.jsx'
+import Variables from './Variables.jsx'
+import Automation from './Automation.jsx'
+import Devices from './Devices.jsx'
+import Configuration from './Configuration.jsx'
 
 class ControlPanel extends Component {
   constructor (props) {
     super(props)
     this.state = { tabIndex: 0 }
-    this.styleTabInactive = 'block px-4 py-1 md:p-2 lg:px-4 text-teal-800'
-    this.styleTabActive = 'block px-4 py-1 md:p-2 lg:px-4 text-black bg-teal-200 rounded'
+
+    // Styles for tab buttons
+    this.styleTabInactive = 'block px-4 py-1 md:p-2 lg:px-4 text-black'
+    this.styleTabActive = 'block px-4 py-1 md:p-2 lg:px-4 text-black bg-teal-200 rounded-full'
   }
 
   render (state) {
@@ -30,8 +33,8 @@ class ControlPanel extends Component {
           <nav className="bg-teal-300 shadow" role="navigation">
             <div className="container mx-auto p-4 flex flex-wrap items-center md:flex-no-wrap">
               <div className="mr-4 md:mr-8">
-                <a href="#" rel="home">
-                  <img className="w-64" src={logo} />
+                <a href="https://github.com/boreal_systems/Director" rel="home">
+                  <img className="h-10" src={logo} />
                 </a>
               </div>
               <div className="ml-auto md:hidden">
@@ -54,6 +57,9 @@ class ControlPanel extends Component {
                     <a href="#">Variables</a>
                   </Tab>
                   <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
+                    <a href="#">Automation</a>
+                  </Tab>
+                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
                     <a href="#">Devices</a>
                   </Tab>
                   <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
@@ -74,6 +80,9 @@ class ControlPanel extends Component {
           </TabPanel>
           <TabPanel>
             <Variables />
+          </TabPanel>
+          <TabPanel>
+            <Automation />
           </TabPanel>
           <TabPanel>
             <Devices />
