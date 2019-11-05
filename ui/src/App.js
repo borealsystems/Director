@@ -8,14 +8,19 @@ import ControlPanel from './views/ControlPanel.jsx'
 class App extends Component {
   constructor (props) {
     super(props)
-    this.state = { isLoggedIn: 1 }
+    this.state = { isLoggedIn: 0 }
+  }
+
+  handleLogin () {
+    this.setState({ isLoggedIn: 1 })
+    console.log('Login')
   }
 
   render () {
     if (this.state.isLoggedIn === 1) {
       return <ControlPanel />
     }
-    return <LoginPage />
+    return <LoginPage handleChange={this.handleLogin}/>
   }
 }
 

@@ -1,3 +1,17 @@
+@font-face {
+  font-family: IBMPlexSansCondensed;
+  font-style: normal;
+  font-weight: 300;
+  src: url('/dist/fonts/IBMPlexSansCondensed-Regular.ttf')
+}
+
+@font-face {
+  font-family: IBMPlexSansCondensed;
+  font-style: normal;
+  font-weight: 100;
+  src: url('/dist/fonts/IBMPlexSansCondensed-ExtraLight.ttf')
+}
+
 /* Buttons */
 .btn {
   @apply font-bold; 
@@ -44,4 +58,15 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #4A5568;
+}
+
+/* Logo */
+
+.logoA {
+  font-family: IBMPlexSansCondensed;
+  font-weight: 300;
+}
+.logoB {
+  font-family: IBMPlexSansCondensed;
+  font-weight: 100;
 }

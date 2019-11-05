@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-// Stuff
-import logo from '../../public/assets/logo.png'
+// Components
+import Logo from '../components/Logo.jsx'
 import Clock from '../components/Clock.jsx'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
@@ -34,7 +34,8 @@ class ControlPanel extends Component {
             <div className="container mx-auto p-4 flex flex-wrap items-center md:flex-no-wrap">
               <div className="mr-4 md:invisible lg:visible">
                 <a href="https://github.com/boreal-systems/Director" rel="home">
-                  <img className="h-10" src={logo} />
+                  {/* <img className="h-10" src={logo} /> */}
+                  <Logo className="text-4xl ml-3"/>
                 </a>
               </div>
               <div className="ml-auto md:hidden">
