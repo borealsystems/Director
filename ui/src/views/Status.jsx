@@ -15,13 +15,13 @@ class Status extends Component {
       <div className="container py-2">
         <TwoColumn left={
           <div>
-            <span className="text-xl font-bold pb-10">System Status</span>
-            <SystemStatus status='error' message='Systems Are Experiencing Serious Errors'/>
+            <h1 className="text-xl font-bold my-1">System Status</h1>
+            <SystemStatus />
           </div>
         } right={
           <div>
             <span className="text-xl font-bold pb-4">Logs</span>
-            <div className="flex flex-col overflow-y-scroll">
+            <div style={{ height: '83vh' }} className="flex flex-col overflow-y-scroll">
               <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
               <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
               <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>

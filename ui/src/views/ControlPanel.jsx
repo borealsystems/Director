@@ -21,21 +21,20 @@ class ControlPanel extends Component {
     this.state = { tabIndex: 0 }
 
     // Styles for tab buttons
-    this.styleTabInactive = 'block px-4 py-1 md:p-2 lg:px-4 text-black'
+    this.styleTabInactive = 'block px-4 py-1 md:p-2 lg:px-4'
     this.styleTabActive = 'block px-4 py-1 md:p-2 lg:px-4 text-black bg-teal-200 rounded-full'
   }
 
   render (state) {
     return (
-      <div>
+      <div className="h-screen overflow-hidden">
         {/* <Navbar /> */}
         <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
           <nav className="bg-teal-300 shadow" role="navigation">
-            <div className="container mx-auto p-4 flex flex-wrap items-center md:flex-no-wrap">
+            <div className="p-4 flex flex-wrap items-center md:flex-no-wrap">
               <div className="mr-4 md:invisible lg:visible">
                 <a href="https://github.com/boreal-systems/Director" rel="home">
-                  {/* <img className="h-10" src={logo} /> */}
-                  <Logo className="text-4xl ml-3"/>
+                  <Logo className="text-3xl"/>
                 </a>
               </div>
               <div className="ml-auto md:hidden">
@@ -66,6 +65,9 @@ class ControlPanel extends Component {
                   <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
                     <a href="#">Configuration</a>
                   </Tab>
+                  <li>
+                    <a href="#">Logout</a>
+                  </li>
                   <li className="sm:invisible xl:visible">
                     <Clock className={this.styleTabInactive} />
                   </li>
@@ -73,7 +75,7 @@ class ControlPanel extends Component {
               </div>
             </div>
           </nav>
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 h-full">
             <TabPanel>
               <Status />
             </TabPanel>

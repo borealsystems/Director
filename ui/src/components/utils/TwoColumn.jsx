@@ -5,9 +5,9 @@ import { hot } from 'react-hot-loader'
 class TwoColumn extends Component {
   render () {
     return (
-      <div className="h-screen lg:flex my-4">
-        <div className="h-screen lg:w-1/2 overflow-y-scroll md:block md:mb-2 px-4">{this.props.left}</div>
-        <div className="h-screen lg:w-1/2 overflow-y-scroll md:block md:mt-2 px-4">{this.props.right}</div>
+      <div className="lg:flex overflow-auto my-4">
+        <div className="lg:w-1/2 md:block md:mb-2 px-4">{this.props.left}</div>
+        <div className="lg:w-1/2 md:block md:mt-2 px-4">{this.props.right}</div>
       </div>
     )
   }

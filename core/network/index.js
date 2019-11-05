@@ -1,23 +1,34 @@
 import express from 'express'
-import schema from './schema'
 import graphqlHTTP from 'express-graphql'
+var { buildSchema } = require('graphql')
+var cors = require('cors')
 
 const port = 3001
 const app = express()
 const debug = require('debug')('BorealDirector:src/core/network/network')
 
-app.use('/graphql', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Content-Type,  Authorization, Content-Length, X-Requested-With')
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200)
-  } else {
-    next()
+app.use(cors())
+
+var schema = buildSchema(`
+  type Query {
+    status: String
+    statusMessage: String
   }
-})
+`)
+
+// The root provides a resolver function for each API endpoint
+var root = {
+  status: () => {
+    return 'good'
+  },
+  statusMessage: () => {
+    return 'System Is Functioning Normally'
+  }
+}
 
 app.use('/graphql', graphqlHTTP({
-  schema,
+  schema: schema,
+  rootValue: root,
   graphiql: true
 }))
 

@@ -3,8 +3,48 @@ import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
 class SystemStatus extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { status: 'info', statusMessage: 'The system is still loading and will be functional shortly' }
+  }
+
+  componentDidUpdate () {
+    console.log(this.state)
+  }
+
+  componentDidMount () {
+    fetch('http://localhost:3001/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({ query: '{ status statusMessage }' })
+    })
+      .then(r => r.json())
+      .then(r => this.setState(r.data))
+  }
+
   render () {
-    if (this.props.status === 'good') {
+    if (this.state.status === 'info') {
+      return (
+        <div className="flex h-64 bg-teal-400 mb-2">
+          <div className="w-16 bg-teal-500">
+            <div className="p-4">
+              <svg className="h-8 w-8 text-white fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M437.019 74.981C388.667 26.629 324.38 0 256 0S123.333 26.63 74.981 74.981 0 187.62 0 256s26.629 132.667 74.981 181.019C123.332 485.371 187.62 512 256 512s132.667-26.629 181.019-74.981C485.371 388.667 512 324.38 512 256s-26.629-132.668-74.981-181.019zM256 470.636C137.65 470.636 41.364 374.35 41.364 256S137.65 41.364 256 41.364 470.636 137.65 470.636 256 374.35 470.636 256 470.636z"/><path d="M256 235.318c-11.422 0-20.682 9.26-20.682 20.682v94.127c0 11.423 9.26 20.682 20.682 20.682 11.423 0 20.682-9.259 20.682-20.682V256c0-11.422-9.259-20.682-20.682-20.682zM270.625 147.248A20.826 20.826 0 0 0 256 141.19a20.826 20.826 0 0 0-14.625 6.058 20.824 20.824 0 0 0-6.058 14.625 20.826 20.826 0 0 0 6.058 14.625A20.83 20.83 0 0 0 256 182.556a20.826 20.826 0 0 0 14.625-6.058 20.826 20.826 0 0 0 6.058-14.625 20.839 20.839 0 0 0-6.058-14.625z"/></svg>
+            </div>
+          </div>
+          <div className="w-auto text-grey-darker items-center p-4">
+            <span className="text-md font-bold pb-4">
+              {this.state.statusSubject || 'Info'}
+            </span>
+            <p className="leading-tight">
+              {this.state.statusMessage}
+            </p>
+          </div>
+        </div>
+      )
+    } else if (this.state.status === 'good') {
       return (
         <div className="flex h-64 bg-green-400 mb-2">
           <div className="w-16 bg-green-500">
@@ -14,15 +54,15 @@ class SystemStatus extends Component {
           </div>
           <div className="w-auto text-grey-darker items-center p-4">
             <span className="text-md font-bold pb-4">
-              {this.props.subject || 'Success'}
+              {this.state.statusSubject || 'Normal Operation'}
             </span>
             <p className="leading-tight">
-              {this.props.message}
+              {this.state.statusMessage}
             </p>
           </div>
         </div>
       )
-    } else if (this.props.status === 'warn') {
+    } else if (this.state.status === 'warn') {
       return (
         <div className="flex h-64 bg-yellow-400 mb-2">
           <div className="w-16 bg-yellow-500">
@@ -32,15 +72,15 @@ class SystemStatus extends Component {
           </div>
           <div className="w-auto text-grey-darker items-center p-4">
             <span className="text-md font-bold pb-4">
-              {this.props.subject || 'Warning'}
+              {this.state.statusSubject || 'Warning'}
             </span>
             <p className="leading-tight">
-              {this.props.message}
+              {this.state.statusMessage}
             </p>
           </div>
         </div>
       )
-    } else if (this.props.status === 'error') {
+    } else if (this.state.status === 'error') {
       return (
         <div className="flex h-64 bg-red-400 mb-2">
           <div className="w-16 bg-red-500">
@@ -50,10 +90,10 @@ class SystemStatus extends Component {
           </div>
           <div className="w-auto text-black opacity-75 items-center p-4">
             <span className="text-md font-bold pb-4">
-              {this.props.subject || 'Error'}
+              {this.state.statusSubject || 'Issues'}
             </span>
             <p className="leading-tight">
-              {this.props.message}
+              {this.state.statusMessage}
             </p>
           </div>
         </div>
