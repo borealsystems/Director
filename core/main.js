@@ -1,7 +1,9 @@
-import dbload from './libs/dbUtils'
-import './network'
+import path from 'path'
 import system from './libs/system'
 import webpackConfigurationObject from '../webpack.config.js'
+import definitionManager from './libs/definitionManager'
+import dbload from './libs/dbUtils'
+import './network'
 
 const debug = require('debug')('BorealDirector:core/main')
 
@@ -24,5 +26,11 @@ if (process.env.NODE_ENV === 'development') {
 // const debug = require('debug')('src/core')
 dbload()
 system.on('db', (stream) => {
-  console.log(stream)
+  debug(stream)
+})
+
+definitionManager.load(path.resolve('RFC/BDDL/Definitions'))
+
+system.on('definitionLoad', (stream) => {
+  debug(stream)
 })
