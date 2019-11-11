@@ -1,12 +1,21 @@
-const { gql } = require('apollo-server')
+import {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLString
+} from 'graphql'
 
-const typeDefs = gql`
-  type Query {
-    launches: [Launch]!
-    launch(id: ID!): Launch
-    # Queries for the current user
-    me: User
-  } 
-`
+import definitions from '../libs/sharedVars'
 
-module.exports = typeDefs
+export default new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'definitionList',
+    fields: {
+      definitionList: {
+        type: GraphQLString,
+        resolve: () => {
+          return JSON.stringify(definitions.arr)
+        }
+      }
+    }
+  })
+})

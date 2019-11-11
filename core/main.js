@@ -29,7 +29,7 @@ system.on('db', (stream) => {
   debug(stream)
 })
 
-definitionManager.load(path.resolve('RFC/BDDL/Definitions'))
+definitionManager.load(path.resolve('DefinitionLibrary'))
 
 system.on('definitionLoad', (stream) => {
   debug(stream)
