@@ -4,3 +4,6 @@
 [submodule "RFC/RFP"]
 	path = RFC/RFP
 	url = https://github.com/borealsystems/RFP.git
+[submodule "DefinitionLibrary"]
+	path = DefinitionLibrary
+	url = https://github.com/borealsystems/DefinitionLibrary.git
