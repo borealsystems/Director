@@ -20,11 +20,5 @@ export default new GraphQLSchema({
         resolve: () => { return 'System Operating As Intended' }
       }
     }
-  }),
-  status: new GraphQLObjectType({
-    name: 'definitionList',
-    fields: {
-
-    }
   })
 })
