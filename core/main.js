@@ -23,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
     debug('Starting server on http://localhost:3000')
   })
 }
+
 // const debug = require('debug')('src/core')
 dbload()
 system.on('db', (stream) => {

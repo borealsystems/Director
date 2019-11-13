@@ -5,44 +5,40 @@ import { hot } from 'react-hot-loader'
 // Components
 import Alert from '../components/Alert.jsx'
 import SystemStatus from '../components/SystemStatus.jsx'
-import TwoColumn from '../components/utils/TwoColumn.jsx'
 
 const uuidv4 = require('uuid/v4')
 
 class Status extends Component {
   render () {
     return (
-      <div className="container py-2">
-        <TwoColumn left={
-          <div>
-            <h1 className="text-xl font-bold my-1">System Status</h1>
-            <SystemStatus />
+      <div className="">
+        <div className='block'>
+          <h1 className="text-xl font-bold my-1">System Status</h1>
+          <SystemStatus />
+        </div>
+        <div className='block'>
+          <span className="text-xl font-bold pb-4">Logs</span>
+          <div style={{ height: '60%' }}className="flex flex-col overflow-y-scroll">
+            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
+            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
+            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
+            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
+            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
+            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
+            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
+            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
+            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
+            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
+            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
+            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
+            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
+            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
+            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
+            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
+            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
+            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
           </div>
-        } right={
-          <div>
-            <span className="text-xl font-bold pb-4">Logs</span>
-            <div style={{ height: '83vh' }} className="flex flex-col overflow-y-scroll">
-              <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-              <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-              <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-              <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-              <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-              <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
-              <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-              <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-              <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-              <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-              <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-              <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
-              <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-              <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-              <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-              <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-              <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-              <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
-            </div>
-          </div>
-        } />
+        </div>
       </div>
     )
   }

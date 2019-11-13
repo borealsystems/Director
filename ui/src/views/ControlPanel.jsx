@@ -2,10 +2,16 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink
+} from 'react-router-dom'
+
 // Components
 import Logo from '../components/Logo.jsx'
 import Clock from '../components/Clock.jsx'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 // Subviews
 import Status from './Status.jsx'
@@ -21,82 +27,67 @@ class ControlPanel extends Component {
     this.state = { tabIndex: 0 }
 
     // Styles for tab buttons
-    this.styleTabInactive = 'block px-4 py-1 md:p-2 lg:px-4'
-    this.styleTabActive = 'block px-4 py-1 md:p-2 lg:px-4 text-black bg-teal-200 rounded-full'
+    this.styleTabInactive = 'block w-56 py-1 pl-5 object-right'
+    this.styleTabActive = this.styleTabInactive + ' ' + 'bg-purple-800'
   }
 
   render (state) {
     return (
-      <div className="h-screen overflow-hidden">
-        {/* <Navbar /> */}
-        <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
-          <nav className="bg-teal-300 shadow" role="navigation">
-            <div className="p-4 flex flex-wrap items-center md:flex-no-wrap">
-              <div className="mr-4 md:invisible lg:visible">
-                <a href="https://github.com/boreal-systems/Director" rel="home">
-                  <Logo className="text-3xl"/>
-                </a>
-              </div>
-              <div className="ml-auto md:hidden">
-                <button className="flex items-center px-3 py-2 border rounded" type="button">
-                  <svg className="h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <title>Menu</title>
-                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="w-full md:w-auto md:flex-grow md:flex md:items-center">
-                <TabList className="flex flex-col mt-4 pt-4 border-t md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Status</a>
-                  </Tab>
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Actions</a>
-                  </Tab>
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Variables</a>
-                  </Tab>
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Automation</a>
-                  </Tab>
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Devices</a>
-                  </Tab>
-                  <Tab selectedClassName={this.styleTabActive} className={this.styleTabInactive}>
-                    <a href="#">Configuration</a>
-                  </Tab>
-                  <li>
-                    <a href="#">Logout</a>
-                  </li>
-                  <li className="sm:invisible xl:visible">
-                    <Clock className={this.styleTabInactive} />
-                  </li>
-                </TabList>
-              </div>
-            </div>
-          </nav>
-          <div className="container mx-auto px-4 h-full">
-            <TabPanel>
-              <Status />
-            </TabPanel>
-            <TabPanel>
-              <Actions />
-            </TabPanel>
-            <TabPanel>
-              <Variables />
-            </TabPanel>
-            <TabPanel>
-              <Automation />
-            </TabPanel>
-            <TabPanel>
-              <Devices />
-            </TabPanel>
-            <TabPanel>
-              <Configuration />
-            </TabPanel>
+      <Router>
+        <div className="container flex h-screen min-w-full">
+          <div className="flex-none w-56 text-white text-lg font-thin bg-indigo-900">
+            <NavLink to="/"><Logo className="text-center text-2xl py-3" /></NavLink>
+            <div className="h-px my-2 bg-gray-500"></div>
+            <span className={this.styleTabInactive + ' text-sm text-gray-500 uppercase'}>Manage</span>
+            <NavLink to="/Status" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Status</NavLink>
+            <NavLink to="/Actions" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Actions</NavLink>
+            <NavLink to="/Variables" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Variables</NavLink>
+            <NavLink to="/Automation" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Automation</NavLink>
+            <NavLink to="/Devices" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Devices</NavLink>
+            <div className="h-px my-2 bg-gray-500"></div>
+            <span className={this.styleTabInactive + ' text-sm text-gray-500 uppercase'}>Configuration</span>
+            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Settings</NavLink>
+            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Users</NavLink>
+            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Partitions</NavLink>
+            <span className={this.styleTabInactive + ' absolute bottom-0 mb-3 font-normal'}>
+              <Clock />
+            </span>
           </div>
-        </Tabs>
-      </div>
+
+          {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+          <div className="flex-1 h-screen overflow-y-scroll">
+            <div className="container mx-auto py-2">
+              <Switch>
+                <Route path="/Status">
+                  <Status />
+                </Route>
+                <Route path="/Variables">
+                  <Variables />
+                </Route>
+                <Route path="/Actions">
+                  <Actions />
+                </Route>
+                <Route path="/Variables">
+                  <Variables />
+                </Route>
+                <Route path="/Automation">
+                  <Automation />
+                </Route>
+                <Route path="/Devices">
+                  <Devices />
+                </Route>
+                <Route path="/Configuration">
+                  <Configuration />
+                </Route>
+                <Route path="/">
+                  <span>Home</span>
+                </Route>
+              </Switch>
+            </div>
+          </div>
+        </div>
+      </Router>
     )
   }
 }

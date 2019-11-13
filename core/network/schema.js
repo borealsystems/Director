@@ -1,5 +1,5 @@
 import { GraphQLJSONObject } from 'graphql-type-json'
-import { GraphQLSchema, GraphQLObjectType, GraphQLString } from 'graphql'
+import { GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLString } from 'graphql'
 
 import { definitions } from '../libs/sharedVars'
 
@@ -7,15 +7,19 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'query',
     fields: {
-      definitionList: {
-        type: GraphQLJSONObject,
-        resolve: () => { return definitions[0] }
+      definitions: { // Device Definitions
+        type: new GraphQLList(GraphQLJSONObject),
+        resolve: () => { return definitions }
       },
-      status: {
+      definitionNames: { // Device Definitions
+        type: new GraphQLList(GraphQLString),
+        resolve: () => { return definitions.map((key, index) => { return definitions[index].name }) }
+      },
+      status: { // Status Slug
         type: GraphQLString,
         resolve: () => { return 'good' }
       },
-      statusMessage: {
+      statusMessage: { // Status Message
         type: GraphQLString,
         resolve: () => { return 'System Operating As Intended' }
       }

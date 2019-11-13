@@ -15,7 +15,7 @@ app.use('/graphql', graphqlHTTP({
   graphiql: dev
 }))
 
-app.use('/', (req, res) => {
+app.use('/*', (req, res) => {
   res.json('Go to /graphql to test your queries and mutations!')
 })
 
