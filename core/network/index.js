@@ -1,6 +1,7 @@
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import schema from './schema'
+import path from 'path'
 const cors = require('cors')
 
 const debug = require('debug')('BorealDirector:core/libs/network')
@@ -15,8 +16,8 @@ app.use('/graphql', graphqlHTTP({
   graphiql: dev
 }))
 
-app.use('/*', (req, res) => {
-  res.json('Go to /graphql to test your queries and mutations!')
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/ui/dist/index.html'))
 })
 
 const server = app.listen(3001, () => {

@@ -9,7 +9,6 @@ const definitionManager = () => {}
 definitionManager.load = (dir) => {
   fs.readdir(dir)
     .then((listing) => {
-      debug(listing)
       listing.forEach((definitionName, obj) => {
         if (RegExp(/\.(json)/g).test(definitionName)) {
           debug(`Loading Definition: ${definitionName.replace(/\.[^/.]+$/, '')}`)

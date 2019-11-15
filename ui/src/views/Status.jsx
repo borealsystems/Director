@@ -6,37 +6,24 @@ import { hot } from 'react-hot-loader'
 import Alert from '../components/Alert.jsx'
 import SystemStatus from '../components/SystemStatus.jsx'
 
-const uuidv4 = require('uuid/v4')
-
 class Status extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { logs: [{ type: 'info', subject: 'System Initialisation', message: 'The system is loading' }] }
+  }
+
   render () {
     return (
-      <div className="">
-        <div className='block'>
+      <div>
+        <div className='block mt-10'>
           <h1 className="text-xl font-bold my-1">System Status</h1>
           <SystemStatus />
         </div>
+        <br /><br />
         <div className='block'>
           <span className="text-xl font-bold pb-4">Logs</span>
           <div style={{ height: '60%' }}className="flex flex-col overflow-y-scroll">
-            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
-            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
-            <Alert type='error' subject='Issues' message='Systems Are Experiencing Serious Errors'/>
-            <Alert type='warn' message='Device (Streamdeck 1) Disconnected'/>
-            <Alert type='success' subject='Device Definitions Reloaded' message='Device Definitions have been updated successfully'/>
-            <Alert type='info' subject='Device Connected' message="Device (Streamdeck 1) Has Connected"/>
-            <Alert type='info' subject='Action Trigger' message={uuidv4()}/>
-            <Alert type='success' subject='DB Loaded' message='System Database has loaded successfully'/>
+            {this.state.logs.map((key, index) => <Alert key={key} type={key.type} subject={key.subject} message={key.message}/>)}
           </div>
         </div>
       </div>

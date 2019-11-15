@@ -10,7 +10,11 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
-        options: { presets: ['@babel/env'] }
+        options: {
+          presets: ['@babel/preset-env',
+            '@babel/react', { plugins: ['@babel/plugin-proposal-class-properties'] }
+          ]
+        }
       },
       {
         test: /\.css$/,
@@ -68,7 +72,8 @@ module.exports = {
     contentBase: path.join(__dirname, 'ui/public/'),
     port: 3000,
     publicPath: 'http://localhost:3000/dist/',
-    hotOnly: true
+    hotOnly: true,
+    historyApiFallback: true
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
