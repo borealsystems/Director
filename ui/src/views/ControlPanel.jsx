@@ -14,12 +14,18 @@ import Logo from '../components/Logo.jsx'
 import Clock from '../components/Clock.jsx'
 
 // Subviews
-import Status from './Status.jsx'
-import Actions from './Actions.jsx'
-import Variables from './Variables.jsx'
-import Automation from './Automation.jsx'
-import Devices from './Devices.jsx'
-import Configuration from './Configuration.jsx'
+import Actions from './Actions/Actions.jsx'
+import Automation from './Automation/Automation.jsx'
+import ControlView from './ControlView/ControlView.jsx'
+import Controllers from './Controllers/Controllers.jsx'
+import Devices from './Devices/Devices.jsx'
+import Partitions from './Partitions/Partitions.jsx'
+import Settings from './Settings/Settings.jsx'
+import Shotbox from './Shotbox/Shotbox.jsx'
+import Status from './Status/Status.jsx'
+import UserPreferences from './UserPreferences/UserPreferences.jsx'
+import Users from './Users/Users.jsx'
+import Variables from './Variables/Variables.jsx'
 
 class ControlPanel extends Component {
   constructor (props) {
@@ -47,16 +53,16 @@ class ControlPanel extends Component {
             <NavLink to="/Automation" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Automation</NavLink>
             <div className="h-px my-2 bg-gray-500"></div>
             <span className={this.styleTabInactive + ' text-xs text-gray-500 uppercase'}>Configure</span>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Settings</NavLink>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Users</NavLink>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Partitions</NavLink>
+            <NavLink to="/Settings" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Settings</NavLink>
+            <NavLink to="/Users" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Users</NavLink>
+            <NavLink to="/Partitions" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Partitions</NavLink>
             <div className="h-px my-2 bg-gray-500"></div>
             <span className={this.styleTabInactive + ' text-xs text-gray-500 uppercase'}>Control</span>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Action Runner</NavLink>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Control View</NavLink>
+            <NavLink to="/Shotbox" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Shotbox</NavLink>
+            <NavLink to="/ControlView" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Control View</NavLink>
             <div className="h-px my-2 bg-gray-500"></div>
             <span className={this.styleTabInactive + ' text-xs text-gray-500 uppercase'}>Account</span>
-            <NavLink to="/Configuration" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Settings</NavLink>
+            <NavLink to="/UserPreferences" className={this.styleTabInactive} activeClassName={this.styleTabActive}>UserPreferences</NavLink>
             <span className={this.styleTabInactive + ' absolute bottom-0 mb-3 text-sm text-gray-500 uppercase'}>
               {this.state.user}<br />
               LOGOUT
@@ -72,11 +78,14 @@ class ControlPanel extends Component {
                 <Route path="/Status">
                   <Status />
                 </Route>
-                <Route path="/Variables">
-                  <Variables />
-                </Route>
                 <Route path="/Actions">
                   <Actions />
+                </Route>
+                <Route path="/Devices">
+                  <Devices />
+                </Route>
+                <Route path="/Controllers">
+                  <Controllers />
                 </Route>
                 <Route path="/Variables">
                   <Variables />
@@ -84,11 +93,23 @@ class ControlPanel extends Component {
                 <Route path="/Automation">
                   <Automation />
                 </Route>
-                <Route path="/Devices">
-                  <Devices />
+                <Route path="/Settings">
+                  <Settings />
                 </Route>
-                <Route path="/Configuration">
-                  <Configuration />
+                <Route path="/Users">
+                  <Users />
+                </Route>
+                <Route path="/Partitions">
+                  <Partitions />
+                </Route>
+                <Route path="/Shotbox">
+                  <Shotbox />
+                </Route>
+                <Route path="/ControlView">
+                  <ControlView />
+                </Route>
+                <Route path="/UserPreferences">
+                  <UserPreferences />
                 </Route>
                 <Route path="/">
                   <span>Home</span>

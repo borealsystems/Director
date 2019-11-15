@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
 // Components
-import Alert from '../components/Alert.jsx'
-import SystemStatus from '../components/SystemStatus.jsx'
+import Alert from '../../components/Alert.jsx'
+import SystemStatus from './components/SystemStatus.jsx'
 
 class Status extends Component {
   constructor (props) {

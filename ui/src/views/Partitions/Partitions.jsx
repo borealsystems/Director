@@ -2,14 +2,14 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-class Configuration extends Component {
+class Partitions extends Component {
   render () {
     return (
-      <div className="container mx-auto w-100">
-        <h1>Configuration Component</h1>
+      <div>
+        <h1>Partitions Component</h1>
       </div>
     )
   }
 }
 
-export default hot(module)(Configuration)
+export default hot(module)(Partitions)
