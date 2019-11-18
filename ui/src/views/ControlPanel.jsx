@@ -30,7 +30,7 @@ import Variables from './Variables/Variables.jsx'
 class ControlPanel extends Component {
   constructor (props) {
     super(props)
-    this.state = { user: 'Firstname Lastname' }
+    this.state = { user: 'firstname lastname' }
 
     // Styles for tab buttons
     this.styleTabInactive = 'block w-56 py-1 pl-5 object-right'
@@ -62,7 +62,7 @@ class ControlPanel extends Component {
             <NavLink to="/ControlView" className={this.styleTabInactive} activeClassName={this.styleTabActive}>Control View</NavLink>
             <div className="h-px my-2 bg-gray-500"></div>
             <span className={this.styleTabInactive + ' text-xs text-gray-500 uppercase'}>Account</span>
-            <NavLink to="/UserPreferences" className={this.styleTabInactive} activeClassName={this.styleTabActive}>UserPreferences</NavLink>
+            <NavLink to="/UserPreferences" className={this.styleTabInactive} activeClassName={this.styleTabActive}>User Preferences</NavLink>
             <span className={this.styleTabInactive + ' absolute bottom-0 mb-3 text-sm text-gray-500 uppercase'}>
               {this.state.user}<br />
               LOGOUT

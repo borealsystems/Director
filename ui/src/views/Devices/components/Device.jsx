@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-class Action extends Component {
+class Device extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -42,4 +42,4 @@ class Action extends Component {
   }
 }
 
-export default hot(module)(Action)
+export default hot(module)(Device)

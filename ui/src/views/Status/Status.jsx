@@ -3,13 +3,28 @@ import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
 // Components
-import Alert from '../../components/Alert.jsx'
+import Log from './components/Log.jsx'
 import SystemStatus from './components/SystemStatus.jsx'
 
 class Status extends Component {
   constructor (props) {
     super(props)
-    this.state = { logs: [{ type: 'info', subject: 'System Initialisation', message: 'The system is loading' }] }
+    this.state = {
+      logs: [
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' }
+      ]
+    }
   }
 
   render () {
@@ -22,8 +37,8 @@ class Status extends Component {
         <br /><br />
         <div className='block'>
           <span className="text-xl font-bold pb-4">Logs</span>
-          <div style={{ height: '60%' }}className="flex flex-col overflow-y-scroll">
-            {this.state.logs.map((key, index) => <Alert key={key} type={key.type} subject={key.subject} message={key.message}/>)}
+          <div style={{ height: '45vh' }} className="flex flex-col overflow-y-scroll">
+            {this.state.logs.map((key, index) => <Log key={index} type={key.type} subject={key.subject} message={key.message}/>)}
           </div>
         </div>
       </div>

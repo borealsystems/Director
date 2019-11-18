@@ -10,7 +10,7 @@
     "dev": "NODE_ENV=development DEBUG=BorealDirector:* node .",
     "wp-dev": "webpack-dev-server --mode development",
     "webpack": "rm -rf ui/dist/* && webpack --mode production",
-    "pc": "pycount -e node_modules"
+    "sloc": "sloc . -e node_modules -f cli-table"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.11.0",
@@ -30,6 +30,7 @@
     "postcss-loader": "^3.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-dropdown": "^1.6.4",
     "react-hot-loader": "^4.12.15",
     "react-router-dom": "^5.1.2",
     "react-tabs": "^3.0.0",

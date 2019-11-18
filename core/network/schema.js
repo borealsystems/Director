@@ -13,7 +13,7 @@ export default new GraphQLSchema({
       },
       definitionNames: { // Device Definitions
         type: new GraphQLList(GraphQLString),
-        resolve: () => { return definitions.map((key, index) => { return definitions[index].name }) }
+        resolve: () => definitions.map((key, index) => { return definitions[index].name })
       },
       status: { // Status Slug
         type: GraphQLString,

@@ -2,14 +2,16 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-class Alert extends Component {
+// TODO: Fix Blue Line
+
+class Log extends Component {
   render () {
     if (this.props.type === 'info') {
       return (
-        <div className="flex bg-blue-900 mb-2">
-          <div className="w-1 bg-blue-500">
+        <div className="flex-none bg-blue-900 mb-2">
+          <div className="block w-1 bg-blue-500">
           </div>
-          <div className="w-auto items-center p-2">
+          <div className="block w-auto items-center p-2">
             <span className="text-sm font-bold pb-2">
               {this.props.subject || 'Info'}{' '}
             </span>
@@ -69,4 +71,4 @@ class Alert extends Component {
   }
 }
 
-export default hot(module)(Alert)
+export default hot(module)(Log)

@@ -8,7 +8,6 @@ const dbLoad = () => {
   db.get('state') === undefined ? dbCreate() : system.emit('db', 'loaded')
 }
 
-// eslint-disable-next-line no-undef
 const coreSettingsStructure = { name: name, version: version }
 debug(`coreSettingsStruct: ${JSON.stringify(coreSettingsStructure)}`)
 
