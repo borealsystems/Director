@@ -1,17 +1,50 @@
+import { definitions, ProviderRequirements } from '../libs/globals'
+import {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLList
+} from 'graphql'
 import { GraphQLJSONObject } from 'graphql-type-json'
-import { GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLString } from 'graphql'
+import { find } from 'lodash'
 
-import { definitions } from '../libs/sharedVars'
-
-export default new GraphQLSchema({
+var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'query',
+    name: 'RootQueryType',
     fields: {
-      definitions: { // Device Definitions
-        type: new GraphQLList(GraphQLJSONObject),
-        resolve: () => { return definitions }
+      // definitions: { // Device Definitions
+      //   type: new GraphQLList(new GraphQLObjectType({
+      //     fields: {
+      //       name: {
+      //         type: GraphQLString!,
+      //         resolve: () => { 'Ross Carbonite Black' }
+      //       }
+      //       manufacturer: {
+      //         type: GraphQLString!,
+      //         resolve: () => { 'Ross Video' }
+      //       }
+      //       product: {
+      //         type: GraphQLString!,
+      //         resolve: () => { 'Carbonite Black' }
+      //       }
+      //     }
+      //   }))
+      // },
+      definition: { // Full Device Definition
+        type: GraphQLJSONObject,
+        args: {
+          definitionName: { type: GraphQLString }
+        },
+        resolve: (obj, args, context, info) => { return find(definitions, { name: args.definitionName }) }
       },
-      definitionNames: { // Device Definitions
+      providerRequirements: { // Provider Requirements
+        type: GraphQLJSONObject,
+        args: {
+          provider: { type: GraphQLString }
+        },
+        resolve: (obj, args, context, info) => { return find(ProviderRequirements, args.provider) }
+      },
+      definitionNames: { // Device Definition Listing
         type: new GraphQLList(GraphQLString),
         resolve: () => definitions.map((key, index) => { return definitions[index].name })
       },
@@ -26,3 +59,5 @@ export default new GraphQLSchema({
     }
   })
 })
+
+export { schema }

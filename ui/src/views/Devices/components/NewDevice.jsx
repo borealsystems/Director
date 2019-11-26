@@ -1,58 +1,77 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
+import { Client, setDefaultClient } from 'micro-graphql-react'
 
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
-import { findIndex, merge } from 'lodash'
+import { merge, get } from 'lodash'
+
+const client = new Client({
+  endpoint: 'http://localhost:3001/graphql'
+})
+
+setDefaultClient(client)
 
 class NewDevice extends Component {
   constructor (props) {
     super(props)
+    this.placeholder = 'Name'
     this.state = {
       newDevice: {
-        definitionIndex: 0,
         name: '',
         selected: { value: 'BorealSystems-DirectorInternal', label: 'BorealSystems-DirectorInternal' }
       },
-      definitionNames: ['BorealSystems-DirectorInternal'],
-      definitions: [
-        {
-          name: 'BorealSystems-DirectorInternal',
-          manufacturer: 'Boreal Systems',
-          product: 'Director',
-          productVersion: '1.0.0',
-          version: '1.0.0',
-          communicationProvider: 'internal',
-          type: 'orchestration',
-          functions: []
-        }
-      ]
+      providerRequirements: { internal: ['ip'] },
+      definition: {
+        name: 'BorealSystems-DirectorInternal',
+        manufacturer: 'Boreal Systems',
+        product: 'Director',
+        productVersion: '1.0.0',
+        version: '1.0.0',
+        provider: 'internal',
+        type: 'orchestration',
+        functions: []
+      }
     }
-    // this._onDropdownSelect = this._onDropdownSelect.bind(this)
   }
 
   componentDidUpdate () {
     console.log(this.state)
-    // this.props.newDevice(this.state.newDevice)
   }
 
   componentDidMount () {
-    this.setState({ newDevice: { selected: '', definitionIndex: findIndex(this.state.definitions, { name: 'BorealSystems-DirectorInternal' }) } })
+    client.runQuery(
+      `query definitionNames {
+        definitionNames
+      }`
+    )
+      .then(r => this.setState({ definitionNames: r.data.definitionNames, newDevice: { name: '', selected: '' } }))
+  }
 
-    fetch('http://localhost:3001/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({ query: '{ definitionNames, definitions }' })
+  _updateProviderRequirements (provider) {
+    return new Promise((resolve, reject) => {
+      client.runQuery(
+        `query providerRequirements ($providerName: String) {
+          providerRequirements(provider: $providerName)
+        }`,
+        { providerName: provider }
+      )
+        .then(s => this.setState(merge(this.state, s.data)))
+        .then(resolve())
+        .catch(e => reject(e))
     })
-      .then(r => r.json())
-      .then(r => this.setState(r.data))
   }
 
   _onDropdownSelect (option) {
-    this.setState(merge(this.state, { newDevice: { selected: option, definitionIndex: findIndex(this.state.definitions, { name: option.label }) } }))
+    client.runQuery(
+      `query DEFINITION ($definitionName: String) {
+        definition(definitionName: $definitionName)
+      }`,
+      { definitionName: option.value }
+    )
+      .then(r => this.setState(merge(this.state, r.data)))
+      .then(this.setState(merge(this.state, { newDevice: { selected: option } })))
+      .then(this._updateProviderRequirements(this.state.definition.provider))
   }
 
   _handleNameChange (event) {
@@ -73,7 +92,7 @@ class NewDevice extends Component {
             id="name"
             value={this.state.newDevice.name}
             onChange={this._handleNameChange.bind(this)}
-            placeholder="Name" />
+            placeholder={this.placeholder} />
           <Dropdown
             className="flex-1"
             controlClassName="shadow appearance-none border border-gray-500 rounded bg-gray-700 mx-2 py-2 px-3 text-white leading-tight focus:outline-none focus:border-white"
@@ -84,8 +103,11 @@ class NewDevice extends Component {
         </div>
         {defaultOption !== '' ? (
           <div className="w-full py-2 px-2">
-            <div>Adding a new {this.state.definitions[this.state.newDevice.definitionIndex].manufacturer} {this.state.definitions[this.state.newDevice.definitionIndex].product} with the name {this.state.newDevice.name}</div>
-            <div>This device uses {this.state.definitions[this.state.newDevice.definitionIndex].communicationProvider}</div>
+            <div>Adding a new {get(this.state, 'definition.manufacturer')} {get(this.state, 'definition.product')}{this.state.newDevice.name !== '' ? (<span> with the name {this.state.newDevice.name} </span>) : (null)} </div>
+            <div>This device uses <b>{this.state.definition.provider}</b> as its communications provider</div>
+            {this.state.providerRequirements !== null ? (
+              <div> {JSON.stringify(get(this.state, `providerRequirements.${this.state.definition.provider}`))}</div>
+            ) : (null) }
           </div>
         ) : (null) }
       </div>

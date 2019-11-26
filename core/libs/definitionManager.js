@@ -1,6 +1,6 @@
 import path from 'path'
 import system from './system'
-import { definitions } from '../libs/sharedVars'
+import { definitions } from '../libs/globals'
 const debug = require('debug')('BorealDirector:core/libs/definitionManager')
 const fs = require('fs-extra')
 

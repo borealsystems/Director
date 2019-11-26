@@ -2,8 +2,10 @@ import path from 'path'
 import system from './libs/system'
 import webpackConfigurationObject from '../webpack.config.js'
 import definitionManager from './libs/definitionManager'
+import providerManager from './libs/providerManager'
 import dbload from './libs/dbUtils'
 import './network'
+import './network/mdns'
 
 const debug = require('debug')('BorealDirector:core/main')
 
@@ -31,6 +33,7 @@ system.on('db', (stream) => {
 })
 
 definitionManager.load(path.resolve('DefinitionLibrary'))
+providerManager.load(path.resolve('core/network/providers'))
 
 system.on('definitionLoad', (stream) => {
   debug(stream)

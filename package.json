@@ -25,6 +25,8 @@
     "graphql-type-json": "^0.3.0",
     "hot-loader": "^0.0.0",
     "lodash": "^4.17.15",
+    "mdns": "^2.5.1",
+    "micro-graphql-react": "^0.4.0-beta12",
     "node-storage": "^0.0.9",
     "path": "^0.12.7",
     "postcss-loader": "^3.0.0",

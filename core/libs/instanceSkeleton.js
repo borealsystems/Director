@@ -12,8 +12,8 @@ class instanceSkeleton {
 
   parseDefinition () {
     debug('Parsing BDDS')
-    this.communicationProvider = this.bdds.communicationProvider
-    if (this.communicationProvider === 'RossTalk') {
+    this.Provider = this.bdds.Provider
+    if (this.Provider === 'RossTalk') {
     }
   }
 }
