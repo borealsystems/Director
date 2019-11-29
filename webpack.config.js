@@ -7,6 +7,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto'
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
@@ -60,8 +65,11 @@ module.exports = {
   },
   resolve: {
     extensions: [
-      '*', '.js', '.jsx'
-    ]
+      '*', '.js', '.jsx', '.mjs'
+    ],
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    }
   },
   output: {
     path: path.resolve(__dirname, 'ui/dist/'),

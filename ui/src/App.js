@@ -1,35 +1,38 @@
 // eslint-disable-next-line no-unused-vars
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { hot } from 'react-hot-loader'
-import { Client, setDefaultClient } from 'micro-graphql-react'
+import { Provider, createClient } from 'urql'
 
-import LoginPage from './views/LoginPage.jsx'
+// import LoginPage from './views/LoginPage.jsx'
 import ControlPanel from './views/ControlPanel.jsx'
 
-const client = new Client({
-  endpoint: '/graphql',
-  fetchOptions: { credentials: 'include' }
+const client = createClient({
+  url: 'http://localhost:3001/graphql'
 })
 
-setDefaultClient(client)
+// const handleLogin = () => {
+//   isLoggedIn = 1
+//   console.log('Login')
+// }
 
-class App extends Component {
-  constructor (props) {
-    super(props)
-    this.state = { isLoggedIn: 1 }
-  }
+const App = () => {
+  // constructor (props) {
+  //   super(props)
+  //   this.state = { isLoggedIn: 1 }
+  // }
 
-  handleLogin () {
-    this.setState({ isLoggedIn: 1 })
-    console.log('Login')
-  }
+  var isLoggedIn = useState(0)
 
-  render () {
-    if (this.state.isLoggedIn === 1) {
-      return <ControlPanel />
-    }
-    return <LoginPage handleChange={this.handleLogin}/>
+  isLoggedIn = 1
+
+  if (isLoggedIn === 1) {
+    return (
+      <Provider value={client}>
+        <ControlPanel />
+      </Provider>
+    )
   }
+  // return <LoginPage handleChange={handleLogin}/>
 }
 
 export default hot(module)(App)
