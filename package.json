@@ -1,6 +1,6 @@
 {
   "name": "director",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Boreal Systems Director",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/director",
@@ -34,7 +34,6 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-dropdown": "^1.6.4",
-    "react-hot-loader": "^4.12.15",
     "react-router-dom": "^5.1.2",
     "react-tabs": "^3.0.0",
     "style-loader": "^1.0.0",
@@ -62,6 +61,7 @@
     "image-webpack-loader": "^6.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "react-hot-loader": "^4.12.15"
   }
 }
