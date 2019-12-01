@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { hot } from 'react-hot-loader'
 import { Query } from 'urql'
 import Dropdown from 'react-dropdown'
@@ -23,8 +23,6 @@ const NewDevice = () => {
     functions: []
   })
   var [requirements, setRequirements] = useState({})
-
-  useEffect(e => console.log(requirements))
 
   return (
     <Query query={`
@@ -74,12 +72,16 @@ const NewDevice = () => {
               <div className="w-full py-2 px-2">
                 <div>Adding a new {data.definition.manufacturer} {data.definition.product}{newDeviceName !== '' ? (<span> with the name {newDeviceName} </span>) : (null)} </div>
                 <div>This device uses <b>{data.definition.provider}</b> as its communications provider</div>
-                <div className="text-2xl mt-4 -mb-4">Configuration</div>
-                <ProviderRequirements
-                  providerRequirements={get(data.providerRequirements, data.definition.provider, [])}
-                  requirements={requirements}
-                  onChange={(req) => { setRequirements({ ...requirements, ...req }) }}>
-                </ProviderRequirements>
+                {!data.providerRequirements.internal && (
+                  <div>
+                    <div className="text-2xl mt-4 -mb-4">Configuration</div>
+                    <ProviderRequirements
+                      providerRequirements={get(data.providerRequirements, data.definition.provider, [])}
+                      requirements={requirements}
+                      onChange={(req) => { setRequirements({ ...requirements, ...req }) }}>
+                    </ProviderRequirements>
+                  </div>
+                )}
               </div>
             ) : (null) }
           </div>

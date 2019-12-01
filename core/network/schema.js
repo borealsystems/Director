@@ -12,7 +12,7 @@ var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-      // definitions: { // Device Definitions
+      // definitions: { // Device Definitions // GraphQL-ifies definition
       //   type: new GraphQLList(new GraphQLObjectType({
       //     fields: {
       //       name: {

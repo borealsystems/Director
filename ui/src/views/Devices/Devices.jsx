@@ -17,10 +17,6 @@ class Devices extends Component {
     this.newDevice = this.newDevice.bind(this)
   }
 
-  componentDidUpdate () {
-    console.log(this.state)
-  }
-
   onClick (e) {
     e.preventDefault()
     this.setState({ showNewDevice: !this.state.showNewDevice })
