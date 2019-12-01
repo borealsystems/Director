@@ -1,6 +1,6 @@
 {
   "name": "director",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Boreal Systems Director",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/director",
@@ -59,9 +59,9 @@
     "eslint-plugin-standard": "^4.0.1",
     "file-loader": "^4.2.0",
     "image-webpack-loader": "^6.0.0",
+    "react-hot-loader": "^4.12.15",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.9.0",
-    "react-hot-loader": "^4.12.15"
+    "webpack-dev-server": "^3.9.0"
   }
 }
