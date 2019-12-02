@@ -66,3 +66,29 @@
   font-family: IBMPlexSansCondensed;
   font-weight: 100;
 }
+
+/* Dropdown styles have to be applied manually :( */
+
+.Dropdown-option {
+  @apply text-white;
+  @apply leading-tight 
+}
+
+.Dropdown-option.is-selected {
+  @apply text-white;
+  @apply leading-tight;
+  @apply bg-gray-800;
+}
+
+.Dropdown-option.is-selected:hover {
+  @apply text-white;
+  @apply leading-tight;
+  @apply bg-gray-800;
+}
+
+.Dropdown-option:hover {
+  @apply text-white;
+  @apply leading-tight;
+  @apply bg-gray-600;
+  @apply text-gray-900
+}

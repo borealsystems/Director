@@ -64,10 +64,16 @@ const NewDevice = (props) => {
                 placeholder='Name' />
               <Dropdown
                 className="flex-1"
+                isselectedClassName="shadow appearance-none border border-gray-500 rounded bg-gray-700 mx-2 py-2 px-3 text-white leading-tight focus:outline-none focus:border-white"
                 controlClassName="shadow appearance-none border border-gray-500 rounded bg-gray-700 mx-2 py-2 px-3 text-white leading-tight focus:outline-none focus:border-white"
+                menuClassName="shadow appearance-none border border-gray-500 rounded bg-gray-700 mt-1 text-white leading-tight focus:outline-none focus:border-white"
                 options={data.definitionNames}
                 value={newDevice}
-                onChange={(e) => setNewDevice(e)}
+                onChange={(e) => {
+                  setNewDevice(e)
+                  props.setNewDevice({ ...props.newDevice, definition: e.value })
+                }
+                }
                 placeholder="Definition" />
             </div>
             {newDevice !== '' ? (
@@ -80,7 +86,7 @@ const NewDevice = (props) => {
                     <ProviderRequirements
                       providerRequirements={get(data.providerRequirements, data.definition.provider, [])}
                       requirements={requirements}
-                      onChange={(req) => { props.setNewDevice({ ...props.newDevice, ...props.newDevice.requirements, ...req }) }}>
+                      onChange={(req) => { props.setNewDevice({ ...props.newDevice, config: { ...props.newDevice.requirements, ...req } }) }}>
                     </ProviderRequirements>
                   </div>
                 )}
