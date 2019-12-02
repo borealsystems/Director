@@ -43,22 +43,18 @@
   @apply mt-2;
 }
 
-/* Scroll Bars
+/* Scroll Bars */
+::-webkit-scrollbar-thumb {
+  background: #666; 
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7FAFC;
+  background: transparent; 
 }
-
-::-webkit-scrollbar-thumb {
-  background: #A0AEC0;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #4A5568;
-} */
 
 /* Logo */
 

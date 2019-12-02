@@ -36,7 +36,7 @@ const ControlPanel = () => {
   return (
     <Router>
       <div className="container bg-gray-800 text-white flex h-screen min-w-full">
-        <div className="flex-none w-56 text-white text-lg font-thin bg-indigo-900 overflow-y-scroll">
+        <div className="flex-none w-56 text-white text-lg font-thin bg-indigo-900 h-5/6 overflow-y-scroll overflow-x-hidden">
           <NavLink to="/"><Logo className="text-center text-2xl py-3" /></NavLink>
           <div className="h-px mb-2 bg-gray-500"></div>
           <span className={styleTabInactive + ' text-xs text-gray-500 uppercase'}>Manage</span>
@@ -58,13 +58,15 @@ const ControlPanel = () => {
           <div className="h-px my-2 bg-gray-500"></div>
           <span className={styleTabInactive + ' text-xs text-gray-500 uppercase'}>Account</span>
           <NavLink to="/UserPreferences" className={styleTabInactive} activeClassName={styleTabActive}>User Preferences</NavLink>
-          <span className={styleTabInactive + ' absolute bottom-0 mb-3 text-sm text-gray-500 uppercase'}>
-            {user.firstname} {user.lastname}<br />
-              LOGOUT
-          </span>
-          <span className={styleTabInactive + ' absolute bottom-0 mb-16 font-normal'}>
-            <Clock />
-          </span>
+          <div className={styleTabInactive + ' absolute bottom-0 mb-3 text-sm text-gray-500 uppercase'}>
+            <span >
+              {user[0].firstname} {user[0].lastname}<br />
+                LOGOUT
+            </span>
+            <span className="text-white text-lg font-light">
+              <Clock />
+            </span>
+          </div>
         </div>
 
         <div className="flex-1 h-screen overflow-y-scroll">

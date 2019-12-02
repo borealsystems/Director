@@ -6,7 +6,7 @@ import 'react-dropdown/style.css'
 import { get } from 'lodash'
 import ProviderRequirements from './ProviderRequirements.jsx'
 
-const NewDevice = () => {
+const NewDevice = (props) => {
   var [newDevice, setNewDevice] = useState({
     value: 'BorealSystems-DirectorInternal',
     label: 'BorealSystems-DirectorInternal'
@@ -22,7 +22,7 @@ const NewDevice = () => {
     type: 'orchestration',
     functions: []
   })
-  var [requirements, setRequirements] = useState({})
+  var [requirements] = useState({})
 
   return (
     <Query query={`
@@ -58,7 +58,9 @@ const NewDevice = () => {
                 type="text"
                 id="name"
                 value={newDeviceName}
-                onChange={(e) => { setNewDeviceName(e.target.value) }}
+                onChange={(e) => {
+                  setNewDeviceName(e.target.value, props.setNewDevice({ ...props.newDevice, name: e.target.value }))
+                }}
                 placeholder='Name' />
               <Dropdown
                 className="flex-1"
@@ -78,7 +80,7 @@ const NewDevice = () => {
                     <ProviderRequirements
                       providerRequirements={get(data.providerRequirements, data.definition.provider, [])}
                       requirements={requirements}
-                      onChange={(req) => { setRequirements({ ...requirements, ...req }) }}>
+                      onChange={(req) => { props.setNewDevice({ ...props.newDevice, ...props.newDevice.requirements, ...req }) }}>
                     </ProviderRequirements>
                   </div>
                 )}
