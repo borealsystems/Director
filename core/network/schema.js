@@ -60,8 +60,8 @@ var schema = new GraphQLSchema({
         type: GraphQLString,
         resolve: () => { return 'System Operating As Intended' }
       },
-      devices: { // Status Message
-        type: GraphQLJSONObject,
+      devices: { // List all devices
+        type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('device') }
       }
     }
@@ -74,17 +74,20 @@ var schema = new GraphQLSchema({
         type: GraphQLString,
         args: {
           name: { type: GraphQLString },
+          definition: { type: GraphQLString },
           ok: { type: GraphQLBoolean },
           config: { type: GraphQLJSONObject }
         },
         resolve: (parent, args) => {
           const uuid = uuidBase62.v4()
           const newDevice = {
+            uuid: uuid,
+            definition: args.definition,
             name: args.name,
             config: args.config
           }
           debug(args.name, args.config)
-          db.put(`device.${uuid}`, newDevice)
+          db.put('device', [...(db.get('device')), newDevice])
           return `device.${uuid}`
         }
       }

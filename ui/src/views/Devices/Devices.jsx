@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { hot } from 'react-hot-loader'
 import { useQuery, useMutation } from 'urql'
+// eslint-disable-next-line no-unused-vars
+import { GraphQLJSONObject } from 'graphql-type-json'
 
 import Device from './components/Device.jsx'
 import NewDevice from './components/NewDevice.jsx'
-
-var uuidBase62 = require('uuid-base62')
 
 const handleCancel = (setNewDevice, setShowNewDevice) => {
   setNewDevice({})
@@ -14,21 +14,19 @@ const handleCancel = (setNewDevice, setShowNewDevice) => {
 }
 
 const handleSubmit = (newDevice, setNewDevice, setShowNewDevice, newDeviceMutationResult, newDeviceMutation) => {
-  newDeviceMutation({ newDevice }).then(console.log(newDeviceMutationResult))
-  console.log(newDevice)
+  newDeviceMutation({ definition: newDevice.definition, name: newDevice.name, config: newDevice.config }).then(console.log(newDeviceMutationResult))
+  // setNewDevice({})
+  // setShowNewDevice(false)
 }
 
 const addNewDeviceGQL = `
-  mutation AddTodo($text: String!) {
-    addTodo(text: $text) {
-      id
-      text
-    }
+  mutation newDevice($name: String!, $config: JSONObject) {
+    newDevice(name: $name, config: $config)
   }
 `
 
 const Devices = () => {
-  var [devices] = useQuery({ query: '{ devices }' })
+  var [devices, updateDevices] = useQuery({ query: '{ devices }', requestPolicy: 'network-only' })
   var [showNewDevice, setShowNewDevice] = useState(false)
   var [newDevice, setNewDevice] = useState({ ok: true })
   var [newDeviceMutationResult, newDeviceMutation] = useMutation(addNewDeviceGQL)
@@ -53,17 +51,9 @@ const Devices = () => {
         <div className="inline-block w-1/3 py-2 px-2">UUID</div>
         <div className="inline-block w-1/6 py-2 px-2"></div>
       </div>
-      {devices.data.map((number) =>
-        <li>{JSON.stringify(number)}</li>
-      )}
-      <Device name="Sting" uuid={uuidBase62.v4()} index="1"/>
-      <Device name="PreRoll" uuid={uuidBase62.v4()} index="2"/>
-      <Device name="FTB" uuid={uuidBase62.v4()} index="3"/>
-      <Device name="RollClip" uuid={uuidBase62.v4()} index="4"/>
-      <Device name="Ad Break" uuid={uuidBase62.v4()} index="5"/>
-      <Device name="Start Record" uuid={uuidBase62.v4()} index="6"/>
-      <Device name="Stop Record" uuid={uuidBase62.v4()} index="7"/>
-      <Device name="Network Bug" uuid={uuidBase62.v4()} index="8"/>
+      {!devices.fetching && devices.data.devices.map((device, index) => {
+        return <Device name={device.name} config={device.config} uuid={device.uuid} key={index} index={index}/>
+      })}
       {showNewDevice ? (<NewDevice newDevice={newDevice} setNewDevice={setNewDevice}/>) : (null)
       }
       <div className="bg-gray-700 text-center font-bold border border-gray-500 rounded-b-lg">
@@ -74,7 +64,19 @@ const Devices = () => {
               <button className="py-2 px-2 ml-px h-10 border-l border-gray-500 w-full" onClick={ () => handleCancel(setNewDevice, setShowNewDevice) }>Cancel</button>
             </div>
             <div className="inline-block w-1/6 ">
-              <button disabled={!newDevice.ok} className={!newDevice.ok ? 'bg-grey-900 text-gray-500 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full' : 'bg-indigo-900 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full'} onClick={() => handleSubmit(newDevice, setNewDevice, setShowNewDevice, newDeviceMutationResult, newDeviceMutation) }>Submit</button>
+              <button
+                disabled={!newDevice.ok}
+                className={!newDevice.ok ? 'bg-grey-900 text-gray-500 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full' : 'bg-indigo-900 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full'}
+                onClick={
+                  () => {
+                    handleSubmit(newDevice, setNewDevice, setShowNewDevice, newDeviceMutationResult, newDeviceMutation)
+                    setNewDevice({ ok: true })
+                    setShowNewDevice(false)
+                    updateDevices({ requestPolicy: 'network-only' })
+                  }
+                }>
+                Submit
+              </button>
             </div>
           </div>
         ) : (
