@@ -3,10 +3,14 @@ import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLBoolean
 } from 'graphql'
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { find } from 'lodash'
+import db from '../libs/db'
+const uuidBase62 = require('uuid-base62')
+const debug = require('debug')('BorealDirector:core/network/schema')
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -55,6 +59,34 @@ var schema = new GraphQLSchema({
       statusMessage: { // Status Message
         type: GraphQLString,
         resolve: () => { return 'System Operating As Intended' }
+      },
+      devices: { // Status Message
+        type: GraphQLJSONObject,
+        resolve: () => { return db.get('device') }
+      }
+    }
+  }),
+
+  mutation: new GraphQLObjectType({
+    name: 'RootMutationType',
+    fields: {
+      newDevice: {
+        type: GraphQLString,
+        args: {
+          name: { type: GraphQLString },
+          ok: { type: GraphQLBoolean },
+          config: { type: GraphQLJSONObject }
+        },
+        resolve: (parent, args) => {
+          const uuid = uuidBase62.v4()
+          const newDevice = {
+            name: args.name,
+            config: args.config
+          }
+          debug(args.name, args.config)
+          db.put(`device.${uuid}`, newDevice)
+          return `device.${uuid}`
+        }
       }
     }
   })

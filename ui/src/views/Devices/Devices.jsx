@@ -1,6 +1,6 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect, Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { hot } from 'react-hot-loader'
+import { useQuery, useMutation } from 'urql'
 
 import Device from './components/Device.jsx'
 import NewDevice from './components/NewDevice.jsx'
@@ -13,13 +13,25 @@ const handleCancel = (setNewDevice, setShowNewDevice) => {
   console.log('Cancel')
 }
 
-const handleSubmit = (newDevice, setNewDevice, setShowNewDevice) => {
+const handleSubmit = (newDevice, setNewDevice, setShowNewDevice, newDeviceMutationResult, newDeviceMutation) => {
+  newDeviceMutation({ newDevice }).then(console.log(newDeviceMutationResult))
   console.log(newDevice)
 }
 
+const addNewDeviceGQL = `
+  mutation AddTodo($text: String!) {
+    addTodo(text: $text) {
+      id
+      text
+    }
+  }
+`
+
 const Devices = () => {
+  var [devices] = useQuery({ query: '{ devices }' })
   var [showNewDevice, setShowNewDevice] = useState(false)
-  var [newDevice, setNewDevice] = useState({ ok: false })
+  var [newDevice, setNewDevice] = useState({ ok: true })
+  var [newDeviceMutationResult, newDeviceMutation] = useMutation(addNewDeviceGQL)
 
   useEffect(
     () => {
@@ -41,6 +53,9 @@ const Devices = () => {
         <div className="inline-block w-1/3 py-2 px-2">UUID</div>
         <div className="inline-block w-1/6 py-2 px-2"></div>
       </div>
+      {devices.data.map((number) =>
+        <li>{JSON.stringify(number)}</li>
+      )}
       <Device name="Sting" uuid={uuidBase62.v4()} index="1"/>
       <Device name="PreRoll" uuid={uuidBase62.v4()} index="2"/>
       <Device name="FTB" uuid={uuidBase62.v4()} index="3"/>
@@ -59,7 +74,7 @@ const Devices = () => {
               <button className="py-2 px-2 ml-px h-10 border-l border-gray-500 w-full" onClick={ () => handleCancel(setNewDevice, setShowNewDevice) }>Cancel</button>
             </div>
             <div className="inline-block w-1/6 ">
-              <button disabled={!newDevice.ok} className={!newDevice.ok ? 'bg-grey-900 text-gray-500 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full' : 'bg-indigo-900 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full'} onClick={() => handleSubmit(newDevice, setNewDevice, setShowNewDevice) }>Submit</button>
+              <button disabled={!newDevice.ok} className={!newDevice.ok ? 'bg-grey-900 text-gray-500 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full' : 'bg-indigo-900 py-2 px-2 ml-px h-10 rounded-br-lg border-l border-r border-gray-500 w-full'} onClick={() => handleSubmit(newDevice, setNewDevice, setShowNewDevice, newDeviceMutationResult, newDeviceMutation) }>Submit</button>
             </div>
           </div>
         ) : (
