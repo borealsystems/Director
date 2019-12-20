@@ -12,10 +12,10 @@ class Status extends Component {
     this.state = {
       logs: [
         { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'warn', subject: 'Stuff\'s not quite right', message: 'The system is loading' },
+        { type: 'success', subject: 'System Initialisation', message: 'The system is loading' },
         { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
-        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
-        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
-        { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
+        { type: 'error', subject: 'It\'s Broken', message: 'The system is loading' },
         { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
         { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
         { type: 'info', subject: 'System Initialisation', message: 'The system is loading' },
@@ -31,12 +31,12 @@ class Status extends Component {
     return (
       <div>
         <div className='block mt-10'>
-          <h1 className="text-xl font-bold my-1">System Status</h1>
+          <h1 className="text-xl text-gray-800 dark:text-gray-200 font-bold my-1">System Status</h1>
           <SystemStatus />
         </div>
         <br /><br />
         <div className='block'>
-          <span className="text-xl font-bold pb-4">Logs</span>
+          <span className="text-xl text-gray-800 dark:text-gray-200 font-bold pb-4">Logs</span>
           <div style={{ height: '45vh' }} className="flex flex-col overflow-y-scroll">
             {this.state.logs.map((key, index) => <Log key={index} type={key.type} subject={key.subject} message={key.message}/>)}
           </div>

@@ -52,7 +52,12 @@ const Devices = () => {
         <div className="inline-block w-1/6 py-2 px-2"></div>
       </div>
       {!devices.fetching && devices.data.devices.map((device, index) => {
-        return <Device name={device.name} config={device.config} uuid={device.uuid} key={index} index={index}/>
+        return <Device
+          name={device.name}
+          config={device.config}
+          uuid={device.uuid}
+          key={index}
+          index={index}/>
       })}
       {showNewDevice ? (<NewDevice newDevice={newDevice} setNewDevice={setNewDevice}/>) : (null)
       }
@@ -61,7 +66,13 @@ const Devices = () => {
           <div>
             <div className="inline-block w-4/6 py-2 px-2"></div>
             <div className="inline-block w-1/6 ">
-              <button className="py-2 px-2 ml-px h-10 border-l border-gray-500 w-full" onClick={ () => handleCancel(setNewDevice, setShowNewDevice) }>Cancel</button>
+              <button
+                className="py-2 px-2 ml-px h-10 border-l border-gray-500 w-full"
+                onClick={
+                  () => handleCancel(setNewDevice, setShowNewDevice)
+                }>
+                Cancel
+              </button>
             </div>
             <div className="inline-block w-1/6 ">
               <button

@@ -8,11 +8,9 @@ class Log extends Component {
   render () {
     if (this.props.type === 'info') {
       return (
-        <div className="flex-none bg-blue-900 mb-2">
-          <div className="block w-1 bg-blue-500">
-          </div>
+        <div className="flex-none bg-blue-400 dark:bg-blue-500 rounded-lg mr-1 mb-2">
           <div className="block w-auto items-center p-2">
-            <span className="text-sm font-bold pb-2">
+            <span className="text-sm w-64 font-bold pb-2">
               {this.props.subject || 'Info'}{' '}
             </span>
             <span className="text-sm">
@@ -23,8 +21,7 @@ class Log extends Component {
       )
     } else if (this.props.type === 'success') {
       return (
-        <div className="flex bg-green-900 mb-2">
-          <div className="w-1 bg-green-500"></div>
+        <div className="flex bg-green-400 dark:bg-green-500 rounded-lg mr-1 mb-2">
           <div className="w-auto items-center p-2">
             <span className="text-sm font-bold pb-2">
               {this.props.subject || 'Success'}{' '}
@@ -37,31 +34,27 @@ class Log extends Component {
       )
     } else if (this.props.type === 'warn') {
       return (
-        <div className="flex bg-yellow-900 mb-2">
-          <div className="w-1 bg-yellow-400">
-          </div>
-          <div className="w-auto text-grey-darker items-center p-2 pt-1">
+        <div className="flex-none bg-orange-400 dark:bg-orange-500 rounded-lg mr-1 mb-2">
+          <div className="block w-auto items-center p-2">
             <span className="text-sm font-bold pb-2">
-              {this.props.subject || 'Warning'}
+              {this.props.subject || 'Warning'}{' '}
             </span>
-            <p className="text-sm">
+            <span className="text-sm">
               {this.props.message}
-            </p>
+            </span>
           </div>
         </div>
       )
     } else if (this.props.type === 'error') {
       return (
-        <div className="flex bg-red-900 mb-2">
-          <div className="w-1 bg-red-400">
-          </div>
-          <div className="w-auto text-grey-darker items-center p-2 pt-1">
+        <div className="flex-none bg-red-400 dark:bg-red-500 rounded-lg mr-1 mb-2">
+          <div className="block w-auto items-center p-2">
             <span className="text-sm font-bold pb-2">
-              {this.props.subject || 'Error'}
+              {this.props.subject || 'Error'}{' '}
             </span>
-            <p className="text-sm">
+            <span className="text-sm">
               {this.props.message}
-            </p>
+            </span>
           </div>
         </div>
       )

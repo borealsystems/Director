@@ -1,6 +1,6 @@
 {
   "name": "director",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Boreal Systems Director",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/director",
@@ -60,6 +60,7 @@
     "file-loader": "^4.2.0",
     "image-webpack-loader": "^6.0.0",
     "react-hot-loader": "^4.12.15",
+    "tailwindcss-dark-mode": "^1.1.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.9.0"

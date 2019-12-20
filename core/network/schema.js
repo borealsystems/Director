@@ -9,6 +9,7 @@ import {
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { find } from 'lodash'
 import db from '../libs/db'
+import system from '../libs/system'
 const uuidBase62 = require('uuid-base62')
 const debug = require('debug')('BorealDirector:core/network/schema')
 
@@ -16,24 +17,6 @@ var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-      // definitions: { // Device Definitions // GraphQL-ifies definition
-      //   type: new GraphQLList(new GraphQLObjectType({
-      //     fields: {
-      //       name: {
-      //         type: GraphQLString!,
-      //         resolve: () => { 'Ross Carbonite Black' }
-      //       }
-      //       manufacturer: {
-      //         type: GraphQLString!,
-      //         resolve: () => { 'Ross Video' }
-      //       }
-      //       product: {
-      //         type: GraphQLString!,
-      //         resolve: () => { 'Carbonite Black' }
-      //       }
-      //     }
-      //   }))
-      // },
       definition: { // Full Device Definition
         type: GraphQLJSONObject,
         args: {
@@ -88,6 +71,7 @@ var schema = new GraphQLSchema({
           }
           debug(args.name, args.config)
           db.put('device', [...(db.get('device')), newDevice])
+          system.emit('device_update', uuid)
           return `device.${uuid}`
         }
       }
