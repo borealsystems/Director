@@ -6,6 +6,7 @@ import providerManager from './libs/providerManager'
 import dbload from './libs/dbUtils'
 import './network'
 import './network/mdns'
+import './controllers/controllerManager'
 
 const debug = require('debug')('BorealDirector:core/main')
 
