@@ -72,6 +72,7 @@ var schema = new GraphQLSchema({
           debug(args.name, args.config)
           db.put('device', [...(db.get('device')), newDevice])
           system.emit('device_update', uuid)
+          debug(newDevice)
           return `device.${uuid}`
         }
       }

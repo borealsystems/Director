@@ -21,8 +21,8 @@ class Log extends Component {
       )
     } else if (this.props.type === 'success') {
       return (
-        <div className="flex bg-green-400 dark:bg-green-500 rounded-lg mr-1 mb-2">
-          <div className="w-auto items-center p-2">
+        <div className="flex-none bg-green-400 dark:bg-green-500 rounded-lg mr-1 mb-2">
+          <div className="block w-auto items-center p-2">
             <span className="text-sm font-bold pb-2">
               {this.props.subject || 'Success'}{' '}
             </span>

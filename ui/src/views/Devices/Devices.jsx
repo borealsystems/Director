@@ -38,24 +38,22 @@ const Devices = () => {
   )
 
   return (
-    <div className="w-100">
-      <div className="bg-gray-700 text-center font-bold border border-gray-500 border-b-0 rounded-t-lg">
+    <div className="w-100 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+      <div className="text-center font-bold border border-gray-500 border-b-0 rounded-t-lg">
         <div className="inline-block w-3/6 py-2 px-2">Devices</div>
         <div className="inline-block w-1/6 py-2 px-2"></div>
         <div className="inline-block w-1/3 py-2 px-2">
-          <input className="shadow appearance-none border border-gray-500 rounded bg-gray-700 w-full py-2 px-3 text-white leading-tight focus:outline-none focus:border-white" id="username" type="text" placeholder="Search" />
+          <input className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:border-white" id="username" type="text" placeholder="Search" />
         </div>
       </div>
-      <div className="bg-gray-800 text-center font-bold border border-gray-500 border-b-0">
+      <div className="bg-gray-400 dark:bg-gray-600 text-center font-bold border border-gray-500 border-b-0">
         <div className="inline-block w-3/6 py-2 px-2">Name</div>
         <div className="inline-block w-1/3 py-2 px-2">UUID</div>
         <div className="inline-block w-1/6 py-2 px-2"></div>
       </div>
       {!devices.fetching && devices.data.devices.map((device, index) => {
         return <Device
-          name={device.name}
-          config={device.config}
-          uuid={device.uuid}
+          device={device}
           key={index}
           index={index}/>
       })}
