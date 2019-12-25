@@ -44,8 +44,8 @@ var schema = new GraphQLSchema({
         resolve: () => { return 'System Operating As Intended' }
       },
       devices: { // List all devices
-        type: new GraphQLList(GraphQLJSONObject),
-        resolve: () => { return db.get('device') }
+        type: GraphQLJSONObject,
+        resolve: () => { return db.get('devices') }
       }
     }
   }),
@@ -64,16 +64,25 @@ var schema = new GraphQLSchema({
         resolve: (parent, args) => {
           const uuid = uuidBase62.v4()
           const newDevice = {
-            uuid: uuid,
-            definition: args.definition,
             name: args.name,
+            definition: args.definition,
             config: args.config
           }
-          debug(args.name, args.config, args.definition)
-          db.put('device', [...(db.get('device')), newDevice])
+          db.put(`devices.${uuid}`, newDevice)
           system.emit('device_update', uuid)
           debug(newDevice)
-          return `device.${uuid}`
+          return `devices.${uuid}`
+        }
+      },
+      deleteDevice: {
+        type: GraphQLString,
+        args: {
+          uuid: { type: GraphQLString }
+        },
+        resolve: (parent, args) => {
+          db.remove(`devices.${args.uuid}`)
+          system.emit('device_delete', args.uuid)
+          return `${args.uuid} deleted`
         }
       }
     }

@@ -86,7 +86,7 @@ const NewDevice = (props) => {
                     <ProviderRequirements
                       providerRequirements={get(data.providerRequirements, data.definition.provider, [])}
                       requirements={requirements}
-                      onChange={(req) => { props.setNewDevice({ ...props.newDevice, config: { ...props.newDevice.requirements, ...req } }) }}>
+                      onChange={(req) => { props.setNewDevice({ ...props.newDevice, config: { ...props.newDevice.config, ...req } }) }}>
                     </ProviderRequirements>
                   </div>
                 )}

@@ -1,6 +1,5 @@
 import db from './db'
 import system from './system'
-const { version, name } = require('../../package.json')
 const debug = require('debug')('BorealDirector:src/libs/dbUtils')
 
 const dbLoad = () => {
@@ -8,12 +7,11 @@ const dbLoad = () => {
   db.get('state') === undefined ? dbCreate() : system.emit('db', 'loaded')
 }
 
-const coreSettingsStructure = { name: name, version: version }
-debug(`coreSettingsStruct: ${JSON.stringify(coreSettingsStructure)}`)
+const defaultDevice = { definition: 'BorealDirector-Internal', name: 'Internal' }
 
 const dbCreate = () => {
-  debug('Creating DB')
-  db.put('coreSettings', coreSettingsStructure)
+  debug('No DB, Creating DB')
+  db.put('devices.1000000000000000000000', defaultDevice)
   db.put('state', 1)
   system.emit('db', 'created')
 }
