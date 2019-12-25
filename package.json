@@ -1,6 +1,6 @@
 {
   "name": "director",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Boreal Systems Director",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/director",
@@ -34,6 +34,8 @@
     "path": "^0.12.7",
     "postcss-loader": "^3.0.0",
     "react": "^16.11.0",
+    "react-alert": "^6.0.0",
+    "react-alert-template-basic": "^1.0.0",
     "react-dom": "^16.11.0",
     "react-dropdown": "^1.6.4",
     "react-router-dom": "^5.1.2",

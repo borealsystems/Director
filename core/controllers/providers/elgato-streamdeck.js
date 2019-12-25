@@ -1,5 +1,4 @@
 import db from '../../libs/db'
-import system from '../../libs/system'
 import { findKey } from 'lodash'
 const uuidBase62 = require('uuid-base62')
 const { openStreamDeck, listStreamDecks } = require('elgato-stream-deck')

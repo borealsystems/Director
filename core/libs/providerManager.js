@@ -1,9 +1,9 @@
-import rosstalk from '../network/providers/rosstalk'
+import { initRosstalk } from '../network/providers/rosstalk'
 
 const ProviderManager = () => {}
 
 ProviderManager.load = (dir) => {
-  rosstalk.init()
+  initRosstalk()
 }
 
 export default ProviderManager

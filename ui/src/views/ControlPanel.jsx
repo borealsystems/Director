@@ -82,12 +82,13 @@ const ControlPanel = () => {
             <span className={styleSubHeading}>User</span>
             <NavLink to="/UserPreferences" className={styleTabInactive} activeClassName={styleTabActive}>User Preferences</NavLink>
           </div>
-          <div className="flex-1 absolute bottom-0 w-56 text-sm uppercase text-gray-900 bg-teal-400 h-20 mb-4 rounded-r-lg shadow-lg dark:shadow-none">
+          <div className="flex-1 absolute bottom-0 w-56 text-sm uppercase text-gray-900 bg-teal-400 h-40 mb-4 pt-4 rounded-r-lg shadow-lg dark:shadow-none">
             <div className={styleTabInactive}>
-              <span >
+              <span className="">
                 {user[0].firstname} {user[0].lastname}<br />
                   LOGOUT
               </span>
+              <div className="h-10 my-2"></div>
               <span className="text-lg font-light">
                 <Clock />
               </span>

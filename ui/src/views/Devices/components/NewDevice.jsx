@@ -51,7 +51,7 @@ const NewDevice = (props) => {
         setDefinition(data.definition)
 
         return (
-          <div className="inline-block w-full py-4 px-4 border-t border-l border-r border-gray-500">
+          <div className="inline-block bg-gray-200 dark:bg-gray-800 w-full py-4 px-4 border-t border-l border-r border-gray-500">
             <div className="text-3xl py-2 -mt-4 px-2">Add A New Device</div>
             <div className="flex">
               <input className="flex-initial shadow appearance-none border border-gray-500 rounded bg-gray-700 w-1/3 mx-2 py-2 px-3 text-white leading-tight focus:outline-none focus:border-white"

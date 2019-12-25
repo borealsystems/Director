@@ -5,6 +5,7 @@ const ProviderRequirements = ['ip', 'port']
 
 class TCPClient {
   constructor (host, port) {
+    debug(host, port)
     this.client = new net.Socket()
     this.client.connect(port, host, function () {
       debug('CONNECTED TO: ' + host + ':' + port)
@@ -14,6 +15,7 @@ class TCPClient {
 
   send (command) {
     this.client.write(command)
+    debug(command)
   }
 
   close () {

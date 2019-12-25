@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import { hot } from 'react-hot-loader'
 import { Provider, createClient } from 'urql'
+import { Provider as AlertProvider } from 'react-alert'
+import AlertTemplate from './components/AlertTemplate.jsx'
 
 // import LoginPage from './views/LoginPage.jsx'
 import ControlPanel from './views/ControlPanel.jsx'
@@ -16,19 +18,13 @@ const client = createClient({
 // }
 
 const App = () => {
-  // constructor (props) {
-  //   super(props)
-  //   this.state = { isLoggedIn: 1 }
-  // }
-
-  var isLoggedIn = useState(0)
-
-  isLoggedIn = 1
-
-  if (isLoggedIn === 1) {
+  var [isLoggedIn] = useState(true)
+  if (isLoggedIn === true) {
     return (
       <Provider value={client}>
-        <ControlPanel />
+        <AlertProvider template={AlertTemplate} position={'bottom left'} timeout={5000} transition="fade">
+          <ControlPanel />
+        </AlertProvider>
       </Provider>
     )
   }

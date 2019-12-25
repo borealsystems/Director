@@ -17,16 +17,18 @@ const requirements = {
   ]
 }
 
-const rosstalk = (host, port, command) => {
-  debug(requirements)
-  const tcp = new TCPClient(host, port)
-  tcp.send(command)
-}
+class Rosstalk extends TCPClient {}
 
-rosstalk.init = () => {
+// const rosstalk = (host, port, command) => {
+//   debug(requirements)
+//   const tcp = new TCPClient(host, port)
+//   tcp.send(command)
+// }
+
+const initRosstalk = () => {
   ProviderRequirements.push(requirements)
   debug(ProviderRequirements)
 }
 
-export default rosstalk
-export { requirements }
+export default Rosstalk
+export { initRosstalk, requirements }

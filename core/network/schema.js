@@ -9,9 +9,9 @@ import {
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { find } from 'lodash'
 import db from '../libs/db'
-import system from '../libs/system'
-const uuidBase62 = require('uuid-base62')
-const debug = require('debug')('BorealDirector:core/network/schema')
+// eslint-disable-next-line no-unused-vars
+import { deviceCreate, deviceModify, deviceDelete } from '../libs/deviceManager'
+// const debug = require('debug')('BorealDirector:core/network/schema')
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -62,16 +62,13 @@ var schema = new GraphQLSchema({
           config: { type: GraphQLJSONObject }
         },
         resolve: (parent, args) => {
-          const uuid = uuidBase62.v4()
           const newDevice = {
             name: args.name,
             definition: args.definition,
             config: args.config
           }
-          db.put(`devices.${uuid}`, newDevice)
-          system.emit('device_update', uuid)
-          debug(newDevice)
-          return `devices.${uuid}`
+          // deviceCreate(newDevice)
+          return deviceCreate(newDevice)
         }
       },
       deleteDevice: {
@@ -80,9 +77,8 @@ var schema = new GraphQLSchema({
           uuid: { type: GraphQLString }
         },
         resolve: (parent, args) => {
-          db.remove(`devices.${args.uuid}`)
-          system.emit('device_delete', args.uuid)
-          return `${args.uuid} deleted`
+          deviceDelete(args.uuid)
+          return 200
         }
       }
     }
