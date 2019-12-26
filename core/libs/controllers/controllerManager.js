@@ -1,5 +1,5 @@
 import { connectStreamDecks } from './providers/elgato-streamdeck'
-import db from '../libs/db'
+import db from '../db'
 
 const debug = require('debug')('BorealDirector:core/controllers/controllerManager')
 

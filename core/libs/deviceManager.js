@@ -27,8 +27,7 @@ const deviceDelete = (_uuid) => {
 }
 
 const initialiseDevice = (_uuid, _device) => {
-  const provider = find(definitions, { name: _device.definition }).provider
-  switch (provider) {
+  switch (find(definitions, { name: _device.definition }).provider) {
     case 'rosstalk':
       providerConnections.push({ uuid: _uuid, connection: new Rosstalk(_device.config.ip, _device.config.port) })
       debug(providerConnections)

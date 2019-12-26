@@ -1,4 +1,4 @@
-import db from '../../libs/db'
+import db from '../../db'
 import { findKey } from 'lodash'
 const uuidBase62 = require('uuid-base62')
 const { openStreamDeck, listStreamDecks } = require('elgato-stream-deck')
@@ -6,6 +6,8 @@ const debug = require('debug')('BorealDirector:core/controllers/elgato-streamdec
 
 let itemsProcessed = 0
 const uuidArray = []
+
+// TODO: Fix this pile of crap
 
 const connectStreamDecks = () => {
   return new Promise((resolve, reject) => {
