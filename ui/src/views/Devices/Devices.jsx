@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { hot } from 'react-hot-loader'
 import { useQuery, useMutation } from 'urql'
-import { keys } from 'lodash'
 // eslint-disable-next-line no-unused-vars
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { useAlert } from 'react-alert'
@@ -51,9 +50,12 @@ const Devices = () => {
       </div>
 
       {!devices.fetching &&
-        keys(devices.data.devices).map((key) => {
-          return <Device device={devices.data.devices[key]} key={key} uuid={key} refreshContainer={() => { updateDevices() }}/>
+        devices.data.devices.map((value, index) => {
+          return (<Device device={value} key={index} refreshContainer={() => { updateDevices() }}/>)
         })
+        // devices.data.devices.forEach((element, index) => {
+        //   return <Device device={element} key={index} refreshContainer={() => { updateDevices() }}/>
+        // })
       }
 
       {showNewDevice ? (<NewDevice newDevice={newDevice} setNewDevice={setNewDevice}/>) : (null)}

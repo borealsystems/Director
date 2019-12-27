@@ -1,6 +1,6 @@
 import db from './db'
 import { devices, definitions, providerConnections } from './globals'
-import { find } from 'lodash'
+import { find, remove } from 'lodash'
 
 // eslint-disable-next-line no-unused-vars
 import Rosstalk from '../network/providers/rosstalk'
@@ -10,7 +10,7 @@ const debug = require('debug')('BorealDirector:core/libs/deviceManager')
 
 const deviceCreate = (_config) => {
   const uuid = uuidBase62.v4()
-  db.put(`devices.${uuid}`, _config)
+  db.put('devices', [...db.get('devices'), { uuid: uuid, ..._config }])
   devices.push(uuid)
   debug(`Device ${uuid} Created`)
   initialiseDevice(uuid, _config)
@@ -22,7 +22,9 @@ const deviceModify = (_uuid, _config) => {
 }
 
 const deviceDelete = (_uuid) => {
-  db.remove(`devices.${_uuid}`)
+  var devicesArray = db.get('devices')
+  remove(devicesArray, { uuid: _uuid })
+  db.put('devices', devicesArray)
   debug(`Device ${_uuid} Deleted`)
 }
 

@@ -22,9 +22,9 @@ const Device = (props) => {
 
   const deleteDevice = () => {
     if (confirm('Are you sure?\nThis cannot be undone and will break all actions that use this device')) {
-      deleteDeviceMutation({ uuid: props.uuid }).then(props.refreshContainer())
+      deleteDeviceMutation({ uuid: props.device.uuid }).then(props.refreshContainer())
       if (deleteDeviceMutationResult.data !== false) {
-        alert.success({ title: 'Device Deleted', content: `${props.device.name}\n${props.uuid}` })
+        alert.success({ title: 'Device Deleted', content: `${props.device.name}\n${props.device.uuid}` })
       }
     }
   }
@@ -33,7 +33,7 @@ const Device = (props) => {
     <div key={props.index} className='bg-gray-300 dark:bg-gray-800'>
       <div className="text-center">
         <div className="inline-block w-3/6 h-10 py-2 px-2 border-t border-l border-gray-500">{props.device.name}</div>
-        <div className="inline-block w-1/3 h-10 py-2 px-2 border-t border-l border-gray-500">{props.uuid}</div>
+        <div className="inline-block w-1/3 h-10 py-2 px-2 border-t border-l border-gray-500">{props.device.uuid}</div>
         <div className="inline-block w-1/6 h-10 py-2 px-2 border-t border-l border-r border-gray-500">
           {showProperties ? (
             <button className="text-xs text-gray-500 uppercase" onClick={() => toggleProps()}>Less {'<'}</button>
@@ -44,7 +44,7 @@ const Device = (props) => {
       </div>
       {showProperties &&
       <div className="w-100 minh-64 py-2 px-2 border-l border-r border-t border-gray-500">
-        <span>UUID: {props.uuid} </span><br/>
+        <span>UUID: {props.device.uuid} </span><br/>
         <span>Name: {props.device.name} </span><br/>
         <span>Definition: {props.device.definition} </span><br/>
         <span>{props.device.config && `config: ${JSON.stringify(props.device.config)}`}</span>

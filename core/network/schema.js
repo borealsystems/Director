@@ -44,7 +44,7 @@ var schema = new GraphQLSchema({
         resolve: () => { return 'System Operating As Intended' }
       },
       devices: { // List all devices
-        type: GraphQLJSONObject,
+        type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('devices') }
       },
       functions: { // List all devices
@@ -60,8 +60,8 @@ var schema = new GraphQLSchema({
       newDevice: {
         type: GraphQLString,
         args: {
-          name: { type: GraphQLString },
           definition: { type: GraphQLString },
+          name: { type: GraphQLString },
           ok: { type: GraphQLBoolean },
           config: { type: GraphQLJSONObject }
         },
