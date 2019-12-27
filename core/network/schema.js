@@ -1,4 +1,4 @@
-import { definitions, ProviderRequirements } from '../libs/globals'
+import { definitions, ProviderRequirements, functions } from '../libs/globals'
 import {
   GraphQLSchema,
   GraphQLObjectType,
@@ -46,6 +46,10 @@ var schema = new GraphQLSchema({
       devices: { // List all devices
         type: GraphQLJSONObject,
         resolve: () => { return db.get('devices') }
+      },
+      functions: { // List all devices
+        type: new GraphQLList(GraphQLJSONObject),
+        resolve: () => { return functions }
       }
     }
   }),

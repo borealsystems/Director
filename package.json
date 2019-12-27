@@ -1,16 +1,21 @@
 {
   "name": "director",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Boreal Systems Director",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/director",
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development DEBUG=BorealDirector:* node .",
-    "wp-dev": "webpack-dev-server --mode development",
+    "dev": "yarn run dev-frontend & yarn run dev-backend",
+    "dev-backend": "NODE_ENV=development DEBUG=BorealDirector:* nodemon .",
+    "dev-frontend": "webpack-dev-server --mode development",
     "webpack": "rm -rf ui/dist/* && webpack --mode production",
     "sloc": "sloc . -e node_modules -f cli-table"
+  },
+  "nodemonConfig": {
+    "ignore": ["ui/*"],
+    "delay": "2500"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.11.0",

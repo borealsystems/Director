@@ -1,34 +1,33 @@
 import db from '../../db'
-import { findKey } from 'lodash'
+import { find } from 'lodash'
+import { controllers } from '../../globals'
 const uuidBase62 = require('uuid-base62')
 const { openStreamDeck, listStreamDecks } = require('elgato-stream-deck')
 const debug = require('debug')('BorealDirector:core/controllers/elgato-streamdeck')
 
 let itemsProcessed = 0
-const uuidArray = []
 
 // TODO: Fix this pile of crap
+// TODO: Replace with a RFP server
 
 const connectStreamDecks = () => {
   return new Promise((resolve, reject) => {
-    const listOfStreamDecks = listStreamDecks()
+    const listOfStreamDecks = listStreamDecks() // List em all
     debug(`Loading ${listOfStreamDecks.length} StreamDeck(s)`)
     listOfStreamDecks.forEach(element => {
-      debug('found', findKey(db.get('controllers'), { serial: element.serialNumber }))
-      if (findKey(db.get('controllers'), { serial: element.serialNumber })) {
-        uuidArray.push(findKey(db.get('controllers'), { serial: element.serialNumber }))
+      if (find(db.get('controllers'), { serialNumber: element.serialNumber })) {
+        controllers.push({ uuid: find(db.get('controllers'), { serialNumber: element.serialNumber }).uuid, type: 'streamdeck', model: element.model, device: openStreamDeck(element.path) })
         itemsProcessed++
         if (itemsProcessed === listOfStreamDecks.length) {
-          resolve(uuidArray)
+          resolve()
         }
       } else {
         const uuid = uuidBase62.v4()
-        db.put(`controllers.${uuid}.device`, openStreamDeck(element.path))
-        db.put(`controllers.${uuid}.serial`, element.serialNumber)
-        uuidArray.push(uuid)
+        controllers.push({ uuid: uuid, type: 'streamdeck', subtype: element, device: openStreamDeck(element.path) })
+        db.put('controllers', [...db.get('controllers'), { uuid: uuid, type: 'streamdeck', model: element.model, serialNumber: element.serialNumber }])
         itemsProcessed++
         if (itemsProcessed === listOfStreamDecks.length) {
-          resolve(uuidArray)
+          resolve()
         }
       }
     })
