@@ -4,13 +4,15 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLInt
 } from 'graphql'
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { find } from 'lodash'
 import db from '../libs/db'
 // eslint-disable-next-line no-unused-vars
 import { deviceCreate, deviceModify, deviceDelete } from '../libs/deviceManager'
+import controllerManager from '../libs/controllers/controllerManager'
 // const debug = require('debug')('BorealDirector:core/network/schema')
 
 var schema = new GraphQLSchema({
@@ -47,9 +49,17 @@ var schema = new GraphQLSchema({
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('devices') }
       },
-      functions: { // List all devices
+      functions: { // All available functions as reported by definitions
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return functions }
+      },
+      actions: { // List all configured actions
+        type: new GraphQLList(GraphQLJSONObject),
+        resolve: () => { return db.get('actions') }
+      },
+      controllers: { // List all connected controllers
+        type: new GraphQLList(GraphQLJSONObject),
+        resolve: () => { return db.get('controllers') }
       }
     }
   }),
@@ -83,6 +93,17 @@ var schema = new GraphQLSchema({
         resolve: (parent, args) => {
           deviceDelete(args.uuid)
           return 200
+        }
+      },
+      setControllerBrightness: { // set controller brightness
+        type: GraphQLString,
+        args: {
+          uuid: { type: GraphQLString },
+          brightness: { type: GraphQLInt }
+        },
+        resolve: (parent, args) => {
+          controllerManager.setBrightness(args.uuid, args.brightness)
+          return args.brightness
         }
       }
     }
