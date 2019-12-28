@@ -11,6 +11,7 @@ const dbCreate = () => {
   debug('No DB, Creating DB')
   db.put('devices', [{ uuid: '1000000000000000000000', definition: 'BorealDirector-Internal', name: 'Internal' }])
   db.put('controllers', [])
+  db.put('actions', [])
   db.put('state', 1)
   system.emit('db', 'created')
 }

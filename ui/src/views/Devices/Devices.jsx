@@ -53,9 +53,6 @@ const Devices = () => {
         devices.data.devices.map((value, index) => {
           return (<Device device={value} key={index} refreshContainer={() => { updateDevices() }}/>)
         })
-        // devices.data.devices.forEach((element, index) => {
-        //   return <Device device={element} key={index} refreshContainer={() => { updateDevices() }}/>
-        // })
       }
 
       {showNewDevice ? (<NewDevice newDevice={newDevice} setNewDevice={setNewDevice}/>) : (null)}
