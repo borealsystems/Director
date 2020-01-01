@@ -5,7 +5,8 @@ import {
   GraphQLString,
   GraphQLList,
   GraphQLBoolean,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLNonNull
 } from 'graphql'
 import { GraphQLJSONObject } from 'graphql-type-json'
 import { find } from 'lodash'
@@ -13,50 +14,77 @@ import db from '../libs/db'
 // eslint-disable-next-line no-unused-vars
 import { deviceCreate, deviceModify, deviceDelete } from '../libs/deviceManager'
 import controllerManager from '../libs/controllers/controllerManager'
-// const debug = require('debug')('BorealDirector:core/network/schema')
+import actionManager from '../libs/actionManager'
+
+// TODO: NonNullable things
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-      definition: { // Full Device Definition
-        type: GraphQLJSONObject,
-        args: {
-          definitionName: { type: GraphQLString }
-        },
-        resolve: (obj, args, context, info) => { return find(definitions, { name: args.definitionName }) }
+
+      // Status and Logs
+
+      status: { // Status Slug
+        type: GraphQLString,
+        resolve: () => { return 'good' }
       },
-      providerRequirements: { // Provider Requirements
+
+      statusMessage: { // Status Message
+        type: GraphQLString,
+        resolve: () => { return 'System Operating As Intended' }
+      },
+
+      // TODO: Implement central logging
+
+      // Providers
+
+      providerRequirements: { //  List provider Requirements
         type: GraphQLJSONObject,
         args: {
           provider: { type: GraphQLString }
         },
         resolve: (obj, args, context, info) => { return find(ProviderRequirements, args.provider) }
       },
-      definitionNames: { // Device Definition Listing
+
+      // Definitions
+
+      definition: { // Get full device definition
+        type: GraphQLJSONObject,
+        args: {
+          definitionName: { type: GraphQLString }
+        },
+        resolve: (obj, args, context, info) => { return find(definitions, { name: args.definitionName }) }
+      },
+
+      definitionNames: { // List all device definitions
         type: new GraphQLList(GraphQLString),
         resolve: () => definitions.map((key, index) => { return definitions[index].name })
       },
-      status: { // Status Slug
-        type: GraphQLString,
-        resolve: () => { return 'good' }
-      },
-      statusMessage: { // Status Message
-        type: GraphQLString,
-        resolve: () => { return 'System Operating As Intended' }
-      },
-      devices: { // List all devices
+
+      // Devices
+
+      devices: { // List all configured devices
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('devices') }
       },
+
+      // Functions
+
       functions: { // All available functions as reported by definitions
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return functions }
       },
+
+      // Actions
+
       actions: { // List all configured actions
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('actions') }
       },
+
+      // Controllers
+
       controllers: { // List all connected controllers
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('controllers') }
@@ -67,7 +95,10 @@ var schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
-      newDevice: {
+
+      // Devices
+
+      newDevice: { // Create a new device
         type: GraphQLString,
         args: {
           definition: { type: GraphQLString },
@@ -81,21 +112,40 @@ var schema = new GraphQLSchema({
             definition: args.definition,
             config: args.config
           }
-          // deviceCreate(newDevice)
           return deviceCreate(newDevice)
         }
       },
-      deleteDevice: {
+
+      // TODO: Edit devices
+
+      deleteDevice: { // Delete a device by UUID
         type: GraphQLString,
         args: {
-          uuid: { type: GraphQLString }
+          uuid: { type: new GraphQLNonNull(GraphQLString) }
         },
         resolve: (parent, args) => {
           deviceDelete(args.uuid)
           return 200
         }
       },
-      setControllerBrightness: { // set controller brightness
+
+      // Actions
+
+      createAction: { // Create a new action
+        type: GraphQLString,
+        args: {
+          device: { type: new GraphQLNonNull(GraphQLString) },
+          function: { type: new GraphQLNonNull(GraphQLString) },
+          params: { type: GraphQLJSONObject }
+        },
+        resolve: (parent, args) => {
+          actionManager.createAction(args.device, args.function, args.params)
+        }
+      },
+
+      // Controllers
+
+      setControllerBrightness: { // Set controller brightness by UUID
         type: GraphQLString,
         args: {
           uuid: { type: GraphQLString },

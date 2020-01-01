@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 
-// TODO: Fix Blue Line
+// TODO: Rewrite as Function
 
 class Log extends Component {
   render () {

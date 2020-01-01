@@ -1,6 +1,8 @@
 import React from 'react'
 import { hot } from 'react-hot-loader'
 
+// TODO: Create Actions
+
 const NewAction = (props) => {
   return (
     <div className="bg-gray-400 dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-center font-bold border border-gray-500 rounded-b-lg">

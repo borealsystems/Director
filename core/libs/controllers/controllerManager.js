@@ -58,7 +58,7 @@ controllerManager.setBrightness = (uuid, brightness) => {
   }
 }
 
-controllerManager.handleExit = () => {
+controllerManager.handleExit = () => { // TODO: make this work
   controllers.forEach(element => {
     if (element.type === 'streamdeck') {
       element.device.clearAllKeys() // Clear everything at startup
