@@ -1,7 +1,7 @@
 import { connectStreamDecks } from './providers/elgato-streamdeck'
 import { controllers } from '../globals'
 import { find } from 'lodash'
-import path from 'path'
+import text2svg from '../utils/text2svg'
 import db from '../db'
 const sharp = require('sharp') // See http://sharp.dimens.io/en/stable/ for full docs on this great library!
 
@@ -15,16 +15,16 @@ controllerManager.handleStreamdecks = () => {
       controllers.forEach(element => {
         if (element.type === 'streamdeck') {
           element.device.setBrightness(100)
-          sharp(path.resolve(__dirname, 'providers/layer2.png'))
+          sharp(text2svg('Test'))
             .flatten() // Eliminate alpha channel, if any.
-            .resize(element.device.ICON_SIZE * element.device.KEY_COLUMNS, element.device.ICON_SIZE * element.device.KEY_ROWS) // Scale up/down to the right size, cropping if necessary.
+            .resize(element.device.ICON_SIZE, element.device.ICON_SIZE) // Scale up/down to the right size, cropping if necessary.
             .raw() // Give us uncompressed RGB.
             .toBuffer()
             .then(buffer => {
-              element.device.fillPanel(buffer)
+              element.device.fillImage(2, buffer)
             })
             .catch(err => {
-              debug(err)
+              debug('Sharp: ', err)
             })
 
           element.device.on('down', keyIndex => { // Handle button presses

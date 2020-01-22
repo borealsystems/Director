@@ -49,7 +49,7 @@ const toggleTheme = () => {
 const ControlPanel = () => {
   var user = useState({ firstname: 'firstname', lastname: 'lastname' })
 
-  const styleTabInactive = 'block rounded-l-lg w-56 py-1 pl-5 object-right'
+  const styleTabInactive = 'block rounded-l w-56 py-1 pl-5 object-right'
   const styleTabActive = styleTabInactive + ' ml-2 w-64 bg-teal-400 shadow-md dark:shadow-none'
   const styleSubHeading = styleTabInactive + ' text-xs text-gray-800 uppercase'
   const styleLine = 'h-px w-64 my-2 bg-gray-700'
@@ -82,7 +82,7 @@ const ControlPanel = () => {
             <span className={styleSubHeading}>User</span>
             <NavLink to="/UserPreferences" className={styleTabInactive} activeClassName={styleTabActive}>User Preferences</NavLink>
           </div>
-          <div className="flex-1 absolute bottom-0 w-56 text-sm uppercase text-gray-900 bg-teal-400 h-40 mb-4 pt-4 rounded-r-lg shadow-lg dark:shadow-none">
+          <div className="flex-1 absolute bottom-0 w-56 text-sm uppercase text-gray-900 bg-teal-400 h-40 mb-4 pt-4 rounded-r shadow-lg dark:shadow-none">
             <div className={styleTabInactive}>
               <span className="">
                 {user[0].firstname} {user[0].lastname}<br />
@@ -95,7 +95,7 @@ const ControlPanel = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1 rounded-l-lg my-4 ml-4 bg-gray-200 dark:bg-gray-800 overflow-y-scroll shadow-xl">
+        <div className="flex-1 rounded-l my-4 ml-4 bg-gray-200 dark:bg-gray-800 overflow-y-scroll shadow-xl">
           <div className="container mx-auto px-2 py-10">
             <Switch>
               <Route path="/Status">
