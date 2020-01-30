@@ -5,7 +5,7 @@ const debug = require('debug')('BorealDirector:core/libs/functionManager')
 const loadFunctions = () => {
   debug('Loading Functions')
   definitions.forEach(definition => {
-    functions.push({ definition: definition.name, functions: definition.functions })
+    functions.push({ name: definition.name, label: definition.product, functions: definition.functions })
   })
 }
 

@@ -64,14 +64,14 @@ var schema = new GraphQLSchema({
 
       // Devices
 
-      devices: { // List all configured devices
+      getDevices: { // List all configured devices
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return db.get('devices') }
       },
 
       // Functions
 
-      functions: { // All available functions as reported by definitions
+      getFunctions: { // All available functions as reported by definitions
         type: new GraphQLList(GraphQLJSONObject),
         resolve: () => { return functions }
       },
@@ -134,12 +134,13 @@ var schema = new GraphQLSchema({
       createAction: { // Create a new action
         type: GraphQLString,
         args: {
+          name: { type: new GraphQLNonNull(GraphQLString) },
           device: { type: new GraphQLNonNull(GraphQLString) },
           function: { type: new GraphQLNonNull(GraphQLString) },
           params: { type: GraphQLJSONObject }
         },
         resolve: (parent, args) => {
-          actionManager.createAction(args.device, args.function, args.params)
+          actionManager.createAction(args.name, args.device, args.function, args.params)
         }
       },
 
