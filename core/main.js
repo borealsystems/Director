@@ -7,6 +7,7 @@ import './network'
 import './network/mdns'
 import controllerManager from './libs/controllers/controllerManager'
 import './libs/functionManager'
+import log from './libs/log'
 
 const debug = require('debug')('BorealDirector:core/main')
 
@@ -21,6 +22,8 @@ controllerManager.initControllers()
 
 process.on('SIGINT', () => {
   controllerManager.handleExit()
-  debug('SIGINT Recieved, shutting down BorealDirector:Core')
+  debug('SIGINT Recieved, shutting down BorealDirector//Core')
   process.exit()
 })
+
+log.error('system is fucked')

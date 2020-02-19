@@ -59,14 +59,24 @@ const NewAction = (props) => {
         <div className="text-3xl py-2 -mt-4 px-2">Add A New Action</div>
         <div className="flex">
           <span className="flex-initial mx-1 py-2 px-1 text-gray-900 dark:text-white">Name</span>
-          <input className="flex-initial appearance-none border border-gray-500 rounded bg-gray-300 dark:bg-gray-700 w-1/3 mx-2 py-2 px-3 text-gray-900 dark:text-white leading-tight focus:outline-none focus:border-white"
+          {/* <input className="flex-initial appearance-none border border-gray-500 rounded bg-gray-300 dark:bg-gray-700 w-1/3 mx-2 py-2 px-3 text-gray-900 dark:text-white leading-tight focus:outline-none focus:border-white"
             type="text"
             id="name"
             value={newAction.name}
             onChange={(e) => {
-              setNewAction({ name: e.target.value, ...newAction })
+              console.log(e.target.value)
+              setNewAction(prevState => { return { name: e.target.value, ...prevState } })
             }}
-            placeholder='' />
+            placeholder='New Action' /> */}
+
+          <input className="flex-initial shadow appearance-none border border-gray-500 rounded bg-gray-700 w-1/3 mx-2 py-2 px-3 text-white leading-tight focus:outline-none focus:border-white"
+            type="text"
+            id="name"
+            value={newAction.name}
+            onChange={(e) => {
+              setNewAction({ ...newAction, name: e.target.value })
+            }}
+            placeholder='Name' />
         </div><br /><hr />
         <div className="text-xl py-2 px-2">Action Steps</div>
 
