@@ -7,6 +7,10 @@ const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, Tabl
 const Logs = () => {
   const headers = [
     {
+      key: 'time',
+      header: 'Time'
+    },
+    {
       key: 'path',
       header: 'Path'
     },
@@ -21,13 +25,14 @@ const Logs = () => {
   ]
 
   const [result] = useQuery({
-    query: '{ getLogs }'
+    query: '{ getLogs }',
+    pollInterval: 1000
   })
 
   if (result.error) {
     return (
       <ToastNotification
-        caption={result.error}
+        caption={result.error.message}
         hideCloseButton={true}
         kind="error"
         lowContrast
@@ -55,6 +60,7 @@ const Logs = () => {
           Logs
         </h1>
         <DataTable
+          isSortable
           rows={result.data.getLogs}
           headers={headers}
           render={({ rows, headers, getHeaderProps }) => (

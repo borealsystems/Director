@@ -4,7 +4,8 @@ import { Loading, ToastNotification } from 'carbon-components-react'
 
 const Status = () => {
   const [result] = useQuery({
-    query: '{ getStatus }'
+    query: '{ getStatus }',
+    pollInterval: 1000
   })
 
   if (result.error) {

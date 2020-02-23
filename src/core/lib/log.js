@@ -107,7 +107,12 @@ const createLogger = (title,
 }
 
 const log = (level, path, message) => {
-  logs.push({ level: level, path: path, message: message })
+  const time = () => {
+    const now = new Date()
+    const date = new Date(now.getTime() - (now.getTimezoneOffset() * 60000))
+    return date.toISOString().replace(/.*T(.*)Z/, '$1')
+  }
+  logs.push({ id: logs.length.toString(), time: time(), level: level, path: path, message: message })
   switch (level) {
     case 'debug':
       createLogger(path).debug(message)
