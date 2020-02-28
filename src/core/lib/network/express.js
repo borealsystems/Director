@@ -2,7 +2,7 @@ import log from '../log'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import path from 'path'
-import { schema } from './schema'
+import { schema } from './graphql/schema'
 import cors from 'cors'
 
 const app = express()

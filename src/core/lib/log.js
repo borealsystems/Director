@@ -6,7 +6,8 @@ import {
 } from 'chalk'
 import nicelyFormat from 'nicely-format'
 import createDebug from 'debug'
-import { logs } from '../globals'
+
+const logs = []
 
 const time = () => {
   const now = new Date()
@@ -136,3 +137,4 @@ const log = (level, path, message) => {
 }
 
 export default log
+export { logs }

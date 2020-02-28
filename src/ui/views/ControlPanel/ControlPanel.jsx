@@ -22,9 +22,12 @@ import { View32, Settings24, Keyboard24, Search20, User20, Notification20 } from
 import NavLink from './components/NavLink.jsx'
 import NavGroup from './components/NavGroup.jsx'
 
+import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
 import Status from './Status/Status.jsx'
+
+import logo from '../../Logos/Dark_Icon.svg'
 
 const ControlPanel = () => (
   <div className="container">
@@ -32,13 +35,14 @@ const ControlPanel = () => (
       <HeaderContainer
         render={({ isSideNavExpanded, onClickSideNavExpand }) => (
           <>
-            <Header aria-label="IBM Platform Name">
+            <Header aria-label="Boreal Systems Director">
               <SkipToContent />
               <HeaderMenuButton
                 aria-label="Open menu"
                 onClick={onClickSideNavExpand}
                 isActive={isSideNavExpanded}
               />
+              <img style={{ marginLeft: '10px', marginRight: '-7px' }} height='36px' src={logo} />
               <HeaderName href="/" prefix='Boreal Systems'>
                 Director
               </HeaderName>
@@ -75,7 +79,7 @@ const ControlPanel = () => (
               <Content id="main-content">
                 <div className="bx--grid">
                   <div className="bx--row">
-                    <section className="bx--offset-lg-2 bx--col-lg-13">
+                    <section className="bx--offset-lg-2 bx--col-lg-10">
                       {/* MONITOR */}
                       <Route exact path="/monitor">
                         <Redirect to="/monitor/status" />
@@ -95,7 +99,7 @@ const ControlPanel = () => (
                       </Route>
                       {/* CONFIGURE */}
                       <Route path="/config/devices">
-                        <h1>Devices</h1>
+                        <Devices />
                       </Route>
                       <Route path="/config/actions">
                         <h1>Actions</h1>

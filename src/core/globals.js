@@ -1,3 +1,0 @@
-const logs = []
-
-export { logs }

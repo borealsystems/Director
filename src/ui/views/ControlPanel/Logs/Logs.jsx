@@ -25,7 +25,15 @@ const Logs = () => {
   ]
 
   const [result] = useQuery({
-    query: '{ getLogs }',
+    query: `query getLogs {
+      getLogs {
+        id
+        time
+        level
+        path
+        message
+      }
+    }`,
     pollInterval: 1000
   })
 
