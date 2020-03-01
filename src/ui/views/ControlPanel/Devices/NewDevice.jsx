@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { Button, Dropdown, TextInput, InlineLoading, InlineNotification } from 'carbon-components-react'
+import omit from 'lodash/omit'
 
-const NewDevice = () => {
+const NewDevice = (props) => {
   const [newDevice, setNewDevice] = useState({})
   const [configuration, setConfiguration] = useState({})
   const [result] = useQuery({
@@ -21,11 +22,13 @@ const NewDevice = () => {
     }`
   })
 
-  var [newDeviceMutationResult, newDeviceMutation] = useMutation({
-    mutation: `mutation newDevice($name: String!, $location: String, $description: String, $provider: String, $configuration) {
-      newDevice(name: $name, definition: $definition, config: $config)
-    }`
-  })
+  const newDeviceMutationGQL = `mutation newDevice($newDevice: newDevice) {
+    newDevice(device: $newDevice) {
+      id
+    }
+  }`
+
+  var [newDeviceMutationResult, newDeviceMutation] = useMutation(newDeviceMutationGQL)
 
   const submitNewDevice = () => {
     console.log('submitting new device')
@@ -37,8 +40,9 @@ const NewDevice = () => {
       })
     }
     newDevice.configuration = conf
-    newDeviceMutation(newDevice)
-    console.log(newDeviceMutationResult)
+    newDeviceMutation({ newDevice: { ...omit(newDevice, '__typename'), provider: { id: newDevice.provider.id } } }).then(console.log(newDeviceMutationResult))
+    // eslint-disable-next-line react/prop-types
+    props.visability(false)
   }
 
   return (
@@ -146,8 +150,6 @@ const NewDevice = () => {
         <Button onClick={() => { submitNewDevice() }} size='default' kind="primary">
           Submit
         </Button>
-        <br/>
-        { JSON.stringify(newDevice) }
         <br/><br/>
       </div>
     </div>

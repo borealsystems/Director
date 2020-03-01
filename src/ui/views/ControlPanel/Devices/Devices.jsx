@@ -96,7 +96,7 @@ const Devices = () => {
                     </Button>
                   </TableToolbarContent>
                 </TableToolbar>
-                <NewDevice />
+                <NewDevice visability={ setNewDeviceVisibility }/>
               </div>
               }
               <Table>

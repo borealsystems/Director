@@ -5,6 +5,8 @@ import {
   GraphQLList
 } from 'graphql'
 
+import configurationType from './configurationType'
+
 const deviceType = new GraphQLObjectType({
   name: 'Device',
   fields: {
@@ -30,19 +32,7 @@ const deviceType = new GraphQLObjectType({
       type: GraphQLString
     },
     configuration: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'configurationItem',
-          fields: {
-            name: {
-              type: GraphQLString
-            },
-            value: {
-              type: GraphQLString
-            }
-          }
-        })
-      )
+      type: new GraphQLList(configurationType)
     }
   }
 })

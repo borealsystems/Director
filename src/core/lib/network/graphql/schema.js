@@ -1,22 +1,20 @@
-import { logs } from '../../log'
 import { providers } from '../providers'
-import { devices } from '../../devices'
+import { createNewDevice, devices } from '../../devices'
+import { logs } from '../../log'
 import db from '../../db'
+import shortid from 'shortid'
 
 import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLList,
-  GraphQLBoolean,
-  GraphQLInputObjectType
-  // GraphQLNonNull
+  GraphQLList
 } from 'graphql'
-// import { GraphQLJSONObject } from 'graphql-type-json'
 
 import providerType from './providerType'
 import logType from './logType'
 import deviceType from './deviceTypes/deviceType.js'
+import newDeviceInputType from './deviceTypes/newDeviceInputType.js'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -53,80 +51,20 @@ var schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
-      createNewDevice: { // Set controller brightness by UUID
+      newDevice: { // Set controller brightness by UUID
         type: deviceType,
         args: {
-          input: {
-            type: new GraphQLInputObjectType({
-              name: 'newDevice',
-              fields: {
-                name: {
-                  type: GraphQLString
-                },
-                location: {
-                  type: GraphQLString
-                },
-                description: {
-                  type: GraphQLString
-                },
-                provider: {
-                  type: new GraphQLInputObjectType({
-                    name: 'providerObject',
-                    fields: {
-                      id: {
-                        type: GraphQLString
-                      },
-                      label: {
-                        type: GraphQLString
-                      },
-                      protocol: {
-                        type: GraphQLString
-                      },
-                      parameters: {
-                        type: new GraphQLList(
-                          new GraphQLInputObjectType({
-                            name: 'parameterObject',
-                            fields: {
-                              required: {
-                                type: GraphQLBoolean
-                              },
-                              id: {
-                                type: GraphQLString
-                              },
-                              label: {
-                                type: GraphQLString
-                              },
-                              regex: {
-                                type: GraphQLString
-                              }
-                            }
-                          })
-                        )
-                      }
-                    }
-                  }),
-                  configuration: {
-                    type: new GraphQLList(
-                      new GraphQLInputObjectType({
-                        name: 'newDeviceConfiguration',
-                        fields: {
-                          id: {
-                            type: GraphQLString
-                          },
-                          value: {
-                            type: GraphQLString
-                          }
-                        }
-                      })
-                    )
-                  }
-                }
-              }
-            })
+          device: {
+            type: newDeviceInputType
           }
         },
         resolve: (parent, args) => {
-          return ('there was an attempt')
+          const newDevice = {
+            id: shortid.generate(),
+            ...args.device,
+            provider: args.device.provider.id
+          }
+          return createNewDevice(newDevice)
         }
       }
     }
