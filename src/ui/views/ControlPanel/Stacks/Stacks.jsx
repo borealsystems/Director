@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
 import headers from './headers'
-import NewDevice from './NewDevice.jsx'
+import NewStack from './NewStack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
 const Devices = () => {
-  const [newDeviceVisability, setNewDeviceVisibility] = useState(false)
+  const [newStackVisability, setNewStackVisability] = useState(true)
   const [result] = useQuery({
     query: `query getDevices {
       getDevices {
@@ -19,6 +19,10 @@ const Devices = () => {
         enabled
         description
         location
+        configuration {
+          name
+          value
+        }
       }
     }`,
     pollInterval: 1000
@@ -32,9 +36,9 @@ const Devices = () => {
             margin: '0 0 32px 0'
           }}
         >
-          Devices
+          Stacks
         </h1>
-        <GraphQLError caption={result.error.message} />
+        <GraphQLError error={result.error.message} />
       </div>
     )
   }
@@ -47,7 +51,7 @@ const Devices = () => {
             margin: '0 0 32px 0'
           }}
         >
-          Devices
+          Stacks
         </h1>
         <DataTable
           isSortable
@@ -55,31 +59,31 @@ const Devices = () => {
           headers={headers}
           render={({ rows, headers, getHeaderProps }) => (
             <TableContainer>
-              {!newDeviceVisability &&
+              {!newStackVisability &&
               <div>
                 <TableToolbar>
                   {/* pass in `onInputChange` change here to make filtering work */}
                   {/* <TableToolbarSearch onChange={() => {}} /> */}
                   <TableToolbarContent>
-                    <Button onClick={() => { setNewDeviceVisibility(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
+                    <Button onClick={() => { setNewStackVisability(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
                       Add new
                     </Button>
                   </TableToolbarContent>
                 </TableToolbar>
               </div>
               }
-              {newDeviceVisability &&
+              {newStackVisability &&
               <div>
                 <TableToolbar>
                   {/* pass in `onInputChange` change here to make filtering work */}
                   {/* <TableToolbarSearch onChange={() => {}} /> */}
                   <TableToolbarContent>
-                    <Button onClick={() => { setNewDeviceVisibility(false) }} style={{ minWidth: '20%' }} size='default' kind="primary">
+                    <Button onClick={() => { setNewStackVisability(false) }} style={{ minWidth: '20%' }} size='default' kind="primary">
                       Cancel
                     </Button>
                   </TableToolbarContent>
                 </TableToolbar>
-                <NewDevice visability={ setNewDeviceVisibility }/>
+                <NewStack visability={ setNewStackVisability }/>
               </div>
               }
               <Table>

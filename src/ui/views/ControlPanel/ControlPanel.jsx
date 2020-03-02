@@ -25,6 +25,7 @@ import NavGroup from './components/NavGroup.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
+import Stacks from './Stacks/Stacks.jsx'
 import Status from './Status/Status.jsx'
 
 import logo from '../../Logos/Dark_Icon.svg'
@@ -69,7 +70,7 @@ const ControlPanel = () => (
                   </NavGroup>
                   <NavGroup icon={Settings24} label="Configure" grouppath="/config">
                     <NavLink to="/config/devices" label="Devices"/>
-                    <NavLink to="/config/actions" label="Actions"/>
+                    <NavLink to="/config/stacks" label="Stacks"/>
                     <NavLink to="/config/controllers" label="Controllers"/>
                   </NavGroup>
                 </SideNavItems>
@@ -101,8 +102,8 @@ const ControlPanel = () => (
                       <Route path="/config/devices">
                         <Devices />
                       </Route>
-                      <Route path="/config/actions">
-                        <h1>Actions</h1>
+                      <Route path="/config/stacks">
+                        <Stacks />
                       </Route>
                       <Route path="/config/controllers">
                         <h1>Controllers</h1>

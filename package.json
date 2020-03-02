@@ -53,6 +53,7 @@
     "lodash": "^4.17.15",
     "nicely-format": "^1.1.0",
     "osc": "^2.4.0",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.19",
