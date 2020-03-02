@@ -24,5 +24,5 @@ app.get('/*', (req, res) => {
 })
 
 app.listen(3001, () => {
-  log('info', 'core/lib/network/express', 'Director is listening on http://localhost:3001')
+  log('info', 'core/lib/network/express', 'Director UI Available on http://localhost:3001')
 })

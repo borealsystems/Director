@@ -1,4 +1,4 @@
-import { providers } from '../providers'
+import { providers } from '../../providers'
 import { createNewDevice, devices } from '../../devices'
 import { logs } from '../../log'
 import db from '../../db'

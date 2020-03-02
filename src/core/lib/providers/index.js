@@ -1,3 +1,5 @@
+import { oscInit, oscSend } from './osc'
+
 const providers = [
   {
     id: 'genericOSC',
@@ -20,4 +22,16 @@ const providers = [
   }
 ]
 
-export { providers }
+const initProviders = () => {
+  providers.map((provider, index) => {
+    switch (provider.id) {
+      case 'genericOSC':
+        console.log(provider)
+        oscInit(provider)
+        oscSend('127.0.0.1', 64410, '/test', [
+          { type: 's', value: 'default' }])
+    }
+  })
+}
+
+export { initProviders, providers }
