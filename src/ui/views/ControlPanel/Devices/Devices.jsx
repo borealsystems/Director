@@ -42,17 +42,23 @@ const Devices = () => {
   if (result.data) {
     return (
       <div>
-        <h1>Devices</h1>
-        <p>
-          Devices are a piece of hardware or software configured to be controlled by BorealDirector.
-        </p>
-        <br />
         <DataTable
           isSortable
           rows={result.data.getDevices}
           headers={headers}
-          render={({ rows, headers, getHeaderProps }) => (
-            <TableContainer>
+          render={({
+            rows,
+            headers,
+            getHeaderProps,
+            getRowProps,
+            getTableProps,
+            getTableContainerProps
+          }) => (
+            <TableContainer
+              title="Devices"
+              description="Devices are a piece of hardware or software configured to be controlled by BorealDirector."
+              {...getTableContainerProps()}
+            >
               {!newDeviceVisability &&
               <div>
                 <TableToolbar>
@@ -80,7 +86,7 @@ const Devices = () => {
                 <NewDevice visability={ setNewDeviceVisibility }/>
               </div>
               }
-              <Table>
+              <Table {...getTableProps()}>
                 <TableHead>
                   <TableRow>
                     <TableHeader />
@@ -94,16 +100,21 @@ const Devices = () => {
                 <TableBody>
                   {rows.map(row => (
                     <React.Fragment key={row.id}>
-                      <TableExpandRow>
+                      <TableExpandRow {...getRowProps({ row })}>
                         {row.cells.map(cell => (
                           <TableCell key={cell.id}>{cell.value}</TableCell>
                         ))}
                       </TableExpandRow>
-                      {row.isExpanded && (
-                        <TableExpandedRow colSpan={headers.length + 1}>
-                          <p>Pretend this works</p>
-                        </TableExpandedRow>
-                      )}
+                      <TableExpandedRow
+                        colSpan={headers.length + 1}
+                        className="demo-expanded-td">
+                        <h1 className="demo-inner-container-header">
+                          Expandable row content
+                        </h1>
+                        <p className="demo-inner-container-content">
+                          Description here
+                        </p>
+                      </TableExpandedRow>
                     </React.Fragment>
                   ))}
                 </TableBody>

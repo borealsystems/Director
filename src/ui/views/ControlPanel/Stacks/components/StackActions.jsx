@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import headers from './actionHeaders'
 import { DataTable } from 'carbon-components-react'
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
+const { Table, TableContainer, TableExpandHeader, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
 const tmp = [
   {
@@ -46,15 +46,23 @@ const StackActions = (props) => {
   return (
     <>
       <DataTable
-        isSortable
         rows={props.actions}
         headers={headers}
-        render={({ rows, headers, getHeaderProps }) => (
-          <TableContainer>
-            <Table>
+        {...props}
+        render={({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          getTableContainerProps
+        }) => (
+          <TableContainer
+            {...getTableContainerProps()}>
+            <Table {...getTableProps()}>
               <TableHead>
                 <TableRow>
-                  <TableHeader />
+                  <TableExpandHeader />
                   {headers.map((header, index) => (
                     <TableHeader key={index} {...getHeaderProps({ header })}>
                       {header.header}
@@ -63,18 +71,23 @@ const StackActions = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                { props.actions && rows.map(row => (
+                {rows.map(row => (
                   <React.Fragment key={row.id}>
-                    <TableExpandRow>
+                    <TableExpandRow {...getRowProps({ row })}>
                       {row.cells.map(cell => (
                         <TableCell key={cell.id}>{cell.value}</TableCell>
                       ))}
                     </TableExpandRow>
-                    {row.isExpanded && (
-                      <TableExpandedRow colSpan={headers.length + 1}>
-                        <p>Pretend this works</p>
-                      </TableExpandedRow>
-                    )}
+                    <TableExpandedRow
+                      colSpan={headers.length + 1}
+                      className="demo-expanded-td">
+                      <h1 className="demo-inner-container-header">
+                        Expandable row content
+                      </h1>
+                      <p className="demo-inner-container-content">
+                        Description here
+                      </p>
+                    </TableExpandedRow>
                   </React.Fragment>
                 ))}
               </TableBody>
