@@ -1,4 +1,5 @@
 import { oscInit } from './osc'
+import log from '../log.js'
 
 const _regex = {
   host: '(^((?:([a-z0-9]\\.|[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9])\\.)+)([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]))\\.?$)|(\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5 [0-5])|[0-1]?[0-9]?[0-9]))\\b)',
@@ -27,7 +28,7 @@ const providers = [
     ],
     providerFunctions: [
       {
-        id: 'integer',
+        id: 'string',
         label: 'Send String',
         parameters: [
           {
@@ -83,6 +84,7 @@ const providers = [
 
 const initProviders = () => {
   providers.map((provider, index) => {
+    log('info', 'core/lib/providers', `Loading Provider: ${provider.label}`)
     switch (provider.id) {
       case 'osc':
         oscInit(provider)

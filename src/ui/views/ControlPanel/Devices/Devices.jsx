@@ -42,13 +42,11 @@ const Devices = () => {
   if (result.data) {
     return (
       <div>
-        <h1
-          style={{
-            margin: '0 0 32px 0'
-          }}
-        >
-          Devices
-        </h1>
+        <h1>Devices</h1>
+        <p>
+          Devices are a piece of hardware or software configured to be controlled by BorealDirector.
+        </p>
+        <br />
         <DataTable
           isSortable
           rows={result.data.getDevices}
@@ -103,7 +101,7 @@ const Devices = () => {
                       </TableExpandRow>
                       {row.isExpanded && (
                         <TableExpandedRow colSpan={headers.length + 1}>
-                          <p>Aux squad rules</p>
+                          <p>Pretend this works</p>
                         </TableExpandedRow>
                       )}
                     </React.Fragment>

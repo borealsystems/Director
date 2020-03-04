@@ -31,7 +31,7 @@ import Status from './Status/Status.jsx'
 import logo from '../../Logos/Dark_Icon.svg'
 
 const ControlPanel = () => (
-  <div className="container">
+  <div className="container bx--theme--g100">
     <Router>
       <HeaderContainer
         render={({ isSideNavExpanded, onClickSideNavExpand }) => (

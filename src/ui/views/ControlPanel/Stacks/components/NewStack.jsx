@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, Dropdown, TextInput, InlineLoading, InlineNotification } from 'carbon-components-react'
+import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
+import StackActions from './StackActions.jsx'
+import GraphQLError from '../../components/GraphQLError.jsx'
 
 const NewStack = (props) => {
   const [newStack, setNewStack] = useState({})
   const [newStackItem, setNewStackItem] = useState({})
-  const [stackActions, setStackActions] = useState([])
+  const [newStackActions, setNewStackActions] = useState([])
   const [result] = useQuery({
     query: `query getDeviceFunctions {
       getDevices {
@@ -67,24 +69,9 @@ const NewStack = (props) => {
             margin: '1vh 0 2vh 1vw'
           }}>Stack Actions</h4>
         </div>
+        <StackActions actions={newStackActions} />
         <div className="bx--row">
-          { result.error &&
-            <InlineNotification
-              caption={result.error.message}
-              hideCloseButton={true}
-              kind="error"
-              lowContrast
-              notificationType="toast"
-              role="alert"
-              style={{
-                marginBottom: '.5rem',
-                minWidth: '30rem'
-              }}
-              subtitle="The Director UI cannot communicate with the server or the server encountered an error. Please check your network connection then contact your system administrator."
-              timeout={0}
-              title="GraphQL Error"
-            />
-          }
+          { result.error && <GraphQLError error={result.error.message} /> }
           { result.fetching && <InlineLoading /> }
           { result.data &&
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
@@ -95,12 +82,12 @@ const NewStack = (props) => {
                 items={result.data.getDevices}
                 itemToString={item => (item ? item.name : '')}
                 // label="Provider"
-                onChange={(dd) => { setNewStack({ ...newStack, device: dd.selectedItem }) }}
+                onChange={(dd) => { setNewStackItem({ ...newStackItem, device: dd.selectedItem }) }}
                 titleText="Action Device"
               />
             </div>
           }
-          { !newStack.device &&
+          { !newStackItem.device &&
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
               <Dropdown
                 ariaLabel="Dropdown"
@@ -112,13 +99,13 @@ const NewStack = (props) => {
               />
             </div>
           }
-          { newStack.device && newStack.device.id !== '0' &&
+          { newStackItem.device && newStackItem.device.id !== '0' &&
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
               <Dropdown
                 ariaLabel="Dropdown"
                 id="newDeviceProvider"
                 label='Required'
-                items={result.data.getProviders.find(item => item.id === newStack.device.provider).providerFunctions}
+                items={result.data.getProviders.find(item => item.id === newStackItem.device.provider).providerFunctions}
                 itemToString={item => (item ? item.label : '')}
                 // label="Provider"
                 onChange={(func) => { setNewStackItem({ ...newStackItem, function: func.selectedItem }) }}
@@ -127,19 +114,19 @@ const NewStack = (props) => {
             </div>
           }
           {/* TODO: Proper validation */}
-          { !newStack.function &&
-            <Button disabled onClick={() => { }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
+          { !newStackItem.function &&
+            <Button disabled style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
             Add Action
             </Button>
           }
-          { newStack.function && newStack.device.id !== '0' &&
-            <Button onClick={() => { }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
+          { newStackItem.function && newStackItem.device.id !== '0' &&
+            <Button onClick={() => { setNewStackActions([...newStackActions, { id: newStackActions.length.toString(), deviceName: newStackItem.device.name, functionLabel: newStackItem.function.label, ...newStackItem }]) }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
             Add Action
             </Button>
           }
         </div><br/>
-        { newStack.function && newStack.function.parameters &&
-          newStack.function.parameters.map((parameter, index) => {
+        { newStackItem.function && newStackItem.function.parameters &&
+          newStackItem.function.parameters.map((parameter, index) => {
             return (
               <div key={index}>
                 <div key={index} className="bx--row">
@@ -151,7 +138,7 @@ const NewStack = (props) => {
                         placeholder='Required'
                         labelText={parameter.label}
                         onClick={() => {}}
-                        onChange={(e) => { setStackActions({ ...stackActions, [parameter.id]: e.target.value }) }}
+                        onChange={(e) => { setNewStackItem({ ...newStackItem, config: { ...newStackItem.config, [parameter.id]: e.target.value } }) }}
                       />
                     </div>
                   }
@@ -160,11 +147,8 @@ const NewStack = (props) => {
             )
           })
         }
-        <br/>
-        <Button onClick={() => { }} size='default' kind="primary">
-          Submit
-        </Button>
         <br/><br/>
+        {JSON.stringify(newStackActions)}
         {JSON.stringify(newStack)}
       </div>
     </div>
