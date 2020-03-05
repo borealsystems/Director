@@ -9,9 +9,6 @@ const configurationType = new GraphQLObjectType({
     id: {
       type: GraphQLString
     },
-    name: {
-      type: GraphQLString
-    },
     value: {
       type: GraphQLString
     }

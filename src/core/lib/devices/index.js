@@ -1,5 +1,6 @@
 import db from '../db'
 import log from '../log'
+import { remove } from 'lodash'
 
 const devices = []
 
@@ -39,4 +40,23 @@ const instantiateDeviceProvider = (_id) => {
   }
 }
 
-export { instantiateDeviceProvider, createNewDevice, devices, initDevices }
+const deleteDevice = (_id) => {
+  // const removedDevice = devices.find((item) => { return item.id === _id })
+  if (_id === '0') {
+    log('info', 'core/lib/devices', 'You Can\'t Delete BorealDirector from BorealDirector')
+    return 'error'
+  } else {
+    const removedDevice = remove(devices, (item) => {
+      return item.id === _id
+    })
+    if (!devices.find((item) => { return item.id === _id })) {
+      log('info', 'core/lib/devices', `Deleted ${_id} (${removedDevice[0].name})`)
+      db.set('devices', devices)
+      return 'ok'
+    } else {
+      log('info', 'core/lib/devices', `Deletion of ${_id} (${removedDevice[0].name}) failed.`)
+      return 'error'
+    }
+  }
+}
+export { instantiateDeviceProvider, createNewDevice, deleteDevice, devices, initDevices }

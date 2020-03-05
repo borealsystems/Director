@@ -1,5 +1,5 @@
 import { providers } from '../../providers'
-import { createNewDevice, devices } from '../../devices'
+import { createNewDevice, deleteDevice, devices } from '../../devices'
 import { logs } from '../../log'
 import db from '../../db'
 import shortid from 'shortid'
@@ -73,6 +73,16 @@ var schema = new GraphQLSchema({
             provider: args.device.provider.id
           }
           return createNewDevice(newDevice)
+        }
+      },
+
+      deleteDevice: {
+        type: GraphQLString,
+        args: {
+          id: { type: GraphQLString }
+        },
+        resolve: (parent, args) => {
+          return deleteDevice(args.id)
         }
       }
     }

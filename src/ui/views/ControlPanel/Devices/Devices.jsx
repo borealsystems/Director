@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
-import headers from './headers'
-import NewDevice from './NewDevice.jsx'
+import deviceHeaders from './components/deviceHeaders'
+import NewDevice from './components/NewDevice.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
+import Device from './components/Device.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
@@ -19,6 +20,10 @@ const Devices = () => {
         enabled
         description
         location
+        configuration {
+          id
+          value
+        }
       }
     }`,
     pollInterval: 1000
@@ -45,7 +50,7 @@ const Devices = () => {
         <DataTable
           isSortable
           rows={result.data.getDevices}
-          headers={headers}
+          headers={deviceHeaders}
           render={({
             rows,
             headers,
@@ -106,14 +111,8 @@ const Devices = () => {
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow
-                        colSpan={headers.length + 1}
-                        className="demo-expanded-td">
-                        <h1 className="demo-inner-container-header">
-                          Expandable row content
-                        </h1>
-                        <p className="demo-inner-container-content">
-                          Description here
-                        </p>
+                        colSpan={headers.length + 1}>
+                        <Device devices={result.data.getDevices} deviceID={row.id} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

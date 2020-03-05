@@ -35,7 +35,7 @@ const NewDevice = (props) => {
     const conf = []
     for (var key of Object.keys(configuration)) {
       conf.push({
-        id: key,
+        id: `${key}`,
         value: configuration[key]
       })
     }
