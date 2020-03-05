@@ -9,15 +9,13 @@ import HeaderContainer from 'carbon-components-react/lib/components/UIShell/Head
 import {
   Content,
   Header,
-  HeaderGlobalAction,
-  HeaderGlobalBar,
   HeaderMenuButton,
   HeaderName,
   SkipToContent,
   SideNav,
   SideNavItems
 } from 'carbon-components-react/lib/components/UIShell'
-import { View32, Settings24, Keyboard24, Search20, User20, Notification20 } from '@carbon/icons-react'
+import { View32, Settings24, Keyboard24 } from '@carbon/icons-react'
 
 import NavLink from './components/NavLink.jsx'
 import NavGroup from './components/NavGroup.jsx'
@@ -47,7 +45,7 @@ const ControlPanel = () => (
               <HeaderName href="/" prefix='Boreal Systems'>
                 Director
               </HeaderName>
-              <HeaderGlobalBar>
+              {/* <HeaderGlobalBar>
                 <HeaderGlobalAction aria-label="Search" onClick={() => {}}>
                   <Search20 />
                 </HeaderGlobalAction>
@@ -57,7 +55,7 @@ const ControlPanel = () => (
                 <HeaderGlobalAction aria-label="User" onClick={() => {}}>
                   <User20 />
                 </HeaderGlobalAction>
-              </HeaderGlobalBar>
+              </HeaderGlobalBar> */}
               <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
                 <SideNavItems>
                   <NavGroup icon={View32} label="Monitor" grouppath="/monitor">
