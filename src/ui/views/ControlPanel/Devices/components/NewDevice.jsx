@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, Dropdown, TextInput, InlineLoading, InlineNotification } from 'carbon-components-react'
+import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
 import omit from 'lodash/omit'
+import GraphQLError from '../../components/GraphQLError.jsx'
 
 const NewDevice = (props) => {
   const [newDevice, setNewDevice] = useState({})
@@ -89,21 +90,7 @@ const NewDevice = (props) => {
         </div><br/>
         <div className="bx--row">
           { result.error &&
-            <InlineNotification
-              caption={result.error.message}
-              hideCloseButton={true}
-              kind="error"
-              lowContrast
-              notificationType="toast"
-              role="alert"
-              style={{
-                marginBottom: '.5rem',
-                minWidth: '30rem'
-              }}
-              subtitle="The Director UI cannot communicate with the server or the server encountered an error. Please check your network connection then contact your system administrator."
-              timeout={0}
-              title="GraphQL Error"
-            />
+            <GraphQLError error={result.error.message} />
           }
           { result.fetching && <InlineLoading /> }
           { result.data &&
