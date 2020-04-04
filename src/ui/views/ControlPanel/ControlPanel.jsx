@@ -26,7 +26,7 @@ import Logs from './Logs/Logs.jsx'
 import Stacks from './Stacks/Stacks.jsx'
 import Status from './Status/Status.jsx'
 
-import logo from '../../Logos/Dark_Icon.svg'
+import logo from '../../logos/Dark_Icon.svg'
 
 const ControlPanel = () => (
   <div className="container bx--theme--g100">

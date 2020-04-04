@@ -1,4 +1,4 @@
-![Director](ui/public/assets/logo.png)
+![Director](src/ui/logos/BorealDirector.svg)
 
 ---
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fborealsystems%2FDirector.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fborealsystems%2FDirector?ref=badge_shield) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
