@@ -1,5 +1,4 @@
 const path = require('path')
-// const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 
 module.exports = {
   entry: './src/ui/index.js',
@@ -41,19 +40,16 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
           'style-loader',
-          // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
           'sass-loader'
         ]
       }
     ]
   },
   output: {
-    path: path.resolve(__dirname, '/dist/ui'),
-    publicPath: '/dist/',
+    path: path.resolve(__dirname, 'dist/ui'),
+    publicPath: './dist/ui',
     filename: 'bundle.js'
   },
   devServer: {
@@ -66,12 +62,4 @@ module.exports = {
       '/gql': 'http://localhost:3001/'
     }
   }
-  // plugins: [
-  //   new GoogleFontsPlugin({
-  //     fonts: [
-  //       { family: 'IBM Plex Sans' }
-  //     ]
-  //     /* ...options */
-  //   })
-  // ]
 }

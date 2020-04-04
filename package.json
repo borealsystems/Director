@@ -1,16 +1,17 @@
 {
   "name": "borealdirector",
   "version": "1.0.0",
-  "main": "director.js",
+  "main": "dist/main.js",
   "repository": "https://github.com/borealsystems/Director.git",
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
   "scripts": {
     "build-ui": "webpack --mode production src/ui",
     "build-core": "babel src/core -d dist/core",
+    "build": "rm -rf ./dist && yarn run build-core && yarn run build-ui",
     "dev-ui": "webpack-dev-server",
     "dev-core": "NODE_ENV=development nodemon --ignore src/ui --exec babel-node src/core/main.js",
-    "start": "yarn run build-core && yarn run build-ui && node dist/main.js"
+    "production": "yarn run build && node dist/core/main.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

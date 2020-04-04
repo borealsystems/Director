@@ -20,7 +20,7 @@ const headers = [
     header: 'Provider'
   },
   {
-    key: 'enabled',
+    key: 'enabled-comp',
     header: 'Enabled'
   },
   {

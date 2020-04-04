@@ -20,7 +20,7 @@ const Devices = () => {
         description
         location
         configuration {
-          name
+          id
           value
         }
       }

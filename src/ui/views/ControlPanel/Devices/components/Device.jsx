@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, TextInput, Toggle } from 'carbon-components-react'
+import { Button, TextInput, ToggleSmall } from 'carbon-components-react'
 import { useMutation } from 'urql'
 
 const deleteDeviceGQL = `
@@ -61,15 +61,16 @@ const Device = (props) => {
           </div><br/>
           <h4>Configuration</h4>
           <div className="bx--row">
-            <p>Device Status:&nbsp;</p>
-            <Toggle
-              labelA='Disabled'
-              labelB='Enabled'
-              toggled={device.enabled}
-              onChange={() => {}}
-              onToggle={() => {}}
-              id="enableDevice"
-            />
+            <div className="bx--col bx--col-lg-4">
+              <ToggleSmall
+                labelA='Disabled'
+                labelB='Enabled'
+                toggled={device.enabled}
+                onChange={() => {}}
+                onToggle={() => {}}
+                id="enableDevice"
+              />
+            </div>
           </div>
           { device.configuration && device.configuration.map((item) =>
             <div key={item.id} className='bx-row'>

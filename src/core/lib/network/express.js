@@ -20,9 +20,11 @@ app.get('/dist/bundle.js', (req, res) => {
 })
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../../../ui/public/index.html'))
+  res.sendFile('../../../../ui/public/index.html')
 })
 
-app.listen(3001, () => {
-  log('info', 'core/lib/network/express', 'Director UI Available on http://localhost:3001')
+const port = process.env.NODE_ENV === 'development' ? 3001 : 3000
+
+app.listen(port, () => {
+  log('info', 'core/lib/network/express', `Director UI Available on http://localhost:${port}`)
 })
