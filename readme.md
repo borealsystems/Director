@@ -32,10 +32,10 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] MIDI
 - [ ] RossTalk
 - [ ] Ember+
-- [ ] RFP
+- [ ] RFP (Boreal Systems Link)
 
 ### Hardware Control
-- [ ] Elgato Streamdeck
+- [ ] Elgato Streamdeck (via Boreal Systems Link)
 - [ ] Blackmagic Design Router Panels
 - [ ] Ross Ultrix RCP
 - [ ] Aja Kuma Router Panels
