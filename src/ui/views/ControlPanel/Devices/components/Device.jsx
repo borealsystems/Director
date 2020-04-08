@@ -62,7 +62,8 @@ const Device = (props) => {
           <h4>Configuration</h4>
           <div className="bx--row">
             <div className="bx--col bx--col-lg-4">
-              <ToggleSmall
+              Device State: <ToggleSmall
+                aria-label='Device Status'
                 labelA='Disabled'
                 labelB='Enabled'
                 toggled={device.enabled}
