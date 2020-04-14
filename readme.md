@@ -32,10 +32,10 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] MIDI
 - [ ] RossTalk
 - [ ] Ember+
-- [ ] RFP (Boreal Systems Link)
+- [ ] RFP (Director Link)
 
 ### Hardware Control
-- [ ] Elgato Streamdeck (via Boreal Systems Link)
+- [ ] Elgato Streamdeck (via Director Link)
 - [ ] Blackmagic Design Router Panels
 - [ ] Ross Ultrix RCP
 - [ ] Aja Kuma Router Panels
@@ -44,8 +44,8 @@ The intention of this project is to create an open facility scale orchestration 
 
 ## Ancilary Projects
 
-### Remote Functionality Protocol (Official Name TBD)
-The RFP is designed to facilitate the interconnection of different instances of both Director and 3rd part open control software in such a way that any action or device may have its configuration and functionality become available over the network, allowing remote integration of devices and control solutions that do not operate on an ethernet based PHY. Thus allowing devices such as Elgato's Streamdeck to operate in a remote location from the Director Core, and enabling devices such as the USB midi interfaces to be controlled from the Core.
+### Director Link Protocol
+The DLP is designed to facilitate the interconnection of different instances of both Director and 3rd part open control software in such a way that any action or device may have its configuration and functionality become available over the network, allowing remote integration of devices and control solutions that do not operate on an ethernet based PHY. Thus allowing devices such as Elgato's Streamdeck to operate in a remote location from the Director Core, and enabling devices such as the USB midi interfaces to be controlled from the Core.
 
 ## Broadcast Device Definition Language
 The BDDL is an ancilirary project that provides a standard for device capability definitions for open broadcast control projects, it aims to increase interoperability between projects, allowing an end user or developer to write a simple BDDL file to define all functionality that a given device, software, or protocol exposes to the control suite.

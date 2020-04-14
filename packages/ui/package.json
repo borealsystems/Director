@@ -1,0 +1,13 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "The configuration interface component of the Boreal Director orchestration suite",
+  "main": "src/index.js",
+  "repository": "https://github.com/borealsystems/Director",
+  "author": "Oliver Herrmann",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode production src/ui",
+    "dev": "webpack-dev-server"
+  }
+}
