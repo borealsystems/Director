@@ -1,19 +1,11 @@
 {
   "name": "borealdirector",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "repository": "https://github.com/borealsystems/Director.git",
   "author": "Oliver Herrmann <oliver@monoxane.io>",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/*"
-  ],
-  "scripts": {
-    "build-ui": "webpack --mode production src/ui",
-    "build-core": "babel src/core -d dist/core",
-    "build": "rm -rf ./dist && yarn run build-core && yarn run build-ui",
-    "dev-ui": "webpack-dev-server",
-    "dev-core": "NODE_ENV=development nodemon --ignore src/ui --exec babel-node src/core/main.js",
-    "production": "yarn run build && node dist/core/main.js"
-  }
+  ]
 }
