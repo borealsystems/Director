@@ -4,45 +4,6 @@ import headers from './actionHeaders'
 import { DataTable } from 'carbon-components-react'
 const { Table, TableContainer, TableExpandHeader, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
-// eslint-disable-next-line no-unused-vars
-const tmp = [
-  {
-    step: 0,
-    device: {
-      name: 'PacketSender',
-      id: '8KWJDTZ-',
-      provider: 'osc',
-      __typename: 'Device'
-    },
-    function: {
-      id: 'integer',
-      label: 'Send String',
-      parameters: [
-        {
-          label: 'OSC Path',
-          id: 'path',
-          inputType:
-          'textInput',
-          regex: null,
-          __typename: 'functionParameter'
-        },
-        {
-          label: 'Value',
-          id: 'string',
-          inputType: 'textInput',
-          regex: '^-?\\d+$',
-          __typename: 'functionParameter'
-        }
-      ],
-      __typename: 'providerFunction'
-    },
-    config: {
-      path: '/textNode',
-      string: 'testString'
-    }
-  }
-]
-
 const StackActions = (props) => {
   return (
     <>

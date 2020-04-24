@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { useQuery } from 'urql'
+import { useQuery, useMutation } from 'urql'
 import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
 import StackActions from './StackActions.jsx'
 import GraphQLError from '../../components/GraphQLError.jsx'
+import omit from 'lodash'
 
 const NewStack = (props) => {
   const [newStack, setNewStack] = useState({})
@@ -31,6 +32,31 @@ const NewStack = (props) => {
       }
     }`
   })
+
+  const newStackMutationGQL = `mutation newStack($newStack: newStack) {
+    newStack(stack: $newStack) {
+      id
+    }
+  }`
+
+  var [newStackMutationResult, newStackMutation] = useMutation(newStackMutationGQL)
+
+  const submitNewStack = () => {
+    console.log('submitting new stack')
+    // const newStackActions
+    const actions = []
+    for (var key of Object.keys(newStackActions)) {
+      console.log(key)
+      console.log(newStackActions[key])
+      actions.push(
+        newStackActions[key]
+      )
+    }
+    console.log({ newStack: { ...newStack, actions: actions } })
+    // newStackMutation({ newStack: { ...omit({ ...newStack, actions: { ...newStackActions } }, '__typename') } }).then(console.log(newStackMutationResult))
+    // eslint-disable-next-line react/prop-types
+    props.visability(false)
+  }
 
   return (
     <div className="bx--col-lg-10">
@@ -108,7 +134,7 @@ const NewStack = (props) => {
                 items={result.data.getProviders.find(item => item.id === newStackItem.device.provider).providerFunctions}
                 itemToString={item => (item ? item.label : '')}
                 // label="Provider"
-                onChange={(func) => { setNewStackItem({ ...newStackItem, function: func.selectedItem }) }}
+                onChange={(func) => { setNewStackItem({ ...newStackItem, providerFunction: func.selectedItem }) }}
                 titleText="Action Function"
               />
             </div>
@@ -120,7 +146,10 @@ const NewStack = (props) => {
             </Button>
           }
           { newStackItem.function && newStackItem.device.id !== '0' &&
-            <Button onClick={() => { setNewStackActions([...newStackActions, { id: newStackActions.length.toString(), deviceName: newStackItem.device.name, functionLabel: newStackItem.function.label, ...newStackItem }]) }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
+            <Button onClick={() => {
+              setNewStackActions([...newStackActions, { id: newStackActions.length.toString(), deviceName: newStackItem.device.name, functionLabel: newStackItem.function.label, ...newStackItem }])
+              setNewStackItem({})
+            }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
             Add Action
             </Button>
           }
@@ -148,8 +177,12 @@ const NewStack = (props) => {
           })
         }
         <br/><br/>
-        {JSON.stringify(newStackActions)}
-        {JSON.stringify(newStack)}
+        {JSON.stringify({ newStack: { ...newStack, actions: { ...newStackActions } } }) }
+        <br/><br/>
+        <Button onClick={() => { submitNewStack() }} style={{ minWidth: '20%' }} size='default' kind="primary">
+          Submit
+        </Button>
+        <br/><br/>
       </div>
     </div>
   )

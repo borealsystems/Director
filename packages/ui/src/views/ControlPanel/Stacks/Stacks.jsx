@@ -85,9 +85,6 @@ const Devices = () => {
                     <Button onClick={() => { setNewStackVisability(false) }} style={{ minWidth: '20%', marginRight: '-2px' }} size='default' kind="secondary">
                       Cancel
                     </Button>
-                    <Button onClick={() => { setNewStackVisability(false) }} style={{ minWidth: '20%' }} size='default' kind="primary">
-                      Submit
-                    </Button>
                   </TableToolbarContent>
                 </TableToolbar>
                 <NewStack visability={ setNewStackVisability }/>
