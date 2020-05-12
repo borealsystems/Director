@@ -8,7 +8,7 @@ const initDevices = () => {
   db.get('devices').then((d) => {
     if (d === undefined) {
       devices.push({
-        name: 'Boreal Systems Director',
+        label: 'Boreal Systems Director',
         id: '0',
         provider: 'internal',
         enabled: true,
@@ -27,7 +27,7 @@ const initDevices = () => {
 const createNewDevice = (newDevice) => {
   devices.push(newDevice)
   db.set('devices', devices)
-  log('info', 'core/lib/devices', `Creating ${newDevice.id} (${newDevice.name})`)
+  log('info', 'core/lib/devices', `Creating ${newDevice.id} (${newDevice.label})`)
   instantiateDeviceProvider(newDevice.id)
 }
 
@@ -35,7 +35,7 @@ const instantiateDeviceProvider = (_id) => {
   const device = devices.find(({ id }) => id === _id)
   switch (device.provider) {
     case 'genericOSC':
-      log('info', 'core/lib/devices', `Loaded ${device.id} (${device.name}) with ${device.provider}`)
+      log('info', 'core/lib/devices', `Loaded ${device.id} (${device.label}) with ${device.provider}`)
       break
   }
 }

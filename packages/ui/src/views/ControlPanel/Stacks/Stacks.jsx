@@ -7,21 +7,26 @@ import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
+// TODO: delete stacks
+// TODO: edit stacks
+// TODO: fill content in dropdowns
+
 const Devices = () => {
-  const [newStackVisability, setNewStackVisability] = useState(true)
+  const [newStackVisability, setNewStackVisability] = useState(false)
   const [result] = useQuery({
-    query: `query getDevices {
-      getDevices {
-        name
+    query: `query getStacks {
+      getStacks {
         id
-        provider
-        status
-        enabled
+        name
         description
-        location
-        configuration {
-          id
-          value
+        actions {
+          deviceid
+          providerFunctionID
+          functionLabel
+          parameters {
+            id
+            value
+          }
         }
       }
     }`,
@@ -48,7 +53,7 @@ const Devices = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getDevices}
+          rows={result.data.getStacks}
           headers={headers}
           render={({
             rows,

@@ -10,22 +10,6 @@ const headers = [
   {
     key: 'description',
     header: 'Description'
-  },
-  {
-    key: 'location',
-    header: 'Location'
-  },
-  {
-    key: 'provider',
-    header: 'Provider'
-  },
-  {
-    key: 'enabled',
-    header: 'Enabled'
-  },
-  {
-    key: 'status',
-    header: 'Status'
   }
 ]
 

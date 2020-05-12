@@ -47,15 +47,20 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    }
+  },
   output: {
     path: path.resolve(__dirname, 'dist/ui'),
-    publicPath: '/dist/ui',
+    publicPath: path.resolve(__dirname, 'dist/ui'),
     filename: 'bundle.js'
   },
   devServer: {
     contentBase: path.join(__dirname, '/src/public/'),
     port: 3000,
-    publicPath: 'http://localhost:3000/dist',
+    publicPath: 'http://localhost:3000/dist/',
     hotOnly: true,
     historyApiFallback: true,
     proxy: {

@@ -62,7 +62,7 @@ const NewDevice = (props) => {
               placeholder='Required'
               labelText='Device Name'
               onClick={() => {}}
-              onChange={(e) => { setNewDevice({ ...newDevice, name: e.target.value }) }}
+              onChange={(e) => { setNewDevice({ ...newDevice, label: e.target.value }) }}
             />
           </div>
           <div className="bx--text-input__field-wrapper bx--col">

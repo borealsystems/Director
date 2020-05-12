@@ -8,7 +8,7 @@ import {
 const newDeviceInputType = new GraphQLInputObjectType({
   name: 'newDevice',
   fields: {
-    name: {
+    label: {
       type: GraphQLString
     },
     location: {

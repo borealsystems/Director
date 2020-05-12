@@ -3,7 +3,12 @@ import { useQuery, useMutation } from 'urql'
 import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
 import StackActions from './StackActions.jsx'
 import GraphQLError from '../../components/GraphQLError.jsx'
-import omit from 'lodash'
+
+// TODO: Step times and delays
+// TODO: edit stacks
+// TODO: edit actions
+// TODO: fix that weird bug with updating the dropdown on action submit
+// TODO: move the action add button cos its in a wack spot
 
 const NewStack = (props) => {
   const [newStack, setNewStack] = useState({})
@@ -12,7 +17,7 @@ const NewStack = (props) => {
   const [result] = useQuery({
     query: `query getDeviceFunctions {
       getDevices {
-        name
+        label
         id
         provider
       }
@@ -33,7 +38,7 @@ const NewStack = (props) => {
     }`
   })
 
-  const newStackMutationGQL = `mutation newStack($newStack: newStack) {
+  const newStackMutationGQL = `mutation newStack($newStack: StackInput) {
     newStack(stack: $newStack) {
       id
     }
@@ -43,17 +48,7 @@ const NewStack = (props) => {
 
   const submitNewStack = () => {
     console.log('submitting new stack')
-    // const newStackActions
-    const actions = []
-    for (var key of Object.keys(newStackActions)) {
-      console.log(key)
-      console.log(newStackActions[key])
-      actions.push(
-        newStackActions[key]
-      )
-    }
-    console.log({ newStack: { ...newStack, actions: actions } })
-    // newStackMutation({ newStack: { ...omit({ ...newStack, actions: { ...newStackActions } }, '__typename') } }).then(console.log(newStackMutationResult))
+    newStackMutation({ newStack: { ...newStack, actions: newStackActions } })
     // eslint-disable-next-line react/prop-types
     props.visability(false)
   }
@@ -106,7 +101,7 @@ const NewStack = (props) => {
                 id="newDeviceProvider"
                 label='Required'
                 items={result.data.getDevices}
-                itemToString={item => (item ? item.name : '')}
+                // itemToString={item => (item ? item.name : '')}
                 // label="Provider"
                 onChange={(dd) => { setNewStackItem({ ...newStackItem, device: dd.selectedItem }) }}
                 titleText="Action Device"
@@ -118,7 +113,7 @@ const NewStack = (props) => {
               <Dropdown
                 ariaLabel="Dropdown"
                 disabled
-                id="newDeviceProvider"
+                id="newActionFunction"
                 label='Select A Device'
                 items={''}
                 titleText="Action Function"
@@ -129,33 +124,48 @@ const NewStack = (props) => {
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
               <Dropdown
                 ariaLabel="Dropdown"
-                id="newDeviceProvider"
+                id="newActionFunction"
                 label='Required'
                 items={result.data.getProviders.find(item => item.id === newStackItem.device.provider).providerFunctions}
-                itemToString={item => (item ? item.label : '')}
-                // label="Provider"
                 onChange={(func) => { setNewStackItem({ ...newStackItem, providerFunction: func.selectedItem }) }}
                 titleText="Action Function"
               />
             </div>
           }
           {/* TODO: Proper validation */}
-          { !newStackItem.function &&
+          { !newStackItem.providerFunction &&
             <Button disabled style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
             Add Action
             </Button>
           }
-          { newStackItem.function && newStackItem.device.id !== '0' &&
+          { newStackItem.providerFunction && newStackItem.device.id !== '0' &&
             <Button onClick={() => {
-              setNewStackActions([...newStackActions, { id: newStackActions.length.toString(), deviceName: newStackItem.device.name, functionLabel: newStackItem.function.label, ...newStackItem }])
+              var parameters = []
+              for (var key of Object.keys(newStackItem.parameters)) {
+                parameters.push({
+                  id: `${key}`,
+                  value: newStackItem.parameters[key]
+                })
+              }
+              var temp = [...newStackActions]
+              temp.push(
+                {
+                  id: newStackActions.length.toString(),
+                  deviceid: newStackItem.device.id,
+                  providerFunctionID: newStackItem.providerFunction.id,
+                  functionLabel: newStackItem.providerFunction.label,
+                  parameters: parameters
+                }
+              )
+              setNewStackActions(temp)
               setNewStackItem({})
             }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
             Add Action
             </Button>
           }
         </div><br/>
-        { newStackItem.function && newStackItem.function.parameters &&
-          newStackItem.function.parameters.map((parameter, index) => {
+        { newStackItem.providerFunction && newStackItem.providerFunction.parameters &&
+          newStackItem.providerFunction.parameters.map((parameter, index) => {
             return (
               <div key={index}>
                 <div key={index} className="bx--row">
@@ -167,7 +177,7 @@ const NewStack = (props) => {
                         placeholder='Required'
                         labelText={parameter.label}
                         onClick={() => {}}
-                        onChange={(e) => { setNewStackItem({ ...newStackItem, config: { ...newStackItem.config, [parameter.id]: e.target.value } }) }}
+                        onChange={(e) => { setNewStackItem({ ...newStackItem, parameters: { ...newStackItem.parameters, [parameter.id]: e.target.value } }) }}
                       />
                     </div>
                   }
@@ -176,8 +186,11 @@ const NewStack = (props) => {
             )
           })
         }
+        {newStackMutationResult && JSON.stringify(newStackMutationResult)}
         <br/><br/>
-        {JSON.stringify({ newStack: { ...newStack, actions: { ...newStackActions } } }) }
+        {JSON.stringify(newStackItem) }
+        <br/><br/>
+        {JSON.stringify({ ...newStack, actions: newStackActions }) }
         <br/><br/>
         <Button onClick={() => { submitNewStack() }} style={{ minWidth: '20%' }} size='default' kind="primary">
           Submit

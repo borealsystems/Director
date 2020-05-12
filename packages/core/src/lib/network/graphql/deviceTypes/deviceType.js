@@ -10,7 +10,7 @@ import configurationType from './configurationType'
 const deviceType = new GraphQLObjectType({
   name: 'Device',
   fields: {
-    name: {
+    label: {
       type: GraphQLString
     },
     description: {

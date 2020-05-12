@@ -7,6 +7,8 @@ const _regex = {
   signed_int: '^-?\\d+$',
   signed_float: '([+-]?(?=\\.\\d|\\d)(?:\\d+)?(?:\\.?\\d*))(?:[eE]([+-]?\\d+))?'
 }
+
+// TODO: move this insertion to provider logic file
 const providers = [
   {
     id: 'osc',
@@ -66,15 +68,26 @@ const providers = [
         label: 'Send Float',
         parameters: [
           {
-            type: 'textInput',
+            inputType: 'textInput',
             label: 'OSC Path',
             id: 'path'
           },
           {
-            type: 'textInput',
+            inputType: 'textInput',
             label: 'Value',
             id: 'float',
-            regex: _regex.signed_float
+            regex: _regex.signed_int
+          }
+        ]
+      },
+      {
+        id: 'path',
+        label: 'Send Path',
+        parameters: [
+          {
+            inputType: 'textInput',
+            label: 'OSC Path',
+            id: 'path'
           }
         ]
       }
@@ -82,6 +95,9 @@ const providers = [
   }
 ]
 
+const providerInterfaces = []
+
+//  TODO: refactor this to use an automatic array map
 const initProviders = () => {
   providers.map((provider, index) => {
     log('info', 'core/lib/providers', `Loading Provider: ${provider.label}`)
@@ -92,4 +108,4 @@ const initProviders = () => {
   })
 }
 
-export { initProviders, providers }
+export { initProviders, providerInterfaces, providers }

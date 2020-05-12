@@ -13,7 +13,7 @@ const Devices = () => {
   const [result] = useQuery({
     query: `query getDevices {
       getDevices {
-        name
+        label
         id
         provider
         status
