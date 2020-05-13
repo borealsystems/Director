@@ -9,7 +9,7 @@ const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, Tabl
 
 // TODO: delete stacks
 // TODO: edit stacks
-// TODO: fill content in dropdowns
+// TODO: fill content in expandos
 
 const Devices = () => {
   const [newStackVisability, setNewStackVisability] = useState(false)

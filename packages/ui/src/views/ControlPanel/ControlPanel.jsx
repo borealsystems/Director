@@ -24,6 +24,7 @@ import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
 import Stacks from './Stacks/Stacks.jsx'
+import Shotbox from './Shotbox/Shotbox.jsx'
 import Status from './Status/Status.jsx'
 
 import logo from '../../logos/Dark_Icon.svg'
@@ -91,7 +92,7 @@ const ControlPanel = () => (
                       </Route>
                       {/* CONTROL */}
                       <Route path="/control/shotbox">
-                        <h1>Shotbox</h1>
+                        <Shotbox />
                       </Route>
                       <Route path="/control/flow">
                         <Flow />
