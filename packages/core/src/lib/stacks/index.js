@@ -1,6 +1,6 @@
 import db from '../db'
 import log from '../log'
-import { remove } from 'lodash'
+import { remove, sortBy } from 'lodash'
 import { devices } from '../devices'
 
 import { providerInterfaces } from '../providers'
@@ -35,11 +35,10 @@ const deleteStack = (_id) => {
   }
 }
 
-// TODO: ensure correct action order by sorting the array first
 // TODO: Facilitate delays and step timings
 const executeStack = (_id) => {
-  log('info', 'core/lib/stacks', `Executing stack ${_id}`)
-  stacks.find((stack) => { return stack.id === _id }).actions.map((action) => {
+  log('info', 'core/lib/stacks', `Executing stack ${_id} (${stacks.find((stack) => { return stack.id === _id }).name})`)
+  sortBy(stacks.find((stack) => { return stack.id === _id }).actions, [(o) => { return o.id }]).map((action) => {
     var device = devices.find((device) => { return device.id === action.deviceid })
     providerInterfaces[providerInterfaces.findIndex((providerInterface) => { return providerInterface.id === device.provider })].providerInterface(device.configuration, action.providerFunctionID, action.parameters)
   })
