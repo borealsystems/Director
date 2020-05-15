@@ -22,13 +22,21 @@ osc.init = (providers, providerInterfaces) => {
     metadata: true
   })
 
-  // Open the socket.
+  // TODO: fix OSC recieve
+  // TODO: Split providers and protocols into seperate directories
   provider.instance.udpPort.open()
-  log('info', 'core/lib/providers/osc', 'Listening for OSC on 0.0.0.0:7000')
+  log('info', 'core/lib/providers/osc', 'Listening for OSC on 0.0.0.0:8000')
 
-  // Listen for incoming osc messages.
   provider.instance.udpPort.on('message', (oscMsg, timeTag, info) => {
-    log('debug', 'core/lib/providers/resolume', `Recieved ${JSON.stringify(oscMsg)}`)
+    log('debug', 'core/lib/providers/osc', `Recieved ${JSON.stringify(oscMsg)}`)
+  })
+
+  provider.instance.udpPort.on('bundle', (oscMsg, timeTag, info) => {
+    log('debug', 'core/lib/providers/osc', `Recieved ${JSON.stringify(oscMsg)}`)
+  })
+
+  provider.instance.udpPort.on('error', (error) => {
+    log('error', 'core/lib/providers/osc', `Experienced Error ${JSON.stringify(error)}`)
   })
 
   providerInterfaces.push({ id: 'osc', providerInterface: osc.interface })
