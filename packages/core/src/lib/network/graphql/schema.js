@@ -1,6 +1,6 @@
 import { providers } from '../../providers'
 import { createNewDevice, deleteDevice, devices } from '../../devices'
-import { createNewStack, executeStack, stacks } from '../../stacks'
+import { createNewStack, deleteStack, executeStack, stacks } from '../../stacks'
 import { logs } from '../../log'
 import db from '../../db'
 import shortid from 'shortid'
@@ -45,7 +45,9 @@ var schema = new GraphQLSchema({
         name: 'Get Communication Providers',
         description: 'Returns all available communication providers, the backend of a device and what defines available actions',
         type: new GraphQLList(providerType),
-        resolve: () => { return providers }
+        resolve: () => {
+          return providers
+        }
       },
 
       getDevices: {
@@ -111,6 +113,20 @@ var schema = new GraphQLSchema({
             ...args.stack
           }
           return createNewStack(newStack)
+        }
+      },
+
+      deleteStack: {
+        name: 'Delete Stack',
+        description: 'Removes a stack from existance',
+        type: GraphQLString,
+        args: {
+          id: {
+            type: GraphQLString
+          }
+        },
+        resolve: (parent, args) => {
+          return deleteStack(args.id)
         }
       },
 

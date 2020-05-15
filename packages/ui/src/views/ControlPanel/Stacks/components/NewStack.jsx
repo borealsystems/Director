@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
+import { Button, Dropdown, DropdownSkeleton, TextInput, InlineLoading } from 'carbon-components-react'
 import StackActions from './StackActions.jsx'
 import GraphQLError from '../../components/GraphQLError.jsx'
 
@@ -101,7 +101,7 @@ const NewStack = (props) => {
                 id="newDeviceProvider"
                 label='Required'
                 items={result.data.getDevices}
-                // itemToString={item => (item ? item.name : '')}
+                itemToString={item => (item ? item.label : '')}
                 // label="Provider"
                 onChange={(dd) => { setNewStackItem({ ...newStackItem, device: dd.selectedItem }) }}
                 titleText="Action Device"
@@ -110,14 +110,7 @@ const NewStack = (props) => {
           }
           { !newStackItem.device &&
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
-              <Dropdown
-                ariaLabel="Dropdown"
-                disabled
-                id="newActionFunction"
-                label='Select A Device'
-                items={''}
-                titleText="Action Function"
-              />
+              <DropdownSkeleton />
             </div>
           }
           { newStackItem.device && newStackItem.device.id !== '0' &&

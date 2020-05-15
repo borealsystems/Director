@@ -71,21 +71,20 @@ const Shotbox = () => {
             return (
               <React.Fragment key={rowIndex}>
                 <Row className="bx--text-input__field-wrapper">
-                  { padRowTo4(row).map((item, itemIndex) => {
+                  { padRowTo4(row).map((stack, stackIndex) => {
                     return (
-                      <Column className="bx--button__field-wrapper" key={itemIndex}>
-                        { item.id &&
-                          <Button onClick={() => { executeStackMutation({ executeID: item.id }) }} style={{ width: '20.7em', height: '5em' }} size='default' kind="primary">
+                      <Column className="bx--button__field-wrapper" key={stackIndex}>
+                        { stack.id &&
+                          <Button onClick={() => { executeStackMutation({ executeID: stack.id }) }} style={{ width: '20.7em', height: '8em' }} size='default' kind="primary">
                             <>
-                              <h4>{item.name}</h4>
-                              <br></br>
-                              <p>{item.description}</p>
+                              <h3>{stack.name}</h3>
+                              <br/>
+                              {stack.description}
                             </>
                           </Button>
                         }
-                        { !item.id &&
-                          <Button disabled style={{ width: '20.7em' }} size='default' kind="primary">
-                            {item.name}
+                        { !stack.id &&
+                          <Button disabled style={{ width: '20.7em', height: '8em' }} size='default' kind="primary">
                           </Button>
                         }
                       </Column>

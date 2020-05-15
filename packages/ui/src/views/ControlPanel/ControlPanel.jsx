@@ -63,14 +63,15 @@ const ControlPanel = () => (
                     <NavLink to="/monitor/status" label="Status"/>
                     <NavLink to="/monitor/logs" label="Logs"/>
                   </NavGroup>
-                  <NavGroup icon={Keyboard24} label="Control" grouppath="/control">
-                    <NavLink to="/control/shotbox" label="Shotbox"/>
-                    <NavLink to="/control/flow" label="Flow"/>
-                  </NavGroup>
                   <NavGroup icon={Settings24} label="Configure" grouppath="/config">
                     <NavLink to="/config/devices" label="Devices"/>
                     <NavLink to="/config/stacks" label="Stacks"/>
                     <NavLink to="/config/controllers" label="Controllers"/>
+                  </NavGroup>
+                  <NavGroup icon={Keyboard24} label="Control" grouppath="/control">
+                    <NavLink to="/control/shotbox" label="Shotbox"/>
+                    {/* TODO: decide if i even want to implement flows, are they relevent to the direction of this project? */}
+                    {/* <NavLink to="/control/flow" label="Flow"/> */}
                   </NavGroup>
                 </SideNavItems>
               </SideNav>
