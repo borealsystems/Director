@@ -21,7 +21,9 @@ const Device = (props) => {
     return (
       <div className="bx--col-lg-10">
         <div className="bx--grid">
-          <h4>Details</h4>
+          <h3>{device.label}</h3>
+          <h5>ID: {device.id}</h5>
+          <br />
           <div className="bx--row">
             <div className="bx--text-input__field-wrapper bx--col">
               <TextInput
@@ -29,7 +31,7 @@ const Device = (props) => {
                 id='newDeviceName'
                 placeholder='Required'
                 labelText='Device Name'
-                value={device.name}
+                value={device.label}
                 onClick={() => {}}
                 onChange={(e) => { }}
               />
@@ -89,11 +91,14 @@ const Device = (props) => {
             </div>
           )}
           <div className="bx--row">
-            <Button onClick={() => deleteDeviceMutation({ idToDelete: device.id })} style={{ minWidth: '20%' }} size='small' kind="danger">
+            <Button onClick={() => deleteDeviceMutation({ idToDelete: device.id })} style={{ minWidth: '20%' }} size='normal' kind="danger">
               Delete
             </Button>
-            <Button onClick={() => { }} style={{ minWidth: '20%' }} size='small' kind="primary">
+            <Button onClick={() => { }} style={{ minWidth: '20%' }} size='normal' kind="primary">
               Update
+            </Button>
+            <Button onClick={() => { }} style={{ minWidth: '20%' }} size='normal' kind="secondary">
+              Cancel
             </Button>
           </div>
         </div>

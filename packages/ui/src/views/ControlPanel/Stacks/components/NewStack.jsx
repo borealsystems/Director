@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, Dropdown, DropdownSkeleton, TextInput, InlineLoading } from 'carbon-components-react'
+import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-react'
 import StackActions from './StackActions.jsx'
 import GraphQLError from '../../components/GraphQLError.jsx'
 
@@ -8,7 +8,6 @@ import GraphQLError from '../../components/GraphQLError.jsx'
 // TODO: edit stacks
 // TODO: edit actions
 // TODO: fix that weird bug with updating the dropdown on action submit
-// TODO: move the action add button cos its in a wack spot
 
 const NewStack = (props) => {
   const [newStack, setNewStack] = useState({})
@@ -51,6 +50,7 @@ const NewStack = (props) => {
     newStackMutation({ newStack: { ...newStack, actions: newStackActions } })
     // eslint-disable-next-line react/prop-types
     props.visability(false)
+    console.log(newStackMutationResult)
   }
 
   return (
@@ -110,7 +110,13 @@ const NewStack = (props) => {
           }
           { !newStackItem.device &&
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
-              <DropdownSkeleton />
+              <Dropdown
+                disabled
+                ariaLabel="Dropdown"
+                id="newDeviceProvider"
+                titleText="Action Function"
+                items={[]}
+              />
             </div>
           }
           { newStackItem.device && newStackItem.device.id !== '0' &&
@@ -124,37 +130,6 @@ const NewStack = (props) => {
                 titleText="Action Function"
               />
             </div>
-          }
-          {/* TODO: Proper validation */}
-          { !newStackItem.providerFunction &&
-            <Button disabled style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
-            Add Action
-            </Button>
-          }
-          { newStackItem.providerFunction && newStackItem.device.id !== '0' &&
-            <Button onClick={() => {
-              var parameters = []
-              for (var key of Object.keys(newStackItem.parameters)) {
-                parameters.push({
-                  id: `${key}`,
-                  value: newStackItem.parameters[key]
-                })
-              }
-              var temp = [...newStackActions]
-              temp.push(
-                {
-                  id: newStackActions.length.toString(),
-                  deviceid: newStackItem.device.id,
-                  providerFunctionID: newStackItem.providerFunction.id,
-                  functionLabel: newStackItem.providerFunction.label,
-                  parameters: parameters
-                }
-              )
-              setNewStackActions(temp)
-              setNewStackItem({})
-            }} style={{ height: '40px', marginTop: '24px', marginRight: '16px' }} size='small' kind="primary">
-            Add Action
-            </Button>
           }
         </div><br/>
         { newStackItem.providerFunction && newStackItem.providerFunction.parameters &&
@@ -179,16 +154,49 @@ const NewStack = (props) => {
             )
           })
         }
-        {newStackMutationResult && JSON.stringify(newStackMutationResult)}
-        <br/><br/>
-        {JSON.stringify(newStackItem) }
-        <br/><br/>
-        {JSON.stringify({ ...newStack, actions: newStackActions }) }
-        <br/><br/>
-        <Button onClick={() => { submitNewStack() }} style={{ minWidth: '20%' }} size='default' kind="primary">
-          Submit
-        </Button>
-        <br/><br/>
+        <div>
+          { !newStackItem.providerFunction &&
+            <Button disabled style={{ minWidth: '20%' }} size='default' kind="primary">
+            Add Action
+            </Button>
+          }
+          { newStackItem.providerFunction && newStackItem.device.id !== '0' &&
+            <Button onClick={() => {
+              var parameters = []
+              for (var key of Object.keys(newStackItem.parameters)) {
+                parameters.push({
+                  id: `${key}`,
+                  value: newStackItem.parameters[key]
+                })
+              }
+              var temp = [...newStackActions]
+              temp.push(
+                {
+                  id: newStackActions.length.toString(),
+                  deviceid: newStackItem.device.id,
+                  providerFunctionID: newStackItem.providerFunction.id,
+                  functionLabel: newStackItem.providerFunction.label,
+                  parameters: parameters
+                }
+              )
+              setNewStackActions(temp)
+              setNewStackItem({})
+            }} style={{ minWidth: '20%' }} size='default' kind="primary">
+            Add Action
+            </Button>
+          }
+          { newStackActions.length > 0 &&
+          <Button onClick={() => { submitNewStack() }} style={{ minWidth: '20%' }} size='default' kind="primary">
+            Add Stack
+          </Button>
+          }
+          { newStackActions.length === 0 &&
+          <Button disabled style={{ minWidth: '20%' }} size='default' kind="primary">
+            Add Stack
+          </Button>
+          }
+        </div>
+        <br />
       </div>
     </div>
   )

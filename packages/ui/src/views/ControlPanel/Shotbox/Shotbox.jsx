@@ -75,10 +75,9 @@ const Shotbox = () => {
                     return (
                       <Column className="bx--button__field-wrapper" key={stackIndex}>
                         { stack.id &&
-                          <Button onClick={() => { executeStackMutation({ executeID: stack.id }) }} style={{ width: '20.7em', height: '8em' }} size='default' kind="primary">
+                          <Button onClick={() => { executeStackMutation({ executeID: stack.id }) }} style={{ width: '20.7em', height: '8em', display: 'table' }} size='default' kind="primary">
                             <>
                               <h3>{stack.name}</h3>
-                              <br/>
                               {stack.description}
                             </>
                           </Button>
@@ -92,7 +91,6 @@ const Shotbox = () => {
                   })
                   }
                 </Row>
-                {/* <br /> */}
               </React.Fragment>
             )
           })}

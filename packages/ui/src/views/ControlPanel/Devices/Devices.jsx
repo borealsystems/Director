@@ -83,7 +83,7 @@ const Devices = () => {
                   {/* pass in `onInputChange` change here to make filtering work */}
                   {/* <TableToolbarSearch onChange={() => {}} /> */}
                   <TableToolbarContent>
-                    <Button onClick={() => { setNewDeviceVisibility(false) }} style={{ minWidth: '20%' }} size='default' kind="primary">
+                    <Button onClick={() => { setNewDeviceVisibility(false) }} style={{ minWidth: '20%' }} size='default' kind="secondary">
                       Cancel
                     </Button>
                   </TableToolbarContent>

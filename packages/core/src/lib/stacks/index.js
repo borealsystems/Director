@@ -26,7 +26,7 @@ const deleteStack = (_id) => {
     return item.id === _id
   })
   if (!stacks.find((item) => { return item.id === _id })) {
-    log('info', 'core/lib/stacks', `Deleted ${_id} (${removedStack[0].name})`)
+    log('info', 'core/lib/stacks', `Deleted stack ${_id} (${removedStack[0].name})`)
     db.set('stacks', stacks)
     return 'ok'
   } else {

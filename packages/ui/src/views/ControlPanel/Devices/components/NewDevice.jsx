@@ -4,6 +4,8 @@ import { Button, Dropdown, TextInput, InlineLoading } from 'carbon-components-re
 import omit from 'lodash/omit'
 import GraphQLError from '../../components/GraphQLError.jsx'
 
+// TODO: validation
+
 const NewDevice = (props) => {
   const [newDevice, setNewDevice] = useState({})
   const [configuration, setConfiguration] = useState({})
