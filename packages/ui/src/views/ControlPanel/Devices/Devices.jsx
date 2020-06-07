@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
 import deviceHeaders from './components/deviceHeaders'
-import NewDevice from './components/NewDevice.jsx'
+// import NewDevice from './components/NewDevice.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Device from './components/Device.jsx'
 
@@ -11,18 +11,32 @@ const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, Tabl
 const Devices = () => {
   const [newDeviceVisability, setNewDeviceVisibility] = useState(false)
   const [result] = useQuery({
-    query: `query getDevices {
+    query: `query getDevicesAndProviders {
       getDevices {
-        label
         id
-        provider
-        status
-        enabled
-        description
+        label
         location
+        description
+        provider {
+          id
+          label
+        }
+        enabled
+        status
         configuration {
           id
           value
+        }
+      }
+      getProviders {
+        id
+        label
+        protocol
+        parameters {
+          required
+          id
+          label
+          regex
         }
       }
     }`,
@@ -79,16 +93,14 @@ const Devices = () => {
               }
               {newDeviceVisability &&
               <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
+                {/* <TableToolbar>
                   <TableToolbarContent>
                     <Button onClick={() => { setNewDeviceVisibility(false) }} style={{ minWidth: '20%' }} size='default' kind="secondary">
                       Cancel
                     </Button>
                   </TableToolbarContent>
-                </TableToolbar>
-                <NewDevice visability={ setNewDeviceVisibility }/>
+                </TableToolbar> */}
+                <Device new providers={result.data.getProviders} visability={ setNewDeviceVisibility }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -112,7 +124,7 @@ const Devices = () => {
                       </TableExpandRow>
                       <TableExpandedRow
                         colSpan={headers.length + 1}>
-                        <Device devices={result.data.getDevices} deviceID={row.id} />
+                        <Device devices={result.data.getDevices} providers={result.data.getProviders} deviceID={row.id} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

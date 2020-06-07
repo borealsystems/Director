@@ -7,7 +7,8 @@ import '../../../node_modules/carbon-components/scss/globals/scss/styles.scss'
 
 const client = createClient({
   url: '/gql',
-  requestPolicy: 'network-only'
+  requestPolicy: 'network-only',
+  maskTypename: true
 })
 
 const App = () => {

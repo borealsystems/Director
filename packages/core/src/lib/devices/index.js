@@ -1,6 +1,9 @@
 import db from '../db'
 import log from '../log'
-import { remove } from 'lodash'
+import { findIndex, remove } from 'lodash'
+import shortid from 'shortid'
+
+// import deviceUpdateInputType from '../network/graphql/deviceTypes/deviceUpdateInputType'
 
 const devices = []
 
@@ -24,11 +27,24 @@ const initDevices = () => {
   })
 }
 
-const createNewDevice = (newDevice) => {
-  devices.push(newDevice)
-  db.set('devices', devices)
-  log('info', 'core/lib/devices', `Creating ${newDevice.id} (${newDevice.label})`)
-  instantiateDeviceProvider(newDevice.id)
+const updateDevice = (_device) => {
+  switch (_device.id !== undefined) {
+    case true: {
+      devices[findIndex(devices, item => item.id === _device.id)] = { ...devices[devices.indexOf(item => item.id === _device.id)], ..._device }
+      db.set('devices', devices)
+      log('info', 'core/lib/devices', `Updating ${_device.id} (${_device.label})`)
+      instantiateDeviceProvider(_device.id)
+      return _device.id
+    }
+    case false: {
+      const device = { id: shortid.generate(), ..._device }
+      devices.push(device)
+      db.set('devices', devices)
+      log('info', 'core/lib/devices', `Creating ${device.id} (${device.label})`)
+      instantiateDeviceProvider(device.id)
+      return device.id
+    }
+  }
 }
 
 const instantiateDeviceProvider = (_id) => {
@@ -50,13 +66,13 @@ const deleteDevice = (_id) => {
       return item.id === _id
     })
     if (!devices.find((item) => { return item.id === _id })) {
-      log('info', 'core/lib/devices', `Deleted ${_id} (${removedDevice[0].name})`)
+      log('info', 'core/lib/devices', `Deleted ${_id} (${removedDevice[0].label})`)
       db.set('devices', devices)
       return 'ok'
     } else {
-      log('info', 'core/lib/devices', `Deletion of ${_id} (${removedDevice[0].name}) failed.`)
+      log('info', 'core/lib/devices', `Deletion of ${_id} (${removedDevice[0].label}) failed.`)
       return 'error'
     }
   }
 }
-export { instantiateDeviceProvider, createNewDevice, deleteDevice, devices, initDevices }
+export { instantiateDeviceProvider, updateDevice, deleteDevice, devices, initDevices }

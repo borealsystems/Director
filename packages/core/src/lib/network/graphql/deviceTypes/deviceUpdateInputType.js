@@ -1,28 +1,34 @@
 import {
-  GraphQLObjectType,
   GraphQLString,
+  GraphQLList,
   GraphQLBoolean,
-  GraphQLList
+  GraphQLInputObjectType
 } from 'graphql'
 
-const deviceType = new GraphQLObjectType({
-  name: 'Device',
+const deviceUpdateInputType = new GraphQLInputObjectType({
+  name: 'deviceUpdate',
   fields: {
-    label: {
+    id: {
       type: GraphQLString
     },
-    description: {
+    label: {
       type: GraphQLString
     },
     location: {
       type: GraphQLString
     },
-    id: {
+    description: {
+      type: GraphQLString
+    },
+    enabled: {
+      type: GraphQLBoolean
+    },
+    status: {
       type: GraphQLString
     },
     provider: {
-      type: new GraphQLObjectType({
-        name: 'deviceProviderDetailType',
+      type: new GraphQLInputObjectType({
+        name: 'deviceProviderDetailInputType',
         fields: {
           id: {
             type: GraphQLString
@@ -33,16 +39,10 @@ const deviceType = new GraphQLObjectType({
         }
       })
     },
-    enabled: {
-      type: GraphQLBoolean
-    },
-    status: {
-      type: GraphQLString
-    },
     configuration: {
       type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'deviceConfigurationObject',
+        new GraphQLInputObjectType({
+          name: 'deviceUpdateConfigurationObject',
           fields: {
             id: {
               type: GraphQLString
@@ -57,4 +57,4 @@ const deviceType = new GraphQLObjectType({
   }
 })
 
-export default deviceType
+export default deviceUpdateInputType

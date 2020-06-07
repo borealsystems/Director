@@ -8,7 +8,7 @@ log('info', 'core/lib/db', 'DB Loading')
 const db = new Keyv({
   store: new KeyvFile(
     {
-      filename: 'db'
+      filename: '../../director.db'
     }
   )
 })

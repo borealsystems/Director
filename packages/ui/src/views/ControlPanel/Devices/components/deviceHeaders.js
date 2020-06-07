@@ -16,11 +16,11 @@ const headers = [
     header: 'Location'
   },
   {
-    key: 'provider',
+    key: 'provider.label',
     header: 'Provider'
   },
   {
-    key: 'enabled-comp',
+    key: 'enabled',
     header: 'Enabled'
   },
   {

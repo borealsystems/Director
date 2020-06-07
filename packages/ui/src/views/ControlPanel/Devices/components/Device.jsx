@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, TextInput, ToggleSmall } from 'carbon-components-react'
+import { Button, Dropdown, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
+import omit from 'lodash/omit'
 
 const deleteDeviceGQL = `
   mutation deleteDevice($idToDelete: String!) {
@@ -9,11 +10,62 @@ const deleteDeviceGQL = `
   }
 `
 
+const deviceUpdateMutationGQL = `mutation updateDevice($device: deviceUpdate) {
+  updateDevice(device: $device) {
+    id
+  }
+}`
+
+// const stripTypenames = (value) => {
+//   if (Array.isArray(value)) {
+//     return value.map(stripTypenames)
+//   } else if (value !== null && typeof (value) === 'object') {
+//     const newObject = {}
+//     for (const property in value) {
+//       if (property !== '__typename') {
+//         newObject[property] = stripTypenames(value[property])
+//       }
+//     }
+//     return newObject
+//   } else {
+//     return value
+//   }
+// }
+
 const Device = (props) => {
-  // eslint-disable-next-line no-unused-vars
+  const initialDevice = props.new ? {} : props.devices.find((item) => { return item.id === props.deviceID })
+  const initialConfiguration = {}
+  if (!props.new && initialDevice.configuration) {
+    initialDevice.configuration.forEach(item => {
+      initialConfiguration[item.id] = item
+    })
+  }
+
+  var [device, setDevice] = useState(omit(initialDevice, 'configuration'))
+  var [configuration, setConfiguration] = useState(initialConfiguration)
+
   const [deleteDeviceMutationResult, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
-  const device = props.devices.find((item) => { return item.id === props.deviceID })
-  if (device.id === '0') {
+  const [deviceUpdateMutationResult, deviceUpdateMutation] = useMutation(deviceUpdateMutationGQL)
+
+  const getProvider = (providerID) => {
+    return props.providers.find(provider => provider.id === providerID)
+  }
+
+  const updateDevice = () => {
+    console.log('submitting new device')
+    const conf = []
+    for (var key of Object.keys(configuration)) {
+      conf.push(configuration[key])
+    }
+    const deviceUpdateObject = { device: { ...device, configuration: conf, provider: { id: device.provider.id, label: device.provider.label }, enabled: false, status: 'error' } }
+    console.log(JSON.stringify(deviceUpdateObject))
+    deviceUpdateMutation(deviceUpdateObject).then(console.log(deviceUpdateMutationResult))
+    if (props.visability) {
+      props.visability(false)
+    }
+  }
+
+  if (props.deviceID === '0') {
     return (
       <>Internal Device Has No Configuration Options</>
     )
@@ -21,19 +73,30 @@ const Device = (props) => {
     return (
       <div className="bx--col-lg-10">
         <div className="bx--grid">
-          <h3>{device.label}</h3>
-          <h5>ID: {device.id}</h5>
-          <br />
+          { props.new &&
+            <div className="bx--row">
+              <h3 style={{
+                margin: '1vh 0 2vh 1vw'
+              }}> New Device</h3>
+            </div>
+          }
+          { !props.new &&
+            <div className="bx--row">
+              <h3 style={{
+                margin: '1vh 0 2vh 1vw'
+              }}> {device.label}</h3>
+            </div>
+          }
           <div className="bx--row">
             <div className="bx--text-input__field-wrapper bx--col">
               <TextInput
                 type='text'
                 id='newDeviceName'
                 placeholder='Required'
-                labelText='Device Name'
                 value={device.label}
+                labelText='Device Name'
                 onClick={() => {}}
-                onChange={(e) => { }}
+                onChange={(e) => { setDevice({ ...device, label: e.target.value }) }}
               />
             </div>
             <div className="bx--text-input__field-wrapper bx--col">
@@ -41,10 +104,10 @@ const Device = (props) => {
                 type='text'
                 id='newDeviceLocation'
                 placeholder='Optional'
+                value={device.location || undefined}
                 labelText='Device Location'
-                value={device.location}
                 onClick={() => {}}
-                onChange={(e) => { }}
+                onChange={(e) => { setDevice({ ...device, location: e.target.value }) }}
               />
             </div>
           </div><br/>
@@ -54,53 +117,93 @@ const Device = (props) => {
                 type='text'
                 id='newDeviceDescription'
                 placeholder='Optional'
+                value={device.description || undefined}
                 labelText='Device Description'
-                value={device.description}
                 onClick={() => {}}
-                onChange={(e) => { }}
-              />
-            </div>
-          </div><br/>
-          <h4>Configuration</h4>
-          <div className="bx--row">
-            <div className="bx--col bx--col-lg-4">
-              Device State: <ToggleSmall
-                aria-label='Device Status'
-                labelA='Disabled'
-                labelB='Enabled'
-                toggled={device.enabled}
-                onChange={() => {}}
-                onToggle={() => {}}
-                id="enableDevice"
+                onChange={(e) => { setDevice({ ...device, description: e.target.value }) }}
               />
             </div>
           </div>
-          { device.configuration && device.configuration.map((item) =>
+          <br/>
+          <h4>Configuration</h4>
+          <br/>
+          { props.new === false &&
+            <div className='bx-row'>
+              <Dropdown
+                ariaLabel="Dropdown"
+                id="newDeviceProvider"
+                label='Provider'
+                items={[device.provider]}
+                value={device.provider}
+                disabled
+                // itemToString={item => (item ? item.label : '')}
+                onChange={(provider) => {}}
+                titleText="Device Provider"
+              />
+            </div>
+          }
+          { props.new === true &&
+            <div className="bx--row">
+              <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
+                <Dropdown
+                  ariaLabel="Dropdown"
+                  id="newDeviceProvider"
+                  label='Required'
+                  items={props.providers}
+                  // itemToString={item => (item ? item.label : '')}
+                  onChange={(provider) => { setDevice({ ...device, provider: provider.selectedItem }) }}
+                  titleText="Device Provider"
+                />
+              </div>
+            </div>
+          }
+          <br/>
+          { props.new && device.provider && getProvider(device.provider.id).parameters.map((item) =>
             <div key={item.id} className='bx-row'>
               <div className="bx--text-input__field-wrapper">
                 <TextInput
                   type='text'
-                  id={`configuration${item.id}`}
-                  placeholder='Optional'
-                  labelText={item.id}
-                  value={item.value}
+                  id={`newDeviceParameter${item.id}`}
+                  placeholder={ item.required ? 'Required' : 'Optional' }
+                  labelText={item.label}
                   onClick={() => {}}
-                  onChange={(e) => { } }
+                  onChange={(e) => { setConfiguration({ ...configuration, [item.id]: { id: item.id, value: e.target.value } }) }}
                 />
               </div><br/>
             </div>
           )}
-          <div className="bx--row">
-            <Button onClick={() => deleteDeviceMutation({ idToDelete: device.id })} style={{ minWidth: '20%' }} size='normal' kind="danger">
+          {!props.new && device.provider && getProvider(device.provider.id).parameters.map((item) =>
+            <div key={item.id} className='bx-row'>
+              <div className="bx--text-input__field-wrapper">
+                <TextInput
+                  type='text'
+                  id={`newDeviceParameter${item.id}`}
+                  placeholder={ item.required ? 'Required' : 'Optional' }
+                  labelText={item.label}
+                  value={configuration[item.id] ? configuration[item.id].value : ''}
+                  onClick={() => {}}
+                  onChange={(e) => { setConfiguration({ ...configuration, [item.id]: { id: item.id, value: e.target.value } }) }}
+                />
+              </div><br/>
+            </div>
+          )}
+          <Button onClick={() => { updateDevice() }} size='default' kind="primary">
+            { !props.new && <>Update</> }
+            { props.new && <>Create</> }
+          </Button>
+          { !props.new &&
+            <Button onClick={() => deleteDeviceMutation({ idToDelete: device.id }).then(console.log(deleteDeviceMutationResult))} size='default' kind="danger">
               Delete
             </Button>
-            <Button onClick={() => { }} style={{ minWidth: '20%' }} size='normal' kind="primary">
-              Update
-            </Button>
-            <Button onClick={() => { }} style={{ minWidth: '20%' }} size='normal' kind="secondary">
+          }
+          <Button onClick={() => { props.visability(false) }} size='default' kind="secondary">
               Cancel
-            </Button>
-          </div>
+          </Button>
+          {/* <br/>
+          { JSON.stringify(device) }
+          <hr/>
+          { JSON.stringify(configuration) } */}
+          <br/>
         </div>
       </div>
     )
@@ -108,8 +211,10 @@ const Device = (props) => {
 }
 
 Device.propTypes = {
+  new: PropTypes.bool,
+  deviceID: PropTypes.string,
   devices: PropTypes.array,
-  deviceID: PropTypes.string
+  providers: PropTypes.array
 }
 
 export default Device

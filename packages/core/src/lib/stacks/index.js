@@ -9,10 +9,14 @@ const stacks = []
 
 const initStacks = () => {
   db.get('stacks').then((d) => {
-    d.map((item, index) => {
-      stacks.push(item)
-    })
-  })
+    if (d === undefined) {
+      stacks.push()
+    } else {
+      d.map((item, index) => {
+        stacks.push(item)
+      })
+    }
+  }).catch(e => console.log(e))
 }
 
 const createNewStack = (newStack) => {

@@ -1,10 +1,10 @@
 import { providers } from '../../providers'
-import { createNewDevice, deleteDevice, devices } from '../../devices'
+import { updateDevice, deleteDevice, devices } from '../../devices'
 import { createNewStack, deleteStack, executeStack, stacks } from '../../stacks'
 import { logs } from '../../log'
 import db from '../../db'
-import shortid from 'shortid'
 
+import shortid from 'shortid'
 import {
   GraphQLSchema,
   GraphQLObjectType,
@@ -15,7 +15,7 @@ import {
 import providerType from './providerType'
 import logType from './logType'
 import deviceType from './deviceTypes/deviceType.js'
-import newDeviceInputType from './deviceTypes/newDeviceInputType.js'
+import deviceUpdateInputType from './deviceTypes/deviceUpdateInputType.js'
 import stackType from './stackTypes/stackType.js'
 import newStackInputType from './stackTypes/newStackInputType'
 
@@ -50,11 +50,24 @@ var schema = new GraphQLSchema({
         }
       },
 
+      // TODO: rename
       getDevices: {
         name: 'Get Devices',
         description: 'Returns all configured devices',
         type: new GraphQLList(deviceType),
         resolve: () => { return devices }
+      },
+
+      deviceByID: {
+        name: 'Get Device by ID',
+        description: 'Returns a device specified by the ID',
+        type: deviceType,
+        args: {
+          id: { type: GraphQLString }
+        },
+        resolve: (parent, args) => {
+          return devices.find(device => device.id === args.id)
+        }
       },
 
       getStacks: {
@@ -69,22 +82,17 @@ var schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'Mutations',
     fields: {
-      newDevice: {
-        name: 'New Device',
-        description: 'Creates a new device with one of the available communications providers',
+      updateDevice: {
+        name: 'Create or Modify a Device',
+        description: 'If ID is given, modifies existing device, if not it creates new and returns ID',
         type: deviceType,
         args: {
           device: {
-            type: newDeviceInputType
+            type: deviceUpdateInputType
           }
         },
         resolve: (parent, args) => {
-          const newDevice = {
-            id: shortid.generate(),
-            ...args.device,
-            provider: args.device.provider.id
-          }
-          return createNewDevice(newDevice)
+          return updateDevice(args.device)
         }
       },
 
@@ -109,6 +117,7 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           const newStack = {
+            // TODO: move to createNewStack
             id: shortid.generate(),
             ...args.stack
           }
