@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
 import deviceHeaders from './components/deviceHeaders'
-// import NewDevice from './components/NewDevice.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Device from './components/Device.jsx'
 
