@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production src/ui",
-    "dev": "webpack-dev-server --hot --inline"
+    "dev": "webpack-dev-server"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

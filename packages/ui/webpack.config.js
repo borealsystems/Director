@@ -1,7 +1,34 @@
 const path = require('path')
+const webpack = require('webpack')
+
+const port = process.env.PORT || 3000
 
 module.exports = {
-  entry: './src/index.js',
+  mode: 'development',
+
+  entry: [
+    'webpack-dev-server/client?http://0.0.0.0:3000',
+    './src/index.js'
+  ],
+
+  output: {
+    path: path.resolve(__dirname, 'dist/ui/'),
+    publicPath: '/dist/',
+    filename: 'bundle.js'
+  },
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    }
+  },
+
+  devtool: 'inline-source-map',
+
   module: {
     rules: [
       {
@@ -11,12 +38,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env',
-            '@babel/react'
-          ]
-        }
+        loader: ['react-hot-loader/webpack', 'babel-loader']
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
@@ -47,24 +69,18 @@ module.exports = {
       }
     ]
   },
-  resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom'
-    }
-  },
-  output: {
-    path: path.resolve(__dirname, 'dist/ui'),
-    publicPath: path.resolve(__dirname, 'dist/ui'),
-    filename: 'bundle.js'
-  },
+
   devServer: {
-    contentBase: path.join(__dirname, '/src/public/'),
-    port: 3000,
-    publicPath: 'http://localhost:3000/dist/',
-    hotOnly: true,
+    host: 'localhost',
+    port: port,
     historyApiFallback: true,
+    open: false,
+    contentBase: path.join(__dirname, '/src/public/'),
+    publicPath: 'http://localhost:3000/dist/',
     proxy: {
       '/gql': 'http://localhost:3001/'
-    }
+    },
+    hot: true,
+    hotOnly: true
   }
 }
