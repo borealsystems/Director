@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'standard'
   ],
+  parser: "babel-eslint",
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
