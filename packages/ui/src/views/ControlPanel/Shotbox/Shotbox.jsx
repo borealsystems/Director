@@ -22,7 +22,7 @@ const Shotbox = () => {
     query: `query getStacks {
       getStacks {
         id
-        name
+        label
         description
       }
     }`,
@@ -77,7 +77,7 @@ const Shotbox = () => {
                         { stack.id &&
                           <Button onClick={() => { executeStackMutation({ executeID: stack.id }) }} style={{ width: '20.7em', height: '8em', display: 'table' }} size='default' kind="primary">
                             <>
-                              <h3>{stack.name}</h3>
+                              <h3>{stack.label}</h3>
                               {stack.description}
                             </>
                           </Button>
