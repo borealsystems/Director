@@ -6,7 +6,6 @@ import log from '../log.js'
 const providers = []
 
 const providerInterfaces = []
-// TODO: ESlint really doesnt like this file
 const initProviders = () => {
   fs.readdir(path.resolve(__dirname, './descriptors'), (err, files) => {
     files.forEach(file => {

@@ -17,7 +17,7 @@ resolume.init = (providers, providerInterfaces) => {
 resolume.descriptor = {
   id: 'resolume',
   label: 'Resolume Arena',
-  protocol: 'resolume',
+  protocol: 'osc',
   parameters: [
     {
       required: true,

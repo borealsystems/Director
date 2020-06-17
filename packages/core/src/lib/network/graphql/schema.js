@@ -1,10 +1,9 @@
 import { providers } from '../../providers'
 import { updateDevice, deleteDevice, devices } from '../../devices'
-import { createNewStack, deleteStack, executeStack, stacks } from '../../stacks'
+import { updateStack, deleteStack, executeStack, stacks } from '../../stacks'
 import { logs } from '../../log'
 import db from '../../db'
 
-import shortid from 'shortid'
 import {
   GraphQLSchema,
   GraphQLObjectType,
@@ -17,7 +16,7 @@ import logType from './logType'
 import deviceType from './deviceTypes/deviceType.js'
 import deviceUpdateInputType from './deviceTypes/deviceUpdateInputType.js'
 import stackType from './stackTypes/stackType.js'
-import newStackInputType from './stackTypes/newStackInputType'
+import stackUpdateInputType from './stackTypes/stackUpdateInputType'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -106,22 +105,17 @@ var schema = new GraphQLSchema({
         }
       },
 
-      newStack: {
-        name: 'New Stack',
-        description: 'Creates a new stack',
+      updateStack: {
+        name: 'Stack Update',
+        description: 'Creates a new stack or modifies and existing one',
         type: stackType,
         args: {
           stack: {
-            type: newStackInputType
+            type: stackUpdateInputType
           }
         },
         resolve: (parent, args) => {
-          const newStack = {
-            // TODO: move to createNewStack
-            id: shortid.generate(),
-            ...args.stack
-          }
-          return createNewStack(newStack)
+          return updateStack(args.stack)
         }
       },
 

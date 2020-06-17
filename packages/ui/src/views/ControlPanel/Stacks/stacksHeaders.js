@@ -4,7 +4,7 @@ const headers = [
     header: 'ID'
   },
   {
-    key: 'name',
+    key: 'label',
     header: 'Name'
   },
   {

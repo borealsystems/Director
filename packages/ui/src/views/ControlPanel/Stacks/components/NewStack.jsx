@@ -18,7 +18,10 @@ const NewStack = (props) => {
       getDevices {
         label
         id
-        provider
+        provider {
+          id
+          label
+        }
       }
       getProviders {
         id

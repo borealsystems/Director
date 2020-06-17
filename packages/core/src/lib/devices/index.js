@@ -15,7 +15,7 @@ const initDevices = () => {
         id: '0',
         provider: 'internal',
         enabled: true,
-        status: 'Good',
+        status: 'ok',
         description: 'The Director Core'
       })
     } else {

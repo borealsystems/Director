@@ -2,30 +2,64 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
 import headers from './stacksHeaders'
-import NewStack from './components/NewStack.jsx'
+import Stack from './components/Stack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
-// TODO: delete stacks
-// TODO: edit stacks
-// TODO: fill content in expandos
-
 const Devices = () => {
   const [newStackVisability, setNewStackVisability] = useState(false)
   const [result] = useQuery({
-    query: `query getStacks {
+    query: `query getAll {
       getStacks {
         id
-        name
+        label
         description
         actions {
-          deviceid
-          providerFunctionID
-          functionLabel
+          device {
+            id,
+            label
+            provider {
+              id
+            }
+          }
+          providerFunction {
+            id
+            label
+          }
           parameters {
             id
             value
+          }
+        }
+      }
+      getDevices {
+        id
+        label
+        location
+        description
+        provider {
+          id
+          label
+        }
+        enabled
+        status
+        configuration {
+          id
+          value
+        }
+      }
+      getProviders {
+        id
+        label
+        providerFunctions {
+          id
+          label
+          parameters {
+            id
+            label
+            inputType
+            regex
           }
         }
       }
@@ -87,12 +121,9 @@ const Devices = () => {
                   {/* pass in `onInputChange` change here to make filtering work */}
                   {/* <TableToolbarSearch onChange={() => {}} /> */}
                   <TableToolbarContent>
-                    <Button onClick={() => { setNewStackVisability(false) }} style={{ minWidth: '20%', marginRight: '-2px' }} size='default' kind="secondary">
-                      Cancel
-                    </Button>
                   </TableToolbarContent>
                 </TableToolbar>
-                <NewStack visability={ setNewStackVisability }/>
+                <Stack new devices={result.data.getDevices} providers={result.data.getProviders} visability={ setNewStackVisability }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -107,22 +138,15 @@ const Devices = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map(row => (
+                  {rows.length !== 0 && rows.map(row => (
                     <React.Fragment key={row.id}>
                       <TableExpandRow {...getRowProps({ row })}>
                         {row.cells.map(cell => (
                           <TableCell key={cell.id}>{cell.value}</TableCell>
                         ))}
                       </TableExpandRow>
-                      <TableExpandedRow
-                        colSpan={headers.length + 1}
-                        className="demo-expanded-td">
-                        <h1 className="demo-inner-container-header">
-                          Expandable row content
-                        </h1>
-                        <p className="demo-inner-container-content">
-                          Description here
-                        </p>
+                      <TableExpandedRow colSpan={headers.length + 1}>
+                        <Stack devices={result.data.getDevices} stacks={result.data.getStacks} providers={result.data.getProviders} stackID={row.id} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

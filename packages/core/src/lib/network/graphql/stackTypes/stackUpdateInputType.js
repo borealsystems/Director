@@ -1,11 +1,11 @@
 import {
-  GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString,
   GraphQLList
 } from 'graphql'
 
-const stackType = new GraphQLObjectType({
-  name: 'stackUpdateType',
+const stackUpdateInputType = new GraphQLInputObjectType({
+  name: 'stackUpdateInputType',
   description: 'A Stack is a group of actions that can be triggered at once or sequentially by a controller',
   fields: {
     id: {
@@ -19,16 +19,13 @@ const stackType = new GraphQLObjectType({
     },
     actions: {
       type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'stackActionType',
+        new GraphQLInputObjectType({
+          name: 'stackActionInputType',
           description: 'An action is something that happens on a device or piece of software',
           fields: {
-            id: {
-              type: GraphQLString
-            },
             device: {
-              type: new GraphQLObjectType({
-                name: 'stackDeviceType',
+              type: new GraphQLInputObjectType({
+                name: 'stackDeviceInputType',
                 fields: {
                   id: {
                     type: GraphQLString
@@ -37,10 +34,13 @@ const stackType = new GraphQLObjectType({
                     type: GraphQLString
                   },
                   provider: {
-                    type: new GraphQLObjectType({
-                      name: 'stackDeviceProviderType',
+                    type: new GraphQLInputObjectType({
+                      name: 'stackDeviceProviderInputType',
                       fields: {
                         id: {
+                          type: GraphQLString
+                        },
+                        label: {
                           type: GraphQLString
                         }
                       }
@@ -50,8 +50,8 @@ const stackType = new GraphQLObjectType({
               })
             },
             providerFunction: {
-              type: new GraphQLObjectType({
-                name: 'stackDeviceProviderFunctionType',
+              type: new GraphQLInputObjectType({
+                name: 'stackDeviceProviderFunctionInputType',
                 fields: {
                   id: {
                     type: GraphQLString
@@ -64,8 +64,8 @@ const stackType = new GraphQLObjectType({
             },
             parameters: {
               type: new GraphQLList(
-                new GraphQLObjectType({
-                  name: 'stackActionParametersType',
+                new GraphQLInputObjectType({
+                  name: 'stackActionParametersInputType',
                   fields: {
                     id: {
                       type: GraphQLString
@@ -84,4 +84,4 @@ const stackType = new GraphQLObjectType({
   }
 })
 
-export default stackType
+export default stackUpdateInputType

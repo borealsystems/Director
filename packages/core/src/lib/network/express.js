@@ -20,7 +20,7 @@ app.get('/dist/bundle.js', (req, res) => {
 })
 
 app.get('/*', (req, res) => {
-  res.sendFile('../../../../ui/public/index.html')
+  res.sendFile(path.resolve(__dirname, '../../../../ui/src/public/index.html'))
 })
 
 const port = process.env.NODE_ENV === 'development' ? 3001 : 3000
