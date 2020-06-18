@@ -1,4 +1,4 @@
-import osc from './osc'
+import osc from '../protocolProviders/osc'
 
 const resolume = () => {}
 

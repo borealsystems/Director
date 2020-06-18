@@ -7,9 +7,18 @@ const providers = []
 
 const providerInterfaces = []
 const initProviders = () => {
-  fs.readdir(path.resolve(__dirname, './descriptors'), (err, files) => {
+  fs.readdir(path.resolve(__dirname, './protocolProviders'), (err, files) => {
     files.forEach(file => {
-      import(`./descriptors/${file}`)
+      import(`./protocolProviders/${file}`)
+        .then((module) => {
+          module.default.init(providers, providerInterfaces)
+          log('info', 'core/lib/providers', `Loaded provider: ${module.default.descriptor.label} `)
+        })
+     })
+   })
+   fs.readdir(path.resolve(__dirname, './deviceProviders'), (err, files) => {
+    files.forEach(file => {
+      import(`./deviceProviders/${file}`)
         .then((module) => {
           module.default.init(providers, providerInterfaces)
           log('info', 'core/lib/providers', `Loaded provider: ${module.default.descriptor.label} `)

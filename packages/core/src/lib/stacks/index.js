@@ -1,6 +1,6 @@
 import db from '../db'
 import log from '../log'
-import { remove, sortBy, findIndex } from 'lodash'
+import { remove, findIndex } from 'lodash'
 import shortid from 'shortid'
 import { devices } from '../devices'
 
@@ -52,9 +52,9 @@ const deleteStack = (_id) => {
 // TODO: Facilitate delays and step timings WITH AN INTERNAL ACTION
 const executeStack = (_id) => {
   log('info', 'core/lib/stacks', `Executing stack ${_id} (${stacks.find((stack) => { return stack.id === _id }).label})`)
-  sortBy(stacks.find((stack) => { return stack.id === _id }).actions, [(o) => { return o.id }]).map((action) => {
-    var device = devices.find((device) => { return device.id === action.deviceid })
-    providerInterfaces[providerInterfaces.findIndex((providerInterface) => { return providerInterface.id === device.provider })].providerInterface(device.configuration, action.providerFunctionID, action.parameters)
+  stacks.find((stack) => { return stack.id === _id }).actions.map((action) => {
+    var device = devices.find((device) => { return device.id === action.device.id })
+    providerInterfaces[providerInterfaces.findIndex((providerInterface) => { return providerInterface.id === device.provider.id })].providerInterface(device.configuration, action.providerFunction.id, action.parameters)
   })
   return 'executed'
 }

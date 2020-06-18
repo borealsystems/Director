@@ -10,9 +10,9 @@ The intention of this project is to create an open facility scale orchestration 
 
 ## State
 ### Functionality
-- [ ] Device Descriptors
+- [x] Device Descriptors
 - - [ ] Broadcast Device Definition Language (Maybe)
-- [ ] Actions
+- [x] Actions
 - - [ ] Mutatable Actions
 - [ ] Feedbacks
 - [ ] Web Management

@@ -18,14 +18,13 @@ osc.init = (providers, providerInterfaces) => {
   provider.instance = instance
   provider.instance.udpPort = new _osc.UDPPort({
     localAddress: '0.0.0.0',
-    localPort: 8000,
+    localPort: 8245,
     metadata: true
   })
 
   // TODO: fix OSC recieve
-  // TODO: Split providers and protocols into seperate directories
   provider.instance.udpPort.open()
-  log('info', 'core/lib/providers/osc', 'Listening for OSC on 0.0.0.0:8000')
+  log('info', 'core/lib/providers/osc', `Listening for OSC on ${provider.instance.udpPort.localAddress}:${provider.instance.udpPort.localPort}`)
 
   provider.instance.udpPort.on('message', (oscMsg, timeTag, info) => {
     log('debug', 'core/lib/providers/osc', `Recieved ${JSON.stringify(oscMsg)}`)
