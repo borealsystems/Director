@@ -39,7 +39,6 @@ class GenericOSC {
   recreate = () => {}
 
   rawInterface = (_address, _args) => {
-    log('info', 'core/lib/protocolProviders/osc', 'RAW')
     this.oscClient.send(
       {
         address: _address,

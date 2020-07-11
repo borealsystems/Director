@@ -31,7 +31,7 @@ class BorealDirector {
   interface = (_action) => {
     switch (_action.providerFunction.id) {
       case 'executeStack':
-        executeStack(_action.actionParameters.find((parameter) => { return parameter.id === 'stack' }).value)
+        executeStack(_action.parameters.find((parameter) => { return parameter.id === 'stack' }).value)
         break
     }
   }
