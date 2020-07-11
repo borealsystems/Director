@@ -1,4 +1,4 @@
-import log from './log'
+import log from './utils/log'
 
 const Keyv = require('keyv')
 const KeyvFile = require('keyv-file')
@@ -12,5 +12,7 @@ const db = new Keyv({
     }
   )
 })
+
+db.on('error', err => log('error', 'core/lib/db', err))
 
 export default db

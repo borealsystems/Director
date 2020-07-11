@@ -1,7 +1,7 @@
 import { providers } from '../../providers'
 import { updateDevice, deleteDevice, devices } from '../../devices'
 import { updateStack, deleteStack, executeStack, stacks } from '../../stacks'
-import { logs } from '../../log'
+import { logs } from '../../utils/log'
 import db from '../../db'
 
 import {

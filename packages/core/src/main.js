@@ -1,13 +1,23 @@
-import './lib/network/express'
-
 import { initDevices } from './lib/devices'
-import { initProviders } from './lib/providers'
+import { initProviders, cleanupProviders } from './lib/providers'
 import { initStacks } from './lib/stacks'
+import { initExpress, cleanupExpress } from './lib/network/express'
 
 import db from './lib/db'
 
-initDevices()
-initProviders()
-initStacks()
+initExpress()
+initProviders(() => initDevices(() => initStacks()))
+
+process.on('SIGINT', () => {
+  cleanupProviders()
+  cleanupExpress()
+  setTimeout(process.exit(), 5000)
+})
+
+process.on('SIGHUP', () => {
+  cleanupProviders()
+  cleanupExpress()
+  setTimeout(process.exit(), 5000)
+})
 
 db.set('status', ['success', 'All Systems Go', 'Director, and everything it controls, are operating as intended and are not reporting any errors.'])

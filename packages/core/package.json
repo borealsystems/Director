@@ -1,6 +1,6 @@
 {
   "name": "core",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "The core application for the Boreal Director orchestation suite",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/Director",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src/core -d dist/core",
-    "dev": "NODE_ENV=development nodemon --ignore src/ui --exec babel-node src/main.js"
+    "dev": "NODE_ENV=development nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -27,6 +27,7 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "chalk": "^3.0.0",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
