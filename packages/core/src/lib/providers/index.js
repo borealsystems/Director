@@ -10,9 +10,7 @@ const providerInterfaces = []
 const providerInitMethods = []
 
 const initProviders = (callback) => {
-  
-  // TODO: MAKE THIS CORRECT
-  fs.readdir(path.resolve(__dirname, './protocolProviders'), (err, files) => {
+    fs.readdir(path.resolve(__dirname, './protocolProviders'), (err, files) => {
     var counter = files.length
     files.forEach(file => {
       import(`./protocolProviders/${file}`)

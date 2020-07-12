@@ -23,6 +23,7 @@ import NavGroup from './components/NavGroup.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
+import Panels from './Panels/Panels.jsx'
 import Stacks from './Stacks/Stacks.jsx'
 import Shotbox from './Shotbox/Shotbox.jsx'
 import Status from './Status/Status.jsx'
@@ -66,6 +67,7 @@ const ControlPanel = () => (
                   <NavGroup icon={Settings24} label="Configure" grouppath="/config">
                     <NavLink to="/config/devices" label="Devices"/>
                     <NavLink to="/config/stacks" label="Stacks"/>
+                    <NavLink to="/config/panels" label="Panels"/>
                     <NavLink to="/config/controllers" label="Controllers"/>
                   </NavGroup>
                   <NavGroup icon={Keyboard24} label="Control" grouppath="/control">
@@ -104,6 +106,9 @@ const ControlPanel = () => (
                       </Route>
                       <Route path="/config/stacks">
                         <Stacks />
+                      </Route>
+                      <Route path="/config/panels">
+                        <Panels />
                       </Route>
                       <Route path="/config/controllers">
                         <h1>Controllers</h1>
