@@ -41,7 +41,7 @@
     "carbon-components": "^10.9.3",
     "carbon-components-react": "^7.9.3",
     "carbon-icons": "^7.0.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

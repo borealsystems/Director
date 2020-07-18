@@ -36,7 +36,7 @@
     "graphql": "^14.6.0",
     "keyv": "^4.0.0",
     "keyv-file": "^0.1.13",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nicely-format": "^1.1.0",
     "osc": "^2.4.0",
     "shortid": "^2.2.15"
