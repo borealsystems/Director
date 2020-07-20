@@ -1,12 +1,13 @@
 import { initDevices } from './lib/devices'
 import { initProviders, cleanupProviders } from './lib/providers'
 import { initStacks } from './lib/stacks'
+import { initPanels } from './lib/panels'
 import { initExpress, cleanupExpress } from './lib/network/express'
 
 import db from './lib/db'
 
 initExpress()
-initProviders(() => initDevices(() => initStacks()))
+initProviders(() => initDevices(() => initStacks(() => initPanels())))
 
 process.on('SIGINT', () => {
   cleanupProviders()

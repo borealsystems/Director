@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "1.2.0",
+  "version": "0.2.0",
   "description": "The configuration interface component of the Boreal Director orchestration suite",
   "main": "src/index.js",
   "repository": "https://github.com/borealsystems/Director",

@@ -6,7 +6,7 @@ import { devices } from '../devices'
 
 const stacks = []
 
-const initStacks = () => {
+const initStacks = (cb) => {
   db.get('stacks').then((d) => {
     if (d === undefined) {
       stacks.push()
@@ -15,7 +15,11 @@ const initStacks = () => {
         stacks.push(item)
       })
     }
-  }).catch(e => console.log(e))
+  }).catch(e => console.log(e)).then(() => {
+    if (typeof cb === 'function') {
+      cb()
+    }
+  })
 }
 
 const updateStack = (_stack) => {

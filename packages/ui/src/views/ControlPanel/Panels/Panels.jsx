@@ -3,17 +3,42 @@ import { useQuery } from 'urql'
 import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
 import headers from './panelsHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
+import Panel from './components/Panel.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
 const Panels = () => {
-  const [newStackVisability, setNewStackVisability] = useState(false)
+  const [newPanelVisability, setNewPanelVisability] = useState(false)
   const [result] = useQuery({
     query: `query getAll {
       getStacks {
         id
         label
         description
+      }
+      getPanels {
+        id
+        label
+        description
+        layout {
+          id
+          label
+          rows
+          columns
+        }
+        layoutType {
+          id
+          label
+        }
+        buttons {
+          row
+          column
+          stack {
+            id
+            label
+            description
+          }
+        }
       }
     }`,
     pollInterval: 1000
@@ -39,7 +64,7 @@ const Panels = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getStacks}
+          rows={result.data.getPanels}
           headers={headers}
           render={({
             rows,
@@ -51,23 +76,23 @@ const Panels = () => {
           }) => (
             <TableContainer
               title="Panels"
-              description="A Panel is a virtual abstraction of ."
+              description="A Panel is a virtual abstraction of a control interface."
               {...getTableContainerProps()}
             >
-              {!newStackVisability &&
+              {!newPanelVisability &&
               <div>
                 <TableToolbar>
                   {/* pass in `onInputChange` change here to make filtering work */}
                   {/* <TableToolbarSearch onChange={() => {}} /> */}
                   <TableToolbarContent>
-                    <Button onClick={() => { setNewStackVisability(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
+                    <Button onClick={() => { setNewPanelVisability(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
                       Add new
                     </Button>
                   </TableToolbarContent>
                 </TableToolbar>
               </div>
               }
-              {newStackVisability &&
+              {newPanelVisability &&
               <div>
                 <TableToolbar>
                   {/* pass in `onInputChange` change here to make filtering work */}
@@ -75,6 +100,7 @@ const Panels = () => {
                   <TableToolbarContent>
                   </TableToolbarContent>
                 </TableToolbar>
+                <Panel new stacks={result.data.getStacks} visability={ setNewPanelVisability }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -97,6 +123,7 @@ const Panels = () => {
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow colSpan={headers.length + 1}>
+                        <Panel panels={result.data.getPanels} panelID={row.id} stacks={result.data.getStacks}/>
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

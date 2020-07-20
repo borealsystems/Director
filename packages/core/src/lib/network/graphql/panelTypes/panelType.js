@@ -1,0 +1,89 @@
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLList,
+  GraphQLInt
+} from 'graphql'
+
+const panelType = new GraphQLObjectType({
+  name: 'panelType',
+  description: 'A Panel is a virtual abstraction of a control interface',
+  fields: {
+    id: {
+      type: GraphQLString
+    },
+    label: {
+      type: GraphQLString
+    },
+    description: {
+      type: GraphQLString
+    },
+    layoutType: {
+      type: new GraphQLObjectType({
+        name: 'panelLayoutTypeType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          }
+        }
+      })
+    },
+    layout: {
+      type: new GraphQLObjectType({
+        name: 'panelLayoutType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          },
+          rows: {
+            type: GraphQLInt
+          },
+          columns: {
+            type: GraphQLInt
+          }
+        }
+      })
+    },
+    buttons: {
+      type: new GraphQLList(
+        new GraphQLList(
+          new GraphQLObjectType({
+            name: 'panelButtonType',
+            fields: {
+              row: {
+                type: GraphQLInt
+              },
+              column: {
+                type: GraphQLInt
+              },
+              stack: {
+                type: new GraphQLObjectType({
+                  name: 'panelButtonStackType',
+                  fields: {
+                    id: {
+                      type: GraphQLString
+                    },
+                    label: {
+                      type: GraphQLString
+                    },
+                    description: {
+                      type: GraphQLString
+                    }
+                  }
+                })
+              }
+            }
+          })
+        )
+      )
+    }
+  }
+})
+
+export default panelType

@@ -1,6 +1,7 @@
 import { providers } from '../../providers'
 import { updateDevice, deleteDevice, devices } from '../../devices'
 import { updateStack, deleteStack, executeStack, stacks } from '../../stacks'
+import { updatePanel, deletePanel, panels } from '../../panels'
 import { logs } from '../../utils/log'
 import db from '../../db'
 
@@ -17,6 +18,8 @@ import deviceType from './deviceTypes/deviceType.js'
 import deviceUpdateInputType from './deviceTypes/deviceUpdateInputType.js'
 import stackType from './stackTypes/stackType.js'
 import stackUpdateInputType from './stackTypes/stackUpdateInputType'
+import panelType from './panelTypes/panelType'
+import panelUpdateInputType from './panelTypes/panelUpdateInputType'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -74,6 +77,13 @@ var schema = new GraphQLSchema({
         description: 'Returns all configured stacks',
         type: new GraphQLList(stackType),
         resolve: () => { return stacks }
+      },
+
+      getPanels: {
+        name: 'Get Panels',
+        description: 'Returns all configured panels',
+        type: new GraphQLList(panelType),
+        resolve: () => { return panels }
       }
     }
   }),
@@ -144,6 +154,34 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           return executeStack(args.id)
+        }
+      },
+
+      updatePanel: {
+        name: 'Panel Update',
+        description: 'Update or create a panel',
+        type: panelType,
+        args: {
+          panel: {
+            type: panelUpdateInputType
+          }
+        },
+        resolve: (parent, args) => {
+          updatePanel(args.panel)
+        }
+      },
+
+      deletePanel: {
+        name: 'Delete Panel',
+        description: 'Obliterates the selected panel',
+        type: GraphQLString,
+        args: {
+          id: {
+            type: GraphQLString
+          }
+        },
+        resolve: (parent, args) => {
+          return deletePanel(args.id)
         }
       }
     }

@@ -4,15 +4,11 @@ import log from '../../utils/log'
 import REGEX from '../../utils/regexEnum'
 
 export default function load (providers) {
-  log('info', 'core/lib/deviceProviders/Reso;u', 'Loaded protocol provider: Generic - OSC')
+  log('info', 'core/lib/deviceProviders/Resolume', 'Loaded protocol provider: Generic - OSC')
   providers.push(descriptor)
 }
 
 class ResolumeArena extends GenericOSC {
-  // constructor (_device) {
-  //   super(_device)
-  // }
-
   interface = (_action) => {
     switch (_action.providerFunction.id) {
       case 'column':
