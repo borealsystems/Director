@@ -2,6 +2,7 @@ import { providers } from '../../providers'
 import { updateDevice, deleteDevice, devices } from '../../devices'
 import { updateStack, deleteStack, executeStack, stacks } from '../../stacks'
 import { updatePanel, deletePanel, panels } from '../../panels'
+import { registerBridge, bridges } from '../../bridges'
 import { logs } from '../../utils/log'
 import db from '../../db'
 
@@ -20,6 +21,8 @@ import stackType from './stackTypes/stackType.js'
 import stackUpdateInputType from './stackTypes/stackUpdateInputType'
 import panelType from './panelTypes/panelType'
 import panelUpdateInputType from './panelTypes/panelUpdateInputType'
+import bridgeType from './bridgeTypes/bridgeType'
+import bridgeUpdateInputType from './bridgeTypes/bridgeUpdateInputType'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -84,6 +87,13 @@ var schema = new GraphQLSchema({
         description: 'Returns all configured panels',
         type: new GraphQLList(panelType),
         resolve: () => { return panels }
+      },
+
+      getBridges: {
+        name: 'Get Bridges',
+        description: 'Returns all connected bridges',
+        type: new GraphQLList(bridgeType),
+        resolve: () => { return bridges }
       }
     }
   }),
@@ -182,6 +192,20 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           return deletePanel(args.id)
+        }
+      },
+
+      updateBridge: {
+        name: 'Update Bridge',
+        description: 'Registers or Updates a Bridge',
+        type: GraphQLString,
+        args: {
+          bridge: {
+            type: bridgeUpdateInputType
+          }
+        },
+        resolve: (parent, args, request) => {
+          return registerBridge(args.bridge)
         }
       }
     }

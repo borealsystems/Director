@@ -24,7 +24,7 @@ class GenericRosstalk {
     })
 
     this.socket.on('error', (error) => {
-      log('error', 'core/lib/protocolProviders/rosstalk', error)
+      log('error', 'core/lib/protocolProviders/rosstalk', `${error}`)
       this.device.status = STATUS.ERROR
     })
 

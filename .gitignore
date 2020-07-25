@@ -1,5 +1,7 @@
 director.db
 yarn-error.log
 node_modules
+build
 dist
 .DS_Store
+db/

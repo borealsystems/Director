@@ -3,10 +3,12 @@ import { initProviders, cleanupProviders } from './lib/providers'
 import { initStacks } from './lib/stacks'
 import { initPanels } from './lib/panels'
 import { initExpress, cleanupExpress } from './lib/network/express'
+import { initMDNS } from './lib/network/mdns'
 
 import db from './lib/db'
 
 initExpress()
+initMDNS()
 initProviders(() => initDevices(() => initStacks(() => initPanels())))
 
 process.on('SIGINT', () => {

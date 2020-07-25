@@ -11,7 +11,7 @@ const initDevices = (callback) => {
   db.get('devices').then((d) => {
     if (d === undefined) {
       devices.push({
-        label: 'Boreal Systems Director',
+        label: 'BorealSystems Director',
         id: '0',
         location: 'The Void',
         provider: { id: 'internal', label: 'BorealDirector' },

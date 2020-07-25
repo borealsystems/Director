@@ -20,6 +20,7 @@ import { View32, Settings24, Keyboard24 } from '@carbon/icons-react'
 import NavLink from './components/NavLink.jsx'
 import NavGroup from './components/NavGroup.jsx'
 
+import Bridges from './Bridges/Bridges.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
@@ -28,7 +29,7 @@ import Stacks from './Stacks/Stacks.jsx'
 import Shotbox from './Shotbox/Shotbox.jsx'
 import Status from './Status/Status.jsx'
 
-import logo from '../../logos/Dark_Icon.svg'
+import logo from '../../../../common/logos/Dark_Icon.svg'
 
 const ControlPanel = () => (
   <div className="container bx--theme--g100">
@@ -62,6 +63,7 @@ const ControlPanel = () => (
                 <SideNavItems>
                   <NavGroup icon={View32} label="Monitor" grouppath="/monitor">
                     <NavLink to="/monitor/status" label="Status"/>
+                    <NavLink to="/monitor/bridges" label="Bridges"/>
                     <NavLink to="/monitor/logs" label="Logs"/>
                   </NavGroup>
                   <NavGroup icon={Settings24} label="Configure" grouppath="/config">
@@ -89,6 +91,9 @@ const ControlPanel = () => (
                       </Route>
                       <Route path="/monitor/status">
                         <Status />
+                      </Route>
+                      <Route path="/monitor/bridges">
+                        <Bridges />
                       </Route>
                       <Route path="/monitor/logs">
                         <Logs />
