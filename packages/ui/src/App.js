@@ -6,7 +6,7 @@ import ControlPanel from './views/ControlPanel/ControlPanel.jsx'
 import '../../../node_modules/carbon-components/scss/globals/scss/styles.scss'
 
 const client = createClient({
-  url: '/gql',
+  url: '/graphql',
   requestPolicy: 'network-only',
   maskTypename: true
 })

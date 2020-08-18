@@ -2,36 +2,55 @@ import React from 'react'
 import { useQuery } from 'urql'
 import { DataTable, Loading } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
+import Controller from './components/Controller.jsx'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableExpandRow, TableExpandedRow, TableBody, TableCell } = DataTable
 
-const Bridges = () => {
+const Controllers = () => {
   const headers = [
     {
-      key: 'address',
-      header: 'Address'
+      key: 'label',
+      header: 'Name'
     },
     {
-      key: 'type',
-      header: 'Bridge Type'
+      key: 'manufacturer',
+      header: 'Manufacturer'
     },
     {
-      key: 'version',
-      header: 'Bridge Version'
+      key: 'model',
+      header: 'Model'
+    },
+    {
+      key: 'serial',
+      header: 'Serial Number'
+    },
+    { // TODO Awaiting Upstream
+      key: 'panel.label',
+      header: 'Panel'
+    },
+    {
+      key: 'status',
+      header: 'Status'
     }
   ]
 
   const [result] = useQuery({
-    query: `query getBridges {
-      getBridges {
-        type
-        address
-        version
-        controllers {
-          manufacturer
-          model
-          serial
+    query: `query controllers {
+      controllers {
+        label
+        manufacturer
+        model
+        serial
+        status
+        panel {
+          id
+          label
         }
+        id
+      }
+      getPanels {
+        id
+        label
       }
     }`,
     pollInterval: 1000
@@ -48,7 +67,7 @@ const Bridges = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getBridges}
+          rows={result.data.controllers}
           headers={headers}
           render={({
             rows,
@@ -59,8 +78,8 @@ const Bridges = () => {
             getTableContainerProps
           }) => (
             <TableContainer
-              title="Bridges"
-              description="A Bridge is an application that connects a non-network device to DirectorCore."
+              title="Controllers"
+              description="A Controller is the thing you use to actually make things happen."
               {...getTableContainerProps()}
             >
               <Table {...getTableProps()}>
@@ -79,16 +98,11 @@ const Bridges = () => {
                     <React.Fragment key={row.id}>
                       <TableExpandRow {...getRowProps({ row })}>
                         {row.cells.map(cell => (
-                          <TableCell key={cell.id}>{cell.value}</TableCell>
+                          <TableCell key={cell.index}>{cell.value}</TableCell>
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow colSpan={headers.length + 1}>
-                        { result.data.getBridges[index].controllers && result.data.getBridges[index].controllers.map((controller, index) => (
-                          <div key={index}>
-                            Controller: {controller.manufacturer.replace(/^\w/, c => c.toUpperCase())} {controller.model.replace(/^\w/, c => c.toUpperCase())} <br/>
-                            Serial: {controller.serial}
-                          </div>
-                        )) }
+                        <Controller controllerID={row.id} controllers={result.data.controllers} panels={result.data.getPanels} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}
@@ -102,4 +116,4 @@ const Bridges = () => {
   }
 }
 
-export default Bridges
+export default Controllers

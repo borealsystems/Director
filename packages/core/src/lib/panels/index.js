@@ -5,18 +5,21 @@ import shortid from 'shortid'
 
 const panels = []
 
-const initPanels = (callback) => {
-  db.get('panels').then((d) => {
-    if (d === undefined) {
-      db.set('panels', {})
-    } else {
-      let counter = d.length
-      d.map((item, index) => {
-        panels.push(item)
-        counter--
-        if (counter === 0 && typeof callback === 'function') { callback() }
-      })
-    }
+const initPanels = () => {
+  return new Promise((resolve, reject) => {
+    log('info', 'core/lib/panels', 'Initialising Panels')
+    db.get('panels').then((d) => {
+      if (d === undefined) {
+        db.set('panels', {})
+      } else {
+        let counter = d.length
+        d.map((item, index) => {
+          panels.push(item)
+          counter--
+          if (counter === 0) { resolve() }
+        })
+      }
+    })
   })
 }
 

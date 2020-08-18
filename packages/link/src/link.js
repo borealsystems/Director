@@ -1,8 +1,9 @@
 import 'isomorphic-unfetch'
 import './tray'
 import { mdnsWatch, mdnsAdvertise } from './network/mdns'
-import { initStreamDecks } from './streamdeck'
+import { updateStreamdecks } from './streamdeck'
 
-initStreamDecks()
+updateStreamdecks({ type: 'refresh' })
+updateStreamdecks({ type: 'offline' })
 mdnsWatch()
 mdnsAdvertise()

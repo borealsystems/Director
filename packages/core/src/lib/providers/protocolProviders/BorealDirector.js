@@ -33,6 +33,10 @@ class BorealDirector {
       case 'executeStack':
         executeStack(_action.parameters.find((parameter) => { return parameter.id === 'stack' }).value)
         break
+
+      case 'writeToLog':
+        log('info', 'Manual Log', _action.parameters.find((parameter) => { return parameter.id === 'content' }).value)
+        break
     }
   }
 }
@@ -54,6 +58,17 @@ const descriptor = {
           inputType: 'textInput',
           label: 'Stack ID',
           id: 'stack'
+        }
+      ]
+    },
+    {
+      id: 'writeToLog',
+      label: 'Add A Log Message',
+      parameters: [
+        {
+          inputType: 'textInput',
+          label: 'Log Content',
+          id: 'content'
         }
       ]
     }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
+import { omit } from 'lodash'
 import Action from './Action.jsx'
 
 const deleteStackGQL = `
@@ -17,6 +18,10 @@ const stackUpdateMutationGQL = `
     }
   }`
 
+const executeStackMutationGQL = `mutation executeStack($executeID: String) {
+  executeStack(id: $executeID)
+}`
+
 // TODO: fix the autosaving action parameter details, it currently updates and rerenders which removes to input focus from the client, making long paths hard to type in
 
 const Stack = (props) => {
@@ -31,16 +36,30 @@ const Stack = (props) => {
   var [stack, setStack] = useState(initialStack)
   var [actions, setActions] = useState(initialActions)
 
+  // eslint-disable-next-line no-unused-vars
+  var [executeStackMutationResult, executeStackMutation] = useMutation(executeStackMutationGQL)
   const [deleteStackMutationResult, deleteStackMutation] = useMutation(deleteStackGQL)
   const [stackUpdateMutationResult, stackUpdateMutation] = useMutation(stackUpdateMutationGQL)
 
   const updatestack = () => {
-    console.log('submitting new stack')
     var actionsStripped = []
     actions.forEach(action => {
       actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
     const stackUpdateObject = { stack: { ...stack, actions: actionsStripped } }
+    console.log(JSON.stringify(stackUpdateObject))
+    stackUpdateMutation(stackUpdateObject).then(console.log(stackUpdateMutationResult))
+    if (props.visability) {
+      props.visability(false)
+    }
+  }
+
+  const duplicateStack = () => {
+    var actionsStripped = []
+    actions.forEach(action => {
+      actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
+    })
+    const stackUpdateObject = { stack: { ...omit(stack, 'id'), label: `Duplicate of ${stack.label}`, actions: actionsStripped } }
     console.log(JSON.stringify(stackUpdateObject))
     stackUpdateMutation(stackUpdateObject).then(console.log(stackUpdateMutationResult))
     if (props.visability) {
@@ -107,23 +126,36 @@ const Stack = (props) => {
           { actions && actions.map((item, index) =>
             <Action key={JSON.stringify(item)} index={index} actions={actions} setActions={setActionsProxy} providers={props.providers} devices={props.devices}></Action>
           )}
-          { actions.length === 0
-            ? <Button disabled onClick={() => { updatestack() }} size='default' kind="primary">
-              { !props.new && <>Update</> }
-              { props.new && <>Create</> }
-            </Button> : <Button onClick={() => { updatestack() }} size='default' kind="primary">
-              { !props.new && <>Update</> }
-              { props.new && <>Create</> }
-            </Button>
-          }
           { !props.new &&
-            <Button onClick={() => deleteStackMutation({ deleteID: stack.id }).then(console.log(deleteStackMutationResult))} size='default' kind="danger">
-              Delete
+            <Button onClick={() => executeStackMutation({ executeID: stack.id }) } size='default' kind="secondary" style={{ minWidth: '34%' }}>
+              Test Stack
             </Button>
           }
-          <Button onClick={() => { props.visability(false) }} size='default' kind="secondary">
+          <br/><br/>
+          { actions.length === 0
+            ? <Button disabled onClick={() => { updatestack() }} size='default' kind="primary" style={{ minWidth: '17%' }}>
+              { !props.new && <>Update</> }
+              { props.new && <>Create</> }
+            </Button> : <Button onClick={() => { updatestack() }} size='default' kind="primary" style={{ minWidth: '17%' }}>
+              { !props.new && <>Update</> }
+              { props.new && <>Create</> }
+            </Button>
+          }
+          <Button onClick={() => { props.visability(false) }} size='default' kind="secondary" style={{ minWidth: '17%' }}>
               Cancel
           </Button>
+          <br/><br/>
+          { !props.new &&
+            <>
+              <Button onClick={() => duplicateStack() } size='default' kind="secondary" style={{ minWidth: '17%' }}>
+                Duplicate
+              </Button>
+              <Button onClick={() => deleteStackMutation({ deleteID: stack.id }).then(console.log(deleteStackMutationResult))} size='default' kind="danger" style={{ minWidth: '17%' }}>
+                Delete
+              </Button>
+            </>
+          }
+          <br/>
           <br/>
         </div>
       </div>

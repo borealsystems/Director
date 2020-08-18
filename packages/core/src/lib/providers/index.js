@@ -8,37 +8,39 @@ const providers = []
 const providerInterfaces = []
 
 const providerInitMethods = []
-
-const initProviders = (callback) => {
+const initProviders = () => {
+  return new Promise((resolve, reject) => {
+    log('info', 'core/lib/providers', 'Initialising Providers')
     fs.readdir(path.resolve(__dirname, './protocolProviders'), (err, files) => {
-    var counter = files.length
-    files.forEach(file => {
-      import(`./protocolProviders/${file}`)
-        .then((module) => {
-          module.load(providers)
-          counter --
-          if (counter === 0) { 
-            loadDeviceProvidersWithCallback(callback)
-          }
-        })
-    })
-  })
-
-  const loadDeviceProvidersWithCallback = (callback) => {
-    fs.readdir(path.resolve(__dirname, './deviceProviders'), (err, files) => {
       var counter = files.length
       files.forEach(file => {
-        import(`./deviceProviders/${file}`)
+        import(`./protocolProviders/${file}`)
           .then((module) => {
-            module.default(providers)
+            module.load(providers)
             counter --
             if (counter === 0) { 
-              callback()
+              loadDeviceProviders()
             }
           })
       })
     })
-  }
+  
+    const loadDeviceProviders = () => {
+      fs.readdir(path.resolve(__dirname, './deviceProviders'), (err, files) => {
+        var counter = files.length
+        files.forEach(file => {
+          import(`./deviceProviders/${file}`)
+            .then((module) => {
+              module.default(providers)
+              counter --
+              if (counter === 0) { 
+                resolve()
+              }
+            })
+        })
+      })
+    }
+  })
 }
 
 // TODO: Implement Provider Cleanup for TCP based protocols

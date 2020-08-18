@@ -1,9 +1,11 @@
-import { providers } from '../../providers'
-import { updateDevice, deleteDevice, devices } from '../../devices'
-import { updateStack, deleteStack, executeStack, stacks } from '../../stacks'
-import { updatePanel, deletePanel, panels } from '../../panels'
-import { registerBridge, bridges } from '../../bridges'
+import { bridges, registerBridge } from '../../bridges'
+import { controllers, updateController } from '../../controllers'
+import { devices, updateDevice, deleteDevice } from '../../devices'
 import { logs } from '../../utils/log'
+import { panels, updatePanel, deletePanel } from '../../panels'
+import { providers } from '../../providers'
+import { stacks, updateStack, deleteStack, executeStack } from '../../stacks'
+import { PubSub } from 'apollo-server'
 import db from '../../db'
 
 import {
@@ -12,6 +14,10 @@ import {
   GraphQLString,
   GraphQLList
 } from 'graphql'
+
+import { find } from 'lodash'
+
+// Types
 
 import providerType from './providerType'
 import logType from './logType'
@@ -23,6 +29,14 @@ import panelType from './panelTypes/panelType'
 import panelUpdateInputType from './panelTypes/panelUpdateInputType'
 import bridgeType from './bridgeTypes/bridgeType'
 import bridgeUpdateInputType from './bridgeTypes/bridgeUpdateInputType'
+import controllerType from './controllerTypes/controllerType'
+import controllerInputType from './controllerTypes/controllerInputType'
+
+const pubsub = new PubSub()
+
+const LOG_ADDED = 'LOG_ADDED'
+const BRIDGE_UPDATES = 'BRIDGE_UPDATES'
+const CONTROLLER_UPDATE = 'CONTROLLER_UPDATE'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -89,11 +103,28 @@ var schema = new GraphQLSchema({
         resolve: () => { return panels }
       },
 
+      getPanel: {
+        name: 'Get Panel',
+        description: 'Returns panel by id',
+        type: panelType,
+        args: {
+          id: { type: GraphQLString }
+        },
+        resolve: (parent, args) => { return find(panels, (panel) => panel.id === args.id) }
+      },
+
       getBridges: {
         name: 'Get Bridges',
         description: 'Returns all connected bridges',
         type: new GraphQLList(bridgeType),
         resolve: () => { return bridges }
+      },
+
+      controllers: {
+        name: 'Get Controllers',
+        description: 'Returns all controllers, both online and offline',
+        type: new GraphQLList(controllerType),
+        resolve: () => { return controllers }
       }
     }
   }),
@@ -177,7 +208,7 @@ var schema = new GraphQLSchema({
           }
         },
         resolve: (parent, args) => {
-          updatePanel(args.panel)
+          return updatePanel(args.panel)
         }
       },
 
@@ -204,12 +235,56 @@ var schema = new GraphQLSchema({
             type: bridgeUpdateInputType
           }
         },
-        resolve: (parent, args, request) => {
-          return registerBridge(args.bridge)
+        resolve: (parent, args, context, info) => {
+          var clientIP = context.req.headers['x-forwarded-for'] || context.req.connection.remoteAddress
+          if (clientIP.substr(0, 7) === '::ffff:') {
+            clientIP = clientIP.substr(7)
+          }
+          return registerBridge({ ...args.bridge, address: clientIP })
         }
+      },
+
+      controller: {
+        name: 'Controller Update',
+        description: 'Update a controller',
+        type: controllerType,
+        args: {
+          controller: {
+            type: controllerInputType
+          }
+        },
+        resolve: (parent, args) => {
+          return updateController(args.controller)
+        }
+      }
+    }
+  }),
+
+  subscription: new GraphQLObjectType({
+    name: 'Subscriptions',
+    fields: {
+      subscribeToLogs: {
+        name: 'Subscribe to Logs',
+        description: 'Returns the logs',
+        type: logType,
+        subscribe: () => pubsub.asyncIterator([LOG_ADDED])
+      },
+
+      bridgeUpdates: {
+        name: 'Bridge Updates',
+        description: 'Obselete',
+        type: logType,
+        subscribe: () => pubsub.asyncIterator([BRIDGE_UPDATES])
+      },
+
+      controller: {
+        name: 'Controller Updates',
+        description: 'Subscription for all controller updates',
+        type: controllerType,
+        subscribe: () => pubsub.asyncIterator([CONTROLLER_UPDATE])
       }
     }
   })
 })
 
-export { schema }
+export { schema, pubsub }

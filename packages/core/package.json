@@ -27,6 +27,7 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "apollo-server": "^2.16.0",
     "babel-preset-es2015": "^6.24.1",
     "chalk": "^3.0.0",
     "cors": "^2.8.5",

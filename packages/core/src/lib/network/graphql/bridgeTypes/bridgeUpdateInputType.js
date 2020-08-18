@@ -11,9 +11,6 @@ const bridgeUpdateInputType = new GraphQLInputObjectType({
     type: {
       type: GraphQLString
     },
-    address: {
-      type: GraphQLString
-    },
     version: {
       type: GraphQLString
     },

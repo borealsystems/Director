@@ -75,10 +75,14 @@ module.exports = {
     port: port,
     historyApiFallback: true,
     open: false,
+    disableHostCheck: true,
     contentBase: path.join(__dirname, '/src/public/'),
     publicPath: 'http://localhost:3000/dist/',
     proxy: {
-      '/gql': 'http://localhost:3001/'
+      '/graphql': {
+        target: 'ws://localhost:3001/graphql',
+        ws: true
+      }
     },
     hot: true,
     hotOnly: true

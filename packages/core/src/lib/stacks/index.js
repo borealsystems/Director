@@ -6,19 +6,20 @@ import { devices } from '../devices'
 
 const stacks = []
 
-const initStacks = (cb) => {
-  db.get('stacks').then((d) => {
-    if (d === undefined) {
-      stacks.push()
-    } else {
-      d.map((item, index) => {
-        stacks.push(item)
-      })
-    }
-  }).catch(e => console.log(e)).then(() => {
-    if (typeof cb === 'function') {
-      cb()
-    }
+const initStacks = () => {
+  return new Promise((resolve, reject) => {
+    log('info', 'core/lib/stacks', 'Initialising Stacks')
+    db.get('stacks').then((d) => {
+      if (d === undefined) {
+        stacks.push()
+      } else {
+        d.map((item, index) => {
+          stacks.push(item)
+        })
+      }
+    }).catch(e => console.log(e)).then(() => {
+      resolve()
+    })
   })
 }
 
@@ -61,7 +62,7 @@ const executeStack = (_id) => {
     var device = devices.find((device) => { return device.id === action.device.id })
     device.instance.interface(action)
   })
-  return 'executed'
+  return `Executed $${_id} (${stacks.find((stack) => { return stack.id === _id }).label})`
 }
 
 export { updateStack, deleteStack, stacks, initStacks, executeStack }

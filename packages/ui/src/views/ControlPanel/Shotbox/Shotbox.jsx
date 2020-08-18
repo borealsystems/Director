@@ -81,8 +81,7 @@ const Shotbox = () => {
             <Dropdown
               ariaLabel="Dropdown"
               id="panel"
-              label='Required'
-              value={panel ?? {}}
+              label='Select a panel'
               items={result.data.getPanels}
               onChange={(selection) => { selectPanel(selection.selectedItem) }}
               titleText="Panel"

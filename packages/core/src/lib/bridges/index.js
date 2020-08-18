@@ -1,13 +1,22 @@
 // import db from '../db'
 import log from '../utils/log'
+import { registerController } from '../controllers'
 import { uniqBy } from 'lodash'
+
 let bridges = []
 
+const initBridges = () => {}
+
 const registerBridge = (_bridge) => {
-  log('info', 'core/lib/bridges', `Updating Bridge ${_bridge.type} at ${_bridge.address}`)
+  if (_bridge.controllers) {
+    _bridge.controllers.map((controller) => {
+      registerController(controller)
+    })
+  }
   bridges.push(_bridge)
   bridges = uniqBy(bridges, (bridge) => { return bridge.address })
-  return '200'
+  log('info', 'core/lib/bridges', `Updated Bridge ${_bridge.type} with ${_bridge.controllers.length} controllers`)
+  return `Updated Bridge ${_bridge.type} with ${_bridge.controllers.length} controllers`
 }
 
-export { registerBridge, bridges }
+export { initBridges, registerBridge, bridges }

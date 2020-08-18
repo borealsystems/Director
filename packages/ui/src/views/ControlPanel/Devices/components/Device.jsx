@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Dropdown, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
-import omit from 'lodash/omit'
+import { omit } from 'lodash'
 
 const deleteDeviceGQL = `
   mutation deleteDevice($idToDelete: String!) {
@@ -111,7 +111,7 @@ const Device = (props) => {
           <br/>
           <h4>Configuration</h4>
           <br/>
-          { props.new === false &&
+          { !props.new &&
             <div className='bx-row'>
               <Dropdown
                 ariaLabel="Dropdown"
@@ -126,16 +126,16 @@ const Device = (props) => {
               />
             </div>
           }
-          { props.new === true &&
+          { props.new &&
             <div className="bx--row">
               <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
                 <Dropdown
                   ariaLabel="Dropdown"
                   id="newDeviceProvider"
                   label='Required'
-                  items={props.providers}
+                  items={props.providers.filter(provider => provider.id !== 'internal')}
                   // itemToString={item => (item ? item.label : '')}
-                  onChange={(provider) => { setDevice({ ...device, provider: provider.selectedItem }) }}
+                  onChange={(provider) => { console.log(provider.selectedItem); setDevice({ ...device, provider: provider.selectedItem }) }}
                   titleText="Device Provider"
                 />
               </div>
@@ -183,10 +183,7 @@ const Device = (props) => {
           <Button onClick={() => { props.visability(false) }} size='default' kind="secondary">
               Cancel
           </Button>
-          {/* <br/>
-          { JSON.stringify(device) }
-          <hr/>
-          { JSON.stringify(configuration) } */}
+          <br/>
           <br/>
         </div>
       </div>

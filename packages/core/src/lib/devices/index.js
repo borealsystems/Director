@@ -7,28 +7,31 @@ import { providers } from '../providers'
 
 const devices = []
 
-const initDevices = (callback) => {
-  db.get('devices').then((d) => {
-    if (d === undefined) {
-      devices.push({
-        label: 'BorealSystems Director',
-        id: '0',
-        location: 'The Void',
-        provider: { id: 'internal', label: 'BorealDirector' },
-        enabled: true,
-        status: '1',
-        description: 'The Director Core'
-      })
-      db.set('devices', omitDeep(devices, 'instance'))
-    } else {
-      let counter = d.length
-      d.map((item, index) => {
-        devices.push(item)
-        instantiateDevice(item.id)
-        counter--
-        if (counter === 0) { callback() }
-      })
-    }
+const initDevices = () => {
+  return new Promise((resolve, reject) => {
+    log('info', 'core/lib/devices', 'Initialising Devices')
+    db.get('devices').then((d) => {
+      if (d === undefined) {
+        devices.push({
+          label: 'BorealSystems Director',
+          id: '0',
+          location: 'The Void',
+          provider: { id: 'internal', label: 'BorealDirector' },
+          enabled: true,
+          status: '1',
+          description: 'The Director Core'
+        })
+        db.set('devices', omitDeep(devices, 'instance'))
+      } else {
+        let counter = d.length
+        d.map((item, index) => {
+          devices.push(item)
+          instantiateDevice(item.id)
+          counter--
+          if (counter === 0) { resolve() }
+        })
+      }
+    })
   })
 }
 

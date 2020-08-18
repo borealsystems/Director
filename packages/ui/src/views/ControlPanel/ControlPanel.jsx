@@ -21,6 +21,7 @@ import NavLink from './components/NavLink.jsx'
 import NavGroup from './components/NavGroup.jsx'
 
 import Bridges from './Bridges/Bridges.jsx'
+import Controllers from './Controllers/Controllers.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
@@ -116,7 +117,7 @@ const ControlPanel = () => (
                         <Panels />
                       </Route>
                       <Route path="/config/controllers">
-                        <h1>Controllers</h1>
+                        <Controllers />
                       </Route>
                       {/* ROOT */}
                       <Route exact path="/">

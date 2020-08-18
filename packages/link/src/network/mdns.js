@@ -1,14 +1,15 @@
 import { initGQLClient } from './graphql'
-import { initStreamDecks } from '../streamdeck'
 import log from '../utils/log'
 const mdns = require('mdns')
+
+let mdnsBrowser
 
 const mdnsAdvertise = () => {
   const ad = mdns.createAdvertisement(mdns.tcp('director-bridge'), 4321)
   ad.start()
 }
 
-let directorCore = {}
+const directorCore = {}
 const isIPv4 = new RegExp('^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$')
 
 const getDirectorURIFromService = (service) => {
@@ -18,24 +19,16 @@ const getDirectorURIFromService = (service) => {
 }
 
 const mdnsWatch = (cb) => {
-  const browser = mdns.createBrowser(mdns.tcp('director-core'))
-  browser.on('serviceUp', service => {
+  mdnsBrowser = mdns.createBrowser(mdns.tcp('director-core'))
+  mdnsBrowser.on('serviceUp', service => {
     if (!directorCore.service) {
       directorCore.address = getDirectorURIFromService(service)
-      log('info', 'link/src/network/mdns', `Connecting to Director Core ${directorCore.address} on ${service.networkInterface}`)
-      initGQLClient(`http://${directorCore.address}:${service.port}/gql`)
+      log('info', 'link/network/mdns', `Connecting to Director Core (${directorCore.address}) on ${service.networkInterface}`)
       directorCore.service = service
-      initStreamDecks()
+      initGQLClient(directorCore.address, directorCore.service.port)
     }
   })
-  browser.on('serviceDown', service => {
-    if (directorCore.service?.networkInterface === service.networkInterface) {
-      log('error', 'link/src/network/mdns', `Lost connection to Core ${directorCore.address} on ${service.networkInterface}`)
-      directorCore = {}
-      initStreamDecks()
-    }
-  })
-  browser.start()
+  mdnsBrowser.start()
 }
 
-export { mdnsAdvertise, mdnsWatch, directorCore }
+export { mdnsAdvertise, mdnsWatch, directorCore, mdnsBrowser }

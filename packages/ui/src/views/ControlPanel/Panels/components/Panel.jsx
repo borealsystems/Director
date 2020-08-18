@@ -37,7 +37,7 @@ const Panel = (props) => {
   } else {
     const thisPanel = props.new ? null : props.panels.find(panel => panel.id === props.panelID)
     const buttons = []
-    thisPanel.buttons.map(row => { buttons.push(Object.keys(row).map(function (key) { return row[key] })) })
+    thisPanel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
     initialPanel = { ...thisPanel, buttons: buttons }
   }
   var [panel, setPanel] = useState(initialPanel)
@@ -89,7 +89,7 @@ const Panel = (props) => {
               type='text'
               id='panelName'
               placeholder='Required'
-              value={panel.label}
+              selectedItem={panel.label}
               labelText='Panel Name'
               onClick={() => {}}
               onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
@@ -102,7 +102,7 @@ const Panel = (props) => {
               type='text'
               id='panelDescription'
               placeholder='Optional'
-              value={panel.description || undefined}
+              selectedItem={panel.description || undefined}
               labelText='Panel Description'
               onClick={() => {}}
               onChange={(e) => { setPanel({ ...panel, description: e.target.value }) }}
@@ -116,7 +116,7 @@ const Panel = (props) => {
                 ariaLabel="Dropdown"
                 id="panelLayoutType"
                 label='Required'
-                value={panel.layoutType}
+                selectedItem={panel.layoutType}
                 items={[{ id: 'grid', label: 'Grid' }, { id: 'controller', label: 'Controller' }, { id: 'custom', label: 'Custom' }]}
                 onChange={(layout) => { setPanel({ ...panel, layoutType: layout.selectedItem, layout: {} }) }}
                 titleText="Panel Layout Type"
@@ -140,7 +140,7 @@ const Panel = (props) => {
                   ariaLabel="Dropdown"
                   id="panelLayout"
                   label='Required'
-                  value={panel.layout}
+                  selectedItem={panel.layout}
                   items={
                     [
                       { id: '1x1', label: '1x1', rows: 1, columns: 1 },
@@ -166,7 +166,7 @@ const Panel = (props) => {
                   ariaLabel="Dropdown"
                   id="panelLayout"
                   label='Required'
-                  value={panel.layout}
+                  selectedItem={panel.layout}
                   items={
                     [
                       { id: 'elgato-streamdeck-mini', label: 'Elgato Streamdeck Mini', rows: 2, columns: 3 },
@@ -286,7 +286,7 @@ const Panel = (props) => {
                   ariaLabel="Dropdown"
                   id="buttonStackSelection"
                   label='Required'
-                  value={panel.currentButton.stack}
+                  selectedItem={panel.currentButton.stack}
                   items={props.stacks}
                   onChange={(stack) => {
                     const panelIntermediate = { ...panel }

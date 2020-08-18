@@ -21,6 +21,18 @@ class ResolumeArena extends GenericOSC {
             }
           ]
         )
+        break
+      case 'clearComp':
+        this.rawInterface(
+          '/composition/disconnectall',
+          [
+            {
+              type: 'i',
+              value: 1
+            }
+          ]
+        )
+        break
     }
   }
 }
@@ -55,6 +67,12 @@ const descriptor = {
           label: 'Column',
           id: 'column'
         }
+      ]
+    },
+    {
+      id: 'clearComp',
+      label: 'Clear Composition',
+      parameters: [
       ]
     }
   ]

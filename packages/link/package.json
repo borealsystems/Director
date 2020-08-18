@@ -30,6 +30,7 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "apollo-client": "^2.6.10",
     "babel-preset-es2015": "^6.24.1",
     "chalk": "^3.0.0",
     "debug": "^4.1.1",
@@ -46,7 +47,9 @@
     "sharp": "^0.25.4",
     "shortid": "^2.2.15",
     "smart-promisify": "^1.0.5",
+    "subscriptions-transport-ws": "^0.9.17",
     "systray": "^1.0.5",
-    "urql": "^1.9.8"
+    "urql": "^1.9.8",
+    "websocket": "^1.0.31"
   }
 }
