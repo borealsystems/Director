@@ -6,6 +6,9 @@ The Canonical Repository is https://phabricator.boreal.systems/source/Director/
 
 Come chat: irc://irc.freenode.net/#BorealSystems
 
+# THIS IS NOT PRODUCTION READY
+While the core features are mostly stable, the device driver interfaces and the overall system architecture is NOT READY TO BE USED. Check in again at version 1.0.0.
+
 ## Intent
 The intention of this project is to create an open facility scale orchestration and automation suite for broadcast and other live events with a practically limitless amount of actions that can be activated by numerous common network based control protocols and hardware panels. This project is not to be considered production ready, please utilize it cautiously whilst development continues.
 
