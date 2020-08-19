@@ -114,7 +114,7 @@ const Devices = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map(row => (
+                  {rows.map((row, index) => (
                     <React.Fragment key={row.id}>
                       <TableExpandRow {...getRowProps({ row })}>
                         {row.cells.map(cell => (
@@ -123,7 +123,7 @@ const Devices = () => {
                       </TableExpandRow>
                       <TableExpandedRow
                         colSpan={headers.length + 1}>
-                        <Device devices={result.data.getDevices} providers={result.data.getProviders} deviceID={row.id} />
+                        <Device devices={result.data.getDevices} providers={result.data.getProviders} deviceID={row.id} index={index} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dropdown, TextInput } from 'carbon-components-react'
+import { Button, Dropdown, TextInput, Checkbox } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { omit } from 'lodash'
 
@@ -17,7 +17,7 @@ const deviceUpdateMutationGQL = `mutation updateDevice($device: deviceUpdate) {
 }`
 
 const Device = (props) => {
-  const initialDevice = props.new ? {} : props.devices.find((item) => { return item.id === props.deviceID })
+  const initialDevice = props.new ? {} : { ...props.devices[props.index] }
   const initialConfiguration = {}
   if (!props.new && initialDevice.configuration) {
     initialDevice.configuration.forEach(item => {
@@ -111,6 +111,20 @@ const Device = (props) => {
           <br/>
           <h4>Configuration</h4>
           <br/>
+          <div className='bx-row'>
+            <div className="bx--text-input__field-wrapper">
+              {JSON.stringify(device)}
+              <Checkbox
+                labelText='Enable Device'
+                id="deviceEnabledCheckbox"
+                value={device.enabled}
+                onChange={value => {
+                  console.log(device)
+                  setDevice({ ...device, enabled: value })
+                }}
+              />
+            </div><br/>
+          </div>
           { !props.new &&
             <div className='bx-row'>
               <Dropdown
@@ -118,9 +132,8 @@ const Device = (props) => {
                 id="newDeviceProvider"
                 label='Provider'
                 items={[device.provider]}
-                value={device.provider}
+                selectedItem={device.provider}
                 disabled
-                // itemToString={item => (item ? item.label : '')}
                 onChange={(provider) => {}}
                 titleText="Device Provider"
               />
@@ -134,7 +147,7 @@ const Device = (props) => {
                   id="newDeviceProvider"
                   label='Required'
                   items={props.providers.filter(provider => provider.id !== 'internal')}
-                  // itemToString={item => (item ? item.label : '')}
+                  selectedItem={device.provider}
                   onChange={(provider) => { console.log(provider.selectedItem); setDevice({ ...device, provider: provider.selectedItem }) }}
                   titleText="Device Provider"
                 />
@@ -171,6 +184,7 @@ const Device = (props) => {
               </div><br/>
             </div>
           )}
+
           <Button onClick={() => { updateDevice() }} size='default' kind="primary">
             { !props.new && <>Update</> }
             { props.new && <>Create</> }
@@ -193,6 +207,7 @@ const Device = (props) => {
 
 Device.propTypes = {
   new: PropTypes.bool,
+  index: PropTypes.number,
   deviceID: PropTypes.string,
   devices: PropTypes.array,
   providers: PropTypes.array
