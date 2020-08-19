@@ -4,7 +4,7 @@ import log from '../../utils/log'
 import REGEX from '../../utils/regexEnum'
 
 export default function load (providers) {
-  log('info', 'core/lib/deviceProviders/Resolume', 'Loaded protocol provider: Generic - OSC')
+  log('info', 'core/lib/deviceProviders/Resolume', 'Loaded device provider: Resolume - Arena')
   providers.push(descriptor)
 }
 
