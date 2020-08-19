@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Link,
   useRouteMatch
 } from 'react-router-dom'
 import { SideNavMenuItem } from 'carbon-components-react/lib/components/UIShell'
@@ -9,15 +10,19 @@ function NavLink ({ label, to }) {
   const match = useRouteMatch(to)
   if (match) {
     return (
-      <SideNavMenuItem href={to} aria-current="page">
-        {label}
-      </SideNavMenuItem>
+      <Link to={to}>
+        <SideNavMenuItem aria-current="page">
+          {label}
+        </SideNavMenuItem>
+      </Link>
     )
   } else {
     return (
-      <SideNavMenuItem href={to}>
-        {label}
-      </SideNavMenuItem>
+      <Link to={to}>
+        <SideNavMenuItem>
+          {label}
+        </SideNavMenuItem>
+      </Link>
     )
   }
 }
