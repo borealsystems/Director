@@ -10,7 +10,7 @@ const initPanels = () => {
     log('info', 'core/lib/panels', 'Initialising Panels')
     db.get('panels').then((d) => {
       if (d === undefined) {
-        db.set('panels', {})
+        db.set('panels', [])
       } else {
         let counter = d.length
         d.map((item, index) => {
