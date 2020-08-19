@@ -10,7 +10,7 @@ function NavLink ({ label, to }) {
   const match = useRouteMatch(to)
   if (match) {
     return (
-      <Link to={to}>
+      <Link style={{ textDecoration: 'none' }} to={to}>
         <SideNavMenuItem aria-current="page">
           {label}
         </SideNavMenuItem>
@@ -18,7 +18,7 @@ function NavLink ({ label, to }) {
     )
   } else {
     return (
-      <Link to={to}>
+      <Link style={{ textDecoration: 'none' }} to={to}>
         <SideNavMenuItem>
           {label}
         </SideNavMenuItem>
