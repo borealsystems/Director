@@ -35,7 +35,7 @@ const Panel = (props) => {
   if (props.new) {
     initialPanel = {}
   } else {
-    const thisPanel = props.new ? null : props.panels.find(panel => panel.id === props.panelID)
+    const thisPanel = props.new ? null : { ...props.panels.find(panel => panel.id === props.panelID) }
     const buttons = []
     thisPanel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
     initialPanel = { ...thisPanel, buttons: buttons }
@@ -117,7 +117,7 @@ const Panel = (props) => {
                 id="panelLayoutType"
                 label='Required'
                 selectedItem={panel.layoutType}
-                items={[{ id: 'grid', label: 'Grid' }, { id: 'controller', label: 'Controller' }, { id: 'custom', label: 'Custom' }]}
+                items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'custom', label: 'Custom' }]}
                 onChange={(layout) => { setPanel({ ...panel, layoutType: layout.selectedItem, layout: {} }) }}
                 titleText="Panel Layout Type"
               />
@@ -130,32 +130,6 @@ const Panel = (props) => {
                   id="panelLayout"
                   label='Required'
                   items={[]}
-                  titleText="Panel Layout"
-                />
-              </div>
-            }
-            { panel.layoutType && panel.layoutType.id === 'grid' &&
-              <div className="bx--col">
-                <Dropdown
-                  ariaLabel="Dropdown"
-                  id="panelLayout"
-                  label='Required'
-                  selectedItem={panel.layout}
-                  items={
-                    [
-                      { id: '1x1', label: '1x1', rows: 1, columns: 1 },
-                      { id: '2x2', label: '2x2', rows: 2, columns: 2 },
-                      { id: '3x3', label: '3x3', rows: 3, columns: 3 },
-                      { id: '4x4', label: '4x4', rows: 4, columns: 4 },
-                      { id: '5x5', label: '5x5', rows: 5, columns: 5 },
-                      { id: '6x6', label: '6x6', rows: 6, columns: 6 },
-                      { id: '7x7', label: '7x7', rows: 7, columns: 7 },
-                      { id: '8x8', label: '8x8', rows: 8, columns: 8 },
-                      { id: '9x9', label: '9x9', rows: 9, columns: 9 },
-                      { id: '10x10', label: '10x10', rows: 10, columns: 10 }
-                    ]
-                  }
-                  onChange={(layout) => { setPanel({ ...panel, layout: layout.selectedItem }) }}
                   titleText="Panel Layout"
                 />
               </div>
