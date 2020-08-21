@@ -5,6 +5,8 @@ import {
   GraphQLInt
 } from 'graphql'
 
+import stackType from '../stackTypes/stackType'
+
 const panelType = new GraphQLObjectType({
   name: 'panelType',
   description: 'A Panel is a virtual abstraction of a control interface',
@@ -63,20 +65,7 @@ const panelType = new GraphQLObjectType({
                 type: GraphQLInt
               },
               stack: {
-                type: new GraphQLObjectType({
-                  name: 'panelButtonStackType',
-                  fields: {
-                    id: {
-                      type: GraphQLString
-                    },
-                    label: {
-                      type: GraphQLString
-                    },
-                    description: {
-                      type: GraphQLString
-                    }
-                  }
-                })
+                type: stackType
               }
             }
           })

@@ -105,6 +105,17 @@ const Stack = (props) => {
                 onChange={(e) => { setStack({ ...stack, label: e.target.value }) }}
               />
             </div>
+            <div className="bx--text-input__field-wrapper bx--col">
+              <TextInput
+                type='text'
+                id='newstackName'
+                placeholder='Required'
+                value={stack.panelLabel}
+                labelText='Stack Panel Label'
+                onClick={() => {}}
+                onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value }) }}
+              />
+            </div>
           </div><br/>
           <div className="bx--row">
             <div className="bx--text-input__field-wrapper bx--col">

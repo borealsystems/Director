@@ -14,6 +14,7 @@ const Devices = () => {
       getStacks {
         id
         label
+        panelLabel
         description
         actions {
           device {

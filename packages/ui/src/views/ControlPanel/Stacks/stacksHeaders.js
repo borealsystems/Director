@@ -8,6 +8,10 @@ const headers = [
     header: 'Name'
   },
   {
+    key: 'panelLabel',
+    header: 'Panel Label'
+  },
+  {
     key: 'description',
     header: 'Description'
   }

@@ -14,6 +14,9 @@ const stackType = new GraphQLObjectType({
     label: {
       type: GraphQLString
     },
+    panelLabel: {
+      type: GraphQLString
+    },
     description: {
       type: GraphQLString
     },

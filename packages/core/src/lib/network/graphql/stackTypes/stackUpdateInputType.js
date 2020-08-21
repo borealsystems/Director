@@ -14,6 +14,9 @@ const stackUpdateInputType = new GraphQLInputObjectType({
     label: {
       type: GraphQLString
     },
+    panelLabel: {
+      type: GraphQLString
+    },
     description: {
       type: GraphQLString
     },
