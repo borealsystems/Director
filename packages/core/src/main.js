@@ -1,13 +1,13 @@
-import { initControllers } from './lib/controllers'
-import { initDevices } from './lib/devices'
-import { initProviders, cleanupProviders } from './lib/providers'
-import { initStacks } from './lib/stacks'
-import { initPanels } from './lib/panels'
-import { initExpress, cleanupExpress } from './lib/network/express'
-import { initMDNS } from './lib/network/mdns'
-import { initBridges } from './lib/bridges'
+import { initControllers } from './controllers'
+import { initDevices } from './devices'
+import { initProviders, cleanupProviders } from './providers'
+import { initStacks } from './stacks'
+import { initPanels } from './panels'
+import { initExpress, cleanupExpress } from './network/express'
+import { initMDNS } from './network/mdns'
+import { initBridges } from './bridges'
 
-import db from './lib/db'
+import db from './db'
 
 initExpress()
 initMDNS()
