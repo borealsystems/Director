@@ -1,7 +1,5 @@
 # BorealDirector
 
----
-
 The Canonical Repository is https://phabricator.boreal.systems/source/Director/
 
 Come chat: irc://irc.freenode.net/#BorealSystems
@@ -12,22 +10,24 @@ While the core features are mostly stable, the device driver interfaces and the 
 ## Intent
 The intention of this project is to create an open facility scale orchestration and automation suite for broadcast and other live events with a practically limitless amount of actions that can be activated by numerous common network based control protocols and hardware panels. This project is not to be considered production ready, please utilize it cautiously whilst development continues.
 
-## State
-### Functionality
-- [x] Device Descriptors
-- - [ ] Broadcast Device Definition Language (Maybe)
-- [x] Actions
-- - [ ] Mutatable Actions
+## Features
+### Core
+- [x] Devices
+- [x] Stacks
+- [x] Panels
+- [x] Controllers
 - [ ] Feedbacks
-- [ ] Web Management
+- [x] Web Management
 - [ ] User Auth
 - [ ] User segmentation and access control (Playout, Edit Bay, Master Control, etc)
 - [ ] External auth providers
 - [ ] Time Based Automation
 - [ ] State Based Automation
+- [ ] Router Matrix/Flows
 
 ### Software Control
 - [ ] HTTP
+- [ ] GraphQL
 - [ ] TCP
 - [ ] UDP
 - [ ] OSC
@@ -36,20 +36,14 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] MIDI
 - [ ] RossTalk
 - [ ] Ember+
-- [ ] RFP (Director Link)
 
 ### Hardware Control
-- [ ] Elgato Streamdeck (via Director Link)
+- [ ] Elgato Streamdeck (via DirectorLink)
 - [ ] Blackmagic Design Router Panels
 - [ ] Ross Ultrix RCP
 - [ ] Aja Kuma Router Panels
 - [ ] Lawo vsmGEAR
 - [ ] L-S-B Panels (Mostly the same as vsmGEAR)
-
-## Ancilary Projects
-
-### Director Link Protocol
-The DLP is designed to facilitate the interconnection of different instances of both Director and 3rd part open control software in such a way that any action or device may have its configuration and functionality become available over the network, allowing remote integration of devices and control solutions that do not operate on an ethernet based PHY. Thus allowing devices such as Elgato's Streamdeck to operate in a remote location from the Director Core, and enabling devices such as the USB midi interfaces to be controlled from the Core.
 
 ## License
 Boreal Director and all ancilary projects are licensed under the MIT License.
