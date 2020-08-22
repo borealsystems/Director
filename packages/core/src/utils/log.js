@@ -6,6 +6,7 @@ import {
 } from 'chalk'
 import nicelyFormat from 'nicely-format'
 import createDebug from 'debug'
+import fs from 'fs'
 
 import { pubsub } from '../network/graphql/schema'
 
@@ -117,6 +118,7 @@ const log = (level, path, message) => {
   }
   pubsub.publish('LOG_ADDED', { subscribeToLogs: { id: logs.length.toString(), time: time(), level: level, path: path, message: message } })
   logs.push({ id: logs.length.toString(), time: time(), level: level, path: path, message: message })
+  fs.appendFile('logs.txt', `${time()} ${level} ${path} ${message}\r\n`, err => { if (err) throw err })
   switch (level) {
     case 'debug':
       createLogger(path).debug(message)

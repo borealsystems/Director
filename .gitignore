@@ -4,4 +4,5 @@ node_modules
 build
 dist
 .DS_Store
-db/
+packages/core/db/*
+logs.txt
