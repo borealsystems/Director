@@ -10,14 +10,14 @@ const providerInterfaces = []
 const providerInitMethods = []
 const initProviders = () => {
   return new Promise((resolve, reject) => {
-    log('info', 'core/lib/providers', 'Initialising Providers')
+    log('info', 'core/lib/providers', 'Loading Providers')
     fs.readdir(path.resolve(__dirname, './protocolProviders'), (err, files) => {
       var counter = files.length
       files.forEach(file => {
         import(`./protocolProviders/${file}`)
           .then((module) => {
-            module.load(providers)
-            counter --
+            module.default(providers)
+            counter--
             if (counter === 0) { 
               loadDeviceProviders()
             }
@@ -32,7 +32,7 @@ const initProviders = () => {
           import(`./deviceProviders/${file}`)
             .then((module) => {
               module.default(providers)
-              counter --
+              counter--
               if (counter === 0) { 
                 resolve()
               }

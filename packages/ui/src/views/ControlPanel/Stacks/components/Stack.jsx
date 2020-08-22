@@ -25,8 +25,8 @@ const executeStackMutationGQL = `mutation executeStack($executeID: String) {
 // TODO: fix the autosaving action parameter details, it currently updates and rerenders which removes to input focus from the client, making long paths hard to type in
 
 const Stack = (props) => {
-  const initialStack = props.new ? {} : props.stacks.find((item) => { return item.id === props.stackID })
-  const initialActions = props.new ? [] : props.stacks.find((item) => { return item.id === props.stackID }).actions
+  const initialStack = props.new ? {} : { ...props.stacks.find((item) => { return item.id === props.stackID }) }
+  const initialActions = props.new ? [] : [...props.stacks.find((item) => { return item.id === props.stackID }).actions]
   if (!props.new && initialStack.actions) {
     initialStack.actions.forEach(item => {
       initialActions[item.id] = item

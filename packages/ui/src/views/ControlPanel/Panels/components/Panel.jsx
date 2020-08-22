@@ -89,7 +89,7 @@ const Panel = (props) => {
               type='text'
               id='panelName'
               placeholder='Required'
-              selectedItem={panel.label}
+              value={panel.label}
               labelText='Panel Name'
               onClick={() => {}}
               onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
@@ -102,7 +102,7 @@ const Panel = (props) => {
               type='text'
               id='panelDescription'
               placeholder='Optional'
-              selectedItem={panel.description || undefined}
+              value={panel.description || undefined}
               labelText='Panel Description'
               onClick={() => {}}
               onChange={(e) => { setPanel({ ...panel, description: e.target.value }) }}
@@ -119,7 +119,7 @@ const Panel = (props) => {
                 selectedItem={panel.layoutType}
                 items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'custom', label: 'Custom' }]}
                 onChange={(layout) => { setPanel({ ...panel, layoutType: layout.selectedItem, layout: {} }) }}
-                titleText="Panel Layout Type"
+                titleText="Panel Type"
               />
             </div>
             { !panel.layoutType &&
@@ -290,7 +290,7 @@ const Panel = (props) => {
             <br/><br/>
           </>
         }
-        { panel.layout === null
+        { panel.layout === null || panel.label === null
           ? <Button disabled onClick={() => { }} size='default' kind="primary">
             { !props.new && <>Update</> }
             { props.new && <>Create</> }

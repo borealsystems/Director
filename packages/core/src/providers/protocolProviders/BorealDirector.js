@@ -1,10 +1,11 @@
 import { executeStack } from '../../stacks'
+import { devices } from '../../db'
 import log from '../../utils/log'
-// import STATUS from '../../utils/statusEnum'
+import STATUS from '../../utils/statusEnum'
 // import REGEX from '../../utils/regexEnum'
 
-const load = (providers) => {
-  log('info', 'core/lib/protocolProviders/internal', 'Loaded protocol provider: Boreal Systems - BorealDirector')
+export default function load (providers) {
+  log('info', 'core/lib/deviceProviders/BorealDirector', 'Loaded device provider: BorealSystems - BorealDirector')
   providers.push(descriptor)
 }
 
@@ -14,19 +15,15 @@ class BorealDirector {
   }
 
   init = () => {
-
+    devices.get(this.device.id, (error, value) => {
+      if (error) log('error', `virtual/device/${this.device.id}`, error)
+      devices.put(this.device.id, { ...value, status: STATUS.OK })
+    })
   }
 
-  destroy = () => {
-    // if (this.socket.destroyed !== true) {
-    //   this.socket.destroy()
-    // }
-  }
+  destroy = () => {}
 
-  recreate = () => {
-    this.destroy()
-    this.init()
-  }
+  recreate = () => {}
 
   interface = (_action) => {
     switch (_action.providerFunction.id) {
@@ -41,12 +38,10 @@ class BorealDirector {
   }
 }
 
-export { load }
-
 const descriptor = {
-  id: 'internal',
+  id: 'BorealSystems-DirectorInternal',
   type: 'internal',
-  label: 'Internal',
+  label: 'BorealDirector',
   Construct: BorealDirector,
   parameters: [],
   providerFunctions: [

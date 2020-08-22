@@ -22,7 +22,7 @@ const Shotbox = () => {
 
   const [result] = useQuery({
     query: `query getShotboxData {
-      getPanels {
+      panels {
         id
         label
         description
@@ -82,7 +82,7 @@ const Shotbox = () => {
               ariaLabel="Dropdown"
               id="panel"
               label='Select a panel'
-              items={result.data.getPanels}
+              items={result.data.panels}
               onChange={(selection) => { selectPanel(selection.selectedItem) }}
               titleText="Panel"
             />

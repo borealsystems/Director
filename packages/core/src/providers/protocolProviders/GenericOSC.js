@@ -1,13 +1,13 @@
 import osc from 'osc'
+import { devices } from '../../db'
 import log from '../../utils/log'
-// import STATUS from '../../utils/statusEnum'
+import STATUS from '../../utils/statusEnum'
 import REGEX from '../../utils/regexEnum'
 
-const load = (providers) => {
-  log('info', 'core/lib/protocolProviders/osc', 'Loaded protocol provider: Generic - OSC')
+export default function load (providers) {
+  log('info', 'core/lib/deviceProviders/GenericOSC', 'Loaded device provider: Generic - OSC')
   providers.push(descriptor)
 }
-
 class GenericOSC {
   constructor (_device) {
     this.device = _device
@@ -21,9 +21,11 @@ class GenericOSC {
     })
     this.oscClient.open()
     this.oscClient.on('error', function (error) {
-      // TODO: Fix this error not getting the device object
-      console.log(error)
       log('error', `virtual/device/${this.device.id}`, error)
+    })
+    devices.get(this.device.id, (error, value) => {
+      if (error) log('error', `virtual/device/${this.device.id}`, error)
+      devices.put(this.device.id, { ...value, status: STATUS.OK })
     })
   }
 
@@ -93,10 +95,8 @@ class GenericOSC {
   }
 }
 
-export { load, GenericOSC }
-
 const descriptor = {
-  id: 'osc',
+  id: 'Generic-OSC',
   type: 'protocol',
   label: 'Generic OSC',
   Construct: GenericOSC,
@@ -178,3 +178,5 @@ const descriptor = {
     }
   ]
 }
+
+export { GenericOSC }

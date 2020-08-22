@@ -11,7 +11,7 @@ const Devices = () => {
   const [newDeviceVisability, setNewDeviceVisibility] = useState(false)
   const [result] = useQuery({
     query: `query getDevicesAndProviders {
-      getDevices {
+      devices {
         id
         label
         location
@@ -27,7 +27,7 @@ const Devices = () => {
           value
         }
       }
-      getProviders {
+      providers {
         id
         label
         protocol
@@ -62,7 +62,7 @@ const Devices = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getDevices}
+          rows={result.data.devices}
           headers={deviceHeaders}
           render={({
             rows,
@@ -99,7 +99,7 @@ const Devices = () => {
                     </Button>
                   </TableToolbarContent>
                 </TableToolbar> */}
-                <Device new providers={result.data.getProviders} visability={ setNewDeviceVisibility }/>
+                <Device new providers={result.data.providers} visability={ setNewDeviceVisibility }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -123,7 +123,7 @@ const Devices = () => {
                       </TableExpandRow>
                       <TableExpandedRow
                         colSpan={headers.length + 1}>
-                        <Device devices={result.data.getDevices} providers={result.data.getProviders} deviceID={row.id} index={index} />
+                        <Device devices={result.data.devices} providers={result.data.providers} deviceID={row.id} index={index} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

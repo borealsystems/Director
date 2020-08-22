@@ -1,12 +1,12 @@
 import { bridges, registerBridge } from '../../bridges'
-import { controllers, updateController } from '../../controllers'
-import { devices, updateDevice, deleteDevice } from '../../devices'
+import { updateController } from '../../controllers'
+import { updateDevice, deleteDevice } from '../../devices'
 import { logs } from '../../utils/log'
-import { panels, updatePanel, deletePanel } from '../../panels'
+import { updatePanel, deletePanel } from '../../panels'
 import { providers } from '../../providers'
-import { stacks, updateStack, deleteStack, executeStack } from '../../stacks'
+import { updateStack, deleteStack, executeStack } from '../../stacks'
 import { PubSub } from 'apollo-server'
-import db from '../../db'
+import { core, devices, stacks, panels, controllers } from '../../db'
 
 import {
   GraphQLSchema,
@@ -14,8 +14,6 @@ import {
   GraphQLString,
   GraphQLList
 } from 'graphql'
-
-import { find } from 'lodash'
 
 // Types
 
@@ -49,7 +47,7 @@ var schema = new GraphQLSchema({
           GraphQLString
         ),
         resolve: () => {
-          return db.get('status')
+          return core.get('status')
         }
       },
 
@@ -60,7 +58,7 @@ var schema = new GraphQLSchema({
         resolve: () => { return logs }
       },
 
-      getProviders: {
+      providers: {
         name: 'Get Communication Providers',
         description: 'Returns all available communication providers, the backend of a device and what defines available actions',
         type: new GraphQLList(providerType),
@@ -70,11 +68,22 @@ var schema = new GraphQLSchema({
       },
 
       // TODO: rename
-      getDevices: {
+      devices: {
         name: 'Get Devices',
         description: 'Returns all configured devices',
         type: new GraphQLList(deviceType),
-        resolve: () => { return devices }
+        resolve: () => {
+          return new Promise((resolve, reject) => {
+            const deviceArray = []
+            devices.createValueStream()
+              .on('data', function (data) {
+                deviceArray.push(data)
+              })
+              .on('end', function () {
+                resolve(deviceArray)
+              })
+          })
+        }
       },
 
       deviceByID: {
@@ -89,28 +98,55 @@ var schema = new GraphQLSchema({
         }
       },
 
-      getStacks: {
+      stacks: {
         name: 'Get Stacks',
         description: 'Returns all configured stacks',
         type: new GraphQLList(stackType),
-        resolve: () => { return stacks }
+        resolve: () => {
+          return new Promise((resolve, reject) => {
+            const stacksArray = []
+            stacks.createValueStream()
+              .on('data', function (data) {
+                stacksArray.push(data)
+              })
+              .on('end', function () {
+                resolve(stacksArray)
+              })
+          })
+        }
       },
 
-      getPanels: {
+      panels: {
         name: 'Get Panels',
         description: 'Returns all configured panels',
         type: new GraphQLList(panelType),
-        resolve: () => { return panels }
+        resolve: () => {
+          return new Promise((resolve, reject) => {
+            const panelsArray = []
+            panels.createValueStream()
+              .on('data', function (data) {
+                panelsArray.push(data)
+              })
+              .on('end', function () {
+                resolve(panelsArray)
+              })
+          })
+        }
       },
 
-      getPanel: {
+      panel: {
         name: 'Get Panel',
         description: 'Returns panel by id',
         type: panelType,
         args: {
           id: { type: GraphQLString }
         },
-        resolve: (parent, args) => { return find(panels, (panel) => panel.id === args.id) }
+        resolve: (parent, args) => {
+          return new Promise((resolve, reject) => {
+            panels.get(args.id)
+              .then(panel => resolve(panel))
+          })
+        }
       },
 
       getBridges: {
@@ -124,7 +160,18 @@ var schema = new GraphQLSchema({
         name: 'Get Controllers',
         description: 'Returns all controllers, both online and offline',
         type: new GraphQLList(controllerType),
-        resolve: () => { return controllers }
+        resolve: () => {
+          return new Promise((resolve, reject) => {
+            const controllersArray = []
+            controllers.createValueStream()
+              .on('data', function (data) {
+                controllersArray.push(data)
+              })
+              .on('end', function () {
+                resolve(controllersArray)
+              })
+          })
+        }
       }
     }
   }),

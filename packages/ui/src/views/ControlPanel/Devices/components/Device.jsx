@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dropdown, TextInput, Checkbox } from 'carbon-components-react'
+import { Button, Dropdown, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { omit } from 'lodash'
 
@@ -111,7 +111,7 @@ const Device = (props) => {
           <br/>
           <h4>Configuration</h4>
           <br/>
-          <div className='bx-row'>
+          {/* <div className='bx-row'>
             <div className="bx--text-input__field-wrapper">
               {JSON.stringify(device)}
               <Checkbox
@@ -124,7 +124,7 @@ const Device = (props) => {
                 }}
               />
             </div><br/>
-          </div>
+          </div> */}
           { !props.new &&
             <div className='bx-row'>
               <Dropdown

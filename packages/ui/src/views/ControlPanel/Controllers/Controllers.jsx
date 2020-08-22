@@ -48,7 +48,7 @@ const Controllers = () => {
         }
         id
       }
-      getPanels {
+      panels {
         id
         label
       }

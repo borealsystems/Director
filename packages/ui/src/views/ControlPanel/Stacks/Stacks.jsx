@@ -11,7 +11,7 @@ const Devices = () => {
   const [newStackVisability, setNewStackVisability] = useState(false)
   const [result] = useQuery({
     query: `query getAll {
-      getStacks {
+      stacks {
         id
         label
         panelLabel
@@ -34,7 +34,7 @@ const Devices = () => {
           }
         }
       }
-      getDevices {
+      devices {
         id
         label
         location
@@ -50,7 +50,7 @@ const Devices = () => {
           value
         }
       }
-      getProviders {
+      providers {
         id
         label
         providerFunctions {
@@ -88,7 +88,7 @@ const Devices = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getStacks}
+          rows={result.data.stacks}
           headers={headers}
           render={({
             rows,
@@ -124,7 +124,7 @@ const Devices = () => {
                   <TableToolbarContent>
                   </TableToolbarContent>
                 </TableToolbar>
-                <Stack new devices={result.data.getDevices} providers={result.data.getProviders} visability={ setNewStackVisability }/>
+                <Stack new devices={result.data.devices} providers={result.data.providers} visability={ setNewStackVisability }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -147,7 +147,7 @@ const Devices = () => {
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow colSpan={headers.length + 1}>
-                        <Stack devices={result.data.getDevices} stacks={result.data.getStacks} providers={result.data.getProviders} stackID={row.id} />
+                        <Stack devices={result.data.devices} stacks={result.data.stacks} providers={result.data.providers} stackID={row.id} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

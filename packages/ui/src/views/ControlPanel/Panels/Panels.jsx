@@ -11,12 +11,12 @@ const Panels = () => {
   const [newPanelVisability, setNewPanelVisability] = useState(false)
   const [result] = useQuery({
     query: `query getAll {
-      getStacks {
+      stacks {
         id
         label
         description
       }
-      getPanels {
+      panels {
         id
         label
         description
@@ -64,7 +64,7 @@ const Panels = () => {
       <div>
         <DataTable
           isSortable
-          rows={result.data.getPanels}
+          rows={result.data.panels}
           headers={headers}
           render={({
             rows,
@@ -100,7 +100,7 @@ const Panels = () => {
                   <TableToolbarContent>
                   </TableToolbarContent>
                 </TableToolbar>
-                <Panel new stacks={result.data.getStacks} visability={ setNewPanelVisability }/>
+                <Panel new stacks={result.data.stacks} visability={ setNewPanelVisability }/>
               </div>
               }
               <Table {...getTableProps()}>
@@ -123,7 +123,7 @@ const Panels = () => {
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow colSpan={headers.length + 1}>
-                        <Panel panels={result.data.getPanels} panelID={row.id} stacks={result.data.getStacks}/>
+                        <Panel panels={result.data.panels} panelID={row.id} stacks={result.data.stacks}/>
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}
