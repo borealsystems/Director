@@ -43,7 +43,7 @@ const executeStack = (_id) => {
         stack.actions.map(action => {
           deviceInstance[action.device.id].interface(action)
         })
-        log('info', 'core/lib/stacks', `Executed Stack: $${_id} (${stack.label})`)
+        log('info', 'core/lib/stacks', `Executed Stack: ${_id} (${stack.label})`)
       })
       .then(() => resolve(200))
       .catch(err => reject(err))
