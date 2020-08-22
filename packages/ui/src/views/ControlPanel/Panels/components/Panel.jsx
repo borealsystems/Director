@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { omit } from 'lodash'
-import { Grid, Row, Column, Dropdown, Button, TextInput } from 'carbon-components-react'
+import { Grid, Row, Column, ComboBox, Button, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
 
 function matrix (rows, cols, defaultValue) {
@@ -90,7 +90,7 @@ const Panel = (props) => {
               id='panelName'
               placeholder='Required'
               value={panel.label}
-              labelText='Panel Name'
+              labelText='Panel Label'
               onClick={() => {}}
               onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
             />
@@ -112,10 +112,10 @@ const Panel = (props) => {
         { props.new &&
           <div className="bx--row">
             <div className="bx--col">
-              <Dropdown
+              <ComboBox
                 ariaLabel="Dropdown"
                 id="panelLayoutType"
-                label='Required'
+                placeholder='Filter...'
                 selectedItem={panel.layoutType}
                 items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'custom', label: 'Custom' }]}
                 onChange={(layout) => { setPanel({ ...panel, layoutType: layout.selectedItem, layout: {} }) }}
@@ -124,11 +124,11 @@ const Panel = (props) => {
             </div>
             { !panel.layoutType &&
               <div className="bx--col">
-                <Dropdown
+                <ComboBox
                   disabled
                   ariaLabel="Dropdown"
                   id="panelLayout"
-                  label='Required'
+                  placeholder='Filter...'
                   items={[]}
                   titleText="Panel Layout"
                 />
@@ -136,10 +136,10 @@ const Panel = (props) => {
             }
             { panel.layoutType && panel.layoutType.id === 'controller' &&
               <div className="bx--col">
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="panelLayout"
-                  label='Required'
+                  placeholder='Filter...'
                   selectedItem={panel.layout}
                   items={
                     [
@@ -256,10 +256,10 @@ const Panel = (props) => {
             <br/>
             <div className="bx--row">
               <div className="bx--col">
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="buttonStackSelection"
-                  label='Required'
+                  placeholder='Filter...'
                   selectedItem={panel.currentButton.stack}
                   items={props.stacks}
                   onChange={(stack) => {
@@ -281,7 +281,7 @@ const Panel = (props) => {
                   </Button>
                 }
                 { !panel.currentButton?.stack &&
-                  <Button disabled onClick={''} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
+                  <Button disabled onClick={() => {}} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
                     Clear Button
                   </Button>
                 }
@@ -290,11 +290,12 @@ const Panel = (props) => {
             <br/><br/>
           </>
         }
-        { panel.layout === null || panel.label === null
+        { panel.layout === null && panel.label === null
           ? <Button disabled onClick={() => { }} size='default' kind="primary">
             { !props.new && <>Update</> }
             { props.new && <>Create</> }
-          </Button> : <Button onClick={() => { updatePanel() }} size='default' kind="primary">
+          </Button>
+          : <Button onClick={() => { updatePanel() }} size='default' kind="primary">
             { !props.new && <>Update</> }
             { props.new && <>Create</> }
           </Button>
