@@ -1,38 +1,37 @@
-import db from '../db'
+import { controllers } from '../db'
 import log from '../utils/log'
-import { findIndex, uniqBy } from 'lodash'
 import { pubsub } from '../network/graphql/schema'
-
-let controllers = []
 
 const initControllers = () => {
   return new Promise((resolve, reject) => {
     log('info', 'core/lib/controllers', 'Initialising Controllers')
-    db.get('controllers').then((d) => {
-      if (d === undefined) {
-        db.set('controllers', [])
-        resolve()
-      } else {
-        controllers = d
-        resolve()
-      }
-    })
+    resolve()
   })
 }
 
 const registerController = (controller) => {
-  log('info', 'core/lib/controllers', `Registering ${controller.serial} (${controller.manufacturer}, ${controller.model})`)
-  controllers.push({ ...controller, status: 'online', label: `${controller.manufacturer}-${controller.model}`, id: `${controller.manufacturer}-${controller.model}-${controller.serial}` })
-  controllers = uniqBy(controllers, (controller) => { return controller.serial })
-  db.set('controllers', controllers)
-  return controller
+  return new Promise((resolve, reject) => {
+    controllers.put(`${controller.manufacturer}-${controller.model}-${controller.serial}`, { ...controller, status: 'online', label: `${controller.manufacturer}-${controller.model}`, id: `${controller.manufacturer}-${controller.model}-${controller.serial}` })
+      .then(err => {
+        if (err) {
+          reject(err)
+        } else resolve(200)
+      })
+  })
 }
 
 const updateController = (_controller) => {
-  controllers[findIndex(controllers, element => element.id === _controller.id)] = _controller
-  db.set('controllers', controllers)
-  pubsub.publish('CONTROLLER_UPDATE', { controller: _controller })
-  return '200'
+  return new Promise((resolve, reject) => {
+    controllers.get(_controller.id)
+      .then(controller => {
+        controllers.put(_controller.id, { ...controller, ..._controller })
+      })
+      .then(() => {
+        pubsub.publish('CONTROLLER_UPDATE', { controller: _controller })
+      })
+      .then(() => resolve(200))
+      .catch(err => reject(err))
+  })
 }
 
-export { initControllers, registerController, updateController, controllers }
+export { initControllers, registerController, updateController }
