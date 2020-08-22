@@ -137,12 +137,11 @@ const Stack = (props) => {
           { actions && actions.map((item, index) =>
             <Action key={JSON.stringify(item)} index={index} actions={actions} setActions={setActionsProxy} providers={props.providers} devices={props.devices}></Action>
           )}
-          { !props.new &&
+          {/* { !props.new &&
             <Button onClick={() => executeStackMutation({ executeID: stack.id }) } size='default' kind="secondary" style={{ minWidth: '34%' }}>
               Test Stack
             </Button>
-          }
-          <br/><br/>
+          } */}
           { actions.length === 0
             ? <Button disabled onClick={() => { updatestack() }} size='default' kind="primary" style={{ minWidth: '17%' }}>
               { !props.new && <>Update</> }
@@ -152,15 +151,17 @@ const Stack = (props) => {
               { props.new && <>Create</> }
             </Button>
           }
+          &nbsp;
           <Button onClick={() => { props.visability(false) }} size='default' kind="secondary" style={{ minWidth: '17%' }}>
               Cancel
           </Button>
-          <br/><br/>
+          &nbsp;
           { !props.new &&
             <>
               <Button onClick={() => duplicateStack() } size='default' kind="secondary" style={{ minWidth: '17%' }}>
                 Duplicate
               </Button>
+              &nbsp;
               <Button onClick={() => deleteStackMutation({ deleteID: stack.id }).then(console.log(deleteStackMutationResult))} size='default' kind="danger" style={{ minWidth: '17%' }}>
                 Delete
               </Button>

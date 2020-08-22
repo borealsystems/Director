@@ -75,56 +75,17 @@ const Action = (props) => {
   return (
     <>
       <div className="bx--row">
-        <div className="bx--col" style={{ maxWidth: '33%' }}>
+        <div className="bx--col">
           { !props.new &&
-            <h5>Action {props.index + 1}: {action.providerFunction.label} on {action.device.label}</h5>
+          <h5>Action {props.index + 1}: {action.providerFunction.label} on {action.device.label}</h5>
           }
           { props.new &&
             <h5>New Action</h5>
           }
           <br/>
-          { !props.new && getActionMoveButtons() }
-          { props.new && action.providerFunction &&
-            <Button onClick={() => {
-              const actionsArray = props.actions
-              actionsArray.push(action)
-              props.setActions(actionsArray)
-              setAction(initialActionState)
-            }} size='small' kind="primary">
-              Add
-            </Button>
-          }
-          { props.new && !action.providerFunction &&
-            <Button onClick={() => {}} size='small' kind="primary" disabled>
-              Add
-            </Button>
-          }
-          { !props.new && actionComparisonStore !== action &&
-            <>
-              <Button onClick={() => {
-                const actionsArray = props.actions
-                actionsArray[props.index] = action
-                props.setActions(actionsArray)
-                setAction(initialActionState)
-              }} size='small' kind="primary">
-                Update
-              </Button>
-              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
-                Delete
-              </Button>
-            </>
-          }
-          { !props.new && actionComparisonStore === action &&
-            <>
-              <Button disabled size='small' kind="primary">
-                Update
-              </Button>
-              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
-                Delete
-              </Button>
-            </>
-          }
         </div>
+      </div>
+      <div className="bx--row">
         <div className="bx--col">
           <div className="bx--row">
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
@@ -223,6 +184,49 @@ const Action = (props) => {
                   </div>
                 )
               })
+          }
+        </div>
+        <div className="bx--col" style={{ marginTop: '25px', maxWidth: '33%' }}>
+          { !props.new && getActionMoveButtons() }
+          { props.new && action.providerFunction &&
+            <Button onClick={() => {
+              const actionsArray = props.actions
+              actionsArray.push(action)
+              props.setActions(actionsArray)
+              setAction(initialActionState)
+            }} size='small' kind="primary">
+              Add
+            </Button>
+          }
+          { props.new && !action.providerFunction &&
+            <Button onClick={() => {}} size='small' kind="primary" disabled>
+              Add
+            </Button>
+          }
+          { !props.new && actionComparisonStore !== action &&
+            <>
+              <Button onClick={() => {
+                const actionsArray = props.actions
+                actionsArray[props.index] = action
+                props.setActions(actionsArray)
+                setAction(initialActionState)
+              }} size='small' kind="primary">
+                Update
+              </Button>
+              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
+                Delete
+              </Button>
+            </>
+          }
+          { !props.new && actionComparisonStore === action &&
+            <>
+              <Button disabled size='small' kind="primary">
+                Update
+              </Button>
+              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
+                Delete
+              </Button>
+            </>
           }
         </div>
       </div>
