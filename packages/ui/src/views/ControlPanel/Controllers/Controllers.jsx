@@ -102,7 +102,7 @@ const Controllers = () => {
                         ))}
                       </TableExpandRow>
                       <TableExpandedRow colSpan={headers.length + 1}>
-                        <Controller controllerID={row.id} controllers={result.data.controllers} panels={result.data.getPanels} />
+                        <Controller controllerID={row.id} controllers={result.data.controllers} panels={result.data.panels} />
                       </TableExpandedRow>
                     </React.Fragment>
                   ))}

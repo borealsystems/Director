@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dropdown, TextInput } from 'carbon-components-react'
+import { Button, ComboBox, TextInput } from 'carbon-components-react'
 import { ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
 import { findIndex, find } from 'lodash'
 
@@ -129,7 +129,7 @@ const Action = (props) => {
           <div className="bx--row">
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
               { props.new &&
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="actionDevice"
                   label='Required'
@@ -155,7 +155,7 @@ const Action = (props) => {
             </div>
             <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
               { !action.device &&
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="newstackProvider"
                   label='Required'
@@ -166,7 +166,7 @@ const Action = (props) => {
                 />
               }
               { action.device && props.new &&
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="newstackProvider"
                   label='Required'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, TextInput, Dropdown } from 'carbon-components-react'
+import { Button, TextInput, ComboBox } from 'carbon-components-react'
 import { useMutation } from 'urql'
 
 const deleteControllerGQL = `
@@ -76,10 +76,10 @@ const Controller = (props) => {
           </div>
         </div><br/>
         <div className='bx-row'>
-          <Dropdown
+          <ComboBox
             ariaLabel="Dropdown"
             id="controllerPanel"
-            label='Panel'
+            placeholder='Filter...'
             items={props.panels}
             selectedItem={controller.panel}
             itemToString={item => (item ? item.label : '')}

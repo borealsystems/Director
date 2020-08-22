@@ -109,7 +109,7 @@ const Stack = (props) => {
               <TextInput
                 type='text'
                 id='newstackName'
-                placeholder='Required'
+                placeholder='Optional'
                 value={stack.panelLabel}
                 labelText='Stack Panel Label'
                 onClick={() => {}}
