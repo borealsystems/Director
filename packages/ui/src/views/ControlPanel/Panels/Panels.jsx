@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
+import { Button, DataTable, Loading } from 'carbon-components-react'
 import headers from './panelsHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Panel from './components/Panel.jsx'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
+const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Panels = () => {
   const [newPanelVisability, setNewPanelVisability] = useState(false)
@@ -74,6 +74,8 @@ const Panels = () => {
             getHeaderProps,
             getRowProps,
             getTableProps,
+            onInputChange,
+            getToolbarProps,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -82,28 +84,25 @@ const Panels = () => {
               {...getTableContainerProps()}
             >
               {!newPanelVisability &&
-              <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
-                  <TableToolbarContent>
-                    <Button onClick={() => { setNewPanelVisability(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
-                      Add new
-                    </Button>
-                  </TableToolbarContent>
-                </TableToolbar>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewPanelVisability(true) }}>New Panel</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                </div>
               }
               {newPanelVisability &&
-              <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
-                  <TableToolbarContent>
-                  </TableToolbarContent>
-                </TableToolbar>
-                <Panel new stacks={result.data.stacks} visability={ setNewPanelVisability }/>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewPanelVisability(false) }} size='default' kind="secondary">Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                  <Panel new stacks={result.data.stacks} visability={ setNewPanelVisability }/>
+                </div>
               }
               <Table {...getTableProps()}>
                 <TableHead>

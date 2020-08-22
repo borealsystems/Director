@@ -194,9 +194,6 @@ const Device = (props) => {
               Delete
             </Button>
           }
-          <Button onClick={() => { props.visability(false) }} size='default' kind="secondary">
-              Cancel
-          </Button>
           <br/>
           <br/>
         </div>

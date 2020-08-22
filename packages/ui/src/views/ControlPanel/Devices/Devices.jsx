@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
+import { Button, DataTable, Loading } from 'carbon-components-react'
 import deviceHeaders from './components/deviceHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Device from './components/Device.jsx'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
+const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
   const [newDeviceVisability, setNewDeviceVisibility] = useState(false)
@@ -70,6 +70,8 @@ const Devices = () => {
             getHeaderProps,
             getRowProps,
             getTableProps,
+            getToolbarProps,
+            onInputChange,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -78,29 +80,25 @@ const Devices = () => {
               {...getTableContainerProps()}
             >
               {!newDeviceVisability &&
-              <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
-                  <TableToolbarContent>
-                    <Button onClick={() => { setNewDeviceVisibility(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
-                      Add new
-                    </Button>
-                  </TableToolbarContent>
-                </TableToolbar>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewDeviceVisibility(true) }}>New Device</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                </div>
               }
               {newDeviceVisability &&
-              <div>
-                {/* <TableToolbar>
-                  <TableToolbarContent>
-                    <Button onClick={() => { setNewDeviceVisibility(false) }} style={{ minWidth: '20%' }} size='default' kind="secondary">
-                      Cancel
-                    </Button>
-                  </TableToolbarContent>
-                </TableToolbar> */}
-                <Device new providers={result.data.providers} visability={ setNewDeviceVisibility }/>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewDeviceVisibility(false) }} size='default' kind="secondary">Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                  <Device new providers={result.data.providers} visability={ setNewDeviceVisibility }/>
+                </div>
               }
               <Table {...getTableProps()}>
                 <TableHead>

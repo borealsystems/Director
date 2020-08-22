@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, Loading, TableToolbar, TableToolbarContent } from 'carbon-components-react'
+import { Button, DataTable, Loading } from 'carbon-components-react'
 import headers from './stacksHeaders'
 import Stack from './components/Stack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
+const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
   const [newStackVisability, setNewStackVisability] = useState(false)
@@ -96,6 +96,8 @@ const Devices = () => {
             getHeaderProps,
             getRowProps,
             getTableProps,
+            onInputChange,
+            getToolbarProps,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -104,28 +106,25 @@ const Devices = () => {
               {...getTableContainerProps()}
             >
               {!newStackVisability &&
-              <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
-                  <TableToolbarContent>
-                    <Button onClick={() => { setNewStackVisability(true) }} style={{ minWidth: '20%' }} size='default' kind="primary">
-                      Add new
-                    </Button>
-                  </TableToolbarContent>
-                </TableToolbar>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewStackVisability(true) }}>New Stack</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                </div>
               }
               {newStackVisability &&
-              <div>
-                <TableToolbar>
-                  {/* pass in `onInputChange` change here to make filtering work */}
-                  {/* <TableToolbarSearch onChange={() => {}} /> */}
-                  <TableToolbarContent>
-                  </TableToolbarContent>
-                </TableToolbar>
-                <Stack new devices={result.data.devices} providers={result.data.providers} visability={ setNewStackVisability }/>
-              </div>
+                <div>
+                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                      <Button onClick={() => { setNewStackVisability(false) }} size='default' kind="secondary">Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                  <Stack new devices={result.data.devices} providers={result.data.providers} visability={ setNewStackVisability }/>
+                </div>
               }
               <Table {...getTableProps()}>
                 <TableHead>

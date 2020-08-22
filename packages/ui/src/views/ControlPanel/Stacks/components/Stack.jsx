@@ -152,10 +152,6 @@ const Stack = (props) => {
             </Button>
           }
           &nbsp;
-          <Button onClick={() => { props.visability(false) }} size='default' kind="secondary" style={{ minWidth: '17%' }}>
-              Cancel
-          </Button>
-          &nbsp;
           { !props.new &&
             <>
               <Button onClick={() => duplicateStack() } size='default' kind="secondary" style={{ minWidth: '17%' }}>

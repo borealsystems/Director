@@ -4,7 +4,7 @@ import { DataTable, Loading } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Controller from './components/Controller.jsx'
 
-const { Table, TableContainer, TableHead, TableHeader, TableRow, TableExpandRow, TableExpandedRow, TableBody, TableCell } = DataTable
+const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Controllers = () => {
   const headers = [
@@ -75,6 +75,8 @@ const Controllers = () => {
             getHeaderProps,
             getRowProps,
             getTableProps,
+            getToolbarProps,
+            onInputChange,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -82,6 +84,13 @@ const Controllers = () => {
               description="A Controller is the thing you use to actually make things happen."
               {...getTableContainerProps()}
             >
+              <div>
+                <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                  <TableToolbarContent>
+                    <TableToolbarSearch onChange={onInputChange} />
+                  </TableToolbarContent>
+                </TableToolbar>
+              </div>
               <Table {...getTableProps()}>
                 <TableHead>
                   <TableRow>
