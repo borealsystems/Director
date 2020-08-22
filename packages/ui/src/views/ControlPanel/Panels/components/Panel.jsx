@@ -37,7 +37,7 @@ const Panel = (props) => {
   } else {
     const thisPanel = props.new ? null : { ...props.panels.find(panel => panel.id === props.panelID) }
     const buttons = []
-    thisPanel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
+    if (thisPanel.buttons) thisPanel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
     initialPanel = { ...thisPanel, buttons: buttons }
   }
   var [panel, setPanel] = useState(initialPanel)
@@ -130,6 +130,7 @@ const Panel = (props) => {
                   id="panelLayout"
                   placeholder='Filter...'
                   items={[]}
+                  onChange={() => {}}
                   titleText="Panel Layout"
                 />
               </div>
@@ -236,6 +237,7 @@ const Panel = (props) => {
                         <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' kind={getButtonColour(button)}>
                           <>
                             <h5>{button.stack?.id ? button.stack.label : ''}</h5>
+                            {button.stack?.id ? button.stack.panelLabel : ''}
                             {button.stack?.id ? button.stack.id : ''}
                             <br/><sub>{button.row},{button.column}</sub>
                           </>
