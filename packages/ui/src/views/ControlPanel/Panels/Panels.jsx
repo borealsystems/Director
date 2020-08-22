@@ -14,6 +14,7 @@ const Panels = () => {
       stacks {
         id
         label
+        panelLabel
         description
       }
       panels {
@@ -36,6 +37,7 @@ const Panels = () => {
           stack {
             id
             label
+            panelLabel
             description
           }
         }

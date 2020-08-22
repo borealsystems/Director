@@ -234,12 +234,12 @@ const Panel = (props) => {
                   { row.map((button, buttonIndex) => {
                     return (
                       <Column className="bx--button__field-wrapper" key={buttonIndex}>
-                        <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' kind={getButtonColour(button)}>
+                        <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
                           <>
-                            <h5>{button.stack?.id ? button.stack.label : ''}</h5>
-                            {button.stack?.id ? button.stack.panelLabel : ''}
+                            <h5>{button.stack?.id ? button.stack.panelLabel : ''}</h5>
+                            {button.stack?.id ? button.stack.label : ''}<br/>
                             {button.stack?.id ? button.stack.id : ''}
-                            <br/><sub>{button.row},{button.column}</sub>
+                            {/* <br/><sub>{button.row},{button.column}</sub> */}
                           </>
                         </Button>
                       </Column>
@@ -264,6 +264,7 @@ const Panel = (props) => {
                   placeholder='Filter...'
                   selectedItem={panel.currentButton.stack}
                   items={props.stacks}
+                  itemToString={(item) => (item ? `${item.label}  |  ${item.panelLabel}` : null)}
                   onChange={(stack) => {
                     const panelIntermediate = { ...panel }
                     panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = stack.selectedItem

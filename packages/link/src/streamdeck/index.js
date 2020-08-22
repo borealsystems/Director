@@ -28,6 +28,7 @@ const panelGQL = `
         stack {
           id
           label
+          panelLabel
           description
         }
       }

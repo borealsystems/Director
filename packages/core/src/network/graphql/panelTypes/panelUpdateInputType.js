@@ -5,6 +5,8 @@ import {
   GraphQLInt
 } from 'graphql'
 
+import stackUpdateInputType from '../stackTypes/stackUpdateInputType'
+
 const panelUpdateInputType = new GraphQLInputObjectType({
   name: 'panelUpdateInputType',
   description: 'A Panel is a virtual abstraction of a control interface',
@@ -63,20 +65,7 @@ const panelUpdateInputType = new GraphQLInputObjectType({
                 type: GraphQLInt
               },
               stack: {
-                type: new GraphQLInputObjectType({
-                  name: 'panelUpdateButtonStackInputType',
-                  fields: {
-                    id: {
-                      type: GraphQLString
-                    },
-                    label: {
-                      type: GraphQLString
-                    },
-                    description: {
-                      type: GraphQLString
-                    }
-                  }
-                })
+                type: stackUpdateInputType
               }
             }
           })
