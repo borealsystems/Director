@@ -132,7 +132,7 @@ const Action = (props) => {
                 <ComboBox
                   ariaLabel="Dropdown"
                   id="actionDevice"
-                  label='Required'
+                  placeholder='Filter...'
                   value={action.device}
                   items={props.devices}
                   // itemToString={item => (item ? item.label : '')}
@@ -144,7 +144,7 @@ const Action = (props) => {
                 <TextInput
                   type='text'
                   id='actionDevice'
-                  placeholder='Required'
+                  placeholder='Filter...'
                   labelText='Device'
                   value={action.device.label}
                   onClick={() => {}}
@@ -158,7 +158,7 @@ const Action = (props) => {
                 <ComboBox
                   ariaLabel="Dropdown"
                   id="newstackProvider"
-                  label='Required'
+                  placeholder='Filter...'
                   items={[]}
                   onChange={null}
                   titleText="Function"
@@ -169,7 +169,7 @@ const Action = (props) => {
                 <ComboBox
                   ariaLabel="Dropdown"
                   id="newstackProvider"
-                  label='Required'
+                  placeholder='Filter...'
                   items={props.providers.find(provider => provider.id === action.device.provider.id).providerFunctions}
                   onChange={(providerFunction) => { setAction({ ...action, providerFunction: { id: providerFunction.selectedItem.id, label: providerFunction.selectedItem.label } }) }}
                   titleText="Function"
