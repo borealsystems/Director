@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Dropdown, Button, Grid, Row, Column, Loading } from 'carbon-components-react'
+import { ComboBox, Button, Grid, Row, Column, Loading } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const Shotbox = () => {
@@ -78,12 +78,13 @@ const Shotbox = () => {
         </h1>
         <div className="bx--row">
           <div className="bx--col">
-            <Dropdown
+            <ComboBox
               ariaLabel="Dropdown"
               id="panel"
               label='Select a panel'
+              placeholder='Filter...'
               items={result.data.panels}
-              onChange={(selection) => { selectPanel(selection.selectedItem) }}
+              onChange={(selection) => { selection.selectedItem === null ? setPanel({}) : selectPanel(selection.selectedItem) }}
               titleText="Panel"
             />
           </div>
@@ -92,7 +93,7 @@ const Shotbox = () => {
         { panel &&
           <div className="bx--row">
             <Grid style={{ width: '100%' }} condensed>
-              { panel.buttons && panel.buttons.map((row, rowIndex) => {
+              { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
                 return (
                   <React.Fragment key={rowIndex}>
                     <Row>
