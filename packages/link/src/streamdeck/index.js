@@ -17,9 +17,9 @@ mutation updateBridge($bridge: bridgeUpdateInputType) {
   updateBridge(bridge: $bridge)
 }`
 
-const getPanelGQL = `
-  query getPanel($id: String) {
-    getPanel(id: $id) {
+const panelGQL = `
+  query panel($id: String) {
+    panel(id: $id) {
       id
       label
       buttons {
@@ -123,7 +123,7 @@ const updateStreamdecks = ({ type, force }) => {
                   })
               } else {
                 device.config.panel = result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel
-                director.query(getPanelGQL, { id: device.config.panel.id })
+                director.query(panelGQL, { id: device.config.panel.id })
                   .toPromise()
                   .then(result => {
                     device.controller.removeAllListeners('down')
@@ -132,8 +132,8 @@ const updateStreamdecks = ({ type, force }) => {
                       handleButtonPress(device, keyIndex)
                     })
                     const buttons = []
-                    result.data.getPanel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
-                    device.config.panel = { ...result.data.getPanel, buttons: buttons }
+                    result.data.panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
+                    device.config.panel = { ...result.data.panel, buttons: buttons }
                     writePanel({ panel: device.config.panel, device: device })
                   })
               }
