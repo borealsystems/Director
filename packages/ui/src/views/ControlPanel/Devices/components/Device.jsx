@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dropdown, TextInput } from 'carbon-components-react'
+import { Button, ComboBox, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { omit } from 'lodash'
 
@@ -127,10 +127,10 @@ const Device = (props) => {
           </div> */}
           { !props.new &&
             <div className='bx-row'>
-              <Dropdown
+              <ComboBox
                 ariaLabel="Dropdown"
                 id="newDeviceProvider"
-                label='Provider'
+                placeholder='Filter...'
                 items={[device.provider]}
                 selectedItem={device.provider}
                 disabled
@@ -142,10 +142,10 @@ const Device = (props) => {
           { props.new &&
             <div className="bx--row">
               <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
-                <Dropdown
+                <ComboBox
                   ariaLabel="Dropdown"
                   id="newDeviceProvider"
-                  label='Required'
+                  placeholder='Filter...'
                   items={props.providers.filter(provider => provider.id !== 'internal')}
                   selectedItem={device.provider}
                   onChange={(provider) => { console.log(provider.selectedItem); setDevice({ ...device, provider: provider.selectedItem }) }}
