@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, DataTableSkeleton } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, Checkbox } from 'carbon-components-react'
 import deviceHeaders from './components/deviceHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Device from './components/Device.jsx'
@@ -115,9 +115,26 @@ const Devices = () => {
                   {rows.map((row, index) => (
                     <React.Fragment key={row.id}>
                       <TableExpandRow {...getRowProps({ row })}>
-                        {row.cells.map(cell => (
-                          <TableCell key={cell.id}>{cell.value}</TableCell>
-                        ))}
+                        {row.cells.map((cell) => {
+                          if (cell.info.header === 'enabled') {
+                            return (
+                              <TableCell
+                                key={cell.id}
+                                id={cell.id}
+                                className={`la-${cell.info.header}`}>
+                                <Checkbox
+                                  id={'check-' + cell.id}
+                                  checked={cell.value}
+                                  hideLabel
+                                  disabled
+                                  labelText="checkbox"
+                                />
+                              </TableCell>
+                            )
+                          } else {
+                            return <TableCell key={cell.id}>{cell.value}</TableCell>
+                          }
+                        })}
                       </TableExpandRow>
                       <TableExpandedRow
                         colSpan={headers.length + 1}>
