@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'urql'
-import { Loading, ToastNotification } from 'carbon-components-react'
+import { InlineLoading, ToastNotification } from 'carbon-components-react'
 
 const Status = () => {
   const [result] = useQuery({
@@ -27,7 +27,20 @@ const Status = () => {
       />
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) {
+    return (
+      <div>
+        <h1
+          style={{
+            margin: '0 0 32px 0'
+          }}
+        >
+        System Status
+        </h1>
+        <InlineLoading />
+      </div>
+    )
+  }
   if (result.data) {
     return (
       <div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'urql'
-import { DataTable, Loading, ToastNotification } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton, ToastNotification } from 'carbon-components-react'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
@@ -56,23 +56,23 @@ const Logs = () => {
       />
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) return <DataTableSkeleton />
   if (result.data) {
     return (
       <div>
-        <h1
-          style={{
-            margin: '0 0 32px 0'
-          }}
-        >
-          Logs
-        </h1>
         <DataTable
-          isSortable
-          rows={result.data.getLogs}
+          rows={result.data.getLogs.reverse()}
           headers={headers}
-          render={({ rows, headers, getHeaderProps }) => (
-            <TableContainer>
+          render={({
+            rows,
+            headers,
+            getHeaderProps,
+            getTableContainerProps
+          }) => (
+            <TableContainer
+              title="Logs"
+              description="Live Logs from DirectorCore, Newest First"
+              {...getTableContainerProps()}>
               <Table>
                 <TableHead>
                   <TableRow>
