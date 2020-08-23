@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, Loading } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton } from 'carbon-components-react'
 import deviceHeaders from './components/deviceHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Device from './components/Device.jsx'
@@ -56,7 +56,7 @@ const Devices = () => {
       </div>
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) return <DataTableSkeleton headers={deviceHeaders} />
   if (result.data) {
     return (
       <div>

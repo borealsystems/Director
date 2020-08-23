@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { ComboBox, Button, Grid, Row, Column, Loading } from 'carbon-components-react'
+import { ComboBox, Button, Grid, Row, Column, DropdownSkeleton } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const Shotbox = () => {
@@ -65,7 +65,20 @@ const Shotbox = () => {
       </div>
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) {
+    return (
+      <div>
+        <h1
+          style={{
+            margin: '0 0 32px 0'
+          }}
+        >
+            Shotbox
+        </h1>
+        <DropdownSkeleton />
+      </div>
+    )
+  }
   if (result.data) {
     return (
       <div>

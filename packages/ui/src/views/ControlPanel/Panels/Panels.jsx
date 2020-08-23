@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, Loading } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton } from 'carbon-components-react'
 import headers from './panelsHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Panel from './components/Panel.jsx'
@@ -60,7 +60,7 @@ const Panels = () => {
       </div>
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     return (
       <div>

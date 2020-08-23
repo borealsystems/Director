@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'urql'
-import { DataTable, Loading } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 import Controller from './components/Controller.jsx'
 
@@ -61,7 +61,7 @@ const Controllers = () => {
       <GraphQLError caption={result.error.message} />
     )
   }
-  if (result.fetching) return <Loading />
+  if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     return (
       <div>
