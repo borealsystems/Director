@@ -1,8 +1,8 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { Provider, createClient } from 'urql'
 import ControlPanel from './views/ControlPanel/ControlPanel.jsx'
+import Login from './views/Login/Login.jsx'
 import '../../../node_modules/carbon-components/scss/globals/scss/styles.scss'
 
 const client = createClient({
@@ -12,11 +12,23 @@ const client = createClient({
 })
 
 const App = () => {
-  return (
-    <Provider value={client}>
-      <ControlPanel />
-    </Provider>
-  )
+  const [isAuthenticated, setAuthentication] = useState(false)
+
+  if (isAuthenticated) {
+    return (
+      <Provider value={client}>
+        <ControlPanel />
+      </Provider>
+    )
+  } else {
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login'
+    } else {
+      return (
+        <Login auth={setAuthentication} />
+      )
+    }
+  }
 }
 
 export default hot(App)

@@ -55,12 +55,12 @@ const ControlPanel = () => {
   if (result.fetching) { return (<Loading />) }
   if (result.data) {
     return (
-      <div className="container bx--theme--g100">
+      <div className="container">
         <Router>
           <HeaderContainer
             render={({ isSideNavExpanded, onClickSideNavExpand }) => (
               <>
-                <Header aria-label="Boreal Systems Director">
+                <Header aria-label="BorealSystems Director">
                   <SkipToContent />
                   <HeaderMenuButton
                     aria-label="Open menu"
@@ -68,7 +68,7 @@ const ControlPanel = () => {
                     isActive={isSideNavExpanded}
                   />
                   <img style={{ marginLeft: '10px', marginRight: '-7px' }} height='36px' src={logo} />
-                  <HeaderName href="/" prefix='Boreal Systems'>
+                  <HeaderName href="/" prefix='BorealSystems'>
                     Director @ {result.data.coreConfig.label}
                   </HeaderName>
                   <HeaderGlobalBar>
@@ -147,6 +147,9 @@ const ControlPanel = () => {
                           </Route>
                           {/* ROOT */}
                           <Route exact path="/">
+                            <Redirect to="/monitor/status" />
+                          </Route>
+                          <Route exact path="/login">
                             <Redirect to="/monitor/status" />
                           </Route>
                         </section>
