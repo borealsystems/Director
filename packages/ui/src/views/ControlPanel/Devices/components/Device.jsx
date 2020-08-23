@@ -111,20 +111,6 @@ const Device = (props) => {
           <br/>
           <h4>Configuration</h4>
           <br/>
-          {/* <div className='bx-row'>
-            <div className="bx--text-input__field-wrapper">
-              {JSON.stringify(device)}
-              <Checkbox
-                labelText='Enable Device'
-                id="deviceEnabledCheckbox"
-                value={device.enabled}
-                onChange={value => {
-                  console.log(device)
-                  setDevice({ ...device, enabled: value })
-                }}
-              />
-            </div><br/>
-          </div> */}
           { !props.new &&
             <div className='bx-row'>
               <ComboBox

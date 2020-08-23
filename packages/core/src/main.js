@@ -7,7 +7,9 @@ import { initExpress, cleanupExpress } from './network/express'
 import { initMDNS } from './network/mdns'
 import { initBridges } from './bridges'
 import { core } from './db'
+
 import fs from 'fs'
+import os from 'os'
 
 initExpress()
 initMDNS()
@@ -32,4 +34,5 @@ process.on('SIGHUP', () => {
   setTimeout(process.exit(), 5000)
 })
 
-core.put('status', ['success', 'All Systems Go', 'Director, and everything it controls, are operating as intended and are not reporting any errors.'])
+core.put('status', ['success', 'All Systems Go', 'Director is operating as intended and are not reporting any errors.'])
+core.put('config', { port: 4000, label: os.hostname(), mdns: true })

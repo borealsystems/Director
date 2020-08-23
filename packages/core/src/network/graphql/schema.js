@@ -17,18 +17,20 @@ import {
 
 // Types
 
-import providerType from './providerType'
-import logType from './logType'
-import deviceType from './deviceTypes/deviceType.js'
-import deviceUpdateInputType from './deviceTypes/deviceUpdateInputType.js'
-import stackType from './stackTypes/stackType.js'
-import stackUpdateInputType from './stackTypes/stackUpdateInputType'
-import panelType from './panelTypes/panelType'
-import panelUpdateInputType from './panelTypes/panelUpdateInputType'
 import bridgeType from './bridgeTypes/bridgeType'
 import bridgeUpdateInputType from './bridgeTypes/bridgeUpdateInputType'
+import coreConfigType from './coreTypes/coreConfigType'
+import coreConfigInputType from './coreTypes/coreConfigInputType'
 import controllerType from './controllerTypes/controllerType'
 import controllerInputType from './controllerTypes/controllerInputType'
+import deviceType from './deviceTypes/deviceType.js'
+import deviceUpdateInputType from './deviceTypes/deviceUpdateInputType.js'
+import logType from './coreTypes/logType'
+import panelType from './panelTypes/panelType'
+import panelUpdateInputType from './panelTypes/panelUpdateInputType'
+import providerType from './providerType'
+import stackType from './stackTypes/stackType.js'
+import stackUpdateInputType from './stackTypes/stackUpdateInputType'
 
 const pubsub = new PubSub()
 
@@ -40,7 +42,7 @@ var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Queries',
     fields: {
-      getStatus: {
+      status: {
         name: 'Get Status Slug',
         description: 'Returns a status slug to be displayed on the UI homepage',
         type: new GraphQLList(
@@ -51,7 +53,16 @@ var schema = new GraphQLSchema({
         }
       },
 
-      getLogs: {
+      coreConfig: {
+        name: 'Get Core Config',
+        description: 'Return Core Configuration Options',
+        type: coreConfigType,
+        resolve: () => {
+          return core.get('config')
+        }
+      },
+
+      logs: {
         name: 'Get Logs',
         description: 'Returns an array of logs from the core',
         type: new GraphQLList(logType),
@@ -302,6 +313,24 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           return updateController(args.controller)
+        }
+      },
+
+      coreConfig: {
+        name: 'Core Config Update',
+        description: 'Update the core config and reload web server',
+        type: coreConfigType,
+        args: {
+          config: {
+            type: coreConfigInputType
+          }
+        },
+        resolve: (parent, args) => {
+          return new Promise((resolve, reject) => {
+            core.put('config', args.config)
+              .then(() => resolve(args.config))
+              .catch(e => reject(e))
+          })
         }
       }
     }

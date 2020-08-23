@@ -1,9 +1,15 @@
-import { port } from './express'
+import { core } from '../db'
 const mdns = require('mdns')
 
+let ad
+
 const initMDNS = () => {
-  const ad = mdns.createAdvertisement(mdns.tcp('director-core'), port)
-  ad.start()
+  core.get('config')
+    .then(value => {
+      if (ad) ad.stop()
+      ad = mdns.createAdvertisement(mdns.tcp('director-core'), value.port)
+      ad.start()
+    })
 }
 
 export { initMDNS }

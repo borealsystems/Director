@@ -4,7 +4,7 @@ import { InlineLoading, ToastNotification } from 'carbon-components-react'
 
 const Status = () => {
   const [result] = useQuery({
-    query: '{ getStatus }',
+    query: '{ status }',
     pollInterval: 1000
   })
 
@@ -54,7 +54,7 @@ const Status = () => {
         <ToastNotification
           caption=""
           hideCloseButton={true}
-          kind={result.data.getStatus[0]}
+          kind={result.data.status[0]}
           lowContrast
           notificationType="toast"
           role="alert"
@@ -62,9 +62,9 @@ const Status = () => {
             paddingRight: '5rem',
             minWidth: '35rem'
           }}
-          subtitle={result.data.getStatus[2]}
+          subtitle={result.data.status[2]}
           timeout={0}
-          title={result.data.getStatus[1]}
+          title={result.data.status[1]}
         />
       </div>
     )
