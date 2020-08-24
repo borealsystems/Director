@@ -24,7 +24,7 @@ import { Switcher20, ArrowRight20 } from '@carbon/icons-react'
 
 import GraphQLError from '../ControlPanel/components/GraphQLError.jsx'
 
-import background from './undraw_Outer_space_drqu.svg'
+import splash from './splashscreens/Outer_space.svg'
 
 const Login = (props) => {
   const [result] = useQuery({
@@ -110,7 +110,7 @@ const Login = (props) => {
                       }
                     </Column>
                     <Column>
-                      <img src={background} width='75%' style={{ marginLeft: '25%', marginTop: '10%' }}/>
+                      <img src={splash} width='75%' style={{ marginLeft: '25%', marginTop: '10%' }}/>
                     </Column>
                   </Row>
                 </Grid>
