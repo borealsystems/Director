@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { Provider, createClient } from 'urql'
-import ControlPanel from './views/ControlPanel/ControlPanel.jsx'
-import Login from './views/Login/Login.jsx'
+import BorealDirector from './View/Index.jsx'
 import '../../../node_modules/carbon-components/scss/globals/scss/styles.scss'
 
 const client = createClient({
@@ -11,24 +10,10 @@ const client = createClient({
   maskTypename: true
 })
 
-const App = () => {
-  const [isAuthenticated, setAuthentication] = useState(false)
-
-  if (isAuthenticated) {
-    return (
-      <Provider value={client}>
-        <ControlPanel />
-      </Provider>
-    )
-  } else {
-    if (window.location.pathname !== '/login') {
-      window.location.href = '/login'
-    } else {
-      return (
-        <Login auth={setAuthentication} />
-      )
-    }
-  }
-}
+const App = () => (
+  <Provider value={client}>
+    <BorealDirector />
+  </Provider>
+)
 
 export default hot(App)

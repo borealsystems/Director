@@ -36,7 +36,7 @@ const Status = () => {
           System Status
         </h1>
         <ToastNotification
-          caption=""
+          subtitle=""
           hideCloseButton={true}
           kind={result.data.status[0]}
           lowContrast
@@ -46,7 +46,7 @@ const Status = () => {
             paddingRight: '5rem',
             minWidth: '35rem'
           }}
-          subtitle={result.data.status[2]}
+          caption={result.data.status[2]}
           timeout={0}
           title={result.data.status[1]}
         />

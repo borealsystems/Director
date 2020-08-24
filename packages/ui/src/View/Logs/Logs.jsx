@@ -27,8 +27,8 @@ const Logs = () => {
   ]
 
   const [result] = useQuery({
-    query: `query getLogs {
-      getLogs {
+    query: `query logs {
+      logs {
         id
         time
         level
@@ -45,7 +45,7 @@ const Logs = () => {
     return (
       <div>
         <DataTable
-          rows={result.data.getLogs.reverse()}
+          rows={result.data.logs.reverse()}
           headers={headers}
           render={({
             rows,

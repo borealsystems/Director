@@ -116,7 +116,7 @@ const Panel = (props) => {
                 ariaLabel="Dropdown"
                 id="panelLayoutType"
                 placeholder='Filter...'
-                selectedItem={panel.layoutType}
+                selectedItem={panel.layoutType }
                 items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'custom', label: 'Custom' }]}
                 onChange={(layout) => { setPanel({ ...panel, layoutType: layout.selectedItem, layout: {} }) }}
                 titleText="Panel Type"
@@ -204,7 +204,7 @@ const Panel = (props) => {
                 type='text'
                 id='panelLayoutType'
                 placeholder=''
-                value={panel.layoutType.label}
+                value={panel.layoutType.label || null}
                 labelText='Panel Layout Type'
                 onClick={() => {}}
                 onChange={(e) => { }}
@@ -216,7 +216,7 @@ const Panel = (props) => {
                 type='text'
                 id='panelLayout'
                 placeholder=''
-                value={panel.layout.label}
+                value={panel.layout.label || null}
                 labelText='Panel Layout'
                 onClick={() => {}}
                 onChange={(e) => { }}

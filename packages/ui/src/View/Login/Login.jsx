@@ -22,7 +22,7 @@ import {
 
 import { Switcher20, ArrowRight20 } from '@carbon/icons-react'
 
-import GraphQLError from '../ControlPanel/components/GraphQLError.jsx'
+import GraphQLError from '../components/GraphQLError.jsx'
 
 import splash from './splashscreens/Outer_space.svg'
 
