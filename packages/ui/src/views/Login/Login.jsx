@@ -35,9 +35,9 @@ const Login = (props) => {
      }`
   })
 
-  if (result.error) { return (<GraphQLError caption={result.error.message} />) }
-  if (result.fetching) { return (<Loading />) }
-  if (result.data) {
+  if (result.fetching) {
+    return (<Loading />)
+  } else {
     return (
       <div className="container" style={{ backgroundColour: '#222222' }}>
         <HeaderContainer
@@ -63,46 +63,54 @@ const Login = (props) => {
                 <Grid>
                   <Row>
                     <Column sm={{ span: 1 }}>
-                      <Row>
-                        <h2>Log in</h2>
-                      </Row>
-                      <br/>
-                      <Row>
-                        <TextInput
-                          type='text'
-                          id='username'
-                          placeholder='user@boreal.systems'
-                          // value={device.label}
-                          labelText='Username'
-                          onClick={() => {}}
-                        // onChange={(e) => { setDevice({ ...device, label: e.target.value }) }}
-                        />
-                      </Row>
-                      <br/>
-                      <Row>
-                        <TextInput
-                          type='password'
-                          id='password'
-                          placeholder='••••••••••'
-                          // value={device.location || undefined}
-                          labelText='Password'
-                          onClick={() => {}}
-                        // onChange={(e) => { setDevice({ ...device, location: e.target.value }) }}
-                        />
-                      </Row>
-                      <br/>
-                      <Row>
-                        <Button onClick={() => { props.auth(true) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
-                        Continue
-                        </Button>
-                      </Row>
-                      <br/>
-                      <Row>
-                        <Checkbox onChange={() => { }} labelText='Remember Me' />
-                      </Row>
+                      <br/><br/><br/>
+                      { result.error &&
+                        <GraphQLError error={result.error} />
+                      }
+                      { !result.error &&
+                        <>
+                          <Row>
+                            <h2>Log in</h2>
+                          </Row>
+                          <br/>
+                          <Row>
+                            <TextInput
+                              type='text'
+                              id='username'
+                              placeholder='user@boreal.systems'
+                              // value={device.label}
+                              labelText='Username'
+                              onClick={() => {}}
+                              // onChange={(e) => { setDevice({ ...device, label: e.target.value }) }}
+                            />
+                          </Row>
+                          <br/>
+                          <Row>
+                            <TextInput
+                              type='password'
+                              id='password'
+                              placeholder='••••••••••'
+                              // value={device.location || undefined}
+                              labelText='Password'
+                              onClick={() => {}}
+                              // onChange={(e) => { setDevice({ ...device, location: e.target.value }) }}
+                            />
+                          </Row>
+                          <br/>
+                          <Row>
+                            <Button onClick={() => { props.auth(true) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
+                              Continue
+                            </Button>
+                          </Row>
+                          <br/>
+                          <Row>
+                            <Checkbox onChange={() => { }} labelText='Remember Me' />
+                          </Row>
+                        </>
+                      }
                     </Column>
                     <Column>
-                      <img src={background} width='75%' style={{ marginLeft: '15%', marginTop: '10%' }}/>
+                      <img src={background} width='75%' style={{ marginLeft: '25%', marginTop: '10%' }}/>
                     </Column>
                   </Row>
                 </Grid>

@@ -3,23 +3,43 @@ import PropTypes from 'prop-types'
 import { ToastNotification } from 'carbon-components-react'
 
 const GraphQLError = (props) => {
-  return (
-    <ToastNotification
-      hideCloseButton={true}
-      kind="error"
-      lowContrast
-      notificationType="toast"
-      role="alert"
-      style={{
-        marginBottom: '.5rem',
-        minWidth: '30rem'
-      }}
-      subtitle={props.error}
-      caption="The Director UI cannot communicate with the server or the server encountered an error. Please check your network connection then contact your system administrator."
-      timeout={0}
-      title="GraphQL Error"
-    />
-  )
+  if (props.error.networkError) {
+    return (
+      <ToastNotification
+        hideCloseButton={true}
+        kind="error"
+        lowContrast
+        notificationType="toast"
+        role="alert"
+        style={{
+          marginBottom: '.5rem',
+          minWidth: '30rem'
+        }}
+        caption={props.error.message}
+        subtitle="The UI cannot communicate with DirectorCore, please make sure you are connected to the network."
+        timeout={0}
+        title="Network Error"
+      />
+    )
+  } else if (props.error.graphQLErrors.length > 0) {
+    return (
+      <ToastNotification
+        hideCloseButton={true}
+        kind="error"
+        lowContrast
+        notificationType="toast"
+        role="alert"
+        style={{
+          marginBottom: '.5rem',
+          minWidth: '30rem'
+        }}
+        caption={JSON.stringify(props.error.graphQLErrors)}
+        subtitle="DirectorCore experienced an error, please contact your system administrator with the error below."
+        timeout={0}
+        title="GraphQL Error"
+      />
+    )
+  }
 }
 
 GraphQLError.propTypes = {

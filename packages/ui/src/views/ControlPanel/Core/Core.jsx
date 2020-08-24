@@ -47,7 +47,7 @@ const Core = () => {
         >
           Core Configuration
         </h1>
-        <GraphQLError caption={result.error.message} />
+        <GraphQLError error={result.error} />
       </div>
     )
   }

@@ -2,31 +2,15 @@ import React from 'react'
 import { useQuery } from 'urql'
 import { InlineLoading, ToastNotification } from 'carbon-components-react'
 
+import GraphQLError from '../components/GraphQLError.jsx'
+
 const Status = () => {
   const [result] = useQuery({
     query: '{ status }',
     pollInterval: 1000
   })
 
-  if (result.error) {
-    return (
-      <ToastNotification
-        caption={result.error}
-        hideCloseButton={true}
-        kind="error"
-        lowContrast
-        notificationType="toast"
-        role="alert"
-        style={{
-          marginBottom: '.5rem',
-          minWidth: '30rem'
-        }}
-        subtitle="The Director UI cannot communicate with the server. Please check your network connection then contact your system administrator."
-        timeout={0}
-        title="Communication Error"
-      />
-    )
-  }
+  if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) {
     return (
       <div>

@@ -37,11 +37,7 @@ const Bridges = () => {
     pollInterval: 1000
   })
 
-  if (result.error) {
-    return (
-      <GraphQLError caption={result.error.message} />
-    )
-  }
+  if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     return (

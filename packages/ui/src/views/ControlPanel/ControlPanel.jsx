@@ -51,7 +51,7 @@ const ControlPanel = () => {
      }`
   })
 
-  if (result.error) { return (<GraphQLError caption={result.error.message} />) }
+  if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) { return (<Loading />) }
   if (result.data) {
     return (

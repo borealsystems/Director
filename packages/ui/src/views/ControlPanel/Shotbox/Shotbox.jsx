@@ -61,7 +61,7 @@ const Shotbox = () => {
         >
           Shotbox
         </h1>
-        <GraphQLError error={result.error.message} />
+        <GraphQLError error={result.error} />
       </div>
     )
   }

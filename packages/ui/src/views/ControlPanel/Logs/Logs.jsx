@@ -1,6 +1,8 @@
 import React from 'react'
 import { useQuery } from 'urql'
-import { DataTable, DataTableSkeleton, ToastNotification } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton } from 'carbon-components-react'
+
+import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
@@ -37,25 +39,7 @@ const Logs = () => {
     pollInterval: 1000
   })
 
-  if (result.error) {
-    return (
-      <ToastNotification
-        caption={result.error.message}
-        hideCloseButton={true}
-        kind="error"
-        lowContrast
-        notificationType="toast"
-        role="alert"
-        style={{
-          marginBottom: '.5rem',
-          minWidth: '30rem'
-        }}
-        subtitle="The Director UI cannot communicate with the server or the server encountered an error. Please check your network connection then contact your system administrator."
-        timeout={0}
-        title="GraphQL Error"
-      />
-    )
-  }
+  if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton />
   if (result.data) {
     return (

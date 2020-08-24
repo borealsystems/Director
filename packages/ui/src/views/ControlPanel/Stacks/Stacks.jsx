@@ -68,20 +68,7 @@ const Devices = () => {
     pollInterval: 1000
   })
 
-  if (result.error) {
-    return (
-      <div>
-        <h1
-          style={{
-            margin: '0 0 32px 0'
-          }}
-        >
-          Stacks
-        </h1>
-        <GraphQLError error={result.error.message} />
-      </div>
-    )
-  }
+  if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     return (
