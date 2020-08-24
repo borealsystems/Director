@@ -107,7 +107,7 @@ const ControlPanel = () => {
                   <Content id="main-content">
                     <div className="bx--grid">
                       <div className="bx--row">
-                        <section className="bx--offset-lg-2 bx--col-lg-10">
+                        <section className="bx--offset-lg-1 bx--col-lg-10">
                           {/* MONITOR */}
                           <Route exact path="/monitor">
                             <Redirect to="/monitor/status" />

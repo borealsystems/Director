@@ -31,6 +31,8 @@ const Login = (props) => {
     query: `{ 
       coreConfig {
         label
+        helpdeskVisable
+        helpdeskURI
       }
      }`
   })
@@ -104,8 +106,14 @@ const Login = (props) => {
                           </Row>
                           <br/>
                           <Row>
-                            <Checkbox onChange={() => { }} labelText='Remember Me' />
+                            <Checkbox id='loginRememberMe' onChange={() => { }} labelText='Remember Me' />
                           </Row>
+                          <br/>
+                          { result.data.coreConfig.helpdeskVisable &&
+                            <Row>
+                              Need help?&nbsp;<a href={result.data.coreConfig.helpdeskURI}>Contact your system administrator</a>
+                            </Row>
+                          }
                         </>
                       }
                     </Column>

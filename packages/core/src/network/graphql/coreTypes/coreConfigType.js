@@ -19,6 +19,12 @@ const coreConfigType = new GraphQLObjectType({
     },
     address: {
       type: GraphQLString
+    },
+    helpdeskVisable: {
+      type: GraphQLBoolean
+    },
+    helpdeskURI: {
+      type: GraphQLString
     }
   }
 })
