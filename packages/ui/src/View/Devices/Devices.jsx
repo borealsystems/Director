@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import { useQuery } from 'urql'
-import { Button, DataTable, DataTableSkeleton, Checkbox } from 'carbon-components-react'
-import deviceHeaders from './components/deviceHeaders'
+import React from 'react'
+import { useQuery, useMutation } from 'urql'
+import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
+import { Add24 } from '@carbon/icons-react'
 import GraphQLError from '../components/GraphQLError.jsx'
-import Device from './components/Device.jsx'
+import { useHistory } from 'react-router-dom'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
+const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
-  const [newDeviceVisability, setNewDeviceVisibility] = useState(false)
   const [result] = useQuery({
     query: `query getDevicesAndProviders {
       devices {
@@ -27,30 +26,61 @@ const Devices = () => {
           value
         }
       }
-      providers {
-        id
-        label
-        protocol
-        parameters {
-          required
-          id
-          label
-          regex
-        }
-      }
     }`,
     pollInterval: 1000
   })
 
+  const deleteDeviceGQL = `
+    mutation deleteDevice($idToDelete: String!) {
+      deleteDevice(id: $idToDelete)
+    }
+  `
+
+  // eslint-disable-next-line no-unused-vars
+  const [deleteDeviceMutationResult, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
+
+  const headers = [
+    {
+      key: 'id',
+      header: 'ID'
+    },
+    {
+      key: 'label',
+      header: 'Name'
+    },
+    {
+      key: 'description',
+      header: 'Description'
+    },
+    {
+      key: 'location',
+      header: 'Location'
+    },
+    {
+      key: 'provider.label',
+      header: 'Provider'
+    },
+    {
+      key: 'enabled',
+      header: 'Enabled'
+    },
+    {
+      key: 'status',
+      header: 'Status'
+    }
+  ]
+
+  const history = useHistory()
+
   if (result.error) return <GraphQLError error={result.error} />
-  if (result.fetching) return <DataTableSkeleton headers={deviceHeaders} />
+  if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     return (
       <div>
         <DataTable
           isSortable
           rows={result.data.devices}
-          headers={deviceHeaders}
+          headers={headers}
           render={({
             rows,
             headers,
@@ -66,68 +96,54 @@ const Devices = () => {
               description="Devices are a piece of hardware or software configured to be controlled by BorealDirector."
               {...getTableContainerProps()}
             >
-              {!newDeviceVisability &&
-                <div>
-                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                    <TableToolbarContent>
-                      <TableToolbarSearch onChange={onInputChange} />
-                      <Button onClick={() => { setNewDeviceVisibility(true) }}>New Device</Button>
-                    </TableToolbarContent>
-                  </TableToolbar>
-                </div>
-              }
-              {newDeviceVisability &&
-                <div>
-                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                    <TableToolbarContent>
-                      <TableToolbarSearch onChange={onInputChange} />
-                      <Button onClick={() => { setNewDeviceVisibility(false) }} size='default' kind="secondary">Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button>
-                    </TableToolbarContent>
-                  </TableToolbar>
-                  <Device new providers={result.data.providers} visability={ setNewDeviceVisibility }/>
-                </div>
-              }
+              <div>
+                <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                  <TableToolbarContent>
+                    <TableToolbarSearch onChange={onInputChange} />
+                    <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/device/new' }) }}>New Device</Button>
+                  </TableToolbarContent>
+                </TableToolbar>
+              </div>
               <Table {...getTableProps()}>
                 <TableHead>
                   <TableRow>
-                    <TableHeader />
-                    {headers.map((header, index) => (
-                      <TableHeader key={index} {...getHeaderProps({ header })}>
+                    {headers.map((header, i) => (
+                      <TableHeader key={i} {...getHeaderProps({ header })}>
                         {header.header}
                       </TableHeader>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
-                    <React.Fragment key={row.id}>
-                      <TableExpandRow {...getRowProps({ row })}>
-                        {row.cells.map((cell) => {
-                          if (cell.info.header === 'enabled') {
-                            return (
-                              <TableCell
-                                key={cell.id}
-                                id={cell.id}
-                                className={`la-${cell.info.header}`}>
-                                <Checkbox
-                                  id={'check-' + cell.id}
-                                  checked={cell.value}
-                                  hideLabel
-                                  disabled
-                                  labelText="checkbox"
-                                />
-                              </TableCell>
-                            )
-                          } else {
-                            return <TableCell key={cell.id}>{cell.value}</TableCell>
-                          }
-                        })}
-                      </TableExpandRow>
-                      <TableExpandedRow
-                        colSpan={headers.length + 1}>
-                        <Device devices={result.data.devices} providers={result.data.providers} deviceID={row.id} index={index} />
-                      </TableExpandedRow>
-                    </React.Fragment>
+                  {rows.map((row, i) => (
+                    <TableRow key={i} {...getRowProps({ row })}>
+                      {row.cells.map((cell) => {
+                        if (cell.info.header === 'enabled') {
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              id={cell.id}
+                              className={`la-${cell.info.header}`}>
+                              <Checkbox
+                                id={'check-' + cell.id}
+                                checked={cell.value}
+                                hideLabel
+                                disabled
+                                labelText="checkbox"
+                              />
+                            </TableCell>
+                          )
+                        } else {
+                          return <TableCell key={cell.id}>{cell.value}</TableCell>
+                        }
+                      })}
+                      <TableCell className="bx--table-column-menu">
+                        <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
+                          <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `/config/device/${row.cells[0].value}` })} />
+                          <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />
+                        </OverflowMenu>
+                      </TableCell>
+                    </TableRow>
                   ))}
                 </TableBody>
               </Table>
