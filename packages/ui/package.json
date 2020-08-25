@@ -37,6 +37,7 @@
   "dependencies": {
     "@carbon/grid": "^10.8.3",
     "@carbon/icons-react": "^10.8.2",
+    "@carbon/themes": "^10.17.0",
     "@hot-loader/react-dom": "16.12.0",
     "carbon-components": "^10.9.3",
     "carbon-components-react": "^7.9.3",

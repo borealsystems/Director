@@ -2,7 +2,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { Provider, createClient } from 'urql'
 import BorealDirector from './View/Index.jsx'
-import '../../../node_modules/carbon-components/scss/globals/scss/styles.scss'
+import './styles.scss'
 
 const client = createClient({
   url: '/graphql',

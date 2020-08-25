@@ -989,6 +989,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@carbon/colors@^10.12.0":
+  version "10.12.0"
+  resolved "https://registry.yarnpkg.com/@carbon/colors/-/colors-10.12.0.tgz#03ad81c98b2fba149d9a35ef5857dc6c03a7107b"
+  integrity sha512-shLBO4VuU82GyfxdLNhe9djs+DFoefTsRbiwaNuymvPefuO0kNxvRQTb9FsOOdhEA1DiikFTti8oFeQwmeuLkA==
+
 "@carbon/grid@^10.8.3":
   version "10.14.0"
   resolved "https://registry.yarnpkg.com/@carbon/grid/-/grid-10.14.0.tgz#5643303b8e6821306b20ac943ce327068bbbc34e"
@@ -1018,6 +1023,24 @@
   version "10.12.0"
   resolved "https://registry.yarnpkg.com/@carbon/layout/-/layout-10.12.0.tgz#8f80c8d169a1c62669cb65470619b6c259e187a5"
   integrity sha512-qS6WHPqEyVl1AzAnG5awoxfYw8RbX4Pf5Y/Z46s5wTTxm/zzF7Ju/Ej3H2Xkjny1NL7PsF3xyh2CtiojLBrurg==
+
+"@carbon/themes@^10.17.0":
+  version "10.17.0"
+  resolved "https://registry.yarnpkg.com/@carbon/themes/-/themes-10.17.0.tgz#62f19a16d07dcdb39f2fa0c06c5be5c8df9b4e57"
+  integrity sha512-hsOWQE1aP0vFbX2hQoolxA4QDdaMPIIDnka8En4bLtN3azA52kiKgIlwj3B/4Y5z0D1TX8XVQl+D1wGugGXxLg==
+  dependencies:
+    "@carbon/colors" "^10.12.0"
+    "@carbon/layout" "^10.12.0"
+    "@carbon/type" "^10.14.0"
+    color "^3.1.2"
+
+"@carbon/type@^10.14.0":
+  version "10.14.0"
+  resolved "https://registry.yarnpkg.com/@carbon/type/-/type-10.14.0.tgz#d0abd3f388f13ccf727a7248117cbe0f64e1d5f0"
+  integrity sha512-BLf4eCIH8/HIJaQCMDDNZan36X36irFyOrcVo6JP/gS98Ft8Fl12cysZBeUs7p31hpL/y7ELUYmve29GlAzwZg==
+  dependencies:
+    "@carbon/import-once" "^10.3.0"
+    "@carbon/layout" "^10.12.0"
 
 "@hot-loader/react-dom@16.12.0":
   version "16.12.0"

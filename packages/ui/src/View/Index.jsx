@@ -17,6 +17,7 @@ import {
   SkipToContent,
   SideNav,
   SideNavItems,
+  SideNavMenu,
   HeaderContainer,
   HeaderGlobalBar,
   HeaderGlobalAction,
@@ -36,6 +37,7 @@ import Bridges from './Bridges/Bridges.jsx'
 import Core from './Core/Core.jsx'
 import Controllers from './Controllers/Controllers.jsx'
 import Devices from './Devices/Devices.jsx'
+import Device from './Device/Device.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
 import Login from './Login/Login.jsx'
@@ -45,7 +47,7 @@ import Shotbox from './Shotbox/Shotbox.jsx'
 import Status from './Status/Status.jsx'
 
 const ControlPanel = () => {
-  const [isAuthenticated, setAuthenticationState] = useState(false)
+  const [isAuthenticated, setAuthenticationState] = useState(true)
 
   const [result] = useQuery({
     query: `{ 
@@ -58,7 +60,7 @@ const ControlPanel = () => {
   if (result.error) return <GraphQLError error={result.error} />
   if (!result.error) {
     return (
-      <div className="container">
+      <div className="container bx--container02">
         <Router>
           <HeaderContainer
             render={({ isSideNavExpanded, onClickSideNavExpand }) => (
@@ -84,25 +86,25 @@ const ControlPanel = () => {
                     </HeaderGlobalAction>
                   </HeaderGlobalBar>
                   { isAuthenticated && result.data &&
-                    <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
+                    <SideNav aria-label="Side navigation" isRail>
                       <SideNavItems>
-                        <NavGroup icon={View32} label="Monitor" grouppath="/monitor">
-                          <NavLink to="/monitor/status" label="Status"/>
-                          <NavLink to="/monitor/bridges" label="Bridges"/>
+                        <SideNavMenu renderIcon={View32} title='Monitor'>
+                          <NavLink icon={View32} to="/monitor/status" label="Status"/>
+                          <NavLink icon={View32} to="/monitor/bridges" label="Bridges"/>
                           <NavLink to="/monitor/logs" label="Logs"/>
-                        </NavGroup>
-                        <NavGroup icon={Settings24} label="Configure" grouppath="/config">
+                        </SideNavMenu>
+                        <SideNavMenu renderIcon={Settings24} title="Configure">
                           <NavLink to="/config/devices" label="Devices"/>
                           <NavLink to="/config/stacks" label="Stacks"/>
                           <NavLink to="/config/panels" label="Panels"/>
                           <NavLink to="/config/controllers" label="Controllers"/>
-                        </NavGroup>
-                        <NavGroup icon={Keyboard24} label="Control" grouppath="/control">
+                        </SideNavMenu>
+                        <SideNavMenu renderIcon={Keyboard24} title="Control">
                           <NavLink to="/control/shotbox" label="Shotbox"/>
-                        </NavGroup>
-                        <NavGroup icon={TreeViewAlt24} label="Core" grouppath="/core">
+                        </SideNavMenu>
+                        <SideNavMenu renderIcon={TreeViewAlt24} title="Core">
                           <NavLink to="/core/configure" label="Configuration"/>
-                        </NavGroup>
+                        </SideNavMenu>
                       </SideNavItems>
                     </SideNav>
                   }
@@ -141,22 +143,13 @@ const ControlPanel = () => {
                               <Flow />
                             </Route>
                             {/* CONFIGURE */}
-                            <Route path="/config/devices">
-                              <Devices />
-                            </Route>
-                            <Route path="/config/stacks">
-                              <Stacks />
-                            </Route>
-                            <Route path="/config/panels">
-                              <Panels />
-                            </Route>
-                            <Route path="/config/controllers">
-                              <Controllers />
-                            </Route>
+                            <Route path="/config/devices" component={Devices} />
+                            <Route path="/config/device/:id" component={Device} />
+                            <Route path="/config/stacks" component={Stacks} />
+                            <Route path="/config/panels" component={Panels} />
+                            <Route path="/config/controllers" component={Controllers} />
                             {/* CORE */}
-                            <Route path="/core/configure">
-                              <Core />
-                            </Route>
+                            <Route path="/core/configure" component={Core} />
                             {/* ROOT */}
                             <Route exact path="/">
                               <Redirect to="/monitor/status" />
