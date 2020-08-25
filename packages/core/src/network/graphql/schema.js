@@ -97,7 +97,7 @@ var schema = new GraphQLSchema({
         }
       },
 
-      deviceByID: {
+      device: {
         name: 'Get Device by ID',
         description: 'Returns a device specified by the ID',
         type: deviceType,
@@ -105,7 +105,7 @@ var schema = new GraphQLSchema({
           id: { type: GraphQLString }
         },
         resolve: (parent, args) => {
-          return devices.find(device => device.id === args.id)
+          return devices.get(args.id)
         }
       },
 

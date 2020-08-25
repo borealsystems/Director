@@ -30,14 +30,13 @@ import {
 import { View32, Settings24, Keyboard24, User20, TreeViewAlt24, Switcher20 } from '@carbon/icons-react'
 
 import NavLink from './components/NavLink.jsx'
-import NavGroup from './components/NavGroup.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
 
 import Bridges from './Bridges/Bridges.jsx'
 import Core from './Core/Core.jsx'
 import Controllers from './Controllers/Controllers.jsx'
 import Devices from './Devices/Devices.jsx'
-import Device from './Device/Device.jsx'
+import Device from './Device/DeviceWrapper.jsx'
 import Flow from './Flow/Flow.jsx'
 import Logs from './Logs/Logs.jsx'
 import Login from './Login/Login.jsx'
