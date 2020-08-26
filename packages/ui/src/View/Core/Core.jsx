@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, InlineLoading, TextInput, Checkbox, Tooltip, Grid, Row, Column } from 'carbon-components-react'
+import { Button, InlineLoading, TextInput, Checkbox, Tooltip, Grid, Row, Column, InlineNotification } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const Core = () => {
@@ -88,6 +88,16 @@ const Core = () => {
   if (result.data && coreConfig.port) {
     return (
       <Grid>
+        <Row>
+          <InlineNotification
+            style={{ width: '100%' }}
+            lowContrast={true}
+            kind='warning'
+            title='This interface is being overhauled'
+            subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
+            hideCloseButton={true}
+          />
+        </Row>
         <Row>
           <h1>Core Configuration</h1>
         </Row>

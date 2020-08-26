@@ -100,7 +100,7 @@ const Devices = () => {
                 <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                   <TableToolbarContent>
                     <TableToolbarSearch onChange={onInputChange} />
-                    <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/device/new' }) }}>New Device</Button>
+                    <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/devices/new' }) }}>New Device</Button>
                   </TableToolbarContent>
                 </TableToolbar>
               </div>
@@ -139,7 +139,7 @@ const Devices = () => {
                       })}
                       <TableCell className="bx--table-column-menu">
                         <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
-                          <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `/config/device/${row.cells[0].value}` })} />
+                          <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `/config/devices/${row.cells[0].value}` })} />
                           <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />
                         </OverflowMenu>
                       </TableCell>

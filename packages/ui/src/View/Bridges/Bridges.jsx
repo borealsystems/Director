@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'urql'
-import { DataTable, DataTableSkeleton } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableExpandRow, TableExpandedRow, TableBody, TableCell } = DataTable
@@ -42,6 +42,14 @@ const Bridges = () => {
   if (result.data) {
     return (
       <div>
+        <InlineNotification
+          style={{ width: '100%' }}
+          lowContrast={true}
+          kind='warning'
+          title='This interface is being overhauled'
+          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
+          hideCloseButton={true}
+        />
         <DataTable
           isSortable
           rows={result.data.getBridges}

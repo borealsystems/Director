@@ -1,24 +1,11 @@
 import React, { useState } from 'react'
-import { useQuery, useMutation } from 'urql'
-import { ComboBox, Button, Grid, Row, Column, DropdownSkeleton } from 'carbon-components-react'
+import { useQuery } from 'urql'
+import { ComboBox, Row, Column, DropdownSkeleton, InlineNotification } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
+import ShotboxPanelWrapper from './ShotboxPanelWrapper.jsx'
 
 const Shotbox = () => {
   var [panel, setPanel] = useState({})
-
-  const selectPanel = (panel) => {
-    const buttons = []
-    panel.buttons.map(row => { buttons.push(Object.keys(row).map(function (key) { return row[key] })) })
-    setPanel({ ...panel, buttons: buttons })
-  }
-
-  const getEnabledProps = (button) => {
-    if (button.stack) {
-      return { kind: 'primary' }
-    } else {
-      return { disabled: true, kind: 'secondary' }
-    }
-  }
 
   const [result] = useQuery({
     query: `query getShotboxData {
@@ -26,30 +13,17 @@ const Shotbox = () => {
         id
         label
         description
-        layout {
-          id
-          label
-        }
-        buttons {
-          row
-          column
-          stack {
-            id
-            label
-            description
-          }
-        }
       }
     }`,
     pollInterval: 1000
   })
 
-  const executeStackMutationGQL = `mutation executeStack($executeID: String) {
-    executeStack(id: $executeID)
-  }`
-
-  // eslint-disable-next-line no-unused-vars
-  var [executeStackMutationResult, executeStackMutation] = useMutation(executeStackMutationGQL)
+  const resetPanel = (panel) => {
+    setPanel({})
+    setTimeout(() => {
+      setPanel(panel)
+    }, 1)
+  }
 
   if (result.error) {
     return (
@@ -82,6 +56,14 @@ const Shotbox = () => {
   if (result.data) {
     return (
       <div>
+        <InlineNotification
+          style={{ width: '100%' }}
+          lowContrast={true}
+          kind='warning'
+          title='This interface is being overhauled'
+          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
+          hideCloseButton={true}
+        />
         <h1
           style={{
             margin: '0 0 32px 0'
@@ -89,50 +71,28 @@ const Shotbox = () => {
         >
           Shotbox
         </h1>
-        <div className="bx--row">
-          <div className="bx--col">
+        <Row>
+          <Column>
             <ComboBox
               ariaLabel="Dropdown"
               id="panel"
               label='Select a panel'
               placeholder='Filter...'
               items={result.data.panels}
-              onChange={(selection) => { selection.selectedItem === null ? setPanel({}) : selectPanel(selection.selectedItem) }}
-              titleText="Panel"
+              itemToString={(item) => (`${item.label} (${item.id})`)}
+              onChange={(selection) => { selection.selectedItem === null ? setPanel({}) : resetPanel(selection.selectedItem) }}
+              titleText="Panel (required)"
             />
-          </div>
-        </div>
+          </Column>
+        </Row>
         <br/>
-        { panel &&
-          <div className="bx--row">
-            <Grid style={{ width: '100%' }} condensed>
-              { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
-                return (
-                  <React.Fragment key={rowIndex}>
-                    <Row>
-                      { row.map((button, buttonIndex) => {
-                        return (
-                          <Column key={buttonIndex}>
-                            <Button onClick={() => {
-                              executeStackMutation({ executeID: button.stack.id })
-                            }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
-                              <>
-                                <h5>{button.stack?.id ? button.stack.label : ''}</h5>
-                                {button.stack?.id ? button.stack.id : ''}
-                                <br/><sub>{button.row},{button.column}</sub>
-                              </>
-                            </Button>
-                          </Column>
-                        )
-                      })
-                      }
-                    </Row>
-                  </React.Fragment>
-                )
-              })}
-              <br/>
-            </Grid>
-          </div>
+        { panel.id &&
+          <Row>
+            <Column>
+              <br/><br/>
+              <ShotboxPanelWrapper inline={true} match={{ params: { id: panel.id } }} />
+            </Column>
+          </Row>
         }
       </div>
     )

@@ -4,7 +4,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  useRouteMatch
 } from 'react-router-dom'
 
 import { useQuery } from 'urql'
@@ -14,6 +15,9 @@ import {
   Header,
   HeaderMenuButton,
   HeaderName,
+  HeaderNavigation,
+  HeaderMenu,
+  HeaderMenuItem,
   SkipToContent,
   SideNav,
   SideNavItems,
@@ -43,6 +47,7 @@ import Login from './Login/Login.jsx'
 import Panels from './Panels/Panels.jsx'
 import Stacks from './Stacks/Stacks.jsx'
 import Shotbox from './Shotbox/Shotbox.jsx'
+import ShotboxPanelWrapper from './Shotbox/ShotboxPanelWrapper.jsx'
 import Status from './Status/Status.jsx'
 
 const ControlPanel = () => {
@@ -74,6 +79,12 @@ const ControlPanel = () => {
                   <HeaderName href="/" prefix='BorealSystems'>
                     Director
                   </HeaderName>
+                  <HeaderNavigation aria-label="IBM [Platform]">
+                    <HeaderMenu aria-label="Development Build" menuLinkName="This is a development build!">
+                      <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
+                      <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+                    </HeaderMenu>
+                  </HeaderNavigation>
                   <HeaderGlobalBar>
                     { isAuthenticated &&
                       <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
@@ -84,12 +95,12 @@ const ControlPanel = () => {
                       <Switcher20 />
                     </HeaderGlobalAction>
                   </HeaderGlobalBar>
-                  { isAuthenticated && result.data &&
+                  { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&
                     <SideNav aria-label="Side navigation" isRail>
                       <SideNavItems>
                         <SideNavMenu renderIcon={View32} title='Monitor'>
-                          <NavLink icon={View32} to="/monitor/status" label="Status"/>
-                          <NavLink icon={View32} to="/monitor/bridges" label="Bridges"/>
+                          <NavLink to="/monitor/status" label="Status"/>
+                          <NavLink to="/monitor/bridges" label="Bridges"/>
                           <NavLink to="/monitor/logs" label="Logs"/>
                         </SideNavMenu>
                         <SideNavMenu renderIcon={Settings24} title="Configure">
@@ -122,35 +133,26 @@ const ControlPanel = () => {
                         <Row>
                           <Column lg={{ offset: 1, span: 10 }}>
                             {/* MONITOR */}
-                            <Route exact path="/monitor">
-                              <Redirect to="/monitor/status" />
-                            </Route>
-                            <Route path="/monitor/status">
-                              <Status />
-                            </Route>
-                            <Route path="/monitor/bridges">
-                              <Bridges />
-                            </Route>
-                            <Route path="/monitor/logs">
-                              <Logs />
-                            </Route>
-                            {/* CONTROL */}
-                            <Route path="/control/shotbox">
-                              <Shotbox />
-                            </Route>
-                            <Route path="/control/flow">
-                              <Flow />
-                            </Route>
+                            <Route path="/monitor/status" component={Status} />
+                            <Route path="/monitor/bridges" component={Bridges} />
+                            <Route path="/monitor/logs" componrnt={Logs} />
                             {/* CONFIGURE */}
-                            <Route path="/config/devices" component={Devices} />
-                            <Route path="/config/device/:id" component={Device} />
+                            <Route exact path="/config/devices" component={Devices} />
+                            <Route path="/config/devices/:id" component={Device} />
                             <Route path="/config/stacks" component={Stacks} />
                             <Route path="/config/panels" component={Panels} />
                             <Route path="/config/controllers" component={Controllers} />
+                            {/* CONTROL */}
+                            <Route exact path="/control/shotbox" component={Shotbox} />
+                            <Route path="/control/shotbox/:id" component={ShotboxPanelWrapper} />
+                            <Route path="/control/flow" component={Flow} />
                             {/* CORE */}
                             <Route path="/core/configure" component={Core} />
-                            {/* ROOT */}
+                            {/* REDIRECTS */}
                             <Route exact path="/">
+                              <Redirect to="/monitor/status" />
+                            </Route>
+                            <Route exact path="/monitor">
                               <Redirect to="/monitor/status" />
                             </Route>
                             <Route exact path="/login">

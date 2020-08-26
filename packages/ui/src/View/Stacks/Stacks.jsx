@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { Button, DataTable, DataTableSkeleton } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
 import headers from './stacksHeaders'
 import Stack from './components/Stack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
@@ -73,6 +73,14 @@ const Devices = () => {
   if (result.data) {
     return (
       <div>
+        <InlineNotification
+          style={{ width: '100%' }}
+          lowContrast={true}
+          kind='warning'
+          title='This interface is being overhauled'
+          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
+          hideCloseButton={true}
+        />
         <DataTable
           isSortable
           rows={result.data.stacks}
