@@ -11,7 +11,7 @@ function NavLink ({ label, to, icon }) {
   if (match) {
     return (
       <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem aria-current="page" renderIcon={icon}>
+        <SideNavMenuItem aria-current="page">
           {label}
         </SideNavMenuItem>
       </Link>
@@ -19,7 +19,7 @@ function NavLink ({ label, to, icon }) {
   } else {
     return (
       <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem renderIcon={icon}>
+        <SideNavMenuItem>
           {label}
         </SideNavMenuItem>
       </Link>
