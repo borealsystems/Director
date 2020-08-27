@@ -1,0 +1,9 @@
+{
+  "name": "shotbox",
+  "version": "0.0.0",
+  "description": "Mobile and Desktop shotboxes for DirectorCore",
+  "main": "src/main.js",
+  "repository": "https://phabricator.boreal.systems/source/Director/",
+  "author": "Oliver Herrmann <oliver@monoxane.io>",
+  "license": "MIT"
+}
