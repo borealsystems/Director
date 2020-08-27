@@ -24,32 +24,28 @@ const ShotboxPanel = ({ inline, panel }) => {
         <Row>
           <Column>
             <h1>{panel.label}</h1>
-            <br/>
+            <br/><br/>
           </Column>
         </Row>
       }
       { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
         return (
-          <React.Fragment key={rowIndex}>
-            <Row>
-              { row.map((button, buttonIndex) => {
-                return (
-                  <Column key={buttonIndex}>
-                    <Button onClick={() => {
-                      executeStackMutation({ executeID: button.stack.id })
-                    }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
-                      <>
-                        <h5>{button.stack?.id ? button.stack.panelLabel ? button.stack.panelLabel : button.stack.label : ' '}</h5>
-                        {button.stack?.id ? button.stack.panelLabel ? button.stack.label : ' ' : ' '}<br/>
-                        {button.stack?.id ? `ID: ${button.stack.id}` : ' '}
-                      </>
-                    </Button>
-                  </Column>
-                )
-              })
-              }
-            </Row>
-          </React.Fragment>
+          <Row key={rowIndex}>
+            { row.map((button, buttonIndex) => (
+              <Column key={buttonIndex}>
+                <Button onClick={() => {
+                  executeStackMutation({ executeID: button.stack.id })
+                }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
+                  <>
+                    <h5>{button.stack?.id ? button.stack.panelLabel ? button.stack.panelLabel : button.stack.label : ' '}</h5>
+                    {button.stack?.id ? button.stack.panelLabel ? button.stack.label : ' ' : ' '}<br/>
+                    {button.stack?.id ? `ID: ${button.stack.id}` : ' '}
+                  </>
+                </Button>
+              </Column>
+            ))
+            }
+          </Row>
         )
       })}
       <br/>
