@@ -35,7 +35,7 @@ const ShotboxPanel = ({ inline, panel }) => {
               <Column key={buttonIndex}>
                 <Button onClick={() => {
                   executeStackMutation({ executeID: button.stack.id })
-                }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '6em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
+                }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '8em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
                   <>
                     <h5>{button.stack?.id ? button.stack.panelLabel ? button.stack.panelLabel : button.stack.label : ' '}</h5>
                     {button.stack?.id ? button.stack.panelLabel ? button.stack.label : ' ' : ' '}<br/>
