@@ -151,7 +151,7 @@ const Action = (props) => {
             </div>
           </div>
           <br/>
-          { action.providerFunction &&
+          { action.providerFunction && props.providers.find(provider => provider.id === action.device.provider.id).providerFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters.length > 0 &&
             props.providers.find(provider => provider.id === action.device.provider.id)
               .providerFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
               .map((parameter, index) => {
