@@ -17,7 +17,7 @@ const Contributers = () => {
       <h4>Gold Supporters</h4>
       <p>These people put $25 a month towards making this a reality:</p>
       <UnorderedList>
-        <ListItem>Davis M (Since 2020-08-28</ListItem>
+        <ListItem>Davis M (Since 2020-08-28)</ListItem>
       </UnorderedList>
     </div>
   )
