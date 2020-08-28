@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-  useRouteMatch
+  useRouteMatch,
+  useHistory
 } from 'react-router-dom'
 
 import { useQuery } from 'urql'
@@ -31,7 +31,7 @@ import {
   Column
 } from 'carbon-components-react'
 
-import { View32, Settings24, Keyboard24, User20, TreeViewAlt24, Switcher20 } from '@carbon/icons-react'
+import { View32, Settings24, Keyboard24, User20, TreeViewAlt24, Switcher20, Favorite20 } from '@carbon/icons-react'
 
 import NavLink from './components/NavLink.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
@@ -39,6 +39,7 @@ import GraphQLError from './components/GraphQLError.jsx'
 import Bridges from './Bridges/Bridges.jsx'
 import Core from './Core/Core.jsx'
 import Controllers from './Controllers/Controllers.jsx'
+import Contributers from './Contributers/Contributers.jsx'
 import Devices from './Devices/Devices.jsx'
 import Device from './Device/DeviceWrapper.jsx'
 import Flow from './Flow/Flow.jsx'
@@ -53,6 +54,8 @@ import Status from './Status/Status.jsx'
 const ControlPanel = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
 
+  const history = useHistory()
+
   const [result] = useQuery({
     query: `{ 
       coreConfig {
@@ -65,37 +68,39 @@ const ControlPanel = () => {
   if (!result.error) {
     return (
       <div className="container bx--container02">
-        <Router>
-          <HeaderContainer
-            render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-              <>
-                <Header aria-label="BorealSystems Director">
-                  <SkipToContent />
-                  <HeaderMenuButton
-                    aria-label="Open menu"
-                    onClick={onClickSideNavExpand}
-                    isActive={isSideNavExpanded}
-                  />
-                  <HeaderName href="/" prefix='BorealSystems'>
+        <HeaderContainer
+          render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+            <>
+              <Header aria-label="BorealSystems Director">
+                <SkipToContent />
+                <HeaderMenuButton
+                  aria-label="Open menu"
+                  onClick={onClickSideNavExpand}
+                  isActive={isSideNavExpanded}
+                />
+                <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='BorealSystems'>
                     Director
-                  </HeaderName>
-                  <HeaderNavigation aria-label="IBM [Platform]">
-                    <HeaderMenu aria-label="Development Build" menuLinkName="This is a development build!">
-                      <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                      <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
-                    </HeaderMenu>
-                  </HeaderNavigation>
-                  <HeaderGlobalBar>
-                    { isAuthenticated &&
+                </HeaderName>
+                <HeaderNavigation aria-label="IBM [Platform]">
+                  <HeaderMenu aria-label="Development Build" menuLinkName="This is a development build!">
+                    <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
+                    <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+                  </HeaderMenu>
+                </HeaderNavigation>
+                <HeaderGlobalBar>
+                  { isAuthenticated &&
                       <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
                         <User20 />
                       </HeaderGlobalAction>
-                    }
-                    <HeaderGlobalAction aria-label="Switcher" onClick={() => {}}>
-                      <Switcher20 />
-                    </HeaderGlobalAction>
-                  </HeaderGlobalBar>
-                  { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&
+                  }
+                  <HeaderGlobalAction aria-label="Contributers" onClick={ () => history.push({ pathname: '/contributers' }) }>
+                    <Favorite20 />
+                  </HeaderGlobalAction>
+                  <HeaderGlobalAction aria-label="Switcher" onClick={() => {}}>
+                    <Switcher20 />
+                  </HeaderGlobalAction>
+                </HeaderGlobalBar>
+                { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&
                     <SideNav aria-label="Side navigation" isRail>
                       <SideNavItems>
                         <SideNavMenu renderIcon={View32} title='Monitor'>
@@ -117,17 +122,17 @@ const ControlPanel = () => {
                         </SideNavMenu>
                       </SideNavItems>
                     </SideNav>
-                  }
-                </Header>
-                <Switch>
-                  { result.loading && <Loading /> }
-                  { !isAuthenticated && result.data &&
+                }
+              </Header>
+              <Switch>
+                { result.loading && <Loading /> }
+                { !isAuthenticated && result.data &&
                     <>
                       <Redirect to="/login" />
                       <Login auth={setAuthenticationState}/>
                     </>
-                  }
-                  { isAuthenticated && result.data &&
+                }
+                { isAuthenticated && result.data &&
                     <Content id="main-content">
                       <Grid>
                         <Row>
@@ -148,6 +153,7 @@ const ControlPanel = () => {
                             <Route path="/control/flow" component={Flow} />
                             {/* CORE */}
                             <Route path="/core/configure" component={Core} />
+                            <Route path="/contributers" component={Contributers} />
                             {/* REDIRECTS */}
                             <Route exact path="/">
                               <Redirect to="/monitor/status" />
@@ -162,12 +168,11 @@ const ControlPanel = () => {
                         </Row>
                       </Grid>
                     </Content>
-                  }
-                </Switch>
-              </>
-            )}
-          />
-        </Router>
+                }
+              </Switch>
+            </>
+          )}
+        />
       </div>
     )
   }

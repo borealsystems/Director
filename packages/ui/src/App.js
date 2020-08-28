@@ -4,6 +4,8 @@ import { Provider, createClient } from 'urql'
 import BorealDirector from './View/Index.jsx'
 import './styles.scss'
 
+import { BrowserRouter as Router } from 'react-router-dom'
+
 const client = createClient({
   url: '/graphql',
   requestPolicy: 'network-only',
@@ -12,7 +14,9 @@ const client = createClient({
 
 const App = () => (
   <Provider value={client}>
-    <BorealDirector />
+    <Router>
+      <BorealDirector />
+    </Router>
   </Provider>
 )
 
