@@ -96,14 +96,12 @@ const Devices = () => {
               description="Devices are a piece of hardware or software configured to be controlled by BorealDirector."
               {...getTableContainerProps()}
             >
-              <div>
-                <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                  <TableToolbarContent>
-                    <TableToolbarSearch onChange={onInputChange} />
-                    <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/devices/new' }) }}>New Device</Button>
-                  </TableToolbarContent>
-                </TableToolbar>
-              </div>
+              <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+                <TableToolbarContent>
+                  { rows.length > 0 && <TableToolbarSearch onChange={onInputChange} /> }
+                  <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/devices/new' }) }}>New Device</Button>
+                </TableToolbarContent>
+              </TableToolbar>
               <Table {...getTableProps()}>
                 <TableHead>
                   <TableRow>

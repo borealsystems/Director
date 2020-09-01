@@ -1,54 +1,52 @@
 import React, { useState } from 'react'
-
 import {
-  Switch,
-  Route,
   Redirect,
-  useRouteMatch,
-  useHistory
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch
 } from 'react-router-dom'
 
 import { useQuery } from 'urql'
 
 import {
+  Column,
   Content,
+  Grid,
   Header,
+  HeaderContainer,
+  HeaderGlobalAction,
+  HeaderGlobalBar,
+  HeaderMenu,
   HeaderMenuButton,
+  HeaderMenuItem,
   HeaderName,
   HeaderNavigation,
-  HeaderMenu,
-  HeaderMenuItem,
-  SkipToContent,
+  Loading,
+  Row,
   SideNav,
   SideNavItems,
   SideNavMenu,
-  HeaderContainer,
-  HeaderGlobalBar,
-  HeaderGlobalAction,
-  Loading,
-  Grid,
-  Row,
-  Column
+  SkipToContent
 } from 'carbon-components-react'
-
-import { View32, Settings24, Keyboard24, User20, TreeViewAlt24, Switcher20, Favorite20 } from '@carbon/icons-react'
-
-import NavLink from './components/NavLink.jsx'
-import GraphQLError from './components/GraphQLError.jsx'
+import { Favorite20, Keyboard24, Settings24, Switcher20, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
 
 import Bridges from './Bridges/Bridges.jsx'
-import Core from './Core/Core.jsx'
-import Controllers from './Controllers/Controllers.jsx'
 import Contributers from './Contributers/Contributers.jsx'
-import Devices from './Devices/Devices.jsx'
+import Controllers from './Controllers/Controllers.jsx'
+import Core from './Core/Core.jsx'
 import Device from './Device/DeviceWrapper.jsx'
+import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
-import Logs from './Logs/Logs.jsx'
+import GraphQLError from './components/GraphQLError.jsx'
 import Login from './Login/Login.jsx'
+import Logs from './Logs/Logs.jsx'
+import NavLink from './components/NavLink.jsx'
+import PanelWrapper from './Panels/PanelWrapper.jsx'
 import Panels from './Panels/Panels.jsx'
-import Stacks from './Stacks/Stacks.jsx'
 import Shotbox from './Shotbox/Shotbox.jsx'
 import ShotboxPanelWrapper from './Shotbox/ShotboxPanelWrapper.jsx'
+import Stacks from './Stacks/Stacks.jsx'
 import Status from './Status/Status.jsx'
 
 const ControlPanel = () => {
@@ -144,8 +142,9 @@ const ControlPanel = () => {
                             {/* CONFIGURE */}
                             <Route exact path="/config/devices" component={Devices} />
                             <Route path="/config/devices/:id" component={Device} />
-                            <Route path="/config/stacks" component={Stacks} />
-                            <Route path="/config/panels" component={Panels} />
+                            <Route exact path="/config/stacks" component={Stacks} />
+                            <Route exact path="/config/panels" component={Panels} />
+                            <Route path="/config/panels/:id" component={PanelWrapper} />
                             <Route path="/config/controllers" component={Controllers} />
                             {/* CONTROL */}
                             <Route exact path="/control/shotbox" component={Shotbox} />

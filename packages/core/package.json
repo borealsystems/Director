@@ -36,8 +36,6 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^14.6.0",
-    "keyv": "^4.0.0",
-    "keyv-file": "^0.1.13",
     "level": "^6.0.1",
     "lodash": "^4.17.15",
     "mdns": "^2.5.1",

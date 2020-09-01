@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQuery } from 'urql'
+
 import { InlineLoading, ToastNotification } from 'carbon-components-react'
 
 import GraphQLError from '../components/GraphQLError.jsx'

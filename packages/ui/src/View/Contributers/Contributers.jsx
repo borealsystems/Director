@@ -15,7 +15,7 @@ const Contributers = () => {
       </UnorderedList>
       <br/><br/>
       <h4>Gold Supporters</h4>
-      <p>These people put $25 a month towards making this a reality:</p>
+      <p>These people put $25 or more a month towards making this a reality:</p>
       <UnorderedList>
         <ListItem>Davis M (Since 2020-08-28)</ListItem>
       </UnorderedList>
