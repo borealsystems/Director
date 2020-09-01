@@ -1,0 +1,8 @@
+version: "3.4"
+services:
+  core:
+    build: ./packages/core
+  ui:
+    build: ./packages/ui
+    ports:
+      - 3000:80

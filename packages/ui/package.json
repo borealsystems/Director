@@ -7,7 +7,7 @@
   "author": "Oliver Herrmann",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production src/ui",
+    "build": "webpack --mode production src",
     "dev": "webpack-dev-server"
   },
   "devDependencies": {
@@ -43,6 +43,7 @@
     "carbon-components-react": "^7.9.3",
     "carbon-icons": "^7.0.7",
     "formik": "^2.1.5",
+    "graphql": "^15.3.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
