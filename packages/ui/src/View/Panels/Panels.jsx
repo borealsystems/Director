@@ -1,14 +1,13 @@
 import React from 'react'
-import { useQuery } from 'urql'
-import { Button, DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
+import { useQuery, useMutation } from 'urql'
+import { Button, DataTable, DataTableSkeleton, InlineNotification, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
 import { Add24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import headers from './panelsHeaders'
 import GraphQLError from '../components/GraphQLError.jsx'
-import Panel from './components/Panel.jsx'
-import { panelsGQL } from './queries'
+import { panelsGQL, deletePanelGQL } from './queries'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
+const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Panels = () => {
   const [result] = useQuery({
@@ -17,6 +16,8 @@ const Panels = () => {
   })
 
   const history = useHistory()
+
+  const [, deletePanelMutation] = useMutation(deletePanelGQL)
 
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
@@ -41,13 +42,13 @@ const Panels = () => {
             getHeaderProps,
             getRowProps,
             getTableProps,
-            onInputChange,
             getToolbarProps,
+            onInputChange,
             getTableContainerProps
           }) => (
             <TableContainer
               title="Panels"
-              description="A Panel is the virtual interface you make buttons with stacks on."
+              description="Panels are where you organise and assign Stacks to buttons."
               {...getTableContainerProps()}
             >
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
@@ -56,34 +57,32 @@ const Panels = () => {
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/panels/new' }) }}>New Panel</Button>
                 </TableToolbarContent>
               </TableToolbar>
-              { rows.length > 0 &&
-                <Table {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      <TableHeader />
-                      {headers.map((header, index) => (
-                        <TableHeader key={index} {...getHeaderProps({ header })}>
-                          {header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.length !== 0 && rows.map(row => (
-                      <React.Fragment key={row.id}>
-                        <TableExpandRow {...getRowProps({ row })}>
-                          {row.cells.map(cell => (
-                            <TableCell key={cell.id}>{cell.value}</TableCell>
-                          ))}
-                        </TableExpandRow>
-                        <TableExpandedRow colSpan={headers.length + 1}>
-                          <Panel panels={result.data.panels} panelID={row.id} stacks={result.data.stacks}/>
-                        </TableExpandedRow>
-                      </React.Fragment>
+              <Table {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header, i) => (
+                      <TableHeader key={i} {...getHeaderProps({ header })}>
+                        {header.header}
+                      </TableHeader>
                     ))}
-                  </TableBody>
-                </Table>
-              }
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row, i) => (
+                    <TableRow key={i} {...getRowProps({ row })}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value}</TableCell>
+                      ))}
+                      <TableCell className="bx--table-column-menu">
+                        <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
+                          <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `/config/panels/${row.cells[0].value}` })} />
+                          <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => deletePanelMutation({ id: row.cells[0].value })} />
+                        </OverflowMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </TableContainer>
           )}
         />

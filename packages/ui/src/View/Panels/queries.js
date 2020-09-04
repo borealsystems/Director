@@ -32,14 +32,14 @@ const panelsGQL = `query panels {
   }
 }`
 
-const existingPanelGQL = `query panels {
+const existingPanelGQL = `query panel($id: String) {
   stacks {
     id
     label
     panelLabel
     description
   }
-  panels {
+  panel(id: $id) {
     id
     label
     description
@@ -76,8 +76,8 @@ const newPanelGQL = `query panels {
 }`
 
 const deletePanelGQL = `
-  mutation deletePanel($deleteID: String) {
-    deletePanel(id: $deleteID)
+  mutation deletePanel($id: String) {
+    deletePanel(id: $id)
   }
 `
 
