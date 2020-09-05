@@ -4,7 +4,6 @@ import { initProviders, cleanupProviders } from './providers'
 import { initStacks } from './stacks'
 import { initPanels } from './panels'
 import { initExpress, cleanupExpress } from './network/express'
-import { initMDNS } from './network/mdns'
 import { initBridges } from './bridges'
 import { core } from './db'
 
@@ -12,7 +11,6 @@ import fs from 'fs'
 import os from 'os'
 
 initExpress()
-initMDNS()
 initBridges()
 initProviders()
   .then(() => initDevices())

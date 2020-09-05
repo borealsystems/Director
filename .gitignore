@@ -1,8 +1,8 @@
-director.db
 yarn-error.log
 node_modules
 build
 dist
 .DS_Store
 packages/core/db/*
+database/
 logs.txt
