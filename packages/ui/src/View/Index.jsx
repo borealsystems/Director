@@ -27,14 +27,16 @@ import {
   SideNav,
   SideNavItems,
   SideNavMenu,
-  SkipToContent
+  SkipToContent,
+  TooltipDefinition
 } from 'carbon-components-react'
-import { Favorite20, Keyboard24, Settings24, Switcher20, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
+import { Favorite20, Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
 
 import Bridges from './Bridges/Bridges.jsx'
 import Contributers from './Contributers/Contributers.jsx'
 import Controllers from './Controllers/Controllers.jsx'
 import Core from './Core/Core.jsx'
+import Clock from './components/Clock.jsx'
 import Device from './Device/DeviceWrapper.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
@@ -58,6 +60,7 @@ const ControlPanel = () => {
     query: `{ 
       coreConfig {
         label
+        timezone
       }
      }`
   })
@@ -86,6 +89,17 @@ const ControlPanel = () => {
                   </HeaderMenu>
                 </HeaderNavigation>
                 <HeaderGlobalBar>
+                  { result.data &&
+                    <HeaderGlobalAction aria-label="Clock" style={{ width: '10em', color: 'white' }}onClick={ () => {} }>
+                      <TooltipDefinition
+                        tooltipText="Time synced to Core"
+                        align='center'
+                        style={{ borderBottom: 'none' }}
+                      >
+                        <Clock tz={result.data.timezone} />
+                      </TooltipDefinition>
+                    </HeaderGlobalAction>
+                  }
                   { isAuthenticated &&
                       <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
                         <User20 />
@@ -93,9 +107,6 @@ const ControlPanel = () => {
                   }
                   <HeaderGlobalAction aria-label="Contributers" onClick={ () => history.push({ pathname: '/contributers' }) }>
                     <Favorite20 />
-                  </HeaderGlobalAction>
-                  <HeaderGlobalAction aria-label="Switcher" onClick={() => {}}>
-                    <Switcher20 />
                   </HeaderGlobalAction>
                 </HeaderGlobalBar>
                 { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&

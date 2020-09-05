@@ -25,6 +25,9 @@ const coreConfigType = new GraphQLInputObjectType({
     },
     helpdeskURI: {
       type: GraphQLString
+    },
+    timezone: {
+      type: GraphQLString
     }
   }
 })

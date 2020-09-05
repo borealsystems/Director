@@ -58,7 +58,9 @@ var schema = new GraphQLSchema({
         description: 'Return Core Configuration Options',
         type: coreConfigType,
         resolve: () => {
-          return core.get('config')
+          return new Promise((resolve, reject) => {
+            core.get('config').then(config => { resolve({ ...config, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }) })
+          })
         }
       },
 
