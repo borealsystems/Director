@@ -2,6 +2,8 @@ version: "3.4"
 services:
   core:
     build: ./packages/core
+    volumes:
+      - ./database:/borealsystems/director/core/db
   ui:
     build: ./packages/ui
     ports:
