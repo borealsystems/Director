@@ -28,6 +28,9 @@ const coreConfigType = new GraphQLObjectType({
     },
     timezone: {
       type: GraphQLString
+    },
+    systemNotes: {
+      type: GraphQLString
     }
   }
 })

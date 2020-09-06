@@ -3,28 +3,28 @@ import {
   Link,
   useRouteMatch
 } from 'react-router-dom'
-import { SideNavMenuItem } from 'carbon-components-react/lib/components/UIShell'
+import { SideNavLink } from 'carbon-components-react/lib/components/UIShell'
 
 // eslint-disable-next-line react/prop-types
-function NavLink ({ label, to, icon }) {
+function CustomSideNavLink ({ label, to, renderIcon }) {
   const match = useRouteMatch(to)
   if (match) {
     return (
       <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem aria-current="page">
+        <SideNavLink aria-current='page' renderIcon={renderIcon}>
           {label}
-        </SideNavMenuItem>
+        </SideNavLink>
       </Link>
     )
   } else {
     return (
       <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem>
+        <SideNavLink renderIcon={renderIcon}>
           {label}
-        </SideNavMenuItem>
+        </SideNavLink>
       </Link>
     )
   }
 }
 
-export default NavLink
+export default CustomSideNavLink

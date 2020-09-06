@@ -10,7 +10,6 @@ function Clock ({ tz }) {
     }, 1000)
   })
   return (
-    // <h5>{time.getHours()}:{(time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes())}:{(time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds())} {time.getTimezoneOffset() / 60}</h5>
     <p>{time.toLocaleTimeString('en-US', { timeZone: tz })}</p>
   )
 }

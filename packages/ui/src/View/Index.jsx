@@ -30,26 +30,24 @@ import {
   SkipToContent,
   TooltipDefinition
 } from 'carbon-components-react'
-import { Favorite20, Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
+import { Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
 
-import Bridges from './Bridges/Bridges.jsx'
-import Contributers from './Contributers/Contributers.jsx'
 import Controllers from './Controllers/Controllers.jsx'
 import Core from './Core/Core.jsx'
 import Clock from './components/Clock.jsx'
+import Dashboard from './Dashboard/Dashboard.jsx'
 import Device from './Device/DeviceWrapper.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
 import Login from './Login/Login.jsx'
-import Logs from './Logs/Logs.jsx'
-import NavLink from './components/NavLink.jsx'
 import PanelWrapper from './Panels/PanelWrapper.jsx'
 import Panels from './Panels/Panels.jsx'
 import Shotbox from './Shotbox/Shotbox.jsx'
 import ShotboxPanelWrapper from './Shotbox/ShotboxPanelWrapper.jsx'
+import SideNavMenuItem from './components/SideNavMenuItem.jsx'
+import SideNavLink from './components/SideNavLink.jsx'
 import Stacks from './Stacks/Stacks.jsx'
-import Status from './Status/Status.jsx'
 
 const ControlPanel = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
@@ -82,21 +80,23 @@ const ControlPanel = () => {
                 <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='BorealSystems'>
                     Director
                 </HeaderName>
-                <HeaderNavigation aria-label="IBM [Platform]">
-                  <HeaderMenu aria-label="Development Build" menuLinkName="This is a development build!">
-                    <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                    <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
-                  </HeaderMenu>
+                <HeaderNavigation aria-label="BorealSystems Director">
+                  { result.data &&
+                    <HeaderMenu aria-label="Development Build" menuLinkName={`This is a development build on ${result.data.coreConfig.label}`}>
+                      <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
+                      <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+                    </HeaderMenu>
+                  }
                 </HeaderNavigation>
                 <HeaderGlobalBar>
                   { result.data &&
-                    <HeaderGlobalAction aria-label="Clock" style={{ width: '10em', color: 'white' }}onClick={ () => {} }>
+                    <HeaderGlobalAction aria-label="Clock" style={{ width: '10em' }} onClick={ () => {} }>
                       <TooltipDefinition
                         tooltipText="Time synced to Core"
                         align='center'
                         style={{ borderBottom: 'none' }}
                       >
-                        <Clock tz={result.data.timezone} />
+                        <Clock tz={result.data.timezone} style={{ borderBottom: 'none' }} />
                       </TooltipDefinition>
                     </HeaderGlobalAction>
                   }
@@ -105,29 +105,22 @@ const ControlPanel = () => {
                         <User20 />
                       </HeaderGlobalAction>
                   }
-                  <HeaderGlobalAction aria-label="Contributers" onClick={ () => history.push({ pathname: '/contributers' }) }>
-                    <Favorite20 />
-                  </HeaderGlobalAction>
                 </HeaderGlobalBar>
                 { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&
                     <SideNav aria-label="Side navigation" isRail>
                       <SideNavItems>
-                        <SideNavMenu renderIcon={View32} title='Monitor'>
-                          <NavLink to="/monitor/status" label="Status"/>
-                          <NavLink to="/monitor/bridges" label="Bridges"/>
-                          <NavLink to="/monitor/logs" label="Logs"/>
-                        </SideNavMenu>
+                        <SideNavLink to="/dashboard" label="Dashboard" renderIcon={View32} />
                         <SideNavMenu renderIcon={Settings24} title="Configure">
-                          <NavLink to="/config/devices" label="Devices"/>
-                          <NavLink to="/config/stacks" label="Stacks"/>
-                          <NavLink to="/config/panels" label="Panels"/>
-                          <NavLink to="/config/controllers" label="Controllers"/>
+                          <SideNavMenuItem to="/config/devices" label="Devices"/>
+                          <SideNavMenuItem to="/config/stacks" label="Stacks"/>
+                          <SideNavMenuItem to="/config/panels" label="Panels"/>
+                          <SideNavMenuItem to="/config/controllers" label="Controllers"/>
                         </SideNavMenu>
                         <SideNavMenu renderIcon={Keyboard24} title="Control">
-                          <NavLink to="/control/shotbox" label="Shotbox"/>
+                          <SideNavMenuItem to="/control/shotbox" label="Shotbox"/>
                         </SideNavMenu>
                         <SideNavMenu renderIcon={TreeViewAlt24} title="Core">
-                          <NavLink to="/core/configure" label="Configuration"/>
+                          <SideNavMenuItem to="/core/configure" label="Configuration"/>
                         </SideNavMenu>
                       </SideNavItems>
                     </SideNav>
@@ -143,13 +136,11 @@ const ControlPanel = () => {
                 }
                 { isAuthenticated && result.data &&
                     <Content id="main-content">
-                      <Grid>
+                      <Grid style={{ maxWidth: useRouteMatch('/dashboard') ? '200rem' : '90rem' }}>
                         <Row>
-                          <Column lg={{ offset: 1, span: 10 }}>
+                          <Column>
                             {/* MONITOR */}
-                            <Route path="/monitor/status" component={Status} />
-                            <Route path="/monitor/bridges" component={Bridges} />
-                            <Route path="/monitor/logs" componrnt={Logs} />
+                            <Route path="/dashboard" component={Dashboard} />
                             {/* CONFIGURE */}
                             <Route exact path="/config/devices" component={Devices} />
                             <Route path="/config/devices/:id" component={Device} />
@@ -163,16 +154,12 @@ const ControlPanel = () => {
                             <Route path="/control/flow" component={Flow} />
                             {/* CORE */}
                             <Route path="/core/configure" component={Core} />
-                            <Route path="/contributers" component={Contributers} />
                             {/* REDIRECTS */}
                             <Route exact path="/">
-                              <Redirect to="/monitor/status" />
-                            </Route>
-                            <Route exact path="/monitor">
-                              <Redirect to="/monitor/status" />
+                              <Redirect to="/dashboard" />
                             </Route>
                             <Route exact path="/login">
-                              <Redirect to="/monitor/status" />
+                              <Redirect to="/dashboard" />
                             </Route>
                           </Column>
                         </Row>

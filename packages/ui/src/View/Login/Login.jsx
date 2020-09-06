@@ -9,8 +9,6 @@ import {
   HeaderName,
   SkipToContent,
   HeaderContainer,
-  HeaderGlobalBar,
-  HeaderGlobalAction,
   Loading,
   TextInput,
   Button,
@@ -20,7 +18,7 @@ import {
   Column
 } from 'carbon-components-react'
 
-import { Switcher20, ArrowRight20 } from '@carbon/icons-react'
+import { ArrowRight20 } from '@carbon/icons-react'
 
 import GraphQLError from '../components/GraphQLError.jsx'
 
@@ -55,11 +53,6 @@ const Login = (props) => {
                 <HeaderName href="/" prefix='BorealSystems'>
                   Director
                 </HeaderName>
-                <HeaderGlobalBar>
-                  <HeaderGlobalAction aria-label="Switcher" onClick={() => {}}>
-                    <Switcher20 />
-                  </HeaderGlobalAction>
-                </HeaderGlobalBar>
               </Header>
               <Content id="main-content">
                 <Grid>
