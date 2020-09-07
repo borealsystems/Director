@@ -20,21 +20,21 @@ const Dashboard = () => {
       <Row>
         <Column lg={{ span: 6 }}>
           <Tile style={{ height: tileHeight }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>System Information</h5><br/>
+            <h5>System Information</h5><br/>
             <SystemNotes />
           </Tile>
         </Column>
         <Column>
           <Tile style={{ height: tileHeight }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>Quick Links</h5><br/>
-            <p style={{ fontSize: '.875rem' }}>
+            <h5>Quick Links</h5><br/>
+            <p>
                 You can configure your quick links on your user profile that doesn&apos;t exist yet. <Link href='https://phabricator.boreal.systems/T7'>T7.</Link>
             </p>
           </Tile>
         </Column>
         <Column>
           <Tile style={{ height: tileHeight }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>Resource summary</h5>
+            <h5>Resource summary</h5>
             <ResourceSummary/>
           </Tile>
         </Column>
@@ -43,21 +43,21 @@ const Dashboard = () => {
       <Row>
         <Column>
           <Tile style={{ height: tileHeight }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>System Status</h5>
+            <h5>System Status</h5>
             <Status />
           </Tile>
         </Column>
         <Column lg={{ span: 6 }}>
           <Tile style={{ height: tileHeight, overflowY: 'scroll' }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>Logs <Popup16 onClick={ () => { }} style={{ float: 'right' }} /></h5> {/* TODO: Make Modal */}
+            <h5>Logs <Popup16 onClick={ () => { }} style={{ float: 'right' }} /></h5> {/* TODO: Make Modal */}
             <br />
             <Logs />
           </Tile>
         </Column>
         <Column>
           <Tile style={{ height: tileHeight }}>
-            <h5 style={{ fontSize: '.875rem', fontWeight: 600 }}>About Director</h5><br/>
-            <p style={{ fontSize: '.875rem' }}>
+            <h5>About Director</h5><br/>
+            <p>
                 Director is a FOSS project from <Link href='https://boreal.system'>BorealSystems</Link>.
               <br/><br/> We are very greatful for everyones support during ongoing development, in particular we would like to thank our contributers,
                 both <Link href='https://phabricator.boreal.systems/project/members/1/'>Code/Design</Link> and <Link href='https://www.patreon.com/borealsystems?fan_landing=true'>Financial</Link>,

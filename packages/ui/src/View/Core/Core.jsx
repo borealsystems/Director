@@ -10,9 +10,9 @@ const Core = () => {
         label
         port
         address
-        mdns
         helpdeskURI
         helpdeskVisable
+        systemNotes
       }
      }`
   })
@@ -25,9 +25,9 @@ const Core = () => {
         label
         port
         address
-        mdns
         helpdeskURI
         helpdeskVisable
+        systemNotes
       }
     }`
 
