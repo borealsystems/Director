@@ -2,94 +2,92 @@ import { devices } from '../db'
 import log from '../utils/log'
 import shortid from 'shortid'
 import { providers } from '../providers'
+import STATUS from '../utils/statusEnum'
 
 const deviceInstance = {}
 
 const initDevices = () => {
   return new Promise((resolve, reject) => {
     log('info', 'core/lib/devices', 'Loading Devices')
-    devices.get('0', (err, value) => {
-      if (err) {
-        if (err.notFound) {
-          devices.put('0', {
-            id: '0',
-            label: 'BorealSystems Director',
-            location: 'The Void',
-            provider: { id: 'BorealSystems-DirectorInternal', label: 'BorealDirector' },
-            enabled: true,
-            status: 'OK',
-            description: 'The Director Core'
-          }, err => {
-            if (err) log('error', 'core/lib/devices/index.js/initDevices', err)
-            devices.get('0', function (err, value, key) {
-              if (err) {
-              }
-              instantiateDevice('0')
-            })
-          })
-          return
+    devices.updateOne(
+      { id: '0' },
+      {
+        $set: {
+          core: process.env.DIRECTOR_CORE_CONFIG_LABEL,
+          realm: 'root',
+          label: 'BorealSystems Director',
+          location: 'The Void',
+          provider: { id: 'BorealSystems-DirectorInternal', label: 'BorealDirector' },
+          enabled: true,
+          status: STATUS.UNKNOWN,
+          description: 'The Director Core'
         }
-        log('error', 'core/lib/devices', err)
-      } else {
-        devices.createReadStream()
-          .on('data', function (data) {
-            instantiateDevice(data.value.id)
-          })
-          .on('error', function (err) {
-            log('error', 'core/lib/devices/index.js/initDevices', err)
-          })
-      }
-    })
+      },
+      { upsert: true }
+    )
+      .then(() => {
+        devices.find({ core: process.env.DIRECTOR_CORE_CONFIG_LABEL }).forEach(device => {
+          instantiateDevice(device.id)
+        })
+      })
   })
 }
 
 const cleanupDevices = () => {
-  Object.keys(deviceInstance).forEach(device => device.instance.destroy())
+  Object.keys(deviceInstance).forEach(deviceInstance => deviceInstance.destroy())
 }
 
 const updateDevice = (_device) => {
-  switch (_device.id !== undefined) {
-    case true: {
-      devices.put(_device.id, _device, () => {
-        instantiateDevice(_device.id)
+  let id
+  return new Promise((resolve, reject) => {
+    id = _device.id ? _device.id : shortid.generate()
+    devices.updateOne(
+      { id: id },
+      {
+        $set: {
+          core: _device.core ? _device.core : process.env.DIRECTOR_CORE_CONFIG_LABEL,
+          realm: _device.realm ? _device.realm : 'root',
+          id: id,
+          ..._device
+        }
+      },
+      { upsert: true }
+    )
+      .then(() => {
+        return devices.findOne({ id: id })
       })
-      log('info', 'core/lib/devices', `Updated ${_device.id} (${_device.label})`)
-      return _device
-    }
-    case false: {
-      const device = { id: shortid.generate(), ..._device }
-      devices.put(device.id, device, () => {
+      .then(device => {
         instantiateDevice(device.id)
+        log('info', 'core/lib/devices', `Updated ${device.id} (${device.label})`)
+        resolve(device)
       })
-      log('info', 'core/lib/devices', `Created ${device.id} (${device.label})`)
-      return device
-    }
-  }
+      .catch(e => reject(e))
+  })
 }
 
 const instantiateDevice = (_id) => {
-  devices.get(_id, (err, value) => {
-    if (err) log('error', 'core/lib/devices/index.js/instantiatetDevice', err)
-    const provider = providers.find((provider) => provider.id === value.provider.id)
+  devices.findOne({ id: _id }).then(device => {
+    const provider = providers.find((provider) => provider.id === device.provider.id)
     if (deviceInstance[_id]) {
       deviceInstance[_id].destroy()
       deviceInstance[_id].init()
     } else {
-      deviceInstance[_id] = new provider.Construct(value)
+      deviceInstance[_id] = new provider.Construct(device)
       deviceInstance[_id].init()
     }
-    log('info', 'core/lib/devices', `Instantiated ${_id} (${value.label}) with ${value.provider.label}`)
+    log('info', 'core/lib/devices', `Instantiated ${_id} (${device.label}) with ${device.provider.label}`)
   })
 }
 
 const deleteDevice = (_id) => {
   if (_id === '0') {
-    log('info', 'core/lib/devices', 'You Can\'t Delete BorealDirector from BorealDirector')
+    log('info', 'core/lib/devices', 'You Can\'t Delete Director from Director')
     return 'error'
   } else {
-    log('info', 'core/lib/devices', `Deleted Device ${_id}`)
     deviceInstance[_id].destroy()
-    devices.del(_id)
+    devices.deleteOne({ id: _id })
+    log('info', 'core/lib/devices', `Deleted Device ${_id}`)
+    return STATUS.OK
   }
 }
 

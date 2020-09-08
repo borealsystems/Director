@@ -65,10 +65,10 @@ query deviceAndProviders($id: String) {
 }
 `
 
-const deviceUpdateMutationGQL = `mutation updateDevice($device: deviceUpdate) {
-  updateDevice(device: $device) {
+const deviceMutationGQL = `mutation device($device: deviceUpdate) {
+  device(device: $device) {
     id
   }
 }`
 
-export { newDeviceQuery, existingDeviceQuery, deviceUpdateMutationGQL }
+export { newDeviceQuery, existingDeviceQuery, deviceMutationGQL }

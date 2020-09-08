@@ -49,7 +49,7 @@ var schema = new GraphQLSchema({
           GraphQLString
         ),
         resolve: () => {
-          return core.get('status')
+          return ['success', 'All Systems Go', 'Director is operating as intended and is not reporting any errors.']
         }
       },
 
@@ -59,7 +59,11 @@ var schema = new GraphQLSchema({
         type: coreConfigType,
         resolve: () => {
           return new Promise((resolve, reject) => {
-            core.get('config').then(config => { resolve({ ...config, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }) })
+            resolve({
+              label: process.env.DIRECTOR_CORE_CONFIG_LABEL,
+              systemNotes: 'Welcome to Director!\n\nAdministrators can edit this note via the Core Configuration page.\n\nYou should probably include some useful notes here, like who manages and administers this system, and a link to your internal helpdesk or ticketing system for users having problems.',
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            })
           })
         }
       },
@@ -85,17 +89,8 @@ var schema = new GraphQLSchema({
         name: 'Get Devices',
         description: 'Returns all configured devices',
         type: new GraphQLList(deviceType),
-        resolve: () => {
-          return new Promise((resolve, reject) => {
-            const deviceArray = []
-            devices.createValueStream()
-              .on('data', function (data) {
-                deviceArray.push(data)
-              })
-              .on('end', function () {
-                resolve(deviceArray)
-              })
-          })
+        resolve: async () => {
+          return await devices.find({}).toArray()
         }
       },
 
@@ -115,17 +110,8 @@ var schema = new GraphQLSchema({
         name: 'Get Stacks',
         description: 'Returns all configured stacks',
         type: new GraphQLList(stackType),
-        resolve: () => {
-          return new Promise((resolve, reject) => {
-            const stacksArray = []
-            stacks.createValueStream()
-              .on('data', function (data) {
-                stacksArray.push(data)
-              })
-              .on('end', function () {
-                resolve(stacksArray)
-              })
-          })
+        resolve: async () => {
+          return await stacks.find({}).toArray()
         }
       },
 
@@ -133,17 +119,8 @@ var schema = new GraphQLSchema({
         name: 'Get Panels',
         description: 'Returns all configured panels',
         type: new GraphQLList(panelType),
-        resolve: () => {
-          return new Promise((resolve, reject) => {
-            const panelsArray = []
-            panels.createValueStream()
-              .on('data', function (data) {
-                panelsArray.push(data)
-              })
-              .on('end', function () {
-                resolve(panelsArray)
-              })
-          })
+        resolve: async () => {
+          return await panels.find({}).toArray()
         }
       },
 
@@ -156,8 +133,9 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           return new Promise((resolve, reject) => {
-            panels.get(args.id)
+            panels.findOne({ id: args.id })
               .then(panel => resolve(panel))
+              .catch(e => reject(e))
           })
         }
       },
@@ -173,17 +151,8 @@ var schema = new GraphQLSchema({
         name: 'Get Controllers',
         description: 'Returns all controllers, both online and offline',
         type: new GraphQLList(controllerType),
-        resolve: () => {
-          return new Promise((resolve, reject) => {
-            const controllersArray = []
-            controllers.createValueStream()
-              .on('data', function (data) {
-                controllersArray.push(data)
-              })
-              .on('end', function () {
-                resolve(controllersArray)
-              })
-          })
+        resolve: async () => {
+          return await controllers.find({}).toArray()
         }
       }
     }
@@ -192,7 +161,7 @@ var schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'Mutations',
     fields: {
-      updateDevice: {
+      device: {
         name: 'Create or Modify a Device',
         description: 'If ID is given, modifies existing device, if not it creates new and returns ID',
         type: deviceType,

@@ -5,11 +5,11 @@ import { omit } from 'lodash'
 import { ArrowRight24, Exit24, ArrowLeft24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 
-import { deviceUpdateMutationGQL } from './queries'
+import { deviceMutationGQL } from './queries'
 
 const Device = ({ id, result }) => {
   const isNew = id === 'new'
-  const [deviceUpdateMutationResult, deviceUpdateMutation] = useMutation(deviceUpdateMutationGQL)
+  const [deviceUpdateMutationResult, deviceUpdateMutation] = useMutation(deviceMutationGQL)
 
   const initialDevice = isNew ? {} : result.data.device
   const initialConfiguration = {}

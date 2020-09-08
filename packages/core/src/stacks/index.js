@@ -1,4 +1,5 @@
 import log from '../utils/log'
+import status from '../utils/statusEnum'
 import shortid from 'shortid'
 import { stacks } from '../db'
 import { deviceInstance } from '../devices'
@@ -10,27 +11,43 @@ const initStacks = () => {
 }
 
 const updateStack = (_stack) => {
-  const stack = { id: !_stack.id ? shortid.generate() : _stack.id, ..._stack }
-  stacks.put(stack.id, stack)
-  log('info', 'core/lib/stacks', `${!stack.id ? 'Creating' : 'Updating'} ${stack.id} (${stack.label})`)
-  return _stack
+  return new Promise((resolve, reject) => {
+    const id = _stack.id ? _stack.id : shortid.generate()
+    stacks.updateOne(
+      { id: id },
+      {
+        $set: {
+          core: _stack.core ? _stack.core : process.env.DIRECTOR_CORE_CONFIG_LABEL,
+          realm: _stack.realm ? _stack.realm : 'root',
+          id: id,
+          ..._stack
+        }
+      },
+      { upsert: true }
+    )
+      .then(() => {
+        return stacks.findOne({ id: id })
+      })
+      .then(stack => {
+        log('info', 'core/lib/stacks', `${_stack.id ? 'Updated' : 'Created'} ${stack.id} (${stack.label})`)
+        resolve(stack)
+      })
+      .catch(e => reject(e))
+  })
 }
 
 const deleteStack = (_id) => {
   return new Promise((resolve, reject) => {
-    stacks.get(_id)
-      .then((value, err) => {
-        if (err) log('error', 'core/lib/stacks', err)
-        return value
+    stacks.findOne({ id: _id })
+      .then(stack => {
+        stacks.deleteOne({ id: _id })
+        return stack
       })
-      .then(value => {
-        stacks.del(_id)
-        return value
+      .then(stack => {
+        log('info', 'core/lib/stacks', `Deleted Stack ${stack.id} (${stack.label})`)
+        resolve(status.OK)
       })
-      .then(value => {
-        log('info', 'core/lib/stacks', `Deleted Stack ${value.id} (${value.label})`)
-        resolve(200)
-      })
+      .catch(e => reject(e))
   })
 }
 
@@ -38,15 +55,14 @@ const deleteStack = (_id) => {
 // TODO: Deal with offline, inactive, and deleted devices
 const executeStack = (_id) => {
   return new Promise((resolve, reject) => {
-    stacks.get(_id)
+    stacks.findOne({ id: _id })
       .then(stack => {
         stack.actions.map(action => {
           deviceInstance[action.device.id].interface(action)
         })
-        log('info', 'core/lib/stacks', `Executed Stack: ${_id} (${stack.label})`)
+        resolve(status.OK)
       })
-      .then(() => resolve(200))
-      .catch(err => reject(err))
+      .catch(e => reject(e))
   })
 }
 

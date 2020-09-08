@@ -1,47 +1,24 @@
 import log from './utils/log'
-import level from 'level'
-import path from 'path'
+import { MongoClient } from 'mongodb'
 
-log('info', 'core/lib/db', 'Loading Databases')
+const client = new MongoClient('mongodb://127.0.0.1:27017?retryWrites=true&w=majority', { useUnifiedTopology: true })
 
-const core = level(path.join(__dirname, '../db/core'), { createIfMissing: true, valueEncoding: 'json' }, error => {
-  if (error) {
-    log('error', 'core/lib/db', error)
-  } else {
-    log('info', 'core/lib/db', 'Loaded DB: Core')
-  }
-})
+let core
+let devices
+let stacks
+let panels
+let controllers
 
-const devices = level(path.join(__dirname, '../db/devices'), { createIfMissing: true, valueEncoding: 'json' }, err => {
-  if (err) {
-    log('error', 'core/lib/db', err)
-  } else {
-    log('info', 'core/lib/db', 'Loaded DB: Devices')
-  }
-})
+const initDB = async () => {
+  log('info', 'core/lib/db', 'Loading Database')
+  await client.connect()
+  const database = client.db('DirectorCore')
 
-const stacks = level(path.join(__dirname, '../db/stacks'), { createIfMissing: true, valueEncoding: 'json' }, err => {
-  if (err) {
-    log('error', 'core/lib/db', err)
-  } else {
-    log('info', 'core/lib/db', 'Loaded DB: Stacks')
-  }
-})
+  core = database.collection('core')
+  devices = database.collection('devices')
+  stacks = database.collection('stacks')
+  panels = database.collection('panels')
+  controllers = database.collection('controllers')
+}
 
-const panels = level(path.join(__dirname, '../db/panels'), { createIfMissing: true, valueEncoding: 'json' }, err => {
-  if (err) {
-    log('error', 'core/lib/db', err)
-  } else {
-    log('info', 'core/lib/db', 'Loaded DB: Panels')
-  }
-})
-
-const controllers = level(path.join(__dirname, '../db/controllers'), { createIfMissing: true, valueEncoding: 'json' }, err => {
-  if (err) {
-    log('error', 'core/lib/db', err)
-  } else {
-    log('info', 'core/lib/db', 'Loaded DB: Controllers')
-  }
-})
-
-export { core, devices, stacks, panels, controllers }
+export { core, devices, stacks, panels, controllers, initDB }
