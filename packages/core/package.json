@@ -9,7 +9,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "prod": "node dist/main.js",
-    "dev": "NODE_ENV=development DIRECTOR_CORE_CONFIG_LABEL=delta nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
+    "dev": "NODE_ENV=development DIRECTOR_CORE_CONFIG_LABEL=Director DIRECTOR_CORE_DB_HOST=localhost DIRECTOR_CORE_DB_DATABASE=DirectorCore DIRECTOR_CORE_DB_USERNAME=Director DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
