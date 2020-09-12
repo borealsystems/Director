@@ -9,27 +9,9 @@ const deviceInstance = {}
 const initDevices = () => {
   return new Promise((resolve, reject) => {
     log('info', 'core/lib/devices', 'Loading Devices')
-    devices.updateOne(
-      { id: '0' },
-      {
-        $set: {
-          core: process.env.DIRECTOR_CORE_CONFIG_LABEL,
-          realm: 'root',
-          label: 'BorealSystems Director',
-          location: 'The Void',
-          provider: { id: 'BorealSystems-DirectorInternal', label: 'BorealDirector' },
-          enabled: true,
-          status: STATUS.UNKNOWN,
-          description: 'The Director Core'
-        }
-      },
-      { upsert: true }
-    )
-      .then(() => {
-        devices.find({ core: process.env.DIRECTOR_CORE_CONFIG_LABEL }).forEach(device => {
-          instantiateDevice(device.id)
-        })
-      })
+    devices.find({ core: process.env.DIRECTOR_CORE_ID }).forEach(device => {
+      instantiateDevice(device.id)
+    })
   })
 }
 
@@ -45,7 +27,7 @@ const updateDevice = (_device) => {
       { id: id },
       {
         $set: {
-          core: _device.core ? _device.core : process.env.DIRECTOR_CORE_CONFIG_LABEL,
+          core: _device.core ? _device.core : process.env.DIRECTOR_CORE_ID,
           realm: _device.realm ? _device.realm : 'root',
           id: id,
           ..._device

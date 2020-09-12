@@ -4,12 +4,6 @@ import shortid from 'shortid'
 import { stacks } from '../db'
 import { deviceInstance } from '../devices'
 
-const initStacks = () => {
-  return new Promise((resolve, reject) => {
-    log('info', 'core/lib/stacks', 'Initialised Stacks')
-  })
-}
-
 const updateStack = (_stack) => {
   return new Promise((resolve, reject) => {
     const id = _stack.id ? _stack.id : shortid.generate()
@@ -66,4 +60,4 @@ const executeStack = (_id) => {
   })
 }
 
-export { updateStack, deleteStack, stacks, initStacks, executeStack }
+export { updateStack, deleteStack, stacks, executeStack }

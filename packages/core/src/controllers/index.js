@@ -2,13 +2,6 @@ import { controllers } from '../db'
 import log from '../utils/log'
 import { pubsub } from '../network/graphql/schema'
 
-const initControllers = () => {
-  return new Promise((resolve, reject) => {
-    log('info', 'core/lib/controllers', 'Initialising Controllers')
-    resolve()
-  })
-}
-
 const registerController = (_controller) => {
   return new Promise((resolve, reject) => {
     const id = `${_controller.manufacturer}-${_controller.model}-${_controller.serial}`
@@ -60,4 +53,4 @@ const updateController = (_controller) => {
   })
 }
 
-export { initControllers, registerController, updateController }
+export { registerController, updateController }

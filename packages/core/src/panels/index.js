@@ -2,15 +2,7 @@ import { panels } from '../db'
 import log from '../utils/log'
 import shortid from 'shortid'
 
-const initPanels = () => {
-  return new Promise((resolve, reject) => {
-    log('info', 'core/lib/panels', 'Initialising Panels')
-    resolve()
-  })
-}
-
-const cleanupPanels = () => {
-}
+const cleanupPanels = () => {}
 
 const updatePanel = (_panel) => {
   return new Promise((resolve, reject) => {
@@ -53,4 +45,4 @@ const deletePanel = (_id) => {
   })
 }
 
-export { updatePanel, deletePanel, panels, initPanels, cleanupPanels }
+export { updatePanel, deletePanel, panels, cleanupPanels }
