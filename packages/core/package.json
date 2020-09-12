@@ -9,7 +9,8 @@
   "scripts": {
     "build": "babel src -d dist",
     "prod": "node dist/main.js",
-    "dev": "NODE_ENV=development DIRECTOR_CORE_CONFIG_LABEL=Director DIRECTOR_CORE_DB_HOST=localhost DIRECTOR_CORE_DB_DATABASE=DirectorCore DIRECTOR_CORE_DB_USERNAME=Director DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
+    "init": "babel-node src/init.js",
+    "dev": "NODE_ENV=development nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -32,9 +33,8 @@
     "apollo-server": "^2.16.0",
     "babel-preset-es2015": "^6.24.1",
     "chalk": "^3.0.0",
-    "cors": "^2.8.5",
     "debug": "^4.1.1",
-    "express": "^4.17.1",
+    "dotenv": "^8.2.0",
     "express-graphql": "^0.9.0",
     "graphql": "^14.6.0",
     "lodash": "^4.17.15",
