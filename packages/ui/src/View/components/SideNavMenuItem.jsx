@@ -7,7 +7,7 @@ import { SideNavMenuItem } from 'carbon-components-react/lib/components/UIShell'
 
 // eslint-disable-next-line react/prop-types
 function NavLink ({ label, to, renderIcon }) {
-  const match = useRouteMatch(to)
+  const match = useRouteMatch({ path: to, exact: true })
   if (match) {
     return (
       <Link style={{ textDecoration: 'none' }} to={to}>

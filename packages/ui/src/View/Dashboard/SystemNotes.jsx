@@ -9,8 +9,12 @@ import GraphQLError from '../components/GraphQLError.jsx'
 const SystemNotes = () => {
   const [result] = useQuery({
     query: `query systemNotes {
-      coreConfig {
+      cores {
+        id
         systemNotes
+      }
+      thisCore {
+        id
       }
     }`,
     pollInterval: 10000
@@ -24,7 +28,7 @@ const SystemNotes = () => {
         <p style={{ fontSize: '.875rem' }}>
           <Markdown
             escapeHtml={true}
-            source={result.data.coreConfig.systemNotes}
+            source={result.data.cores.find(core => core.id === result.data.thisCore.id).systemNotes}
           />
         </p>
       </>

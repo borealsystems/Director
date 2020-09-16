@@ -1,0 +1,17 @@
+.coreSelect {
+  width: 25em !important;
+  height: 3.35em !important;
+  max-height: 3.35em !important;
+  background-color: #161616 !important;
+  border: none !important;
+}
+.coreSelect .bx--list-box__selection {
+  visibility: hidden;
+}
+.coreSelect .bx--text-input {
+  border: none !important;
+}
+
+.comboBoxNoClear .bx--list-box__selection {
+  visibility: hidden;
+}

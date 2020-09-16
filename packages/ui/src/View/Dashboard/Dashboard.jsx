@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Logs from './Logs.jsx'
 import Status from './Status.jsx'
 import ResourceSummary from './ResourceSummary.jsx'
 import SystemNotes from './SystemNotes.jsx'
 
+import globalContext from '../../globalContext'
+
 import { Grid, Row, Column, Tile, Link } from 'carbon-components-react'
 import { Popup16 } from '@carbon/icons-react'
 
 const Dashboard = () => {
+  const context = useContext(globalContext)
   const tileHeight = '415px'
   return (
     <Grid style={{ maxWidth: '200rem' }}>
@@ -20,7 +23,7 @@ const Dashboard = () => {
       <Row>
         <Column lg={{ span: 6 }}>
           <Tile style={{ height: tileHeight }}>
-            <h5>System Information</h5><br/>
+            <h5>Realm Information | {context.realm.core.label} / {context.realm.realm.label}</h5><br/>
             <SystemNotes />
           </Tile>
         </Column>

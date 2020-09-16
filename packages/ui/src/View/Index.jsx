@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   Redirect,
   Route,
@@ -12,6 +12,7 @@ import { useQuery } from 'urql'
 import {
   Column,
   Content,
+  ComboBox,
   Grid,
   Header,
   HeaderContainer,
@@ -40,6 +41,7 @@ import Device from './Device/DeviceWrapper.jsx'
 import Devices from './Devices/Devices.jsx'
 import Flow from './Flow/Flow.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
+import Landing from './Landing/Landing.jsx'
 import Login from './Login/Login.jsx'
 import PanelWrapper from './Panels/PanelWrapper.jsx'
 import Panels from './Panels/Panels.jsx'
@@ -49,19 +51,59 @@ import SideNavMenuItem from './components/SideNavMenuItem.jsx'
 import SideNavLink from './components/SideNavLink.jsx'
 import Stacks from './Stacks/Stacks.jsx'
 
+import globalContext from '../globalContext'
+import './index.css'
+
 const ControlPanel = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
+  const { realm, setRealm } = useContext(globalContext)
+  const [realms, setRealms] = useState([])
 
   const history = useHistory()
 
   const [result] = useQuery({
     query: `{ 
-      coreConfig {
+      cores {
+        id
         label
         timezone
+        realms{
+          id
+          label
+        }
+      }
+      thisCore {
+        id
+        label
       }
      }`
   })
+
+  const showSidebar = isAuthenticated && result.data && !useRouteMatch('/:core/:realm/control/shotbox/:id') && !useRouteMatch({ path: '/', exact: true }) && realm.core
+  const fullWidth = useRouteMatch({ path: '/:core/:realm/', exact: true }) || useRouteMatch({ path: '/', exact: true })
+  const showTopRealmSelect = realm.realm && realms.length > 0 && !useRouteMatch({ path: '/', exact: true })
+
+  if (result.data && realms.length === 0) {
+    const realmsArray = []
+    result.data.cores.map((core, coreIndex) => {
+      core.realms.map((realm, realmIndex) => {
+        realmsArray.push({ id: `${coreIndex},${realmIndex}`, realm: realm, core: { id: core.id, label: core.label } })
+        if (realmIndex === core.realms.length - 1 && coreIndex === result.data.cores.length - 1) {
+          console.log('FINISHED')
+          console.log(realmsArray)
+          setRealms(realmsArray)
+        }
+      })
+    })
+    setRealm({
+      id: '0,0',
+      realm: {
+        id: 'root',
+        label: 'Default'
+      },
+      core: result.data.thisCore
+    })
+  }
 
   if (result.error) return <GraphQLError error={result.error} />
   if (!result.error) {
@@ -77,16 +119,30 @@ const ControlPanel = () => {
                   onClick={onClickSideNavExpand}
                   isActive={isSideNavExpanded}
                 />
-                <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='BorealSystems'>
-                    Director
+                <HeaderName onClick={() => history.push({ pathname: `/${realm.core.id}/${realm.realm.id}/` })} prefix='BorealSystems'>
+                  Director
                 </HeaderName>
                 <HeaderNavigation aria-label="BorealSystems Director">
-                  { result.data &&
-                    <HeaderMenu aria-label="Development Build" menuLinkName={`This is a development build on ${result.data.coreConfig.label}`}>
-                      <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                      <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
-                    </HeaderMenu>
+                  { showTopRealmSelect &&
+                    <ComboBox
+                      className='coreSelect'
+                      ariaLabel="Dropdown"
+                      id="panel"
+                      label='Select a panel'
+                      placeholder='Core'
+                      selectedItem={realm}
+                      items={realms}
+                      itemToString={(item) => {
+                        console.log(item)
+                        return `${item.core?.label} / ${item.realm?.label}`
+                      }}
+                      onChange={(event) => { setRealm(event.selectedItem) }}
+                    />
                   }
+                  <HeaderMenu aria-label="Development Build" menuLinkName={'This is a development build'}>
+                    <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
+                    <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+                  </HeaderMenu>
                 </HeaderNavigation>
                 <HeaderGlobalBar>
                   { result.data &&
@@ -96,7 +152,7 @@ const ControlPanel = () => {
                         align='center'
                         style={{ borderBottom: 'none' }}
                       >
-                        <Clock tz={result.data.timezone} style={{ borderBottom: 'none' }} />
+                        <Clock tz={result.data.cores[0].timezone} style={{ borderBottom: 'none' }} />
                       </TooltipDefinition>
                     </HeaderGlobalAction>
                   }
@@ -106,21 +162,21 @@ const ControlPanel = () => {
                       </HeaderGlobalAction>
                   }
                 </HeaderGlobalBar>
-                { isAuthenticated && result.data && !useRouteMatch('/control/shotbox/:id') &&
+                { showSidebar &&
                     <SideNav aria-label="Side navigation" isRail>
                       <SideNavItems>
-                        <SideNavLink to="/dashboard" label="Dashboard" renderIcon={View32} />
+                        <SideNavLink to={`/${realm.core.id}/${realm.realm.id}/`} label="Dashboard" renderIcon={View32} />
                         <SideNavMenu renderIcon={Settings24} title="Configure">
-                          <SideNavMenuItem to="/config/devices" label="Devices"/>
-                          <SideNavMenuItem to="/config/stacks" label="Stacks"/>
-                          <SideNavMenuItem to="/config/panels" label="Panels"/>
-                          <SideNavMenuItem to="/config/controllers" label="Controllers"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/${realm.realm.id}/config/devices`} label="Devices"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/${realm.realm.id}/config/stacks`} label="Stacks"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/${realm.realm.id}/config/panels`} label="Panels"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/${realm.realm.id}/config/controllers`} label="Controllers"/>
                         </SideNavMenu>
                         <SideNavMenu renderIcon={Keyboard24} title="Control">
-                          <SideNavMenuItem to="/control/shotbox" label="Shotbox"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/${realm.realm.id}/control/shotbox`} label="Shotbox"/>
                         </SideNavMenu>
                         <SideNavMenu renderIcon={TreeViewAlt24} title="Core">
-                          <SideNavMenuItem to="/core/configure" label="Configuration"/>
+                          <SideNavMenuItem to={`/${realm.core.id}/configure`} label="Configuration"/>
                         </SideNavMenu>
                       </SideNavItems>
                     </SideNav>
@@ -136,30 +192,30 @@ const ControlPanel = () => {
                 }
                 { isAuthenticated && result.data &&
                     <Content id="main-content">
-                      <Grid style={{ maxWidth: useRouteMatch('/dashboard') ? '200rem' : '90rem' }}>
+                      <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
                         <Row>
                           <Column>
-                            {/* MONITOR */}
-                            <Route path="/dashboard" component={Dashboard} />
-                            {/* CONFIGURE */}
-                            <Route exact path="/config/devices" component={Devices} />
-                            <Route path="/config/devices/:id" component={Device} />
-                            <Route exact path="/config/stacks" component={Stacks} />
-                            <Route exact path="/config/panels" component={Panels} />
-                            <Route path="/config/panels/:id" component={PanelWrapper} />
-                            <Route path="/config/controllers" component={Controllers} />
-                            {/* CONTROL */}
-                            <Route exact path="/control/shotbox" component={Shotbox} />
-                            <Route path="/control/shotbox/:id" component={ShotboxPanelWrapper} />
-                            <Route path="/control/flow" component={Flow} />
-                            {/* CORE */}
-                            <Route path="/core/configure" component={Core} />
-                            {/* REDIRECTS */}
-                            <Route exact path="/">
-                              <Redirect to="/dashboard" />
+                            <Route exact path="/" >
+                              <Landing realms={realms} realm={realm} setRealm={setRealm} />
                             </Route>
+                            {/* CONFIGURE */}
+                            <Route exact path="/:core/:realm/config/devices/:id" component={Device} />
+                            <Route exact path="/:core/:realm/config/devices" component={Devices} />
+                            <Route exact path="/:core/:realm/config/stacks" component={Stacks} />
+                            <Route exact path="/:core/:realm/config/panels/:id" component={PanelWrapper} />
+                            <Route exact path="/:core/:realm/config/panels" component={Panels} />
+                            <Route exact path="/:core/:realm/config/controllers" component={Controllers} />
+                            {/* CONTROL */}
+                            <Route exact path="/:core/:realm/control/shotbox" component={Shotbox} />
+                            <Route exact path="/:core/:realm/control/shotbox/:id" component={ShotboxPanelWrapper} />
+                            <Route exact path="/:core/:realm/control/flow" component={Flow} />
+                            {/* CORE */}
+                            <Route exact path="/:core/configure" component={Core} />
+                            {/* MONITOR */}
+                            <Route exact path="/:core/:realm/" component={Dashboard} />
+                            {/* REDIRECTS */}
                             <Route exact path="/login">
-                              <Redirect to="/dashboard" />
+                              <Redirect to="/" />
                             </Route>
                           </Column>
                         </Row>

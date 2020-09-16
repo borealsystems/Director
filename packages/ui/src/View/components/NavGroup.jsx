@@ -6,7 +6,7 @@ import { SideNavMenu } from 'carbon-components-react/lib/components/UIShell'
 
 // eslint-disable-next-line react/prop-types
 function NavGroup ({ icon, label, grouppath, children }) {
-  const match = useRouteMatch(grouppath)
+  const match = useRouteMatch({ path: grouppath, exact: true })
   if (match) {
     return (
       <SideNavMenu renderIcon={icon} title={label} defaultExpanded={true}>

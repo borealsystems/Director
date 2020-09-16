@@ -2,22 +2,18 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLBoolean,
-  GraphQLInt
+  GraphQLList
 } from 'graphql'
+
+import realmType from './realmType'
 
 const coreConfigType = new GraphQLObjectType({
   name: 'CoreConfigType',
   fields: {
-    label: {
+    id: {
       type: GraphQLString
     },
-    mdns: {
-      type: GraphQLBoolean
-    },
-    port: {
-      type: GraphQLInt
-    },
-    address: {
+    label: {
       type: GraphQLString
     },
     helpdeskVisable: {
@@ -31,6 +27,11 @@ const coreConfigType = new GraphQLObjectType({
     },
     systemNotes: {
       type: GraphQLString
+    },
+    realms: {
+      type: new GraphQLList(
+        realmType
+      )
     }
   }
 })

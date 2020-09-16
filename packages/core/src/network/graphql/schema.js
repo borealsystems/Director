@@ -6,7 +6,7 @@ import { updatePanel, deletePanel } from '../../panels'
 import { providers } from '../../providers'
 import { updateStack, deleteStack, executeStack } from '../../stacks'
 import { PubSub } from 'apollo-server'
-import { core, devices, stacks, panels, controllers } from '../../db'
+import { cores, devices, stacks, panels, controllers } from '../../db'
 
 import {
   GraphQLSchema,
@@ -19,7 +19,7 @@ import {
 
 import bridgeType from './bridgeTypes/bridgeType'
 import bridgeUpdateInputType from './bridgeTypes/bridgeUpdateInputType'
-import coreConfigType from './coreTypes/coreConfigType'
+import coreType from './coreTypes/coreType'
 import coreConfigInputType from './coreTypes/coreConfigInputType'
 import controllerType from './controllerTypes/controllerType'
 import controllerInputType from './controllerTypes/controllerInputType'
@@ -53,18 +53,29 @@ var schema = new GraphQLSchema({
         }
       },
 
-      coreConfig: {
-        name: 'Get Core Config',
-        description: 'Return Core Configuration Options',
-        type: coreConfigType,
-        resolve: () => {
-          return new Promise((resolve, reject) => {
-            resolve({
-              label: process.env.DIRECTOR_CORE_CONFIG_LABEL,
-              systemNotes: 'Welcome to Director!\n\nAdministrators can edit this note via the Core Configuration page.\n\nYou should probably include some useful notes here, like who manages and administers this system, and a link to your internal helpdesk or ticketing system for users having problems.',
-              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            })
-          })
+      thisCore: {
+        name: 'thisCore',
+        description: 'Return this cores',
+        type: new GraphQLObjectType({
+          name: 'thisCoreType',
+          fields: {
+            id: {
+              type: GraphQLString
+            },
+            label: {
+              type: GraphQLString
+            }
+          }
+        }),
+        resolve: () => ({ id: process.env.DIRECTOR_CORE_ID, label: process.env.DIRECTOR_CORE_LABEL })
+      },
+
+      cores: {
+        name: 'cores',
+        description: 'Return cores',
+        type: new GraphQLList(coreType),
+        resolve: async () => {
+          return await cores.find({}).toArray()
         }
       },
 
@@ -84,7 +95,6 @@ var schema = new GraphQLSchema({
         }
       },
 
-      // TODO: rename
       devices: {
         name: 'Get Devices',
         description: 'Returns all configured devices',
@@ -287,20 +297,18 @@ var schema = new GraphQLSchema({
         }
       },
 
-      coreConfig: {
-        name: 'Core Config Update',
-        description: 'Update the core config and reload web server',
-        type: coreConfigType,
+      core: {
+        name: 'coreMutation',
+        description: 'Update a core\'s configuration',
+        type: coreType,
         args: {
-          config: {
+          core: {
             type: coreConfigInputType
           }
         },
         resolve: (parent, args) => {
           return new Promise((resolve, reject) => {
-            core.put('config', args.config)
-              .then(() => resolve(args.config))
-              .catch(e => reject(e))
+            cores.updateOne(args.core.id, args.core)
           })
         }
       }
