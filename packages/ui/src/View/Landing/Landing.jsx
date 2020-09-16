@@ -14,7 +14,7 @@ import lost from './lost.svg'
 
 const Landing = ({ realms, realm, setRealm }) => {
   const history = useHistory()
-
+  if (realm.core) history.push(`/${realm.core.id}/${realm.realm.id}/`)
   return (
     <Grid>
       <Row>
@@ -40,10 +40,7 @@ const Landing = ({ realms, realm, setRealm }) => {
                 placeholder='Core'
                 selectedItem={realm}
                 items={realms}
-                itemToString={(item) => {
-                  console.log(item)
-                  return `${item.core?.label} / ${item.realm?.label}`
-                }}
+                itemToString={(item) => { return item.realm?.id === 'root' ? item.core?.label : `${item.core?.label} / ${item.realm?.label}` }}
                 onChange={(event) => {
                   setRealm(event.selectedItem)
                   history.push(`/${event.selectedItem.core.id}/${event.selectedItem.realm.id}/`)

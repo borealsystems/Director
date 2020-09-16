@@ -132,10 +132,7 @@ const ControlPanel = () => {
                       placeholder='Core'
                       selectedItem={realm}
                       items={realms}
-                      itemToString={(item) => {
-                        console.log(item)
-                        return `${item.core?.label} / ${item.realm?.label}`
-                      }}
+                      itemToString={(item) => { return item.realm?.id === 'root' ? item.core?.label : `${item.core?.label} / ${item.realm?.label}` }}
                       onChange={(event) => { setRealm(event.selectedItem) }}
                     />
                   }
@@ -195,9 +192,6 @@ const ControlPanel = () => {
                       <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
                         <Row>
                           <Column>
-                            <Route exact path="/" >
-                              <Landing realms={realms} realm={realm} setRealm={setRealm} />
-                            </Route>
                             {/* CONFIGURE */}
                             <Route exact path="/:core/:realm/config/devices/:id" component={Device} />
                             <Route exact path="/:core/:realm/config/devices" component={Devices} />
@@ -216,6 +210,9 @@ const ControlPanel = () => {
                             {/* REDIRECTS */}
                             <Route exact path="/login">
                               <Redirect to="/" />
+                            </Route>
+                            <Route exact path="/" >
+                              <Landing realms={realms} realm={realm} setRealm={setRealm} />
                             </Route>
                           </Column>
                         </Row>
