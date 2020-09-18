@@ -14,7 +14,7 @@ import lost from './lost.svg'
 
 const Landing = ({ realms, realm, setRealm }) => {
   const history = useHistory()
-  if (realm.core) history.push(`/${realm.core.id}/${realm.realm.id}/`)
+  // if (realm.core) history.push(`/${realm.core.id}/${realm.realm.id}/`)
   return (
     <Grid>
       <Row>
@@ -37,10 +37,14 @@ const Landing = ({ realms, realm, setRealm }) => {
                 id='Realm'
                 label='Realm'
                 titleText='Return to familiar territory'
-                placeholder='Core'
-                selectedItem={realm}
+                placeholder='Core / Realm'
+                selectedItem=''
                 items={realms}
-                itemToString={(item) => { return item.realm?.id === 'root' ? item.core?.label : `${item.core?.label} / ${item.realm?.label}` }}
+                itemToString={(item) => {
+                  return item.realm
+                    ? item.realm.id === 'root' ? item.core.label : `${item.core.label} / ${item.realm.label}`
+                    : ''
+                }}
                 onChange={(event) => {
                   setRealm(event.selectedItem)
                   history.push(`/${event.selectedItem.core.id}/${event.selectedItem.realm.id}/`)
@@ -48,6 +52,10 @@ const Landing = ({ realms, realm, setRealm }) => {
               />
             </Row>
           }
+          <br/>
+          <Row>
+            If you arrived here by a broken link, please submit a bug report.
+          </Row><br/>
         </Column>
         <Column>
           <img src={lost} width='60%' style={{ marginLeft: '25%', marginTop: '10%' }}/>
