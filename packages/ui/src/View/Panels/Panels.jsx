@@ -54,7 +54,7 @@ const Panels = () => {
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
                   { rows.length > 0 && <TableToolbarSearch onChange={onInputChange} /> }
-                  <Button renderIcon={Add24} onClick={() => { history.push({ pathname: '/config/panels/new' }) }}>New Panel</Button>
+                  <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'panels/new' }) }}>New Panel</Button>
                 </TableToolbarContent>
               </TableToolbar>
               <Table {...getTableProps()}>
@@ -75,7 +75,7 @@ const Panels = () => {
                       ))}
                       <TableCell className="bx--table-column-menu">
                         <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
-                          <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `/config/panels/${row.cells[0].value}` })} />
+                          <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `panels/${row.cells[0].value}` })} />
                           <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => deletePanelMutation({ id: row.cells[0].value })} />
                         </OverflowMenu>
                       </TableCell>

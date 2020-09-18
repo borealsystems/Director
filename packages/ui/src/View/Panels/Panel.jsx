@@ -34,7 +34,7 @@ const Panel = ({ id, result }) => {
     const stackUpdateObject = { panel: omit(panel, 'currentButton') }
     console.log(JSON.stringify(stackUpdateObject))
     panelUpdateMutation(stackUpdateObject).then(console.log(panelUpdateMutationResult))
-    history.push({ pathname: '/config/panels' })
+    history.push({ pathname: './' })
   }
 
   const formOnChange = (field, value) => {
@@ -312,7 +312,7 @@ const Panel = ({ id, result }) => {
           <Row>
             <Column style={{ marginLeft: '64.4%' }}>
               <ButtonSet>
-                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: '/config/panels' }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
+                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: './' }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
                   { configurationStep === 0 ? 'Cancel' : 'Go Back' }
                 </Button>
                   &nbsp;
