@@ -14,7 +14,17 @@ const client = createClient({
 })
 
 const App = () => {
-  const [realm, setRealm] = useState({})
+  const [realm, setRealm] = useState({
+    id: '0,0',
+    realm: {
+      id: 'LOADING',
+      label: 'LOADING'
+    },
+    core: {
+      id: 'LOADING',
+      label: 'LOADING'
+    }
+  })
   return (
     <Provider value={client}>
       <Router>
