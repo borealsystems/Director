@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { ComboBox, Row, Column, DropdownSkeleton, InlineNotification } from 'carbon-components-react'
+import { ComboBox, Row, Column, DropdownSkeleton, InlineNotification, Button } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ShotboxPanelWrapper from './ShotboxPanelWrapper.jsx'
+import { Popup16 } from '@carbon/icons-react'
 
 const Shotbox = () => {
-  var [panel, setPanel] = useState({})
+  const [panel, setPanel] = useState({})
 
   const [result] = useQuery({
     query: `query getShotboxData {
@@ -87,12 +88,21 @@ const Shotbox = () => {
         </Row>
         <br/>
         { panel.id &&
-          <Row>
-            <Column>
-              <br/><br/>
-              <ShotboxPanelWrapper inline={true} match={{ params: { id: panel.id } }} />
-            </Column>
-          </Row>
+          <>
+            <Row>
+              <Column>
+                <br/><br/>
+                <ShotboxPanelWrapper inline={true} match={{ params: { id: panel.id } }} />
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                <Button style={{ marginTop: '1.1em' }} renderIcon={Popup16} onClick={() => { window.open(`${window.location.href}/${panel.id}`) } } >
+                  Open In New Tab
+                </Button>
+              </Column>
+            </Row>
+          </>
         }
       </div>
     )
