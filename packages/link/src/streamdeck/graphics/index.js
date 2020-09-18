@@ -14,14 +14,13 @@ const textImage = ({
       image.print(
         font,
         0,
-        (image.bitmap.height / 2.7) - (font.common.lineHeight / 2),
+        (image.bitmap.height / 2.7) - (font.common.lineHeight / text.split('\n').length),
         {
           text: text,
           alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER
         },
         image.bitmap.width,
         image.bitmap.height
-        // Jimp.ALIGN_FONT_CENTER
       )
     })
     .then(() => {
@@ -36,7 +35,7 @@ const writeTextToButton = ({ text, device, buttonIndex, background, color }) => 
     text: text,
     width: device.controller.ICON_SIZE,
     height: device.controller.ICON_SIZE,
-    background: background || '#000000',
+    background: background || '#62fe0f',
     color: color || 'white'
   })
     .then(_buffer => {

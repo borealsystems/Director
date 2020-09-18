@@ -1,9 +1,8 @@
 import 'isomorphic-unfetch'
 import './tray'
-import { mdnsWatch, mdnsAdvertise } from './network/mdns'
 import { updateStreamdecks } from './streamdeck'
+import { initGQLClient } from './network/graphql'
 
 updateStreamdecks({ type: 'refresh' })
 updateStreamdecks({ type: 'offline' })
-mdnsWatch()
-mdnsAdvertise()
+initGQLClient('127.0.0.1', 3001)
