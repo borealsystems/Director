@@ -78,9 +78,12 @@ const BorealDirector = () => {
      }`
   })
 
-  const showSidebar = isAuthenticated && result.data && !useRouteMatch('/:core/:realm/control/shotbox/:id') && !useRouteMatch({ path: '/', exact: true }) && realm.core
-  const fullWidth = useRouteMatch({ path: '/:core/:realm/', exact: true }) || useRouteMatch({ path: '/', exact: true })
-  const showTopRealmSelect = realm.realm && realms.length > 0 && !useRouteMatch({ path: '/', exact: true }) && !useRouteMatch({ path: '/:core/:realm/control/shotbox/:id', exact: true })
+  const matchShotbox = useRouteMatch('/:core/:realm/control/shotbox/:id')
+  const matchRoot = useRouteMatch({ path: '/', exact: true })
+
+  const showSidebar = isAuthenticated && result.data && !matchShotbox && !matchRoot && realm.core
+  const fullWidth = useRouteMatch({ path: '/:core/:realm/', exact: true }) || matchRoot
+  const showTopRealmSelect = realm.realm && realms.length > 0 && !matchRoot && !matchShotbox
 
   if (result.data && realms.length === 0) {
     const realmsArray = []
@@ -88,8 +91,6 @@ const BorealDirector = () => {
       core.realms.map((realm, realmIndex) => {
         realmsArray.push({ id: `${coreIndex},${realmIndex}`, realm: realm, core: { id: core.id, label: core.label } })
         if (realmIndex === core.realms.length - 1 && coreIndex === result.data.cores.length - 1) {
-          console.log('FINISHED')
-          console.log(realmsArray)
           setRealms(realmsArray)
         }
       })
