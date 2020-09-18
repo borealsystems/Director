@@ -28,8 +28,7 @@ import {
   SideNav,
   SideNavItems,
   SideNavMenu,
-  SkipToContent,
-  TooltipDefinition
+  SkipToContent
 } from 'carbon-components-react'
 import { Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
 
@@ -144,13 +143,7 @@ const ControlPanel = () => {
                 <HeaderGlobalBar>
                   { result.data &&
                     <HeaderGlobalAction aria-label="Clock" style={{ width: '10em' }} onClick={ () => {} }>
-                      <TooltipDefinition
-                        tooltipText="Time synced to Core"
-                        align='center'
-                        style={{ borderBottom: 'none' }}
-                      >
-                        <Clock tz={result.data.cores[0].timezone} style={{ borderBottom: 'none' }} />
-                      </TooltipDefinition>
+                      <Clock tz={result.data.cores[0].timezone} style={{ borderBottom: 'none' }} />
                     </HeaderGlobalAction>
                   }
                   { isAuthenticated &&
