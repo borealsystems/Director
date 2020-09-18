@@ -81,7 +81,7 @@ const ControlPanel = () => {
 
   const showSidebar = isAuthenticated && result.data && !useRouteMatch('/:core/:realm/control/shotbox/:id') && !useRouteMatch({ path: '/', exact: true }) && realm.core
   const fullWidth = useRouteMatch({ path: '/:core/:realm/', exact: true }) || useRouteMatch({ path: '/', exact: true })
-  const showTopRealmSelect = realm.realm && realms.length > 0 && !useRouteMatch({ path: '/', exact: true })
+  const showTopRealmSelect = realm.realm && realms.length > 0 && !useRouteMatch({ path: '/', exact: true }) && !useRouteMatch({ path: '/:core/:realm/control/shotbox/:id', exact: true })
 
   if (result.data && realms.length === 0) {
     const realmsArray = []
