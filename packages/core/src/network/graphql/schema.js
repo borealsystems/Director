@@ -111,8 +111,8 @@ var schema = new GraphQLSchema({
         args: {
           id: { type: GraphQLString }
         },
-        resolve: (parent, args) => {
-          return devices.get(args.id)
+        resolve: async (parent, args) => {
+          return await devices.findOne({ id: args.id })
         }
       },
 
