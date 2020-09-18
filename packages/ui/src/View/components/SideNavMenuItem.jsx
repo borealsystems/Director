@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Link,
+  useHistory,
   useRouteMatch
 } from 'react-router-dom'
 import { SideNavMenuItem } from 'carbon-components-react/lib/components/UIShell'
@@ -8,21 +8,18 @@ import { SideNavMenuItem } from 'carbon-components-react/lib/components/UIShell'
 // eslint-disable-next-line react/prop-types
 function NavLink ({ label, to, renderIcon }) {
   const match = useRouteMatch({ path: to, exact: true })
+  const history = useHistory()
   if (match) {
     return (
-      <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem aria-current="page">
-          {renderIcon && <renderIcon />}{label}
-        </SideNavMenuItem>
-      </Link>
+      <SideNavMenuItem aria-current="page" onClick={() => { history.push(to) }}>
+        {renderIcon && <renderIcon />}{label}
+      </SideNavMenuItem>
     )
   } else {
     return (
-      <Link style={{ textDecoration: 'none' }} to={to}>
-        <SideNavMenuItem>
-          {renderIcon && <renderIcon />}{label}
-        </SideNavMenuItem>
-      </Link>
+      <SideNavMenuItem onClick={() => { history.push(to) }}>
+        {renderIcon && <renderIcon />}{label}
+      </SideNavMenuItem>
     )
   }
 }

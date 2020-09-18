@@ -25,12 +25,10 @@ const SystemNotes = () => {
   if (result.data) {
     return (
       <>
-        <p style={{ fontSize: '.875rem' }}>
-          <Markdown
-            escapeHtml={true}
-            source={result.data.cores.find(core => core.id === result.data.thisCore.id).systemNotes}
-          />
-        </p>
+        <Markdown
+          escapeHtml={true}
+          source={result.data.cores.find(core => core.id === result.data.thisCore.id).systemNotes}
+        />
       </>
     )
   }

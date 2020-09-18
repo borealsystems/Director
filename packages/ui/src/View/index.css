@@ -15,3 +15,8 @@
 .comboBoxNoClear .bx--list-box__selection {
   visibility: hidden;
 }
+
+.clock .bx--tooltip__trigger.bx--tooltip__trigger--definition {
+  font-size: 1rem;
+  border-bottom: none;
+}

@@ -53,7 +53,7 @@ import Stacks from './Stacks/Stacks.jsx'
 import globalContext from '../globalContext'
 import './index.css'
 
-const ControlPanel = () => {
+const BorealDirector = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
   const { realm, setRealm } = useContext(globalContext)
   const [realms, setRealms] = useState([])
@@ -142,9 +142,7 @@ const ControlPanel = () => {
                 </HeaderNavigation>
                 <HeaderGlobalBar>
                   { result.data &&
-                    <HeaderGlobalAction aria-label="Clock" style={{ width: '10em' }} onClick={ () => {} }>
-                      <Clock tz={result.data.cores[0].timezone} style={{ borderBottom: 'none' }} />
-                    </HeaderGlobalAction>
+                      <Clock tz={result.data.cores[0].timezone} />
                   }
                   { isAuthenticated &&
                       <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
@@ -172,19 +170,22 @@ const ControlPanel = () => {
                     </SideNav>
                 }
               </Header>
-              <Switch>
-                { result.loading && <Loading /> }
-                { !isAuthenticated && result.data &&
-                    <>
-                      <Redirect to="/login" />
-                      <Login auth={setAuthenticationState}/>
-                    </>
-                }
-                { isAuthenticated && result.data &&
-                    <Content id="main-content">
-                      <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
-                        <Row>
-                          <Column>
+              { result.loading && <Loading /> }
+              <Content id="main-content">
+                <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
+                  <Row>
+                    <Column>
+                      <Switch>
+                        { !isAuthenticated && result.data &&
+                              <>
+                                <Redirect to="/login" />
+                                <Route exact path="/login">
+                                  <Login auth={setAuthenticationState}/>
+                                </Route>
+                              </>
+                        }
+                        { isAuthenticated && result.data &&
+                          <>
                             {/* CONFIGURE */}
                             <Route exact path="/:core/:realm/config/devices/:id" component={Device} />
                             <Route exact path="/:core/:realm/config/devices" component={Devices} />
@@ -207,12 +208,13 @@ const ControlPanel = () => {
                             <Route exact path="/" >
                               <Landing realms={realms} realm={realm} setRealm={setRealm} />
                             </Route>
-                          </Column>
-                        </Row>
-                      </Grid>
-                    </Content>
-                }
-              </Switch>
+                          </>
+                        }
+                      </Switch>
+                    </Column>
+                  </Row>
+                </Grid>
+              </Content>
             </>
           )}
         />
@@ -221,4 +223,4 @@ const ControlPanel = () => {
   }
 }
 
-export default ControlPanel
+export default BorealDirector
