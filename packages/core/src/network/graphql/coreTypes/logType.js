@@ -1,14 +1,13 @@
 import {
   GraphQLObjectType,
-  GraphQLString,
-  GraphQLInt
+  GraphQLString
 } from 'graphql'
 
 const logType = new GraphQLObjectType({
   name: 'LogItem',
   fields: {
     id: {
-      type: GraphQLInt
+      type: GraphQLString
     },
     time: {
       type: GraphQLString
