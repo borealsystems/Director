@@ -135,7 +135,7 @@ const Devices = () => {
                           return <TableCell key={cell.id}>{cell.value}</TableCell>
                         }
                       })}
-                      <TableCell className="bx--table-column-menu">
+                      <TableCell>
                         <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
                           <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
                           <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />

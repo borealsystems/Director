@@ -73,7 +73,7 @@ const Panels = () => {
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>{cell.value}</TableCell>
                       ))}
-                      <TableCell className="bx--table-column-menu">
+                      <TableCell>
                         <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
                           <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `panels/${row.cells[0].value}` })} />
                           <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => deletePanelMutation({ id: row.cells[0].value })} />

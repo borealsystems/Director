@@ -80,9 +80,10 @@ const BorealDirector = () => {
 
   const matchShotbox = useRouteMatch('/:core/:realm/control/shotbox/:id')
   const matchRoot = useRouteMatch({ path: '/', exact: true })
+  const matchDashboard = useRouteMatch({ path: '/:core/:realm/', exact: true, strict: true })
 
   const showSidebar = isAuthenticated && result.data && !matchShotbox && !matchRoot && realm.core
-  const fullWidth = useRouteMatch({ path: '/:core/:realm/', exact: true }) || matchRoot
+  const fullWidth = matchDashboard || matchRoot
   const showTopRealmSelect = realm.realm && realms.length > 0 && !matchRoot && !matchShotbox
 
   if (result.data && realms.length === 0) {
@@ -198,10 +199,10 @@ const BorealDirector = () => {
                             <Route exact path="/:core/:realm/control/shotbox" component={Shotbox} />
                             <Route exact path="/:core/:realm/control/shotbox/:id" component={ShotboxPanelWrapper} />
                             <Route exact path="/:core/:realm/control/flow" component={Flow} />
-                            {/* CORE */}
+                            {/* CORE/REALM */}
                             <Route exact path="/:core/configure" component={Core} />
                             {/* MONITOR */}
-                            <Route exact path="/:core/:realm/" component={Dashboard} />
+                            <Route exact strict path="/:core/:realm/" component={Dashboard} />
                             {/* REDIRECTS */}
                             <Route exact path="/login">
                               <Redirect to="/" />
