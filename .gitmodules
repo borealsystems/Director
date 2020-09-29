@@ -1,0 +1,3 @@
+[submodule "packages/core/src/providers/Library"]
+	path = packages/core/src/providers/Library
+	url = https://phabricator.boreal.systems/source/Library.git
