@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, DataTable, DataTableSkeleton, InlineNotification, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
-import { Add24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
-import headers from './panelsHeaders'
-import GraphQLError from '../components/GraphQLError.jsx'
+import { Add24 } from '@carbon/icons-react'
+import { Button, DataTable, DataTableSkeleton, InlineNotification, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
 import { panelsGQL, deletePanelGQL } from './queries'
+import headers from './panelsHeaders'
+import globalContext from '../../globalContext'
+import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Panels = () => {
+  const { contextRealm } = useContext(globalContext)
   const [result] = useQuery({
     query: panelsGQL,
-    pollInterval: 1000
+    pollInterval: 1000,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
   const history = useHistory()

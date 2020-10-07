@@ -1,43 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
+import { useHistory } from 'react-router-dom'
 import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
 import { Add24 } from '@carbon/icons-react'
 import GraphQLError from '../components/GraphQLError.jsx'
-import { useHistory } from 'react-router-dom'
+import globalContext from '../../globalContext'
+import { devicesQueryGQL, deleteDeviceGQL } from './queries'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
+  const { contextRealm } = useContext(globalContext)
   const [result] = useQuery({
-    query: `query getDevicesAndProviders {
-      devices {
-        id
-        label
-        location
-        description
-        provider {
-          id
-          label
-        }
-        enabled
-        status
-        configuration {
-          id
-          value
-        }
-      }
-    }`,
-    pollInterval: 1000
+    query: devicesQueryGQL,
+    pollInterval: 1000,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
-  const deleteDeviceGQL = `
-    mutation deleteDevice($idToDelete: String!) {
-      deleteDevice(id: $idToDelete)
-    }
-  `
-
-  // eslint-disable-next-line no-unused-vars
-  const [deleteDeviceMutationResult, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
+  const [, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
 
   const headers = [
     {

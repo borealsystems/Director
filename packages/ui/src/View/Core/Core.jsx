@@ -1,45 +1,35 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, InlineLoading, TextInput, Checkbox, Tooltip, Grid, Row, Column, InlineNotification } from 'carbon-components-react'
+import { Button, Form, InlineLoading, TextInput, Grid, Row, Column, InlineNotification, Toggle } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
-const Core = () => {
+const Core = ({ updateAndSetRealm }) => {
   const [result] = useQuery({
     query: `{ 
-      coreConfig {
+      cores {
         label
-        port
-        address
+        id
         helpdeskURI
         helpdeskVisable
-        systemNotes
       }
-     }`
+      thisCore {
+        id
+        label
+      }
+     }`,
+    pollInterval: 10000
   })
 
   const [coreConfig, setCoreConfig] = useState({})
 
-  const coreConfigUpdateMutaionGQL = `
-    mutation coreConfig($config: coreConfigInputType) {
-      coreConfig(config:$config) {
-        label
-        port
-        address
-        helpdeskURI
-        helpdeskVisable
-        systemNotes
-      }
-    }`
-
-  const [coreConfigUpdateMutationResult, coreConfigUpdateMutation] = useMutation(coreConfigUpdateMutaionGQL)
-  const updateCoreConfiguration = () => {
-    coreConfigUpdateMutation({ config: coreConfig }).then(() => console.log(coreConfigUpdateMutationResult))
-    if (coreConfig.port.toString() !== window.location.port) {
-      setTimeout(() => {
-        window.location.replace(`${window.location.protocol}//${window.location.hostname}:${coreConfig.listen}/core/configure`)
-      }, 500)
+  const coreMutationGQL = `
+  mutation core($core: coreInputType) {
+    core(core: $core) {
+      id
     }
-  }
+  }`
+
+  const [coreMutationResult, coreMutation] = useMutation(coreMutationGQL)
 
   if (result.error) {
     return (
@@ -69,8 +59,8 @@ const Core = () => {
       </div>
     )
   }
-  if (result.data && !coreConfig.port) {
-    setCoreConfig(result.data.coreConfig)
+  if (result.data && !coreConfig.id) {
+    setCoreConfig(result.data.cores.find(core => core.id === result.data.thisCore.id))
     return (
       <div>
         <h1
@@ -85,114 +75,99 @@ const Core = () => {
     )
   }
 
-  if (result.data && coreConfig.port) {
+  if (result.data) {
     return (
       <Grid>
-        <Row>
-          <InlineNotification
-            style={{ width: '100%' }}
-            lowContrast={true}
-            kind='warning'
-            title='This interface is being overhauled'
-            subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-            hideCloseButton={true}
-          />
-        </Row>
-        <Row>
-          <h1>Core Configuration</h1>
-        </Row>
-        <br/>
-        <Row>
-          <Column>
-            <fieldset>
-              <legend>General</legend> <br/>
+        <Form>
+          <Row>
+            <InlineNotification
+              style={{ width: '100%' }}
+              lowContrast={true}
+              kind='warning'
+              title='This interface is being overhauled'
+              subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
+              hideCloseButton={true}
+            />
+          </Row>
+          <Row>
+            <Column>
+              <h2>System Configuration</h2>
+            </Column>
+          </Row>
+          <br/>
+          <Row>
+            <Column>
+              <legend>Core</legend>
+            </Column>
+          </Row><br/>
+          <Row>
+            <Column>
+              <TextInput
+                type='text'
+                id='coreID'
+                value={coreConfig.id}
+                labelText='Core ID'
+                disabled
+              />
+            </Column>
+            <Column>
               <TextInput
                 type='text'
                 id='coreLabel'
-                placeholder='Required'
+                placeholder='Core'
                 value={coreConfig.label}
                 labelText='Core Name'
-                onClick={() => {}}
+                required
                 onChange={(e) => { setCoreConfig({ ...coreConfig, label: e.target.value }) }}
               />
-            </fieldset>
-          </Column>
-        </Row><br/>
-        <Row>
-          <Column>
-            <legend>Networking</legend>
-          </Column>
-        </Row> <br/>
-        <Row>
-          <Column>
-            <TextInput
-              type='text'
-              id='coreListenPort'
-              disabled
-              placeholder='Required'
-              value={coreConfig.port}
-              labelText='Core Listen Port'
-              onClick={() => {}}
-              onChange={(e) => { setCoreConfig({ ...coreConfig, port: e.target.value }) }}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Checkbox
-              id="coreConfigMDNS"
-              disabled
-              labelText='Enable mDNS'
-              checked={coreConfig.mdns}
-              onChange={() => setCoreConfig({ ...coreConfig, mdns: !coreConfig.mdns })}
-            />
-          </Column>
-          <Column>
-            <Tooltip>
-              <p>
-              mDNS is used for Link and Director service discovery. Disabling this will stop Link and other Director instance from autodiscovering each other, but will aid in administration in large networks.
-              </p>
-            </Tooltip>
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <legend>Log In Page</legend>
-          </Column>
-        </Row> <br/>
-        <Row>
-          <Column>
-            <TextInput
-              type='text'
-              id='coreLoginHelpdeskURI'
-              placeholder='Required'
-              value={coreConfig.helpdeskURI}
-              labelText='Helpdesk URI'
-              onClick={() => {}}
-              onChange={(e) => { setCoreConfig({ ...coreConfig, helpdeskURI: e.target.value }) }}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Checkbox
-              id="coreLoginHelpdeskVisable"
-              labelText='Show Helpdesk Link'
-              checked={coreConfig.helpdeskVisable}
-              onChange={() => setCoreConfig({ ...coreConfig, helpdeskVisable: !coreConfig.helpdeskVisable })}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Button onClick={() => {
-              console.log(coreConfig)
-              updateCoreConfiguration()
-            }} size='default' kind="primary">
-              Update
-            </Button>
-          </Column>
-        </Row>
+            </Column>
+          </Row><br/>
+          <Row>
+            <Column>
+              <legend>Log In Page</legend>
+            </Column>
+          </Row> <br/>
+          <Row>
+            <Column>
+              <TextInput
+                type='url'
+                id='coreLoginHelpdeskURI'
+                placeholder='https://phabricator.boreal.systems'
+                value={coreConfig.helpdeskURI ?? ''}
+                labelText='Helpdesk Link'
+                required={coreConfig.helpdeskVisable}
+                invalidText='We can&apos;t show a link that doesnt exist'
+                invalid={coreConfig.helpdeskVisable && !coreConfig.helpdeskURI}
+                onChange={(e) => { setCoreConfig({ ...coreConfig, helpdeskURI: e.target.value }) }}
+              />
+            </Column>
+            <Column style={{ marginTop: '1em' }}>
+              <Toggle
+                id="coreLoginHelpdeskVisableToggle"
+                defaultToggled={coreConfig.helpdeskVisable}
+                labelA='Link Hidden'
+                labelB='Link Visible'
+                value={coreConfig.helpdeskVisable}
+                onChange={() => setCoreConfig({ ...coreConfig, helpdeskVisable: !coreConfig.helpdeskVisable })}
+              />
+            </Column>
+          </Row><br/>
+          <Row>
+            <Column>
+              <Button
+                size='default'
+                kind="primary"
+                onClick={() => {
+                  console.log(coreConfig)
+                  coreMutation({ core: coreConfig })
+                    .then(() => console.log(coreMutationResult))
+                    .then(() => updateAndSetRealm({ core: { id: coreConfig.id, label: coreConfig.label } }))
+                }}>
+                Update
+              </Button>
+            </Column>
+          </Row>
+        </Form>
       </Grid>
     )
   }

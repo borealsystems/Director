@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from 'urql'
-import { DataTable, DataTableSkeleton } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, Modal } from 'carbon-components-react'
 
 import GraphQLError from '../components/GraphQLError.jsx'
+import { Popup16 } from '@carbon/icons-react'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell } = DataTable
 
 const Logs = () => {
+  const [logModalVisible, setLogModalVisible] = useState(false)
   const headers = [
     {
       key: 'time',
@@ -43,43 +45,107 @@ const Logs = () => {
   if (result.fetching) return <DataTableSkeleton />
   if (result.data) {
     return (
-      <DataTable
-        rows={result.data.logs.reverse()}
-        headers={headers}
-        shouldShowBorder={false}
-        size='short'
-        stickyHeader={true}
-        render={({
-          rows,
-          headers,
-          getHeaderProps,
-          getTableContainerProps
-        }) => (
-          <TableContainer
-            {...getTableContainerProps()}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header, index) => (
-                    <TableHeader key={index} {...getHeaderProps({ header })}>
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map(row => (
-                  <TableRow key={row.id}>
-                    {row.cells.map(cell => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
+      <>
+        <h5>
+          Logs
+          <Button
+            style={{ float: 'right', margin: 0, transform: 'translate(0.7em, -0.8em)' }}
+            hasIconOnly
+            iconDescription='Log Popout'
+            kind='ghost'
+            renderIcon={Popup16}
+            onClick={ () => { setLogModalVisible(true) }}
+          />
+        </h5>
+        <br />
+        { !logModalVisible &&
+          <DataTable
+            style={{ overflow: 'hidden' }}
+            rows={result.data.logs.reverse()}
+            headers={headers}
+            shouldShowBorder={false}
+            size='short'
+            stickyHeader={true}
+            render={({
+              rows,
+              headers,
+              getHeaderProps,
+              getTableContainerProps
+            }) => (
+              <TableContainer
+                {...getTableContainerProps()}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map((header, index) => (
+                        <TableHeader key={index} {...getHeaderProps({ header })}>
+                          {header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>{cell.value}</TableCell>
+                        ))}
+                      </TableRow>
                     ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      />
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          />
+        }
+        <Modal
+          passiveModal
+          hasScrollingContent
+          size='lg'
+          aria-label='Log Modal'
+          modalHeading={'Logs'}
+          open={logModalVisible}
+          onRequestClose={() => setLogModalVisible(false)}
+        >
+          <DataTable
+            rows={result.data.logs.reverse()}
+            headers={headers}
+            shouldShowBorder={false}
+            size='short'
+            stickyHeader={true}
+            render={({
+              rows,
+              headers,
+              getHeaderProps,
+              getTableContainerProps
+            }) => (
+              <TableContainer
+                {...getTableContainerProps()}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map((header, index) => (
+                        <TableHeader key={index} {...getHeaderProps({ header })}>
+                          {header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>{cell.value}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          />
+        </Modal>
+      </>
     )
   }
 }

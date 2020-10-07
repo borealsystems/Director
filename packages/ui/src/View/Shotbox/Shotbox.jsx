@@ -1,22 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useQuery } from 'urql'
-import { ComboBox, Row, Column, DropdownSkeleton, InlineNotification, Button } from 'carbon-components-react'
+import { ComboBox, Row, Column, DropdownSkeleton, Button } from 'carbon-components-react'
+import { Popup16 } from '@carbon/icons-react'
+import globalContext from '../../globalContext'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ShotboxPanelWrapper from './ShotboxPanelWrapper.jsx'
-import { Popup16 } from '@carbon/icons-react'
 
 const Shotbox = () => {
+  const { contextRealm } = useContext(globalContext)
   const [panel, setPanel] = useState({})
 
   const [result] = useQuery({
-    query: `query getShotboxData {
-      panels {
+    query: `query getShotboxData($realm: String, $core: String) {
+      panels(realm: $realm, core: $core) {
         id
         label
         description
       }
     }`,
-    pollInterval: 1000
+    pollInterval: 1000,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
   const resetPanel = (panel) => {
@@ -57,14 +60,6 @@ const Shotbox = () => {
   if (result.data) {
     return (
       <div>
-        <InlineNotification
-          style={{ width: '100%' }}
-          lowContrast={true}
-          kind='warning'
-          title='This interface is being overhauled'
-          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-          hideCloseButton={true}
-        />
         <h1
           style={{
             margin: '0 0 32px 0'
@@ -78,11 +73,12 @@ const Shotbox = () => {
               ariaLabel="Dropdown"
               id="panel"
               label='Select a panel'
-              placeholder='Filter...'
+              placeholder='Type to Filter...'
               items={result.data.panels}
-              itemToString={(item) => (`${item.label} (${item.id})`)}
+              selectedItem={panel}
+              itemToString={(item) => (item.id ? `${item.label} (${item.id})` : null)}
               onChange={(selection) => { selection.selectedItem === null ? setPanel({}) : resetPanel(selection.selectedItem) }}
-              titleText="Panel (required)"
+              titleText="Panel"
             />
           </Column>
         </Row>

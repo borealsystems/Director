@@ -1,23 +1,16 @@
 import {
   GraphQLInputObjectType,
   GraphQLString,
-  GraphQLBoolean,
-  GraphQLInt
+  GraphQLBoolean
 } from 'graphql'
 
-const coreConfigType = new GraphQLInputObjectType({
-  name: 'coreConfigInputType',
+const coreInputType = new GraphQLInputObjectType({
+  name: 'coreInputType',
   fields: {
-    label: {
+    id: {
       type: GraphQLString
     },
-    mdns: {
-      type: GraphQLBoolean
-    },
-    port: {
-      type: GraphQLInt
-    },
-    address: {
+    label: {
       type: GraphQLString
     },
     helpdeskVisable: {
@@ -28,11 +21,8 @@ const coreConfigType = new GraphQLInputObjectType({
     },
     timezone: {
       type: GraphQLString
-    },
-    systemNotes: {
-      type: GraphQLString
     }
   }
 })
 
-export default coreConfigType
+export default coreInputType

@@ -1,17 +1,13 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import Logs from './Logs.jsx'
 import Status from './Status.jsx'
 import ResourceSummary from './ResourceSummary.jsx'
-import SystemNotes from './SystemNotes.jsx'
-
-import globalContext from '../../globalContext'
+import Notes from './Notes.jsx'
 
 import { Grid, Row, Column, Tile, Link } from 'carbon-components-react'
-import { Popup16 } from '@carbon/icons-react'
 
 const Dashboard = () => {
-  const context = useContext(globalContext)
   const tileHeight = '415px'
   return (
     <Grid style={{ maxWidth: '200rem' }}>
@@ -23,8 +19,7 @@ const Dashboard = () => {
       <Row>
         <Column lg={{ span: 6 }}>
           <Tile style={{ height: tileHeight }}>
-            <h5>Realm Information | {context.realm.core.label} / {context.realm.realm.label}</h5><br/>
-            <SystemNotes />
+            <Notes />
           </Tile>
         </Column>
         <Column>
@@ -51,9 +46,7 @@ const Dashboard = () => {
           </Tile>
         </Column>
         <Column lg={{ span: 6 }}>
-          <Tile style={{ height: tileHeight, overflowY: 'scroll' }}>
-            <h5>Logs <Popup16 onClick={ () => { }} style={{ float: 'right' }} /></h5> {/* TODO: Make Modal */}
-            <br />
+          <Tile style={{ height: tileHeight, overflow: 'hidden' }}>
             <Logs />
           </Tile>
         </Column>

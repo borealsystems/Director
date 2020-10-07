@@ -1,8 +1,8 @@
 import React from 'react'
 
 const globalContext = React.createContext({
-  realm: {},
-  setRealm: () => {}
+  realmContext: {},
+  setContextRealm: () => {}
 })
 
 export default globalContext

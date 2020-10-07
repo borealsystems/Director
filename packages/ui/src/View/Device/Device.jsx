@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, ButtonSet, ComboBox, TextInput, Form, FormGroup, ProgressIndicator, ProgressStep, Grid, Row, Column, DropdownSkeleton, InlineLoading, InlineNotification, Loading } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { omit } from 'lodash'
@@ -7,7 +7,10 @@ import { useHistory } from 'react-router-dom'
 
 import { deviceMutationGQL } from './queries'
 
+import globalContext from '../../globalContext'
+
 const Device = ({ id, result }) => {
+  const { contextRealm } = useContext(globalContext)
   const isNew = id === 'new'
   const [deviceUpdateMutationResult, deviceUpdateMutation] = useMutation(deviceMutationGQL)
 
@@ -35,7 +38,7 @@ const Device = ({ id, result }) => {
       for (var key of Object.keys(configuration)) {
         conf.push(configuration[key])
       }
-      const deviceUpdateObject = { device: { ...device, configuration: conf, provider: { id: device.provider.id, label: device.provider.label }, enabled: false, status: 'error' } }
+      const deviceUpdateObject = { device: { ...device, configuration: conf, provider: { id: device.provider.id, label: device.provider.label }, enabled: false, status: 'error', core: contextRealm.coreID, realm: contextRealm.id } }
       console.log(JSON.stringify(deviceUpdateObject))
       deviceUpdateMutation(deviceUpdateObject).then(resolve(deviceUpdateMutationResult)).catch(e => reject(e))
     })

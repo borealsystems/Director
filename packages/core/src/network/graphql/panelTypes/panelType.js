@@ -20,6 +20,12 @@ const panelType = new GraphQLObjectType({
     description: {
       type: GraphQLString
     },
+    realm: {
+      type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
     layoutType: {
       type: new GraphQLObjectType({
         name: 'panelLayoutTypeType',

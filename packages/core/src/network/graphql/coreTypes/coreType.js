@@ -1,11 +1,8 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLBoolean,
-  GraphQLList
+  GraphQLBoolean
 } from 'graphql'
-
-import realmType from './realmType'
 
 const coreConfigType = new GraphQLObjectType({
   name: 'CoreConfigType',
@@ -24,14 +21,6 @@ const coreConfigType = new GraphQLObjectType({
     },
     timezone: {
       type: GraphQLString
-    },
-    systemNotes: {
-      type: GraphQLString
-    },
-    realms: {
-      type: new GraphQLList(
-        realmType
-      )
     }
   }
 })

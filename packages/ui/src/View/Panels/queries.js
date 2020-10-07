@@ -1,11 +1,11 @@
-const panelsGQL = `query panels {
-  stacks {
+const panelsGQL = `query panels($realm: String, $core: String) {
+  stacks(core: $core, realm: $realm) {
     id
     label
     panelLabel
     description
   }
-  panels {
+  panels(core: $core, realm: $realm) {
     id
     label
     description
@@ -32,8 +32,8 @@ const panelsGQL = `query panels {
   }
 }`
 
-const existingPanelGQL = `query panel($id: String) {
-  stacks {
+const existingPanelGQL = `query panel($id: String, $realm: String, $core: String) {
+  stacks(core: $core, realm: $realm) {
     id
     label
     panelLabel
@@ -66,8 +66,8 @@ const existingPanelGQL = `query panel($id: String) {
   }
 }`
 
-const newPanelGQL = `query panels {
-  stacks {
+const newPanelGQL = `query panels($realm: String, $core: String) {
+  stacks(core: $core, realm: $realm) {
     id
     label
     panelLabel

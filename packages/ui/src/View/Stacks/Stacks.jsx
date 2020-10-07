@@ -1,71 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useQuery } from 'urql'
 import { Button, DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
+import { stacksQueryGQL } from './queries'
 import headers from './stacksHeaders'
+import globalContext from '../../globalContext'
 import Stack from './components/Stack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
+  const { contextRealm } = useContext(globalContext)
   const [newStackVisability, setNewStackVisability] = useState(false)
   const [result] = useQuery({
-    query: `query getAll {
-      stacks {
-        id
-        label
-        panelLabel
-        description
-        actions {
-          device {
-            id,
-            label
-            provider {
-              id
-            }
-          }
-          providerFunction {
-            id
-            label
-          }
-          parameters {
-            id
-            value
-          }
-        }
-      }
-      devices {
-        id
-        label
-        location
-        description
-        provider {
-          id
-          label
-        }
-        enabled
-        status
-        configuration {
-          id
-          value
-        }
-      }
-      providers {
-        id
-        label
-        providerFunctions {
-          id
-          label
-          parameters {
-            id
-            label
-            inputType
-            regex
-          }
-        }
-      }
-    }`,
-    pollInterval: 1000
+    query: stacksQueryGQL,
+    pollInterval: 1000,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
   if (result.error) return <GraphQLError error={result.error} />

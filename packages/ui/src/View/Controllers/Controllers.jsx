@@ -1,59 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from 'urql'
 import { DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
+import { controllersQueryGQL } from './queries'
+import headers from './headers'
+import globalContext from '../../globalContext'
 import GraphQLError from '../components/GraphQLError.jsx'
-import Controller from './components/Controller.jsx'
+import Controller from './Controller.jsx'
 
 const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Controllers = () => {
-  const headers = [
-    {
-      key: 'label',
-      header: 'Name'
-    },
-    {
-      key: 'manufacturer',
-      header: 'Manufacturer'
-    },
-    {
-      key: 'model',
-      header: 'Model'
-    },
-    {
-      key: 'serial',
-      header: 'Serial Number'
-    },
-    { // TODO Awaiting Upstream
-      key: 'panel.label',
-      header: 'Panel'
-    },
-    {
-      key: 'status',
-      header: 'Status'
-    }
-  ]
-
+  const { contextRealm } = useContext(globalContext)
   const [result] = useQuery({
-    query: `query controllers {
-      controllers {
-        label
-        manufacturer
-        model
-        serial
-        status
-        panel {
-          id
-          label
-        }
-        id
-      }
-      panels {
-        id
-        label
-      }
-    }`,
-    pollInterval: 1000
+    query: controllersQueryGQL,
+    pollInterval: 1000,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
   if (result.error) return <GraphQLError error={result.error} />

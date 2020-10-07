@@ -26,6 +26,12 @@ const deviceUpdateInputType = new GraphQLInputObjectType({
     status: {
       type: GraphQLString
     },
+    realm: {
+      type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
     provider: {
       type: new GraphQLInputObjectType({
         name: 'deviceProviderDetailInputType',

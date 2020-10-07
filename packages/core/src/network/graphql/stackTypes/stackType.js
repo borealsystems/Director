@@ -20,6 +20,12 @@ const stackType = new GraphQLObjectType({
     description: {
       type: GraphQLString
     },
+    realm: {
+      type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
     actions: {
       type: new GraphQLList(
         new GraphQLObjectType({

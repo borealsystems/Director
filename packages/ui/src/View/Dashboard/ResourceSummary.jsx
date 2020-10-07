@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from 'urql'
-
 import { InlineLoading } from 'carbon-components-react'
-
-import GraphQLError from '../components/GraphQLError.jsx'
 import { Application20, Devices20, Document20, PanelExpansion20, DataConnected20 } from '@carbon/icons-react'
+import GraphQLError from '../components/GraphQLError.jsx'
+import globalContext from '../../globalContext'
 
 const ResourceSummary = () => {
+  const { contextRealm } = useContext(globalContext)
+
   const [result] = useQuery({
     query: `query resourceSummary {
       devices { id }
@@ -25,7 +26,7 @@ const ResourceSummary = () => {
   if (result.data) {
     return (
       <>
-        <br/><p>This core has the following configured artifacts:</p>
+        <br/><p>{contextRealm.coreLabel} {contextRealm.id === 'ROOT' ? 'root' : `/ ${contextRealm.label}` } has:</p>
         <Devices20 { ...offsetProp }/> {result.data.devices.length} Device{result.data.devices.length !== 1 ? 's' : ''}<br/>
         <Document20 { ...offsetProp }/> {result.data.stacks.length} Stack{result.data.stacks.length !== 1 ? 's' : ''}<br/>
         <PanelExpansion20 { ...offsetProp }/> {result.data.panels.length} Panel{result.data.panels.length !== 1 ? 's' : ''}<br/>

@@ -20,3 +20,19 @@
   font-size: 1rem;
   border-bottom: none;
 }
+
+.bx--modal {
+  height: 95.3vh !important;
+}
+
+.dx--table-modal-trigger {
+  display: flex
+}
+
+.dx--table-modal-trigger div[role=presentation]#realmModalWrapper {
+  display: flex !important;
+}
+
+.dx--table-modal-trigger div[role=presentation]#realmModalWrapper .bx--btn--primary { /* Hack to make wrapped modal button red */
+  background-color: #da1e28;
+}

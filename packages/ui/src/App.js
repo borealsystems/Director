@@ -14,21 +14,15 @@ const client = createClient({
 })
 
 const App = () => {
-  const [realm, setRealm] = useState({
-    id: '0,0',
-    realm: {
-      id: 'LOADING',
-      label: 'LOADING'
-    },
-    core: {
-      id: 'LOADING',
-      label: 'LOADING'
-    }
-  })
+  const [contextRealm, _setContextRealm] = useState(JSON.parse(localStorage.getItem('contextRealm')) ?? {})
+  const setContextRealm = (event) => {
+    localStorage.setItem('contextRealm', JSON.stringify(event))
+    _setContextRealm(event)
+  }
   return (
     <Provider value={client}>
       <Router>
-        <globalContext.Provider value={{ realm, setRealm }}>
+        <globalContext.Provider value={{ contextRealm, setContextRealm }}>
           <BorealDirector />
         </globalContext.Provider>
       </Router>

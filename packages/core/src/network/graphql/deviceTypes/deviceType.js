@@ -20,6 +20,12 @@ const deviceType = new GraphQLObjectType({
     id: {
       type: GraphQLString
     },
+    realm: {
+      type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
     provider: {
       type: new GraphQLObjectType({
         name: 'deviceProviderDetailType',

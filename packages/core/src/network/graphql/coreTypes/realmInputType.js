@@ -1,15 +1,12 @@
 import {
-  GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString
 } from 'graphql'
 
-const realmType = new GraphQLObjectType({
-  name: 'realmType',
+const realmInputType = new GraphQLInputObjectType({
+  name: 'realmInputType',
   fields: {
     coreID: {
-      type: GraphQLString
-    },
-    coreLabel: {
       type: GraphQLString
     },
     id: {
@@ -27,4 +24,4 @@ const realmType = new GraphQLObjectType({
   }
 })
 
-export default realmType
+export default realmInputType

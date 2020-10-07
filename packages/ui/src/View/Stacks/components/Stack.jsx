@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Button, TextInput } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { omit } from 'lodash'
+import globalContext from '../../../globalContext'
 import Action from './Action.jsx'
 
 const deleteStackGQL = `
@@ -25,6 +26,7 @@ const executeStackMutationGQL = `mutation executeStack($executeID: String) {
 // TODO: fix the autosaving action parameter details, it currently updates and rerenders which removes to input focus from the client, making long paths hard to type in
 
 const Stack = (props) => {
+  const { contextRealm } = useContext(globalContext)
   const initialStack = props.new ? {} : { ...props.stacks.find((item) => { return item.id === props.stackID }) }
   const initialActions = props.new ? [] : [...props.stacks.find((item) => { return item.id === props.stackID }).actions]
   if (!props.new && initialStack.actions) {
@@ -46,7 +48,7 @@ const Stack = (props) => {
     actions.forEach(action => {
       actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
-    const stackUpdateObject = { stack: { ...stack, actions: actionsStripped } }
+    const stackUpdateObject = { stack: { ...stack, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
     console.log(JSON.stringify(stackUpdateObject))
     stackUpdateMutation(stackUpdateObject).then(console.log(stackUpdateMutationResult))
     if (props.visability) {
@@ -59,7 +61,7 @@ const Stack = (props) => {
     actions.forEach(action => {
       actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
-    const stackUpdateObject = { stack: { ...omit(stack, 'id'), label: `Duplicate of ${stack.label}`, actions: actionsStripped } }
+    const stackUpdateObject = { stack: { ...omit(stack, 'id'), label: `Duplicate of ${stack.label}`, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
     console.log(JSON.stringify(stackUpdateObject))
     stackUpdateMutation(stackUpdateObject).then(console.log(stackUpdateMutationResult))
     if (props.visability) {

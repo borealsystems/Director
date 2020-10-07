@@ -20,6 +20,12 @@ const panelUpdateInputType = new GraphQLInputObjectType({
     description: {
       type: GraphQLString
     },
+    realm: {
+      type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
     layoutType: {
       type: new GraphQLInputObjectType({
         name: 'panelUpdateLayoutTypeInputType',

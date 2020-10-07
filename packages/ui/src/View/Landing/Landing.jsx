@@ -40,14 +40,10 @@ const Landing = ({ realms, realm, setRealm }) => {
                 placeholder='Core / Realm'
                 selectedItem=''
                 items={realms}
-                itemToString={(item) => {
-                  return item.realm
-                    ? item.realm.id === 'root' ? item.core.label : `${item.core.label} / ${item.realm.label}`
-                    : ''
-                }}
+                itemToString={(item) => { return item.id === 'ROOT' ? item.coreLabel : `${item.coreLabel} / ${item.label}` }}
                 onChange={(event) => {
                   setRealm(event.selectedItem)
-                  history.push(`/${event.selectedItem.core.id}/${event.selectedItem.realm.id}/`)
+                  history.push(`/cores/${event.selectedItem.coreID}/realms/${event.selectedItem.id}/`)
                 }}
               />
             </Row>

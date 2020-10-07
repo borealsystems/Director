@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, ButtonSet, ComboBox, TextInput, Form, FormGroup, ProgressIndicator, ProgressStep, Grid, Row, Column, InlineNotification, Loading } from 'carbon-components-react'
 import { ArrowRight24, Exit24, ArrowLeft24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import { omit } from 'lodash'
 import { useMutation } from 'urql'
 import { panelUpdateMutationGQL } from './queries'
+import globalContext from '../../globalContext'
 
 const Panel = ({ id, result }) => {
+  const { contextRealm } = useContext(globalContext)
   const isNew = id === 'new'
   const history = useHistory()
 
@@ -20,7 +22,6 @@ const Panel = ({ id, result }) => {
     initialPanel = { ...thisPanel, buttons: buttons }
   }
   var [panel, setPanel] = useState(initialPanel)
-  console.log(panel)
 
   const [configurationStep, setConfigurationStep] = useState(isNew ? 0 : 1)
   const [errors, setErrors] = useState({
@@ -31,16 +32,13 @@ const Panel = ({ id, result }) => {
   const [panelUpdateMutationResult, panelUpdateMutation] = useMutation(panelUpdateMutationGQL)
 
   const updatePanel = () => {
-    const stackUpdateObject = { panel: omit(panel, 'currentButton') }
-    console.log(JSON.stringify(stackUpdateObject))
+    const stackUpdateObject = { panel: { ...omit(panel, 'currentButton'), realm: contextRealm.id, core: contextRealm.coreID } }
     panelUpdateMutation(stackUpdateObject).then(console.log(panelUpdateMutationResult))
-    history.push({ pathname: './' })
+    history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` })
   }
 
   const formOnChange = (field, value) => {
     const scopedErrors = { ...errors }
-
-    console.log(field, value)
     switch (field) {
       case 'layoutType':
         scopedErrors.layoutType = !value ? 'Please select a panel layout type' : ''
@@ -312,7 +310,7 @@ const Panel = ({ id, result }) => {
           <Row>
             <Column style={{ marginLeft: '64.4%' }}>
               <ButtonSet>
-                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: './' }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
+                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
                   { configurationStep === 0 ? 'Cancel' : 'Go Back' }
                 </Button>
                   &nbsp;
