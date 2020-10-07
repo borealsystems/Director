@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, lazy, Suspense } from 'react'
 import {
   Redirect,
   Route,
@@ -31,30 +31,32 @@ import {
   SideNavMenu,
   SkipToContent
 } from 'carbon-components-react'
-import { Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
-
-import Controllers from './Controllers/Controllers.jsx'
-import Core from './Core/Core.jsx'
-import Clock from './components/Clock.jsx'
-import Dashboard from './Dashboard/Dashboard.jsx'
-import Device from './Device/DeviceWrapper.jsx'
-import Devices from './Devices/Devices.jsx'
-import Flow from './Flow/Flow.jsx'
-import GraphQLError from './components/GraphQLError.jsx'
-import Landing from './Landing/Landing.jsx'
-import Login from './Login/Login.jsx'
-import PanelWrapper from './Panels/PanelWrapper.jsx'
-import Panels from './Panels/Panels.jsx'
-import ReactError from './components/ReactError.jsx'
-import Realms from './Realms/Realms.jsx'
-import Shotbox from './Shotbox/Shotbox.jsx'
-import ShotboxPanelWrapper from './Shotbox/ShotboxPanelWrapper.jsx'
-import SideNavMenuItem from './components/SideNavMenuItem.jsx'
-import SideNavLink from './components/SideNavLink.jsx'
-import Stacks from './Stacks/Stacks.jsx'
 
 import globalContext from '../globalContext'
 import './index.scss'
+
+import Clock from './components/Clock.jsx'
+import SideNavMenuItem from './components/SideNavMenuItem.jsx'
+import SideNavLink from './components/SideNavLink.jsx'
+import ReactError from './components/ReactError.jsx'
+import GraphQLError from './components/GraphQLError.jsx'
+import { Keyboard24, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
+
+const Landing = lazy(() => import('./Landing/Landing.jsx'))
+const Login = lazy(() => import('./Login/Login.jsx'))
+
+const Controllers = lazy(() => import('./Controllers/Controllers.jsx'))
+const Core = lazy(() => import('./Core/Core.jsx'))
+const Dashboard = lazy(() => import('./Dashboard/Dashboard.jsx'))
+const Device = lazy(() => import('./Device/DeviceWrapper.jsx'))
+const Devices = lazy(() => import('./Devices/Devices.jsx'))
+const Flow = lazy(() => import('./Flow/Flow.jsx'))
+const PanelWrapper = lazy(() => import('./Panels/PanelWrapper.jsx'))
+const Panels = lazy(() => import('./Panels/Panels.jsx'))
+const Realms = lazy(() => import('./Realms/Realms.jsx'))
+const Shotbox = lazy(() => import('./Shotbox/Shotbox.jsx'))
+const ShotboxPanelWrapper = lazy(() => import('./Shotbox/ShotboxPanelWrapper.jsx'))
+const Stacks = lazy(() => import('./Stacks/Stacks.jsx'))
 
 const BorealDirector = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
@@ -167,67 +169,69 @@ const BorealDirector = () => {
               </Header>
               { result.loading && <Loading /> }
               <Content id="main-content">
-                <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
-                  <Row>
-                    <Column>
-                      <ErrorBoundary fallback={<ReactError />}>
-                        <Switch>
-                          { !isAuthenticated && result.data &&
-                                <>
-                                  <Redirect to="/login" />
-                                  <Route exact path="/login">
-                                    <Login auth={setAuthenticationState}/>
-                                  </Route>
-                                </>
-                          }
-                          { isAuthenticated && result.data && !contextRealm.id &&
-                            <>
-                              {/* REDIRECTS */}
-                              <Route path="/:anything">
-                                <Redirect to="/" />
-                              </Route>
-                              <Route path="/" >
-                                <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} />
-                              </Route>
-                            </>
-                          }
-                          { isAuthenticated && result.data && contextRealm.id &&
-                            <>
-                              {/* CONFIGURE */}
-                              <Route exact path="/cores/:core/realms/:realm/config/devices/:id" component={Device} />
-                              <Route exact path="/cores/:core/realms/:realm/config/devices" component={Devices} />
-                              <Route exact path="/cores/:core/realms/:realm/config/stacks" component={Stacks} />
-                              <Route exact path="/cores/:core/realms/:realm/config/panels/:id" component={PanelWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/config/panels" component={Panels} />
-                              <Route exact path="/cores/:core/realms/:realm/config/controllers" component={Controllers} />
-                              {/* CONTROL */}
-                              <Route exact path="/cores/:core/realms/:realm/control/shotbox" component={Shotbox} />
-                              <Route exact path="/cores/:core/realms/:realm/control/shotbox/:id" component={ShotboxPanelWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/control/flow" component={Flow} />
-                              {/* CORE/REALM */}
-                              <Route exact path="/cores/:core/configuration">
-                                <Core updateAndSetRealm={updateAndSetRealm} />
-                              </Route>
-                              <Route exact path="/cores/:core/realms">
-                                <Realms updateRealmsQuery={reexecuteRealmsQuery} />
-                              </Route>
-                              {/* MONITOR */}
-                              <Route exact strict path="/cores/:core/realms/:realm/" component={Dashboard} />
-                              {/* REDIRECTS */}
-                              <Route exact path="/login">
-                                <Redirect to="/" />
-                              </Route>
-                              <Route exact path="/" >
-                                <Redirect to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} />
-                                {/* <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} /> */}
-                              </Route>
-                            </>
-                          }
-                        </Switch>
-                      </ErrorBoundary>
-                    </Column>
-                  </Row>
-                </Grid>
+                <Suspense fallback={<Loading/>} >
+                  <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
+                    <Row>
+                      <Column>
+                        <ErrorBoundary fallback={<ReactError />}>
+                          <Switch>
+                            { !isAuthenticated && result.data &&
+                                  <>
+                                    <Redirect to="/login" />
+                                    <Route exact path="/login">
+                                      <Login auth={setAuthenticationState}/>
+                                    </Route>
+                                  </>
+                            }
+                            { isAuthenticated && result.data && !contextRealm.id &&
+                              <>
+                                {/* REDIRECTS */}
+                                <Route path="/:anything">
+                                  <Redirect to="/" />
+                                </Route>
+                                <Route path="/" >
+                                  <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} />
+                                </Route>
+                              </>
+                            }
+                            { isAuthenticated && result.data && contextRealm.id &&
+                              <>
+                                {/* CONFIGURE */}
+                                <Route exact path="/cores/:core/realms/:realm/config/devices/:id" component={Device} />
+                                <Route exact path="/cores/:core/realms/:realm/config/devices" component={Devices} />
+                                <Route exact path="/cores/:core/realms/:realm/config/stacks" component={Stacks} />
+                                <Route exact path="/cores/:core/realms/:realm/config/panels/:id" component={PanelWrapper} />
+                                <Route exact path="/cores/:core/realms/:realm/config/panels" component={Panels} />
+                                <Route exact path="/cores/:core/realms/:realm/config/controllers" component={Controllers} />
+                                {/* CONTROL */}
+                                <Route exact path="/cores/:core/realms/:realm/control/shotbox" component={Shotbox} />
+                                <Route exact path="/cores/:core/realms/:realm/control/shotbox/:id" component={ShotboxPanelWrapper} />
+                                <Route exact path="/cores/:core/realms/:realm/control/flow" component={Flow} />
+                                {/* CORE/REALM */}
+                                <Route exact path="/cores/:core/configuration">
+                                  <Core updateAndSetRealm={updateAndSetRealm} />
+                                </Route>
+                                <Route exact path="/cores/:core/realms">
+                                  <Realms updateRealmsQuery={reexecuteRealmsQuery} />
+                                </Route>
+                                {/* MONITOR */}
+                                <Route exact strict path="/cores/:core/realms/:realm/" component={Dashboard} />
+                                {/* REDIRECTS */}
+                                <Route exact path="/login">
+                                  <Redirect to="/" />
+                                </Route>
+                                <Route exact path="/" >
+                                  <Redirect to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} />
+                                  {/* <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} /> */}
+                                </Route>
+                              </>
+                            }
+                          </Switch>
+                        </ErrorBoundary>
+                      </Column>
+                    </Row>
+                  </Grid>
+                </Suspense>
               </Content>
             </>
           )}

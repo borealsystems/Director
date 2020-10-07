@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const port = process.env.PORT || 3000
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
 
   entry: [
     'webpack-dev-server/client?http://0.0.0.0:3000',
@@ -18,7 +18,10 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'sourcemaps/[file].map'
+    })
   ],
 
   resolve: {
@@ -27,7 +30,12 @@ module.exports = {
     }
   },
 
-  devtool: 'inline-source-map',
+  optimization: {
+    usedExports: true,
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
 
   module: {
     rules: [
