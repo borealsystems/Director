@@ -1,0 +1,17 @@
+$feature-flags: (
+  enable-css-custom-properties: true,
+);
+
+@import "@carbon/themes/scss/_mixins";
+
+.dx--light {
+  @include carbon--theme($carbon--theme--g10, true);
+  background-color: #f4f4f4 !important;
+}
+
+.dx--dark {
+  @include carbon--theme($carbon--theme--g100, true);
+  background-color: #393939 !important;
+}
+
+@import "carbon-components/scss/globals/scss/styles";

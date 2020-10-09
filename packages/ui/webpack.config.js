@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const port = process.env.PORT || 3000
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
 
   entry: [
     'webpack-dev-server/client?http://0.0.0.0:3000',
@@ -31,10 +31,7 @@ module.exports = {
   },
 
   optimization: {
-    usedExports: true,
-    splitChunks: {
-      chunks: 'all'
-    }
+    usedExports: true
   },
 
   module: {

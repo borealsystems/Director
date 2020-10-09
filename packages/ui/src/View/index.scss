@@ -12,6 +12,7 @@
   border: none !important;
 }
 
+
 .comboBoxNoClear .bx--list-box__selection {
   visibility: hidden;
 }
@@ -19,6 +20,28 @@
 .clock .bx--tooltip__trigger.bx--tooltip__trigger--definition {
   font-size: 1rem;
   border-bottom: none;
+}
+
+.dx--light {
+  .clock .bx--tooltip__trigger.bx--tooltip__trigger--definition {
+    color: #f4f4f4;
+  }
+
+  .coreSelect .bx--text-input {
+    color: #f4f4f4;
+  }
+
+  .coreSelect.bx--list-box--disabled .bx--text-input {
+    color: #525252;
+  }
+
+  .coreSelect .bx--list-box__menu-icon > svg {
+    fill: #f4f4f4;
+  }
+
+  .coreSelect.bx--list-box--disabled .bx--list-box__menu-icon > svg {
+    fill: #525252;
+  }
 }
 
 .bx--modal {

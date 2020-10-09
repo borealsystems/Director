@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableCell,
   TextInput,
-  Modal, InlineNotification, ModalWrapper, TextArea
+  Modal, InlineNotification, ModalWrapper, TextArea, TooltipIcon
 } from 'carbon-components-react'
 import { Add24, Edit24, TrashCan24 } from '@carbon/icons-react'
 
@@ -165,6 +165,9 @@ const Realms = ({ updateRealmsQuery }) => {
                         {header.header}
                       </TableHeader>
                     ))}
+                    <TableHeader>
+                      Modify
+                    </TableHeader>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -182,7 +185,7 @@ const Realms = ({ updateRealmsQuery }) => {
                               kind='ghost'
                               renderIcon={Edit24}
                               hasIconOnly
-                              iconDescription='Edit Realm'
+                              iconDescription='Edit'
                               onClick={() => {
                                 openModal()
                               }}
@@ -190,6 +193,7 @@ const Realms = ({ updateRealmsQuery }) => {
                           )}
                         />
                         { row.cells[0].value !== 'ROOT' &&
+                        <TooltipIcon tooltipText='Delete' direction='top'>
                           <ModalWrapper
                             id="realmModalWrapper"
                             selectorPrimaryFocus="button"
@@ -212,6 +216,7 @@ const Realms = ({ updateRealmsQuery }) => {
                             })}>
                             <p>Deleting this realm is permanent and cannot be undone, all devices, stack, and panels associated with this realm will also be deleted.</p>
                           </ModalWrapper>
+                        </TooltipIcon>
                         }
                       </TableCell>
                     </TableRow>

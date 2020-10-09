@@ -2,7 +2,9 @@ import React from 'react'
 
 const globalContext = React.createContext({
   realmContext: {},
-  setContextRealm: () => {}
+  setContextRealm: () => {},
+  theme: '',
+  toggleTheme: () => {}
 })
 
 export default globalContext

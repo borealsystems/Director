@@ -10,9 +10,17 @@
     <meta name="theme-color" content="#000000" />
     <!-- <link rel="manifest" href="dist/manifest.json" /> -->
     <title>Director</title>
+    <style>
+      .dx--dark {
+        background-color: #393939 !important;
+      }
+    </style>
   </head>
-  <body style="background-color: #393939;">
+  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="text/javascript">
+      document.body.classList.add(localStorage.getItem('uiTheme') ? localStorage.getItem('uiTheme') : 'dx--dark')
+    </script>
     <div id="root"></div>
     <script src="/dist/bundle.js"></script>
   </body>
