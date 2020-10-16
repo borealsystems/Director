@@ -116,10 +116,12 @@ const Devices = () => {
                         }
                       })}
                       <TableCell>
-                        <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
-                          <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
-                          <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />
-                        </OverflowMenu>
+                        { !row.cells[0].value.match(/CORE-/) &&
+                          <OverflowMenu flipped>
+                            <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
+                            <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />
+                          </OverflowMenu>
+                        }
                       </TableCell>
                     </TableRow>
                   ))}

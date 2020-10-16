@@ -52,18 +52,19 @@ const instantiateDevice = (_id) => {
     const provider = providers.find((provider) => provider.id === device.provider.id)
     if (deviceInstance[_id]) {
       deviceInstance[_id].destroy()
+      deviceInstance[_id] = new provider.constructor(device)
       deviceInstance[_id].init()
     } else {
-      deviceInstance[_id] = new provider.Construct(device)
+      deviceInstance[_id] = new provider.constructor(device)
       deviceInstance[_id].init()
     }
-    log('info', 'core/lib/devices', `Instantiated ${_id} (${device.label}) with ${device.provider.label}`)
+    log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${device.provider.label}`)
   })
 }
 
 const deleteDevice = (_id) => {
-  if (_id === '0') {
-    log('info', 'core/lib/devices', 'You Can\'t Delete Director from Director')
+  if (_id.match(/CORE-/)) {
+    log('info', 'core/lib/devices', 'You Can\'t Delete Director from Director!')
     return 'error'
   } else {
     deviceInstance[_id].destroy()

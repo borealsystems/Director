@@ -1,6 +1,7 @@
 import { bridges } from '../../bridges'
 import { logs } from '../../utils/log'
 import { providers } from '../../providers'
+import { deviceInstance } from '../../devices'
 import { cores, devices, stacks, panels, controllers } from '../../db'
 
 import {
@@ -17,7 +18,8 @@ import controllerType from './controllerTypes/controllerType'
 import deviceType from './deviceTypes/deviceType.js'
 import logType from './coreTypes/logType'
 import panelType from './panelTypes/panelType'
-import providerType from './providerType'
+import providerType from './providerTypes/providerType'
+import providerFunctionType from './providerTypes/providerFunctionType'
 import realmType from './coreTypes/realmType'
 import stackType from './stackTypes/stackType.js'
 
@@ -142,6 +144,16 @@ const queries = new GraphQLObjectType({
       resolve: async (parent, args) => {
         return await devices.findOne({ id: args.id })
       }
+    },
+
+    deviceFunctions: {
+      name: 'deviceFunctions',
+      description: 'Returns all providers functions for all configured devices in a realm',
+      type: new GraphQLList(providerFunctionType),
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: (p, args) => deviceInstance[args.id].providerFunctions
     },
 
     stacks: {

@@ -3,22 +3,11 @@ query providers {
   providers {
     id
     label
-    protocol
     parameters {
       required
       id
       label
       regex
-    }
-    providerFunctions {
-      id
-      label
-      parameters {
-        id
-        label
-        inputType
-        regex
-      }
     }
   }
 }
@@ -29,22 +18,11 @@ query deviceAndProviders($id: String) {
   providers {
     id
     label
-    protocol
     parameters {
       required
       id
       label
       regex
-    }
-    providerFunctions {
-      id
-      label
-      parameters {
-        id
-        label
-        inputType
-        regex
-      }
     }
   }
   device(id:$id){

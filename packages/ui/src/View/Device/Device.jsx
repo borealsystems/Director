@@ -73,7 +73,7 @@ const Device = ({ id, result }) => {
         updateDevice().then(() => {
           if (!deviceUpdateMutationResult.error) {
             setIsLoading(false)
-            history.push({ pathname: './' })
+            history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices` })
           }
         })
         break
@@ -201,7 +201,11 @@ const Device = ({ id, result }) => {
           <Row>
             <Column style={{ marginLeft: '64.4%' }}>
               <ButtonSet>
-                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: './' }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
+                <Button
+                  renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24}
+                  onClick={() => { configurationStep === 0 ? history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices` }) : setConfigurationStep(configurationStep - 1) }}
+                  size='default' kind="secondary"
+                >
                   { configurationStep === 0 ? 'Cancel' : 'Go Back' }
                 </Button>
                   &nbsp;

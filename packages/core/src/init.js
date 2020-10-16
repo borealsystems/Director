@@ -27,13 +27,13 @@ initDB()
       {
         core: process.env.DIRECTOR_CORE_ID,
         realm: 'ROOT',
-        id: '0',
-        label: 'BorealSystems Director',
+        id: `CORE-${process.env.DIRECTOR_CORE_ID}`,
+        label: process.env.DIRECTOR_CORE_LABEL,
         location: 'The Void',
-        provider: { id: 'BorealSystems-DirectorInternal', label: 'BorealDirector' },
+        provider: { id: 'ProtocolProviderBorealDirector', label: 'BorealDirector' },
         enabled: true,
         status: STATUS.UNKNOWN,
-        description: 'The Director Core'
+        description: `The virtual device for Core ${process.env.DIRECTOR_CORE_ID}`
       }
     )
   })

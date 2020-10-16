@@ -38,20 +38,19 @@ const stacksQueryGQL = `query getAll($realm: String, $core: String ) {
       value
     }
   }
-  providers {
+}`
+
+const deviceFunctionQueryGQL = `query deviceFunctions($id: String) {
+  deviceFunctions(id: $id) {
     id
     label
-    providerFunctions {
+    parameters {
       id
       label
-      parameters {
-        id
-        label
-        inputType
-        regex
-      }
+      inputType
+      regex
     }
   }
 }`
 
-export { stacksQueryGQL }
+export { stacksQueryGQL, deviceFunctionQueryGQL }

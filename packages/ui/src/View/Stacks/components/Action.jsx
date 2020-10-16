@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import { useQuery } from 'urql'
 import PropTypes from 'prop-types'
 import { Button, ComboBox, TextInput } from 'carbon-components-react'
 import { ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
 import { findIndex, find } from 'lodash'
+import { deviceFunctionQueryGQL } from '../queries'
 
 const arrayMove = (array, from, to) => {
   array = array.slice()
@@ -21,6 +23,13 @@ const Action = (props) => {
   }
   var [action, setAction] = useState(initialActionState)
   var [actionComparisonStore] = useState(initialActionState)
+
+  const [result] = useQuery({
+    query: deviceFunctionQueryGQL,
+    pollInterval: 1000,
+    variables: { id: action?.device?.id },
+    pause: !action.device?.id
+  })
 
   const getActionMoveButtons = () => {
     if (props.actions.length === 1) {
@@ -126,12 +135,22 @@ const Action = (props) => {
                   disabled
                 />
               }
-              { action.device && props.new &&
+              { action.device && props.new && !result.data &&
                 <ComboBox
                   ariaLabel="Dropdown"
                   id="newstackProvider"
                   placeholder='Filter...'
-                  items={props.providers.find(provider => provider.id === action.device.provider.id).providerFunctions}
+                  titleText="Function"
+                  items={[]}
+                  disabled
+                />
+              }
+              { action.device && props.new && result.data &&
+                <ComboBox
+                  ariaLabel="Dropdown"
+                  id="newstackProvider"
+                  placeholder='Filter...'
+                  items={result.data.deviceFunctions}
                   onChange={(providerFunction) => { setAction({ ...action, providerFunction: { id: providerFunction.selectedItem.id, label: providerFunction.selectedItem.label } }) }}
                   titleText="Function"
                 />
@@ -151,9 +170,8 @@ const Action = (props) => {
             </div>
           </div>
           <br/>
-          { action.providerFunction && props.providers.find(provider => provider.id === action.device.provider.id).providerFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters.length > 0 &&
-            props.providers.find(provider => provider.id === action.device.provider.id)
-              .providerFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
+          { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters.length > 0 &&
+            result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
               .map((parameter, index) => {
                 return (
                   <div key={index}>

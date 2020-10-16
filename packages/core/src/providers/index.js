@@ -16,22 +16,24 @@ const initProviders = () => {
       files.forEach(file => {
         import(`./Library/protocolProviders/${file}`)
           .then((module) => {
-            module.default(providers)
+            providers.push(module.default.providerRegistration)
+            log('info', 'core/lib/providers', `Loaded ${module.default.providerRegistration.id} (${module.default.providerRegistration.label})`)
             counter--
             if (counter === 0) { 
               loadDeviceProviders()
             }
           })
+        })
       })
-    })
-  
-    const loadDeviceProviders = () => {
-      fs.readdir(path.resolve(__dirname, './Library/deviceProviders'), (err, files) => {
-        var counter = files.length
-        files.forEach(file => {
-          import(`./Library/deviceProviders/${file}`)
+      
+      const loadDeviceProviders = () => {
+        fs.readdir(path.resolve(__dirname, './Library/deviceProviders'), (err, files) => {
+          var counter = files.length
+          files.forEach(file => {
+            import(`./Library/deviceProviders/${file}`)
             .then((module) => {
-              module.default(providers)
+              providers.push(module.default.providerRegistration)
+              log('info', 'core/lib/providers', `Loaded ${module.default.providerRegistration.id} (${module.default.providerRegistration.label})`)
               counter--
               if (counter === 0) { 
                 resolve()
