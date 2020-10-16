@@ -23,7 +23,7 @@ const updatePanel = (_panel) => {
         return panels.findOne({ id: id })
       })
       .then(panel => {
-        log('info', 'core/lib/panels', `${!panel.id ? 'Creating' : 'Updating'} ${panel.id} (${panel.label})`)
+        log('info', 'core/lib/panels', `${!panel.id ? 'Created' : 'Updated'} ${panel.id} (${panel.label})`)
         resolve(panel)
       })
       .catch(e => reject(e))

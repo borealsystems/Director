@@ -3,6 +3,7 @@ import status from '../utils/statusEnum'
 import shortid from 'shortid'
 import { stacks } from '../db'
 import { deviceInstance } from '../devices'
+import { stackWaterfall } from '../utils/waterfall'
 
 const updateStack = (_stack) => {
   return new Promise((resolve, reject) => {
@@ -24,6 +25,7 @@ const updateStack = (_stack) => {
       })
       .then(stack => {
         log('info', 'core/lib/stacks', `${_stack.id ? 'Updated' : 'Created'} ${stack.id} (${stack.label})`)
+        stackWaterfall(stack)
         resolve(stack)
       })
       .catch(e => reject(e))
