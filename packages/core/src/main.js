@@ -1,5 +1,5 @@
-import { initDevices } from './devices'
-import { initProviders, cleanupProviders } from './providers'
+import { initDevices, cleanupDevices } from './devices'
+import { initProviders } from './providers'
 import { initApollo } from './network/apollo'
 import { initBridges } from './bridges'
 import { initDB } from './db'
@@ -18,12 +18,14 @@ initDB()
 
 process.on('SIGINT', () => {
   fs.appendFileSync('logs.txt', '========= TERMINATING =========\r\n')
-  cleanupProviders()
-  setTimeout(process.exit(), 5000)
+  cleanupDevices()
+    .then(() => log('warn', 'core', '========= TERMINATING ========='))
+    .then(() => process.exit())
 })
 
 process.on('SIGHUP', () => {
   fs.appendFileSync('logs.txt', '========= TERMINATING =========\r\n')
-  cleanupProviders()
-  setTimeout(process.exit(), 5000)
+  cleanupDevices()
+    .then(() => log('warn', 'core', '========= TERMINATING ========='))
+    .then(() => process.exit())
 })

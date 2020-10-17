@@ -15,9 +15,13 @@ const initDevices = () => {
   })
 }
 
-const cleanupDevices = () => {
-  Object.keys(deviceInstance).forEach(deviceInstance => deviceInstance.destroy())
-}
+const cleanupDevices = () => new Promise(resolve => {
+  for (const [key, device] of Object.entries(deviceInstance)) {
+    device.destroy()
+    delete deviceInstance[key]
+  }
+  resolve()
+})
 
 const updateDevice = (_device) => {
   let id
@@ -68,6 +72,7 @@ const deleteDevice = (_id) => {
     return 'error'
   } else {
     deviceInstance[_id].destroy()
+    delete deviceInstance[_id]
     devices.deleteOne({ id: _id })
     log('info', 'core/lib/devices', `Deleted Device ${_id}`)
     return STATUS.OK

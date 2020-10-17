@@ -45,10 +45,4 @@ const initProviders = () => {
   })
 }
 
-// TODO: Implement Provider Cleanup for TCP based protocols
-
-const cleanupProviders = () => {
-  log('warn', 'core/lib/providers', `Clearing TCP providers`)
-}
-
-export { initProviders, cleanupProviders, providerInterfaces, providerInitMethods, providers }
+export { initProviders, providerInterfaces, providerInitMethods, providers }
