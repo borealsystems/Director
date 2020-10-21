@@ -9,8 +9,8 @@ const registerController = (_controller) => {
       { id: id },
       {
         $set: {
-          core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_CONFIG_LABEL,
-          realm: _controller.realm ? _controller.realm : 'root',
+          core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_ID,
+          realm: _controller.realm ? _controller.realm : 'ROOT',
           id: id,
           status: 'online',
           label: `${_controller.manufacturer}-${_controller.model}`,
@@ -33,8 +33,8 @@ const updateController = (_controller) => {
       { id: _controller.id },
       {
         $set: {
-          core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_CONFIG_LABEL,
-          realm: _controller.realm ? _controller.realm : 'root',
+          core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_ID,
+          realm: _controller.realm ? _controller.realm : 'ROOT',
           status: 'online',
           label: `${_controller.manufacturer}-${_controller.model}`,
           ..._controller

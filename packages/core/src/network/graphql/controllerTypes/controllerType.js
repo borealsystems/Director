@@ -32,6 +32,12 @@ const controllerType = new GraphQLObjectType({
     },
     status: {
       type: GraphQLString
+    },
+    core: {
+      type: GraphQLString
+    },
+    realm: {
+      type: GraphQLString
     }
   }
 })

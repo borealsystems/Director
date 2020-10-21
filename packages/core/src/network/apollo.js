@@ -9,22 +9,6 @@ const initApollo = () => {
   port = process.env.NODE_ENV === 'development' ? 3001 : 3000
 
   const apollo = new ApolloServer({
-    subscriptions: {
-      onConnect: (connectionParams, webSocket, context) => {
-        var clientIP = context.socket._socket.remoteAddress
-        if (clientIP.substr(0, 7) === '::ffff:') {
-          clientIP = clientIP.substr(7)
-        }
-        log('info', 'core/lib/network/express', `GraphQL Client ${clientIP} connected`)
-      },
-      onDisconnect: (webSocket, context) => {
-        var clientIP = context.socket._socket.remoteAddress
-        if (clientIP.substr(0, 7) === '::ffff:') {
-          clientIP = clientIP.substr(7)
-        }
-        log('info', 'core/lib/network/express', `GraphQL Client ${clientIP} disconnected`)
-      }
-    },
     schema: schema,
     context: ({ req }) => ({ req: req })
   })

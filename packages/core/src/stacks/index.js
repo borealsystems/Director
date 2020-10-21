@@ -53,6 +53,7 @@ const executeStack = (_id) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
       .then(stack => {
+        log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`)
         stack.actions.map(action => {
           deviceInstance[action.device.id].interface(action)
         })

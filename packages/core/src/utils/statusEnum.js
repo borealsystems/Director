@@ -3,7 +3,8 @@ const STATUS = {
   CLOSED: 'Disconnected',
   OK: 'OK',
   CONNECTING: 'Connecting',
-  ERROR: 'Error'
+  ERROR: 'Error',
+  WARNING: 'Warning'
 }
 
 export default STATUS

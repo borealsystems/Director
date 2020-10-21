@@ -5,7 +5,7 @@ const textImage = ({
   text = '',
   width = 80,
   height = 80,
-  background = '#000007ff',
+  background = '#0ffe62ff', // RBGA
   color
 }) => {
   const image = new Jimp(width, height, background)
@@ -14,7 +14,7 @@ const textImage = ({
       image.print(
         font,
         0,
-        (image.bitmap.height / 2.7) - (font.common.lineHeight / text.split('\n').length),
+        (image.bitmap.height / 2) - (font.common.lineHeight / text.split('\n').length),
         {
           text: text,
           alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER
@@ -35,7 +35,7 @@ const writeTextToButton = ({ text, device, buttonIndex, background, color }) => 
     text: text,
     width: device.controller.ICON_SIZE,
     height: device.controller.ICON_SIZE,
-    background: background || '#62fe0f',
+    background: background,
     color: color || 'white'
   })
     .then(_buffer => {
