@@ -49,6 +49,7 @@ const deviceFunctionQueryGQL = `query deviceFunctions($id: String) {
       label
       inputType
       regex
+      items 
     }
   }
 }`

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import PropTypes from 'prop-types'
-import { Button, ComboBox, TextInput } from 'carbon-components-react'
+import { Button, Column, ComboBox, Row, TextInput } from 'carbon-components-react'
 import { ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
 import { findIndex, find } from 'lodash'
 import { deviceFunctionQueryGQL } from '../queries'
@@ -83,21 +83,21 @@ const Action = (props) => {
 
   return (
     <>
-      <div className="bx--row">
-        <div className="bx--col">
+      <Row>
+        <Column>
           { !props.new &&
           <h5>Action {props.index + 1}: {action.providerFunction.label} on {action.device.label}</h5>
           }
           { props.new &&
             <h5>New Action</h5>
           }
-          <br/>
-        </div>
-      </div>
-      <div className="bx--row">
-        <div className="bx--col">
-          <div className="bx--row">
-            <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
+        </Column>
+      </Row>
+      <br/>
+      <Row>
+        <Column>
+          <Row>
+            <Column>
               { props.new &&
                 <ComboBox
                   ariaLabel="Dropdown"
@@ -122,8 +122,8 @@ const Action = (props) => {
                   disabled
                 />
               }
-            </div>
-            <div className="bx--dropdown__field-wrapper bx--col bx--col-lg-4">
+            </Column>
+            <Column>
               { !action.device &&
                 <ComboBox
                   ariaLabel="Dropdown"
@@ -167,23 +167,26 @@ const Action = (props) => {
                   disabled
                 />
               }
-            </div>
-          </div>
-          <br/>
+            </Column>
+          </Row>
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
           { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters.length > 0 &&
             result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
               .map((parameter, index) => {
                 return (
-                  <div key={index}>
-                    <div key={index} className="bx--row">
+                  <React.Fragment key={index}>
+                    <Row>
                       { parameter.inputType === 'textInput' &&
-                        <div className="bx--text-input__field-wrapper bx--col bx--col-lg-4">
+                        <Column>
                           <TextInput
                             type='text'
                             id={parameter.id}
                             placeholder='Required'
                             labelText={parameter.label}
-                            value={find(action.parameters, element => element.id === parameter.id)?.value }
+                            value={action.parameters.find(e => e.id === parameter.id).value || ''}
                             onClick={() => {}}
                             onChange={(e) => {
                               var parameterArray = [...action.parameters]
@@ -196,15 +199,38 @@ const Action = (props) => {
                               }
                             }}
                           />
-                        </div>
+                        </Column>
                       }
-                    </div><br/>
-                  </div>
+                      { parameter.inputType === 'comboBox' &&
+                        <Column>
+                          <ComboBox
+                            ariaLabel="Dropdown"
+                            id={parameter.id}
+                            placeholder='Filter...'
+                            items={parameter.items}
+                            selectedItem={action.parameters.find(e => e.id === parameter.id).value || ''}
+                            onChange={(e) => {
+                              var parameterArray = [...action.parameters]
+                              if (findIndex(action.parameters, element => element.id === parameter.id) !== -1) {
+                                find(parameterArray, element => element.id === parameter.id).value = e.selectedItem
+                                setAction({ ...action, parameters: [...parameterArray] })
+                              } else {
+                                parameterArray.push({ id: parameter.id, value: e.selectedItem })
+                                setAction({ ...action, parameters: [...parameterArray] })
+                              }
+                            }}
+                            titleText={parameter.id}
+                          />
+                        </Column>
+                      }
+                    </Row>
+                    <br/>
+                  </React.Fragment>
                 )
               })
           }
-        </div>
-        <div className="bx--col" style={{ marginTop: '25px', maxWidth: '33%' }}>
+        </Column>
+        <Column>
           { !props.new && getActionMoveButtons() }
           { props.new && action.providerFunction &&
             <Button onClick={() => {
@@ -246,11 +272,8 @@ const Action = (props) => {
               </Button>
             </>
           }
-        </div>
-      </div>
-      <br/>
-      <hr style={{ borderTop: 'dotted 1px', borderBottom: '0px' }} />
-      <br/>
+        </Column>
+      </Row>
     </>
   )
 }
