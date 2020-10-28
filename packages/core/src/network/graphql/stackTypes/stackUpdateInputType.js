@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLList
 } from 'graphql'
+import GraphQLJSON from 'graphql-type-json'
 
 const stackUpdateInputType = new GraphQLInputObjectType({
   name: 'stackUpdateInputType',
@@ -80,7 +81,7 @@ const stackUpdateInputType = new GraphQLInputObjectType({
                       type: GraphQLString
                     },
                     value: {
-                      type: GraphQLString
+                      type: GraphQLJSON
                     }
                   }
                 })

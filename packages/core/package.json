@@ -37,6 +37,7 @@
     "dotenv": "^8.2.0",
     "express-graphql": "^0.9.0",
     "graphql": "^14.6.0",
+    "graphql-type-json": "^0.3.2",
     "lodash": "^4.17.15",
     "mongodb": "^3.6.1",
     "nicely-format": "^1.1.0",

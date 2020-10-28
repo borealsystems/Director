@@ -4,6 +4,8 @@ import {
   GraphQLList
 } from 'graphql'
 
+import { GraphQLJSONObject } from 'graphql-type-json'
+
 const providerFunctionType = new GraphQLObjectType({
   name: 'providerFunction',
   fields: {
@@ -29,6 +31,11 @@ const providerFunctionType = new GraphQLObjectType({
             },
             regex: {
               type: GraphQLString
+            },
+            items: {
+              type: new GraphQLList(
+                GraphQLJSONObject
+              )
             }
           }
         })

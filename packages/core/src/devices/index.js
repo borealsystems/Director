@@ -54,12 +54,14 @@ const updateDevice = (_device) => {
 const instantiateDevice = (_id) => {
   devices.findOne({ id: _id }).then(device => {
     const provider = providers.find((provider) => provider.id === device.provider.id)
+    const configuration = {}
+    device.configuration && device.configuration.map(conf => { configuration[conf.id] = conf.value })
     if (deviceInstance[_id]) {
       deviceInstance[_id].destroy()
-      deviceInstance[_id] = new provider.constructor(device)
+      deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
       deviceInstance[_id].init()
     } else {
-      deviceInstance[_id] = new provider.constructor(device)
+      deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
       deviceInstance[_id].init()
     }
     log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${device.provider.label}`)

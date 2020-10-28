@@ -55,7 +55,9 @@ const executeStack = (_id) => {
       .then(stack => {
         log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`)
         stack.actions.map(action => {
-          deviceInstance[action.device.id].interface(action)
+          const params = {}
+          action.parameters.map(param => { params[param.id] = param.value })
+          deviceInstance[action.device.id].interface({ ...action, parameters: params })
         })
         resolve(status.OK)
       })

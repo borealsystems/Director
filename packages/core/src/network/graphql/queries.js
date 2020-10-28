@@ -151,9 +151,17 @@ const queries = new GraphQLObjectType({
       description: 'Returns all providers functions for all configured devices in a realm',
       type: new GraphQLList(providerFunctionType),
       args: {
-        id: { type: GraphQLString }
+        id: {
+          type: GraphQLString
+        },
+        realm: {
+          type: GraphQLString
+        },
+        core: {
+          type: GraphQLString
+        }
       },
-      resolve: (p, args) => deviceInstance[args.id].providerFunctions
+      resolve: (p, args) => typeof deviceInstance[args.id].providerFunctions === 'function' ? deviceInstance[args.id].providerFunctions(args) : deviceInstance[args.id].providerFunctions
     },
 
     stacks: {
