@@ -57,6 +57,7 @@ const Realms = lazy(() => import('./Realms/Realms.jsx'))
 const Shotbox = lazy(() => import('./Shotbox/Shotbox.jsx'))
 const ShotboxPanelWrapper = lazy(() => import('./Shotbox/ShotboxPanelWrapper.jsx'))
 const Stacks = lazy(() => import('./Stacks/Stacks.jsx'))
+const StackWrapper = lazy(() => import('./Stacks/StackWrapper.jsx'))
 
 const BorealDirector = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
@@ -204,6 +205,7 @@ const BorealDirector = () => {
                                 {/* CONFIGURE */}
                                 <Route exact path="/cores/:core/realms/:realm/config/devices/:id" component={Device} />
                                 <Route exact path="/cores/:core/realms/:realm/config/devices" component={Devices} />
+                                <Route exact path="/cores/:core/realms/:realm/config/stacks/:id" component={StackWrapper} />
                                 <Route exact path="/cores/:core/realms/:realm/config/stacks" component={Stacks} />
                                 <Route exact path="/cores/:core/realms/:realm/config/panels/:id" component={PanelWrapper} />
                                 <Route exact path="/cores/:core/realms/:realm/config/panels" component={Panels} />

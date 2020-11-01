@@ -2,98 +2,46 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import PropTypes from 'prop-types'
 import { Button, Column, ComboBox, Row, TextInput } from 'carbon-components-react'
-import { ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
-import { findIndex, find } from 'lodash'
-import { deviceFunctionQueryGQL } from '../queries'
-
-const arrayMove = (array, from, to) => {
-  array = array.slice()
-  const startIndex = to < 0 ? array.length + to : to
-  const item = array.splice(from, 1)[0]
-  array.splice(startIndex, 0, item)
-  return array
-}
+import { deviceFunctionQueryGQL } from './queries'
 
 const Action = (props) => {
   var initialActionState = {}
   if (props.new) {
     initialActionState = { parameters: [] }
   } else {
-    initialActionState = { ...props.actions[props.index] }
+    initialActionState = { ...props.action }
   }
   var [action, setAction] = useState(initialActionState)
-  var [actionComparisonStore] = useState(initialActionState)
+  var [actionComparisonStore, setActionComparisonStore] = useState(initialActionState)
 
   const [result] = useQuery({
     query: deviceFunctionQueryGQL,
-    pollInterval: 1000,
     variables: { id: action?.device?.id },
     pause: !action.device?.id
   })
 
-  const getActionMoveButtons = () => {
-    if (props.actions.length === 1) {
-      return (<></>)
-    } else if (props.index === 0) {
-      return (
-        <>
-          <div>
-            <span style={{ display: 'inline-block', paddingTop: '10px' }}>Move Action:</span>
-            <span style={{ display: 'inline-block', width: '44px' }}>&nbsp;</span>
-            <Button onClick={() => {
-              const mutatedActionArray = arrayMove(props.actions, props.index, props.index + 1)
-              props.setActions(mutatedActionArray)
-            }} size='small' kind="ghost">
-              <ArrowDown16 />
-            </Button>
-          </div>
-          <br/>
-        </>
-      )
-    } else if (props.index > 0 && props.index < props.actions.length - 1) {
-      return (
-        <>
-          <div>
-            <span style={{ display: 'inline-block', paddingTop: '10px' }}>Move Action:</span>
-            <Button onClick={() => { props.setActions(arrayMove(props.actions, props.index, props.index - 1)) }} size='small' kind="ghost">
-              <ArrowUp16 />
-            </Button>
-            <Button onClick={() => { props.setActions(arrayMove(props.actions, props.index, props.index + 1)) }} size='small' kind="ghost">
-              <ArrowDown16 />
-            </Button>
-          </div>
-          <br/>
-        </>
-      )
-    } else if (props.index === props.actions.length - 1) {
-      return (
-        <>
-          <div>
-            <span style={{ display: 'inline-block', paddingTop: '10px' }}>Move Action:</span>
-            <Button onClick={() => { props.setActions(arrayMove(props.actions, props.index, props.index - 1)) }} size='small' kind="ghost">
-              <ArrowUp16 />
-            </Button>
-            <span style={{ display: 'inline-block', width: '44px' }}>&nbsp;</span>
-          </div>
-          <br/>
-        </>
-      )
+  const setParameter = (value, id) => {
+    const parameterArray = [...action.parameters]
+    if (parameterArray.find(element => element.id === id)) {
+      parameterArray.find(element => element.id === id).value = value
+      setAction({ ...action, parameters: parameterArray })
+    } else {
+      parameterArray.push({ id: id, value: value })
+      setAction({ ...action, parameters: parameterArray })
+    }
+  }
+
+  const getParameterValue = id => {
+    if (action.parameters.length === 0) return ''
+    if (props.new) {
+      return action.parameters.filter(p => p.id === id).value
+    } else {
+      return action.parameters.find(p => p.id === id).value
     }
   }
 
   return (
     <>
-      <Row>
-        <Column>
-          { !props.new &&
-          <h5>Action {props.index + 1}: {action.providerFunction.label} on {action.device.label}</h5>
-          }
-          { props.new &&
-            <h5>New Action</h5>
-          }
-        </Column>
-      </Row>
-      <br/>
       <Row>
         <Column>
           <Row>
@@ -118,7 +66,7 @@ const Action = (props) => {
                   labelText='Device'
                   value={action.device.label}
                   onClick={() => {}}
-                  onChange={null}
+                  onChange={() => {}}
                   disabled
                 />
               }
@@ -130,7 +78,7 @@ const Action = (props) => {
                   id="newstackProvider"
                   placeholder='Filter...'
                   items={[]}
-                  onChange={null}
+                  onChange={() => {}}
                   titleText="Function"
                   disabled
                 />
@@ -141,6 +89,7 @@ const Action = (props) => {
                   id="newstackProvider"
                   placeholder='Filter...'
                   titleText="Function"
+                  onChange={() => {}}
                   items={[]}
                   disabled
                 />
@@ -186,17 +135,10 @@ const Action = (props) => {
                             id={parameter.id}
                             placeholder='Required'
                             labelText={parameter.label}
-                            value={action.parameters.find(e => e.id === parameter.id).value || ''}
+                            value={getParameterValue(parameter.id)}
                             onClick={() => {}}
                             onChange={(e) => {
-                              var parameterArray = [...action.parameters]
-                              if (findIndex(action.parameters, element => element.id === parameter.id) !== -1) {
-                                find(parameterArray, element => element.id === parameter.id).value = e.target.value
-                                setAction({ ...action, parameters: [...parameterArray] })
-                              } else {
-                                parameterArray.push({ id: parameter.id, value: e.target.value })
-                                setAction({ ...action, parameters: [...parameterArray] })
-                              }
+                              setParameter(e.target.value, parameter.id)
                             }}
                           />
                         </Column>
@@ -208,16 +150,9 @@ const Action = (props) => {
                             id={parameter.id}
                             placeholder='Filter...'
                             items={parameter.items}
-                            selectedItem={action.parameters.find(e => e.id === parameter.id).value || ''}
+                            selectedItem={getParameterValue(parameter.id)}
                             onChange={(e) => {
-                              var parameterArray = [...action.parameters]
-                              if (findIndex(action.parameters, element => element.id === parameter.id) !== -1) {
-                                find(parameterArray, element => element.id === parameter.id).value = e.selectedItem
-                                setAction({ ...action, parameters: [...parameterArray] })
-                              } else {
-                                parameterArray.push({ id: parameter.id, value: e.selectedItem })
-                                setAction({ ...action, parameters: [...parameterArray] })
-                              }
+                              setParameter(e.selectedItem, parameter.id)
                             }}
                             titleText={parameter.id}
                           />
@@ -231,33 +166,24 @@ const Action = (props) => {
           }
         </Column>
         <Column>
-          { !props.new && getActionMoveButtons() }
+          <br/><br/>
           { props.new && action.providerFunction &&
             <Button onClick={() => {
-              const actionsArray = props.actions
-              actionsArray.push(action)
-              props.setActions(actionsArray)
+              props.setActions(action, -1)
               setAction(initialActionState)
             }} size='small' kind="primary">
-              Add
-            </Button>
-          }
-          { props.new && !action.providerFunction &&
-            <Button onClick={() => {}} size='small' kind="primary" disabled>
               Add
             </Button>
           }
           { !props.new && actionComparisonStore !== action &&
             <>
               <Button onClick={() => {
-                const actionsArray = props.actions
-                actionsArray[props.index] = action
-                props.setActions(actionsArray)
-                setAction(initialActionState)
+                props.setActions(action, props.index)
+                setActionComparisonStore(action)
               }} size='small' kind="primary">
                 Update
               </Button>
-              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
+              <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
                 Delete
               </Button>
             </>
@@ -267,23 +193,24 @@ const Action = (props) => {
               <Button disabled size='small' kind="primary">
                 Update
               </Button>
-              <Button onClick={() => { props.actions.splice(props.index, 1) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
+              <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
                 Delete
               </Button>
             </>
           }
         </Column>
       </Row>
+      <br/><br/>
     </>
   )
 }
 
 Action.propTypes = {
-  actions: PropTypes.array,
+  action: PropTypes.object,
   setActions: PropTypes.func,
+  delete: PropTypes.func,
   devices: PropTypes.array,
   providers: PropTypes.array,
-  actionID: PropTypes.string,
   new: PropTypes.bool,
   index: PropTypes.number
 }

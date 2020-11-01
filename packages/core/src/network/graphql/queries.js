@@ -183,6 +183,24 @@ const queries = new GraphQLObjectType({
       }
     },
 
+    stack: {
+      name: 'Get Stack',
+      description: 'Returns stack by ID',
+      type: stackType,
+      args: {
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => {
+        return new Promise((resolve, reject) => {
+          stacks.findOne({ id: args.id })
+            .then(stack => resolve(stack))
+            .catch(e => reject(e))
+        })
+      }
+    },
+
     panels: {
       name: 'Get Panels',
       description: 'Returns all configured panels',

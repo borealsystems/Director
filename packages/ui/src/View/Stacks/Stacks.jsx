@@ -1,106 +1,120 @@
 import React, { useState, useContext } from 'react'
-import { useQuery } from 'urql'
-import { Button, DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
-import { stacksQueryGQL } from './queries'
+import { useQuery, useMutation } from 'urql'
+import { Button, DataTable, DataTableSkeleton, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
+import { stacksQueryGQL, deleteStackGQL, executeStackMutationGQL } from './queries'
+import { useHistory } from 'react-router-dom'
+import { Add24 } from '@carbon/icons-react'
 import headers from './stacksHeaders'
 import globalContext from '../../globalContext'
-import Stack from './components/Stack.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
-const { Table, TableContainer, TableExpandRow, TableExpandedRow, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
+const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
   const { contextRealm } = useContext(globalContext)
-  const [newStackVisability, setNewStackVisability] = useState(false)
-  const [result] = useQuery({
+  const [result, reExecute] = useQuery({
     query: stacksQueryGQL,
-    pollInterval: 1000,
     variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
+
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [filter, setFilter] = useState('')
+
+  const history = useHistory()
+
+  const [, deleteStackMutation] = useMutation(deleteStackGQL)
+  const [, executeStackMutation] = useMutation(executeStackMutationGQL)
 
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
+    const filteredTableData = result.data.stacks.filter(e => {
+      return filter === ''
+        ? e
+        : e.label.toLowerCase().includes(filter.toLowerCase()) ||
+         e.id.toLowerCase().includes(filter.toLowerCase()) ||
+         e.panelLabel?.toLowerCase().includes(filter.toLowerCase())
+    })
+
+    const currentTableData = Array(Math.ceil(result.data.stacks.length / pageSize)).fill()
+      .map((_, index) => index * pageSize)
+      .map(begin => filteredTableData
+        .slice(begin, begin + pageSize)
+      )[page - 1]
+
     return (
-      <div>
-        <InlineNotification
-          style={{ width: '100%' }}
-          lowContrast={true}
-          kind='warning'
-          title='This interface is being overhauled'
-          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-          hideCloseButton={true}
-        />
-        <DataTable
-          isSortable
-          rows={result.data.stacks}
-          headers={headers}
-          render={({
-            rows,
-            headers,
-            getHeaderProps,
-            getRowProps,
-            getTableProps,
-            onInputChange,
-            getToolbarProps,
-            getTableContainerProps
-          }) => (
-            <TableContainer
-              title="Stacks"
-              description="Stacks are an Action or group of Actions that can be executed by a Controller or API endpoint."
-              {...getTableContainerProps()}
-            >
-              {!newStackVisability &&
-                <div>
-                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                    <TableToolbarContent>
-                      <TableToolbarSearch onChange={onInputChange} />
-                      <Button onClick={() => { setNewStackVisability(true) }}>New Stack</Button>
-                    </TableToolbarContent>
-                  </TableToolbar>
-                </div>
-              }
-              {newStackVisability &&
-                <div>
-                  <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                    <TableToolbarContent>
-                      <TableToolbarSearch onChange={onInputChange} />
-                      <Button onClick={() => { setNewStackVisability(false) }} size='default' kind="secondary">Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button>
-                    </TableToolbarContent>
-                  </TableToolbar>
-                  <Stack new devices={result.data.devices} providers={result.data.providers} visability={ setNewStackVisability }/>
-                </div>
-              }
-              <Table {...getTableProps()}>
-                <TableHead>
-                  <TableRow>
-                    <TableHeader />
-                    {headers.map((header, index) => (
-                      <TableHeader key={index} {...getHeaderProps({ header })}>
-                        {header.header}
-                      </TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.length !== 0 && rows.map(row => (
-                    <React.Fragment key={row.id}>
-                      <TableExpandRow {...getRowProps({ row })}>
-                        {row.cells.map(cell => (
-                          <TableCell key={cell.id}>{cell.value}</TableCell>
-                        ))}
-                      </TableExpandRow>
-                      <TableExpandedRow colSpan={headers.length + 1}>
-                        <Stack devices={result.data.devices} stacks={result.data.stacks} providers={result.data.providers} stackID={row.id} />
-                      </TableExpandedRow>
-                    </React.Fragment>
+      <DataTable
+        isSortable
+        rows={currentTableData}
+        headers={headers}
+        render={({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          getToolbarProps,
+          getTableContainerProps
+        }) => (
+          <TableContainer
+            title="Stacks"
+            description="Stacks are an Action or group of Actions that can be executed by a Controller or API endpoint."
+            {...getTableContainerProps()}
+          >
+            <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+              <TableToolbarContent>
+                <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
+                <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'devices/new' }) }}>New Device</Button>
+              </TableToolbarContent>
+            </TableToolbar>
+            <Table {...getTableProps()}>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header, i) => (
+                    <TableHeader key={i} {...getHeaderProps({ header })}>
+                      {header.header}
+                    </TableHeader>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        />
-      </div>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, i) => (
+                  <TableRow key={i} {...getRowProps({ row })}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                    ))}
+                    <TableCell>
+                      { !row.cells[0].value.match(/CORE-/) &&
+                        <OverflowMenu flipped>
+                          <OverflowMenuItem itemText='Edit Stack' onClick={() => history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/${row.cells[0].value}` })} />
+                          <OverflowMenuItem itemText='Execute Stack' onClick={() => executeStackMutation({ id: row.cells[0].value })} />
+                          <OverflowMenuItem itemText='Delete Stack' isDelete onClick={() => deleteStackMutation({ id: row.cells[0].value }).then(reExecute())} />
+                        </OverflowMenu>
+                      }
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Pagination
+              style={{ width: '100%' }}
+              backwardText="Previous page"
+              forwardText="Next page"
+              itemsPerPageText="Items per page:"
+              page={page}
+              pageNumberText="Page Number"
+              pageSize={pageSize}
+              pageSizes={[10, 25, 50, 100]}
+              totalItems={filteredTableData.length}
+              onChange={(e) => {
+                setPage(e.page)
+                setPageSize(e.pageSize)
+              }}
+            />
+          </TableContainer>
+        )}
+      />
     )
   }
 }
