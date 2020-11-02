@@ -1,11 +1,12 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
-import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
 import { Add24 } from '@carbon/icons-react'
+import { devicesQueryGQL, deleteDeviceGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
 import globalContext from '../../globalContext'
-import { devicesQueryGQL, deleteDeviceGQL } from './queries'
+import headers from './headers'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
@@ -19,47 +20,35 @@ const Devices = () => {
 
   const [, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
 
-  const headers = [
-    {
-      key: 'id',
-      header: 'ID'
-    },
-    {
-      key: 'label',
-      header: 'Name'
-    },
-    {
-      key: 'description',
-      header: 'Description'
-    },
-    {
-      key: 'location',
-      header: 'Location'
-    },
-    {
-      key: 'provider.label',
-      header: 'Provider'
-    },
-    {
-      key: 'enabled',
-      header: 'Enabled'
-    },
-    {
-      key: 'status',
-      header: 'Status'
-    }
-  ]
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [filter, setFilter] = useState('')
 
   const history = useHistory()
 
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
+    const rawData = result.data.devices
+    const filteredTableData = rawData.filter(e => {
+      return filter === ''
+        ? e
+        : e.label.toLowerCase().includes(filter.toLowerCase()) ||
+         e.id.toLowerCase().includes(filter.toLowerCase()) ||
+         e.location?.toLowerCase().includes(filter.toLowerCase())
+    })
+
+    const currentTableData = Array(Math.ceil(rawData.length / pageSize)).fill()
+      .map((_, index) => index * pageSize)
+      .map(begin => filteredTableData
+        .slice(begin, begin + pageSize)
+      )[page - 1]
+
     return (
       <div>
         <DataTable
           isSortable
-          rows={result.data.devices}
+          rows={currentTableData}
           headers={headers}
           render={({
             rows,
@@ -78,7 +67,7 @@ const Devices = () => {
             >
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
-                  { rows.length > 0 && <TableToolbarSearch onChange={onInputChange} /> }
+                  <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'devices/new' }) }}>New Device</Button>
                 </TableToolbarContent>
               </TableToolbar>
@@ -127,6 +116,21 @@ const Devices = () => {
                   ))}
                 </TableBody>
               </Table>
+              <Pagination
+                style={{ width: '100%' }}
+                backwardText="Previous page"
+                forwardText="Next page"
+                itemsPerPageText="Items per page:"
+                page={page}
+                pageNumberText="Page Number"
+                pageSize={pageSize}
+                pageSizes={[10, 25, 50, 100]}
+                totalItems={filteredTableData.length}
+                onChange={(e) => {
+                  setPage(e.page)
+                  setPageSize(e.pageSize)
+                }}
+              />
             </TableContainer>
           )}
         />
