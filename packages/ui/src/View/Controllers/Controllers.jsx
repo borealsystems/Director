@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useQuery } from 'urql'
-import { DataTable, DataTableSkeleton, InlineNotification } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton, InlineNotification, Pagination } from 'carbon-components-react'
 import { controllersQueryGQL } from './queries'
 import headers from './headers'
 import globalContext from '../../globalContext'
@@ -17,9 +17,28 @@ const Controllers = () => {
     variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [filter, setFilter] = useState('')
+
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
+    const rawData = result.data.controllers
+    const filteredTableData = rawData.filter(e => {
+      return filter === ''
+        ? e
+        : e.label.toLowerCase().includes(filter.toLowerCase()) ||
+         e.id.toLowerCase().includes(filter.toLowerCase()) ||
+         e.location?.toLowerCase().includes(filter.toLowerCase())
+    })
+
+    const currentTableData = Array(Math.ceil(rawData.length / pageSize)).fill()
+      .map((_, index) => index * pageSize)
+      .map(begin => filteredTableData
+        .slice(begin, begin + pageSize)
+      )[page - 1]
+
     return (
       <div>
         <InlineNotification
@@ -32,7 +51,7 @@ const Controllers = () => {
         />
         <DataTable
           isSortable
-          rows={result.data.controllers}
+          rows={currentTableData}
           headers={headers}
           render={({
             rows,
@@ -52,7 +71,7 @@ const Controllers = () => {
               <div>
                 <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                   <TableToolbarContent>
-                    <TableToolbarSearch onChange={onInputChange} />
+                    <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
                   </TableToolbarContent>
                 </TableToolbar>
               </div>
@@ -82,6 +101,21 @@ const Controllers = () => {
                   ))}
                 </TableBody>
               </Table>
+              <Pagination
+                style={{ width: '100%' }}
+                backwardText="Previous page"
+                forwardText="Next page"
+                itemsPerPageText="Items per page:"
+                page={page}
+                pageNumberText="Page Number"
+                pageSize={pageSize}
+                pageSizes={[10, 25, 50, 100]}
+                totalItems={filteredTableData.length}
+                onChange={(e) => {
+                  setPage(e.page)
+                  setPageSize(e.pageSize)
+                }}
+              />
             </TableContainer>
           )}
         />
