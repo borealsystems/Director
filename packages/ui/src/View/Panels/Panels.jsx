@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import { Add24 } from '@carbon/icons-react'
-import { Button, DataTable, DataTableSkeleton, InlineNotification, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
 import { panelsGQL, deletePanelGQL } from './queries'
 import headers from './panelsHeaders'
 import globalContext from '../../globalContext'
@@ -18,6 +18,10 @@ const Panels = () => {
     variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [filter, setFilter] = useState('')
+
   const history = useHistory()
 
   const [, deletePanelMutation] = useMutation(deletePanelGQL)
@@ -25,19 +29,26 @@ const Panels = () => {
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
+    const rawData = result.data.panels
+    const filteredTableData = rawData.filter(e => {
+      return filter === ''
+        ? e
+        : e.label.toLowerCase().includes(filter.toLowerCase()) ||
+         e.id.toLowerCase().includes(filter.toLowerCase()) ||
+         e.location?.toLowerCase().includes(filter.toLowerCase())
+    })
+
+    const currentTableData = Array(Math.ceil(rawData.length / pageSize)).fill()
+      .map((_, index) => index * pageSize)
+      .map(begin => filteredTableData
+        .slice(begin, begin + pageSize)
+      )[page - 1]
+
     return (
       <div>
-        <InlineNotification
-          style={{ width: '100%' }}
-          lowContrast={true}
-          kind='warning'
-          title='This interface is being overhauled'
-          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-          hideCloseButton={true}
-        />
         <DataTable
           isSortable
-          rows={result.data.panels}
+          rows={currentTableData}
           headers={headers}
           render={({
             rows,
@@ -56,7 +67,7 @@ const Panels = () => {
             >
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
-                  { rows.length > 0 && <TableToolbarSearch onChange={onInputChange} /> }
+                  <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'panels/new' }) }}>New Panel</Button>
                 </TableToolbarContent>
               </TableToolbar>
@@ -86,6 +97,21 @@ const Panels = () => {
                   ))}
                 </TableBody>
               </Table>
+              <Pagination
+                style={{ width: '100%' }}
+                backwardText="Previous page"
+                forwardText="Next page"
+                itemsPerPageText="Items per page:"
+                page={page}
+                pageNumberText="Page Number"
+                pageSize={pageSize}
+                pageSizes={[10, 25, 50, 100]}
+                totalItems={filteredTableData.length}
+                onChange={(e) => {
+                  setPage(e.page)
+                  setPageSize(e.pageSize)
+                }}
+              />
             </TableContainer>
           )}
         />
