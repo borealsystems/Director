@@ -1,9 +1,8 @@
 import {
   GraphQLInputObjectType,
-  GraphQLString
+  GraphQLString,
+  GraphQLInt
 } from 'graphql'
-
-import panelUpdateInputType from '../panelTypes/panelUpdateInputType'
 
 const controllerType = new GraphQLInputObjectType({
   name: 'controllerInputType',
@@ -25,7 +24,49 @@ const controllerType = new GraphQLInputObjectType({
       type: GraphQLString
     },
     panel: {
-      type: panelUpdateInputType
+      type: new GraphQLInputObjectType({
+        name: 'controllerPanelInputType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          }
+        }
+      })
+    },
+    layout: {
+      type: new GraphQLInputObjectType({
+        name: 'controllerLayoutInputType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          },
+          rows: {
+            type: GraphQLInt
+          },
+          columns: {
+            type: GraphQLInt
+          }
+        }
+      })
+    },
+    type: {
+      type: new GraphQLInputObjectType({
+        name: 'controllerLayoutTypeInputType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          }
+        }
+      })
     },
     id: {
       type: GraphQLString

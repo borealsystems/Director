@@ -45,6 +45,7 @@ import { Keyboard24, Light20, LightFilled20, Settings24, TreeViewAlt24, User20, 
 const Landing = lazy(() => import('./Landing/Landing.jsx'))
 const Login = lazy(() => import('./Login/Login.jsx'))
 
+const ControllerWrapper = lazy(() => import('./Controllers/ControllerWrapper.jsx'))
 const Controllers = lazy(() => import('./Controllers/Controllers.jsx'))
 const Core = lazy(() => import('./Core/Core.jsx'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard.jsx'))
@@ -55,6 +56,7 @@ const PanelWrapper = lazy(() => import('./Panels/PanelWrapper.jsx'))
 const Panels = lazy(() => import('./Panels/Panels.jsx'))
 const Realms = lazy(() => import('./Realms/Realms.jsx'))
 const Shotbox = lazy(() => import('./Shotbox/Shotbox.jsx'))
+const ShotboxControllerWrapper = lazy(() => import('./Shotbox/ShotboxControllerWrapper.jsx'))
 const ShotboxPanelWrapper = lazy(() => import('./Shotbox/ShotboxPanelWrapper.jsx'))
 const Stacks = lazy(() => import('./Stacks/Stacks.jsx'))
 const StackWrapper = lazy(() => import('./Stacks/StackWrapper.jsx'))
@@ -209,10 +211,12 @@ const BorealDirector = () => {
                                 <Route exact path="/cores/:core/realms/:realm/config/stacks" component={Stacks} />
                                 <Route exact path="/cores/:core/realms/:realm/config/panels/:id" component={PanelWrapper} />
                                 <Route exact path="/cores/:core/realms/:realm/config/panels" component={Panels} />
+                                <Route exact path="/cores/:core/realms/:realm/config/controllers/:id" component={ControllerWrapper} />
                                 <Route exact path="/cores/:core/realms/:realm/config/controllers" component={Controllers} />
                                 {/* CONTROL */}
                                 <Route exact path="/cores/:core/realms/:realm/control/shotbox" component={Shotbox} />
-                                <Route exact path="/cores/:core/realms/:realm/control/shotbox/:id" component={ShotboxPanelWrapper} />
+                                <Route exact path="/cores/:core/realms/:realm/control/shotbox/controller/:id" component={ShotboxControllerWrapper} />
+                                <Route exact path="/cores/:core/realms/:realm/control/shotbox/panel/:id" component={ShotboxPanelWrapper} />
                                 <Route exact path="/cores/:core/realms/:realm/control/flow" component={Flow} />
                                 {/* CORE/REALM */}
                                 <Route exact path="/cores/:core/configuration">

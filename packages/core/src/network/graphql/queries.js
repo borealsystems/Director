@@ -3,6 +3,7 @@ import { logs } from '../../utils/log'
 import { providers } from '../../providers'
 import { deviceInstance } from '../../devices'
 import { cores, devices, stacks, panels, controllers } from '../../db'
+import { controllerLayouts } from '../../controllers'
 
 import {
   GraphQLObjectType,
@@ -15,6 +16,7 @@ import {
 import bridgeType from './bridgeTypes/bridgeType'
 import coreType from './coreTypes/coreType'
 import controllerType from './controllerTypes/controllerType'
+import controllerLayoutType from './controllerTypes/controllerLayoutType'
 import deviceType from './deviceTypes/deviceType.js'
 import logType from './coreTypes/logType'
 import panelType from './panelTypes/panelType'
@@ -243,6 +245,13 @@ const queries = new GraphQLObjectType({
       resolve: () => { return bridges }
     },
 
+    controllerLayouts: {
+      name: 'Get Controller Layouts',
+      description: 'Returns an array of controller layouts',
+      type: new GraphQLList(controllerLayoutType),
+      resolve: () => { return controllerLayouts }
+    },
+
     controllers: {
       name: 'Get Controllers',
       description: 'Returns all controllers, both online and offline',
@@ -259,6 +268,24 @@ const queries = new GraphQLObjectType({
         const realmFilter = args.realm ? { realm: args.realm } : {}
         const coreFilter = args.core ? { core: args.core } : {}
         return await controllers.find({ ...realmFilter, ...coreFilter }).toArray()
+      }
+    },
+
+    controller: {
+      name: 'Get a Controller',
+      description: 'Returns a specific controller',
+      type: controllerType,
+      args: {
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => {
+        return new Promise((resolve, reject) => {
+          controllers.findOne({ id: args.id })
+            .then(panel => resolve(panel))
+            .catch(e => reject(e))
+        })
       }
     }
   }

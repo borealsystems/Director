@@ -30,6 +30,12 @@ const panelsGQL = `query panels($realm: String, $core: String) {
       }
     }
   }
+  controllerLayouts {
+    id
+    label
+    rows
+    columns
+  }
 }`
 
 const existingPanelGQL = `query panel($id: String, $realm: String, $core: String) {
@@ -63,6 +69,12 @@ const existingPanelGQL = `query panel($id: String, $realm: String, $core: String
         description
       }
     }
+  }
+  controllerLayouts {
+    id
+    label
+    rows
+    columns
   }
 }`
 

@@ -1,5 +1,9 @@
 export default [
   {
+    key: 'id',
+    header: 'id'
+  },
+  {
     key: 'label',
     header: 'Name'
   },

@@ -1,5 +1,5 @@
 import { registerBridge } from '../../bridges'
-import { updateController } from '../../controllers'
+import { updateController, deleteController } from '../../controllers'
 import { updateDevice, deleteDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
 import { updateStack, deleteStack, executeStack } from '../../stacks'
@@ -151,6 +151,20 @@ const mutations = new GraphQLObjectType({
       },
       resolve: (parent, args) => {
         return updateController(args.controller)
+      }
+    },
+
+    deleteController: {
+      name: 'Delete Controller',
+      description: 'Removes a Controller from existance',
+      type: GraphQLString,
+      args: {
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => {
+        return deleteController(args.id)
       }
     },
 

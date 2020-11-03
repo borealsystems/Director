@@ -1,6 +1,8 @@
 import { controllers } from '../db'
-import log from '../utils/log'
 import { pubsub } from '../network/graphql/schema'
+import log from '../utils/log'
+import shortid from 'shortid'
+import STATUS from '../utils/statusEnum'
 
 const registerController = (_controller) => {
   return new Promise((resolve, reject) => {
@@ -28,29 +30,45 @@ const registerController = (_controller) => {
 }
 
 const updateController = (_controller) => {
+  const generatedid = shortid.generate()
+  const id = _controller.id ? _controller.id : `virtual-${generatedid}`
   return new Promise((resolve, reject) => {
     controllers.updateOne(
-      { id: _controller.id },
+      { id: id },
       {
         $set: {
           core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_ID,
           realm: _controller.realm ? _controller.realm : 'ROOT',
-          status: 'online',
-          label: `${_controller.manufacturer}-${_controller.model}`,
+          manufacturer: 'Boreal Systems',
+          model: 'Virtual Controller',
+          serial: generatedid,
+          status: STATUS.OK,
           ..._controller
         }
       },
       { upsert: true }
     )
       .then(() => {
-        return controllers.findOne({ id: _controller.id })
+        return controllers.findOne({ id: id })
       })
       .then((controller) => {
-        log('info', 'core/lib/controllers', `Updated ${controller.id}`)
+        log('info', 'core/lib/controllers', _controller.id ? `Updated ${id}` : `Created ${id}`)
         pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
       })
       .catch(e => reject(e))
   })
 }
 
-export { registerController, updateController }
+const deleteController = id => new Promise((resolve, reject) => {
+  controllers.deleteOne({ id: id })
+  log('info', 'core/lib/controllers', `Deleted Controller ${id}`)
+  return STATUS.OK
+})
+
+const controllerLayouts = [
+  { id: 'elgato-streamdeck-mini', label: 'Elgato Streamdeck Mini', rows: 2, columns: 3 },
+  { id: 'elgato-streamdeck', label: 'Elgato Streamdeck', rows: 3, columns: 5 },
+  { id: 'elgato-streamdeck-XL', label: 'Elgato Streamdeck XL', rows: 4, columns: 8 }
+]
+
+export { registerController, updateController, deleteController, controllerLayouts }

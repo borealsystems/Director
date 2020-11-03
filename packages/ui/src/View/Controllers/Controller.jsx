@@ -1,121 +1,123 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { Button, TextInput, ComboBox } from 'carbon-components-react'
+import { Button, TextInput, ComboBox, Grid, Row, Column } from 'carbon-components-react'
 import { useMutation } from 'urql'
+import { useHistory } from 'react-router-dom'
+import { controllerUpdateMutationGQL } from './queries'
+import globalContext from '../../globalContext'
 
-const deleteControllerGQL = `
-  mutation deleteController($deleteID: String) {
-    deleteController(id: $deleteID)
-  }
-`
-
-const controllerUpdateMutationGQL = `
-  mutation controller($controller: controllerInputType) {
-    controller(controller: $controller) {
-      id
-    }
-  }
-`
-
-const Controller = (props) => {
-  const initialController = props.new ? {} : props.controllers.find((item) => { return item.id === props.controllerID })
+const Controller = ({ id, _controller, layouts, panels }) => {
+  const isNew = id === 'new'
+  const initialController = isNew ? { type: { id: 'virtual', label: 'Virtual Controller' } } : _controller
   var [controller, setController] = useState(initialController)
 
-  const [deleteControllerMutationResult, deleteControllerMutation] = useMutation(deleteControllerGQL)
-  const [controllerUpdateMutationResult, controllerUpdateMutation] = useMutation(controllerUpdateMutationGQL)
+  const history = useHistory()
+  const { contextRealm } = useContext(globalContext)
+
+  const [, controllerUpdateMutation] = useMutation(controllerUpdateMutationGQL)
 
   const updateController = () => {
     console.log(JSON.stringify(controller))
-    controllerUpdateMutation({ controller: controller }).then(console.log(controllerUpdateMutationResult))
-    if (props.visability) {
-      props.visability(false)
-    }
+    controllerUpdateMutation({ controller: controller }).then(
+      history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers` })
+    )
   }
 
   return (
-    <div className="bx--col-lg-10">
-      <div className="bx--grid">
-        { props.new &&
-          <div className="bx--row">
-            <h3 style={{
-              margin: '1vh 0 2vh 1vw'
-            }}> New Controller</h3>
-          </div>
-        }
-        { !props.new &&
-          <div className="bx--row">
-            <h3 style={{
-              margin: '1vh 0 2vh 1vw'
-            }}> {controller.label || 'Unnamed Controller'}</h3>
-          </div>
-        }
-        <div className="bx--row">
-          <div className="bx--text-input__field-wrapper bx--col">
-            <TextInput
-              type='text'
-              id='ControllerName'
-              placeholder='Required'
-              value={controller.label || 'Unnamed Controller'}
-              labelText='Controller Name'
-              onClick={() => {}}
-              onChange={(e) => { setController({ ...controller, label: e.target.value }) }}
-            />
-          </div>
-        </div><br/>
-        <div className="bx--row">
-          <div className="bx--text-input__field-wrapper bx--col">
-            <TextInput
-              type='text'
-              id='ControllerDescription'
-              placeholder='Optional'
-              value={controller.description || undefined}
-              labelText='Controller Description'
-              onClick={() => {}}
-              onChange={(e) => { setController({ ...controller, description: e.target.value }) }}
-            />
-          </div>
-        </div><br/>
-        <div className='bx-row'>
+    <Grid>
+      <Row>
+        <Column>
+          <h1>{ id === 'new' ? 'New Controller' : controller.label }</h1><br/>
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <TextInput
+            type='text'
+            id='ControllerName'
+            placeholder='Required'
+            value={controller.label || ''}
+            labelText='Controller Name'
+            onClick={() => {}}
+            onChange={(e) => { setController({ ...controller, label: e.target.value }) }}
+          />
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
+          <TextInput
+            type='text'
+            id='ControllerDescription'
+            placeholder='Optional'
+            value={controller.description || ''}
+            labelText='Controller Description'
+            onClick={() => {}}
+            onChange={(e) => { setController({ ...controller, description: e.target.value }) }}
+          />
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
+          <ComboBox
+            ariaLabel="Dropdown"
+            id="controllerType"
+            placeholder='Filter...'
+            items={[
+              { id: 'virtual', label: 'Virtual Controller' },
+              { id: 'bridged', label: 'Bridged USB or Serial Controller' }
+            ]}
+            selectedItem={controller.type}
+            onChange={(type) => { setController({ ...controller, type: type.selectedItem }) }}
+            titleText="Controller Type"
+          />
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
+          <ComboBox
+            ariaLabel="Dropdown"
+            id="controllerType"
+            placeholder='Filter...'
+            disabled={!controller.type}
+            items={layouts}
+            selectedItem={controller.layout || ''}
+            itemToString={item => item ? `${item.label} (${item.columns}x${item.rows})` : ''}
+            onChange={(layout) => { setController({ ...controller, layout: layout.selectedItem }) }}
+            titleText="Controller Layout"
+          />
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
           <ComboBox
             ariaLabel="Dropdown"
             id="controllerPanel"
             placeholder='Filter...'
-            items={props.panels}
-            selectedItem={controller.panel}
-            itemToString={item => (item ? item.label : '')}
+            disabled={!controller.layout}
+            items={panels}
+            selectedItem={controller.panel || ''}
             onChange={(panel) => { setController({ ...controller, panel: panel.selectedItem }) }}
-            titleText="Controller Panel Mapping"
+            titleText="Initial Controller Panel Mapping"
           />
-        </div><br/>
-        { controller.panel === null
-          ? <Button disabled onClick={() => { }} size='default' kind="primary">
-            { !props.new && <>Update</> }
-            { props.new && <>Create</> }
-          </Button> : <Button onClick={() => { updateController() }} size='default' kind="primary">
-            { !props.new && <>Update</> }
-            { props.new && <>Create</> }
+        </Column>
+      </Row><br/><br/>
+      <Row>
+        <Column>
+          <Button disabled={!controller.panel || !controller.label} onClick={() => { updateController() }} kind="primary" style={{ float: 'right', minWidth: '15em', maxWidth: '15em' }}>
+            { !isNew && <>Update</> }
+            { isNew && <>Create</> }
           </Button>
-        }
-        { !props.new && controller.status !== 'online' &&
-            <Button onClick={() => deleteControllerMutation({ deleteID: controller.id }).then(console.log(deleteControllerMutationResult))} size='default' kind="danger">
-              Delete
-            </Button>
-        }
-        <Button onClick={() => { props.visability(false) }} size='default' kind="secondary">
-              Cancel
-        </Button>
-        <br/><br/>
-      </div>
-    </div>
+        </Column>
+      </Row>
+    </Grid>
   )
 }
 
 Controller.propTypes = {
-  new: PropTypes.bool,
-  controllerID: PropTypes.string,
-  controllers: PropTypes.array,
+  id: PropTypes.string,
+  _controller: PropTypes.object,
   panels: PropTypes.array,
-  visability: PropTypes.func
+  layouts: PropTypes.array
 }
 
 export default Controller

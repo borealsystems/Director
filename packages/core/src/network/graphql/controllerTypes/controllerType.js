@@ -4,6 +4,7 @@ import {
 } from 'graphql'
 
 import panelType from '../panelTypes/panelType'
+import controllerLayoutType from './controllerLayoutType'
 
 const controllerType = new GraphQLObjectType({
   name: 'controllerType',
@@ -26,6 +27,22 @@ const controllerType = new GraphQLObjectType({
     },
     panel: {
       type: panelType
+    },
+    layout: {
+      type: controllerLayoutType
+    },
+    type: {
+      type: new GraphQLObjectType({
+        name: 'controllerLayoutTypeType',
+        fields: {
+          id: {
+            type: GraphQLString
+          },
+          label: {
+            type: GraphQLString
+          }
+        }
+      })
     },
     id: {
       type: GraphQLString

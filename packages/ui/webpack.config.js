@@ -85,7 +85,8 @@ module.exports = {
     publicPath: 'http://localhost:3000/dist/',
     proxy: {
       '/graphql': {
-        target: 'ws://localhost:3001/graphql',
+        target: 'ws://localhost:3001',
+        changeOrigin: true,
         ws: true
       }
     },

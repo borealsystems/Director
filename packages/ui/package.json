@@ -55,6 +55,7 @@
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.1.2",
     "shortid": "^2.2.15",
+    "subscriptions-transport-ws": "^0.9.18",
     "urql": "^1.9.0",
     "webpack-dev-server": "^3.10.3"
   }

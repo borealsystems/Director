@@ -160,13 +160,7 @@ const Panel = ({ id, result }) => {
                         id="panelLayout"
                         placeholder='Filter...'
                         selectedItem={panel.layout}
-                        items={
-                          [
-                            { id: 'elgato-streamdeck-mini', label: 'Elgato Streamdeck Mini', rows: 2, columns: 3 },
-                            { id: 'elgato-streamdeck', label: 'Elgato Streamdeck', rows: 3, columns: 5 },
-                            { id: 'elgato-streamdeck-XL', label: 'Elgato Streamdeck XL', rows: 4, columns: 8 }
-                          ]
-                        }
+                        items={result.data.controllerLayouts}
                         onChange={(layout) => { setPanel({ ...panel, layout: layout.selectedItem }) }}
                         titleText="Panel Layout (required)"
                       />
