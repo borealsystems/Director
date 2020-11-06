@@ -39,7 +39,6 @@ const Device = ({ id, result }) => {
         conf.push(configuration[key])
       }
       const deviceUpdateObject = { device: { ...device, configuration: conf, provider: { id: device.provider.id, label: device.provider.label }, enabled: false, status: 'error', core: contextRealm.coreID, realm: contextRealm.id } }
-      console.log(JSON.stringify(deviceUpdateObject))
       deviceUpdateMutation(deviceUpdateObject).then(resolve(deviceUpdateMutationResult)).catch(e => reject(e))
     })
   }
@@ -199,8 +198,8 @@ const Device = ({ id, result }) => {
               </FormGroup>
           }
           <Row>
-            <Column style={{ marginLeft: '64.4%' }}>
-              <ButtonSet>
+            <Column>
+              <ButtonSet style={{ float: 'right', marginRight: '9.3em' }}>
                 <Button
                   renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24}
                   onClick={() => { configurationStep === 0 ? history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices` }) : setConfigurationStep(configurationStep - 1) }}
@@ -208,7 +207,6 @@ const Device = ({ id, result }) => {
                 >
                   { configurationStep === 0 ? 'Cancel' : 'Go Back' }
                 </Button>
-                  &nbsp;
                 { isLoading
                   ? <InlineLoading description='Creating Device' status='active' />
                   : <Button renderIcon={ArrowRight24} onClick={() => { validate() }} size='default' kind="primary">

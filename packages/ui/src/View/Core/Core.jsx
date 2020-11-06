@@ -29,7 +29,7 @@ const Core = ({ updateAndSetRealm }) => {
     }
   }`
 
-  const [coreMutationResult, coreMutation] = useMutation(coreMutationGQL)
+  const [, coreMutation] = useMutation(coreMutationGQL)
 
   if (result.error) {
     return (
@@ -158,9 +158,7 @@ const Core = ({ updateAndSetRealm }) => {
                 size='default'
                 kind="primary"
                 onClick={() => {
-                  console.log(coreConfig)
                   coreMutation({ core: coreConfig })
-                    .then(() => console.log(coreMutationResult))
                     .then(() => updateAndSetRealm({ core: { id: coreConfig.id, label: coreConfig.label } }))
                 }}>
                 Update

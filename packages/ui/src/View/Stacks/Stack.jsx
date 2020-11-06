@@ -27,7 +27,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
   const [newActionVisibility, setNewActionVisibility] = useState(isNew)
 
   const [, executeStackMutation] = useMutation(executeStackMutationGQL)
-  const [stackUpdateMutationResult, stackUpdateMutation] = useMutation(stackUpdateMutationGQL)
+  const [, stackUpdateMutation] = useMutation(stackUpdateMutationGQL)
 
   const history = useHistory()
 
@@ -40,7 +40,6 @@ const Stack = ({ id, _stack, providers, devices }) => {
       actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
     const stackUpdateObject = { stack: { ...stack, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
-    console.log(JSON.stringify(stackUpdateObject))
     stackUpdateMutation(stackUpdateObject).then(history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }))
   }
 
@@ -50,12 +49,10 @@ const Stack = ({ id, _stack, providers, devices }) => {
       actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
     const stackUpdateObject = { stack: { ...omit(stack, 'id'), label: `Duplicate of ${stack.label}`, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
-    console.log(JSON.stringify(stackUpdateObject))
-    stackUpdateMutation(stackUpdateObject).then(console.log(stackUpdateMutationResult))
+    stackUpdateMutation(stackUpdateObject)
   }
 
   const setActionsProxy = (action, index) => {
-    console.log(index, action)
     const actionsArray = actions
     if (index === -1) {
       actionsArray.push(action)
@@ -63,7 +60,6 @@ const Stack = ({ id, _stack, providers, devices }) => {
       actionsArray[index] = action
     }
     setActions(actionsArray)
-    console.log(actionsArray)
     setNewActionVisibility(false)
   }
 

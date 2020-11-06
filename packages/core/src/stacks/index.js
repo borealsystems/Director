@@ -41,6 +41,7 @@ const deleteStack = (_id) => {
       })
       .then(stack => {
         log('info', 'core/lib/stacks', `Deleted Stack ${stack.id} (${stack.label})`)
+        stackWaterfall(stack, true)
         resolve(status.OK)
       })
       .catch(e => reject(e))

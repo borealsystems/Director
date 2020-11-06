@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Loading } from 'carbon-components-react'
+import { Loading, ToastNotification } from 'carbon-components-react'
 import { useQuery, useSubscription } from 'urql'
 import { controllerSubscriptionGQL } from './queries'
 import ShotboxPanelWrapper from './ShotboxPanelWrapper.jsx'
@@ -32,9 +32,7 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
 
   // eslint-disable-next-line no-unused-vars
   const [controllerUpdateSubscription] = useSubscription({ query: controllerSubscriptionGQL }, (messages = [], response) => {
-    console.log(response)
     if (response.controller.id === controller.id) {
-      console.log('this controller')
       refresh()
       setController({ ...response })
     }
@@ -44,12 +42,10 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
   if (result.error) { return <GraphQLError error={result.error} /> }
   if (result.fetching && !controller.id) { return <Loading /> }
   if (result.data && !controller.id) {
-    console.log('setting to data')
     setController({ ...result.data.controller })
     return (<></>)
   }
-  if (controller.panel.id) {
-    console.log(controller.panel.id)
+  if (controller.panel?.id) {
     return (
       <>
         { !inline &&
@@ -60,6 +56,24 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
         }
         <ShotboxPanelWrapper inline={inline} match={{ params: { id: controller.panel.id } }} />
       </>
+    )
+  }
+  if (controller.id && !controller.panel?.id) {
+    return (
+      <ToastNotification
+        hideCloseButton={true}
+        kind="warning"
+        lowContrast
+        notificationType="toast"
+        role="alert"
+        style={{
+          marginBottom: '.5rem',
+          minWidth: '30rem'
+        }}
+        caption='Please contact your system administrator if this is unexpected'
+        timeout={0}
+        title='There is no panel Mapped to this Controller'
+      />
     )
   }
 }

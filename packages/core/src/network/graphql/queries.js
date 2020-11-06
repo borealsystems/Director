@@ -8,6 +8,7 @@ import { controllerLayouts } from '../../controllers'
 import {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLInt,
   GraphQLList
 } from 'graphql'
 
@@ -285,6 +286,82 @@ const queries = new GraphQLObjectType({
           controllers.findOne({ id: args.id })
             .then(panel => resolve(panel))
             .catch(e => reject(e))
+        })
+      }
+    },
+
+    dependents: {
+      name: 'dependentObjects',
+      description: 'Returns dependent objects',
+      type: new GraphQLObjectType({
+        name: 'dependentObjectsType',
+        fields: {
+          count: {
+            type: GraphQLInt
+          },
+          list: {
+            type: new GraphQLList(
+              new GraphQLObjectType({
+                name: 'dependentObjectsObjectType',
+                fields: {
+                  id: {
+                    type: GraphQLString
+                  },
+                  label: {
+                    type: GraphQLString
+                  }
+                }
+              })
+            )
+          }
+        }
+      }),
+      args: {
+        type: {
+          type: GraphQLString
+        },
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => {
+        return new Promise((resolve, reject) => {
+          const resolveArray = []
+          switch (args.type) {
+            case 'device':
+              stacks.find({ actions: { $elemMatch: { 'device.id': args.id } } }).each((err, stack) => {
+                if (err) {
+                  reject(err)
+                } else if (stack == null) {
+                  resolve({ count: resolveArray.length, list: resolveArray })
+                } else {
+                  resolveArray.push({ id: stack.id, label: stack.label })
+                }
+              })
+              break
+            case 'stack':
+              panels.find({ buttons: { $elemMatch: { $elemMatch: { 'stack.id': args.id } } } }).each((err, panel) => {
+                if (err) {
+                  reject(err)
+                } else if (panel == null) {
+                  resolve({ count: resolveArray.length, list: resolveArray })
+                } else {
+                  resolveArray.push({ id: panel.id, label: panel.label })
+                }
+              })
+              break
+            case 'panel':
+              controllers.find({ 'panel.id': args.id }).each((err, controller) => {
+                if (err) {
+                  reject(err)
+                } else if (controller == null) {
+                  resolve({ count: resolveArray.length, list: resolveArray })
+                } else {
+                  resolveArray.push({ id: controller.id, label: controller.label })
+                }
+              })
+              break
+          }
         })
       }
     }

@@ -17,7 +17,6 @@ const Controller = ({ id, _controller, layouts, panels }) => {
   const [, controllerUpdateMutation] = useMutation(controllerUpdateMutationGQL)
 
   const updateController = () => {
-    console.log(JSON.stringify(controller))
     controllerUpdateMutation({ controller: controller }).then(
       history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers` })
     )
@@ -97,7 +96,7 @@ const Controller = ({ id, _controller, layouts, panels }) => {
             items={panels}
             selectedItem={controller.panel || ''}
             onChange={(panel) => { setController({ ...controller, panel: panel.selectedItem }) }}
-            titleText="Initial Controller Panel Mapping"
+            titleText="Controller Panel Mapping"
           />
         </Column>
       </Row><br/><br/>

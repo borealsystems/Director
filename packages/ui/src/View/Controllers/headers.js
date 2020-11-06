@@ -1,7 +1,7 @@
 export default [
   {
     key: 'id',
-    header: 'id'
+    header: 'ID'
   },
   {
     key: 'label',

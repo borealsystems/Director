@@ -55,7 +55,6 @@ const Realms = ({ updateRealmsQuery }) => {
     setNewRealmModalSubitting(true)
     newRealmMutation({ realm: { ...newRealm, coreID: contextRealm.coreID } })
       .then((response) => {
-        console.log(response)
         setNewRealmModalSubitting(false)
         if (!response.error) {
           updateRealmsQuery()

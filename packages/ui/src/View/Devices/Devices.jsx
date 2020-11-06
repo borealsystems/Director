@@ -5,16 +5,17 @@ import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowM
 import { Add24 } from '@carbon/icons-react'
 import { devicesQueryGQL, deleteDeviceGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
+import ModalStateManager from '../components/ModalStateManager.jsx'
 import globalContext from '../../globalContext'
 import headers from './headers'
+import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
 const Devices = () => {
   const { contextRealm } = useContext(globalContext)
-  const [result] = useQuery({
+  const [result, refresh] = useQuery({
     query: devicesQueryGQL,
-    pollInterval: 1000,
     variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
@@ -47,7 +48,6 @@ const Devices = () => {
     return (
       <div>
         <DataTable
-          isSortable
           rows={currentTableData}
           headers={headers}
           render={({
@@ -57,7 +57,6 @@ const Devices = () => {
             getRowProps,
             getTableProps,
             getToolbarProps,
-            onInputChange,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -106,10 +105,24 @@ const Devices = () => {
                       })}
                       <TableCell>
                         { !row.cells[0].value.match(/CORE-/) &&
-                          <OverflowMenu flipped>
-                            <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
-                            <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => deleteDeviceMutation({ idToDelete: row.cells[0].value })} />
-                          </OverflowMenu>
+                          <ModalStateManager
+                            LauncherContent={({ setOpen }) => (
+                              <OverflowMenu flipped>
+                                <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
+                                <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => setOpen(true)} />
+                              </OverflowMenu>
+                            )}
+                            ModalContent={({ open, setOpen }) => (
+                              <DeleteObjectModal
+                                open={open}
+                                setOpen={setOpen}
+                                type='device'
+                                id={row.cells[0].value}
+                                label={row.cells[1].value}
+                                deleteFunction={deleteDeviceMutation}
+                                refreshFunction={refresh}
+                              />
+                            )} />
                         }
                       </TableCell>
                     </TableRow>

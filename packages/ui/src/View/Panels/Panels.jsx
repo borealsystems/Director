@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom'
 import { Add24 } from '@carbon/icons-react'
 import { Button, DataTable, DataTableSkeleton, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
 import { panelsGQL, deletePanelGQL } from './queries'
+import ModalStateManager from '../components/ModalStateManager.jsx'
+import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
 import headers from './panelsHeaders'
 import globalContext from '../../globalContext'
 import GraphQLError from '../components/GraphQLError.jsx'
@@ -12,9 +14,8 @@ const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, Tabl
 
 const Panels = () => {
   const { contextRealm } = useContext(globalContext)
-  const [result] = useQuery({
+  const [result, refresh] = useQuery({
     query: panelsGQL,
-    pollInterval: 1000,
     variables: { realm: contextRealm.id, core: contextRealm.coreID }
   })
 
@@ -47,8 +48,7 @@ const Panels = () => {
     return (
       <div>
         <DataTable
-          isSortable
-          rows={currentTableData}
+          rows={currentTableData ?? []}
           headers={headers}
           render={({
             rows,
@@ -57,7 +57,6 @@ const Panels = () => {
             getRowProps,
             getTableProps,
             getToolbarProps,
-            onInputChange,
             getTableContainerProps
           }) => (
             <TableContainer
@@ -71,47 +70,65 @@ const Panels = () => {
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'panels/new' }) }}>New Panel</Button>
                 </TableToolbarContent>
               </TableToolbar>
-              <Table {...getTableProps()}>
-                <TableHead>
-                  <TableRow>
-                    {headers.map((header, i) => (
-                      <TableHeader key={i} {...getHeaderProps({ header })}>
-                        {header.header}
-                      </TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row, i) => (
-                    <TableRow key={i} {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>{cell.value}</TableCell>
+              { rawData.length > 0 &&
+                <>
+                  <Table {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map((header, i) => (
+                          <TableHeader key={i} {...getHeaderProps({ header })}>
+                            {header.header}
+                          </TableHeader>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row, i) => (
+                        <TableRow key={i} {...getRowProps({ row })}>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>{cell.value}</TableCell>
+                          ))}
+                          <TableCell>
+                            <ModalStateManager
+                              LauncherContent={({ setOpen }) => (
+                                <OverflowMenu flipped>
+                                  <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `panels/${row.cells[0].value}` })} />
+                                  <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => setOpen(true)} />
+                                </OverflowMenu>
+                              )}
+                              ModalContent={({ open, setOpen }) => (
+                                <DeleteObjectModal
+                                  open={open}
+                                  setOpen={setOpen}
+                                  type='panel'
+                                  id={row.cells[0].value}
+                                  label={row.cells[1].value}
+                                  deleteFunction={deletePanelMutation}
+                                  refreshFunction={refresh}
+                                />
+                              )} />
+                          </TableCell>
+                        </TableRow>
                       ))}
-                      <TableCell>
-                        <OverflowMenu disabled={row.cells[0].value === '0'} flipped>
-                          <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `panels/${row.cells[0].value}` })} />
-                          <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => deletePanelMutation({ id: row.cells[0].value })} />
-                        </OverflowMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <Pagination
-                style={{ width: '100%' }}
-                backwardText="Previous page"
-                forwardText="Next page"
-                itemsPerPageText="Items per page:"
-                page={page}
-                pageNumberText="Page Number"
-                pageSize={pageSize}
-                pageSizes={[10, 25, 50, 100]}
-                totalItems={filteredTableData.length}
-                onChange={(e) => {
-                  setPage(e.page)
-                  setPageSize(e.pageSize)
-                }}
-              />
+                    </TableBody>
+                  </Table>
+                  <Pagination
+                    style={{ width: '100%' }}
+                    backwardText="Previous page"
+                    forwardText="Next page"
+                    itemsPerPageText="Items per page:"
+                    page={page}
+                    pageNumberText="Page Number"
+                    pageSize={pageSize}
+                    pageSizes={[10, 25, 50, 100]}
+                    totalItems={filteredTableData.length}
+                    onChange={(e) => {
+                      setPage(e.page)
+                      setPageSize(e.pageSize)
+                    }}
+                  />
+                </>
+              }
             </TableContainer>
           )}
         />

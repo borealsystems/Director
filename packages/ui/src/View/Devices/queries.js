@@ -18,8 +18,8 @@ const devicesQueryGQL = `query getDevicesAndProviders($realm: String, $core: Str
 }`
 
 const deleteDeviceGQL = `
-mutation deleteDevice($idToDelete: String!) {
-  deleteDevice(id: $idToDelete)
+mutation deleteDevice($id: String!) {
+  deleteDevice(id: $id)
 }
 `
 

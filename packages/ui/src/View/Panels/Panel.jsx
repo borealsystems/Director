@@ -28,12 +28,11 @@ const Panel = ({ id, result }) => {
     layoutType: ''
   })
 
-  // const [deletePanelMutationResult, deletePanelMutation] = useMutation(deletePanelGQL)
-  const [panelUpdateMutationResult, panelUpdateMutation] = useMutation(panelUpdateMutationGQL)
+  const [, panelUpdateMutation] = useMutation(panelUpdateMutationGQL)
 
   const updatePanel = () => {
     const stackUpdateObject = { panel: { ...omit(panel, 'currentButton'), realm: contextRealm.id, core: contextRealm.coreID } }
-    panelUpdateMutation(stackUpdateObject).then(console.log(panelUpdateMutationResult))
+    panelUpdateMutation(stackUpdateObject)
     history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` })
   }
 

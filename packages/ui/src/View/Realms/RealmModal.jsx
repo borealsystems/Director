@@ -26,7 +26,6 @@ const RealmModal = ({ realmData, render, updateRealmsQuery }) => {
     const realmUpdateObject = omit(realm, ['coreLabel'])
     realmUpdateMutation({ realm: realmUpdateObject })
       .then((response) => {
-        console.log(response)
         setRealmModalSubitting(false)
         if (!response.error) {
           updateRealmsQuery()

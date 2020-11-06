@@ -1,4 +1,5 @@
 import { panels } from '../db'
+import { panelWaterfall } from '../utils/waterfall'
 import log from '../utils/log'
 import shortid from 'shortid'
 
@@ -24,6 +25,7 @@ const updatePanel = (_panel) => {
       })
       .then(panel => {
         log('info', 'core/lib/panels', `${!panel.id ? 'Created' : 'Updated'} ${panel.id} (${panel.label})`)
+        panelWaterfall(panel)
         resolve(panel)
       })
       .catch(e => reject(e))
@@ -39,6 +41,7 @@ const deletePanel = (_id) => {
       })
       .then(panel => {
         log('info', 'core/lib/panels', `Deleted panel ${panel.id} (${panel.label})`)
+        panelWaterfall(panel, true)
         resolve(status.OK)
       })
       .catch(e => reject(e))

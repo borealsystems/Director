@@ -85,6 +85,12 @@ const newPanelGQL = `query panels($realm: String, $core: String) {
     panelLabel
     description
   }
+  controllerLayouts {
+    id
+    label
+    rows
+    columns
+  }
 }`
 
 const deletePanelGQL = `

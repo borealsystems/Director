@@ -1,12 +1,14 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { DataTable, DataTableSkeleton, InlineNotification, Pagination, Button, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
+import { DataTable, DataTableSkeleton, Pagination, Button, OverflowMenu, OverflowMenuItem } from 'carbon-components-react'
 import { Add24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import { controllersQueryGQL, deleteControllerMutationGQL } from './queries'
-import headers from './headers'
+import ModalStateManager from '../components/ModalStateManager.jsx'
+import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
 import globalContext from '../../globalContext'
 import GraphQLError from '../components/GraphQLError.jsx'
+import headers from './headers'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
@@ -50,16 +52,7 @@ const Controllers = () => {
 
     return (
       <div>
-        <InlineNotification
-          style={{ width: '100%' }}
-          lowContrast={true}
-          kind='warning'
-          title='This interface is being overhauled'
-          subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-          hideCloseButton={true}
-        />
         <DataTable
-          isSortable
           rows={currentTableData ?? []}
           headers={headers}
           render={({
@@ -103,17 +96,26 @@ const Controllers = () => {
                             <TableCell key={cell.id}>{cell.value}</TableCell>
                           ))}
                           <TableCell>
-                            <OverflowMenu flipped>
-                              <OverflowMenuItem itemText='Edit Controller' onClick={() => {
-                                history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/${row.cells[0].value}` })
-                              }} />
-                              <OverflowMenuItem itemText='Delete Controller' isDelete disabled={!isDeletable(row.cells)} onClick={() => {
-                                deleteControllerMutation({ id: row.cells[0].value })
-                                setTimeout(() => {
-                                  refresh()
-                                }, 200)
-                              }} />
-                            </OverflowMenu>
+                            <ModalStateManager
+                              LauncherContent={({ setOpen }) => (
+                                <OverflowMenu flipped>
+                                  <OverflowMenuItem itemText='Edit Controller' onClick={() => {
+                                    history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/${row.cells[0].value}` })
+                                  }} />
+                                  <OverflowMenuItem itemText='Delete Controller' isDelete disabled={!isDeletable(row.cells)} onClick={() => { console.log('FUCK'); setOpen(true) }} />
+                                </OverflowMenu>
+                              )}
+                              ModalContent={({ open, setOpen }) => (
+                                <DeleteObjectModal
+                                  open={open}
+                                  setOpen={setOpen}
+                                  type='device'
+                                  id={row.cells[0].value}
+                                  label={row.cells[1].value}
+                                  deleteFunction={deleteControllerMutation}
+                                  refreshFunction={refresh}
+                                />
+                              )} />
                           </TableCell>
                         </TableRow>
                       ))}
