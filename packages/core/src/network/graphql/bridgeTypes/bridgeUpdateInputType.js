@@ -4,6 +4,8 @@ import {
   GraphQLList
 } from 'graphql'
 
+import controllerInputType from '../controllerTypes/controllerInputType'
+
 const bridgeUpdateInputType = new GraphQLInputObjectType({
   name: 'bridgeUpdateInputType',
   description: 'Input type for registering a bridge',
@@ -15,23 +17,7 @@ const bridgeUpdateInputType = new GraphQLInputObjectType({
       type: GraphQLString
     },
     controllers: {
-      type: new GraphQLList(
-        new GraphQLInputObjectType({
-          name: 'bridgeUpdateControllerInputType',
-          description: 'Input type for registering a controller on a bridge',
-          fields: {
-            manufacturer: {
-              type: GraphQLString
-            },
-            model: {
-              type: GraphQLString
-            },
-            serial: {
-              type: GraphQLString
-            }
-          }
-        })
-      )
+      type: new GraphQLList(controllerInputType)
     }
   }
 })

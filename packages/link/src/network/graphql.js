@@ -3,6 +3,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { pipe, subscribe } from 'wonka'
 import { findIndex } from 'lodash'
 import { updateStreamdecks, streamDecks } from '../streamdeck'
+import { config } from '../utils/config'
 import WebSocket from 'ws'
 import log from '../utils/log'
 
@@ -12,11 +13,28 @@ let subscriptionClient
 const initGQLClient = (address, port) => {
   subscriptionClient = new SubscriptionClient(`ws://${address}:${port}/graphql`, { reconnect: true }, WebSocket)
 
-  subscriptionClient.onDisconnected(() => { updateStreamdecks({ type: 'offline' }) })
-  subscriptionClient.onReconnecting(() => { updateStreamdecks({ type: 'connecting' }) })
-  subscriptionClient.onReconnected(() => { setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000) })
-  subscriptionClient.onConnecting(() => { updateStreamdecks({ type: 'connecting' }) })
-  subscriptionClient.onConnected(() => { setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000) })
+  subscriptionClient.onDisconnected(() => {
+    updateStreamdecks({ type: 'offline' })
+    config.set('connection', { ...config.get('connection'), status: false })
+  })
+
+  subscriptionClient.onReconnecting(() => {
+    updateStreamdecks({ type: 'connecting' })
+  })
+
+  subscriptionClient.onReconnected(() => {
+    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000)
+    config.set('connection', { ...config.get('connection'), status: true })
+  })
+
+  subscriptionClient.onConnecting(() => {
+    updateStreamdecks({ type: 'connecting' })
+  })
+
+  subscriptionClient.onConnected(() => {
+    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000)
+    config.set('connection', { ...config.get('connection'), status: true })
+  })
 
   director = new Client({
     url: `http://${address}:${port}/graphql`,
@@ -54,7 +72,7 @@ const initGQLClient = (address, port) => {
       if (result.error) {
         log('error', 'link/src/network/graphql', result.error)
       }
-      if (result.data) {
+      if (result.data && streamDecks.find(sd => sd.config.serial === result.data.controller.serial)) {
         log('info', 'link/src/network/graphql', result.data.controller.id)
         streamDecks[findIndex(streamDecks, (streamdeck) => streamdeck.config.serial === result.data.controller.serial)].config = result.data.controller
         updateStreamdecks({ type: 'connected', force: true })

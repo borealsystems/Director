@@ -9,8 +9,6 @@ import Action from './Action.jsx'
 import { executeStackMutationGQL, stackUpdateMutationGQL } from './queries'
 import { Add24, ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
 
-// TODO: fix the autosaving action parameter details, it currently updates and rerenders which removes to input focus from the client, making long paths hard to type in
-
 const Stack = ({ id, _stack, providers, devices }) => {
   const isNew = id === 'new'
   const { contextRealm } = useContext(globalContext)

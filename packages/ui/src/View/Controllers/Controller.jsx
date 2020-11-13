@@ -58,6 +58,7 @@ const Controller = ({ id, _controller, layouts, panels }) => {
       <Row>
         <Column>
           <ComboBox
+            disabled={controller.type.id !== 'virtual'}
             ariaLabel="Dropdown"
             id="controllerType"
             placeholder='Filter...'
@@ -77,7 +78,7 @@ const Controller = ({ id, _controller, layouts, panels }) => {
             ariaLabel="Dropdown"
             id="controllerType"
             placeholder='Filter...'
-            disabled={!controller.type}
+            disabled={!controller.type || controller.type.id !== 'virtual'}
             items={layouts}
             selectedItem={controller.layout || ''}
             itemToString={item => item ? `${item.label} (${item.columns}x${item.rows})` : ''}

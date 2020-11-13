@@ -14,7 +14,7 @@ const registerController = (_controller) => {
           core: _controller.core ? _controller.core : process.env.DIRECTOR_CORE_ID,
           realm: _controller.realm ? _controller.realm : 'ROOT',
           id: id,
-          status: 'online',
+          status: STATUS.OK,
           label: `${_controller.manufacturer}-${_controller.model}`,
           ..._controller
         }
@@ -62,7 +62,7 @@ const updateController = (_controller) => {
 const deleteController = id => new Promise((resolve, reject) => {
   controllers.deleteOne({ id: id })
   log('info', 'core/lib/controllers', `Deleted Controller ${id}`)
-  return STATUS.OK
+  resolve(STATUS.OK)
 })
 
 const controllerLayouts = [

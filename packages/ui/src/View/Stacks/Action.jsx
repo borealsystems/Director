@@ -154,7 +154,7 @@ const Action = (props) => {
                             onChange={(e) => {
                               setParameter(e.selectedItem, parameter.id)
                             }}
-                            titleText={parameter.id}
+                            titleText={parameter.label}
                           />
                         </Column>
                       }

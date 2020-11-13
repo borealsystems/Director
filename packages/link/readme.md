@@ -1,9 +1,9 @@
 # Boreal Systems Director Link
 
-This package is effectively an interface to allow the use of local USB, MIDI, and Serial with a Director Core instance over the network. It doesn't actually exist yet.
+This package allows you to interface local USB controllers with a remote core over the network, it currently supports Elgato Streamdeck Minis (will support the rest when I have access to them again)
 
 # Developement
-Don't. This is not ready to exist yet.
+Lots of yarn scripts, really bad code.
 
 # Deployment
-Don't.
+`yarn workspace link run release` will produce executable builds in ./dist

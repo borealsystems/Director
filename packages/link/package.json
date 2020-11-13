@@ -3,15 +3,27 @@
   "version": "0.0.0",
   "description": "The link application for the Boreal Director orchestation suite",
   "main": "src/link.js",
-  "bin": "dist/link.js",
+  "bin": "build/link.js",
   "repository": "https://github.com/borealsystems/Director",
   "author": "Oliver Herrmann",
   "license": "MIT",
   "scripts": {
-    "release": "rm -rf build && rm -rf dist && yarn workspace link run build && yarn workspace link run package",
-    "package": "pkg build/link.js --out-path dist",
-    "build": "babel src/ -d build/",
+    "release": "yarn workspace link run webpack && yarn workspace link run build && yarn workspace link run package && yarn workspace link run copy-builds && rm -rf build",
+    "copy-builds": "sh copy-builds.sh",
+    "copy-deps": "sh copy-deps.sh",
+    "package": "rm -rf dist && pkg package.json --out-path dist && yarn workspace link run copy-deps",
+    "build": "rm -rf build && babel src/ -d build/ && cp -r src/network/ui/public build/network/ui/ && cp src/streamdeck/graphics/circle_icon.png build/streamdeck/graphics && cp src/network/ui/dist/*.svg build/network/ui/dist/ && rm -rf build/network/ui/src",
+    "webpack": "rm -rf src/network/ui/dist && webpack --mode production src/network/ui/src/index.jsx",
     "dev": "NODE_ENV=development nodemon --signal SIGHUP --exec babel-node src/link.js"
+  },
+  "pkg": {
+    "scripts": "build/**/*.js",
+    "assets": [
+      "build/network/ui/dist/*",
+      "build/network/ui/public/*",
+      "build/streamdeck/graphics/circle_icon.png",
+      "../../node_modules/@jimp/plugin-print/fonts/open-sans/open-sans-16-white/*"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -35,6 +47,7 @@
     "chalk": "^3.0.0",
     "debug": "^4.1.1",
     "elgato-stream-deck": "^3.3.1",
+    "express-graphql": "^0.11.0",
     "fetch": "^1.1.0",
     "graphql": "^14.6.0",
     "graphql-request": "1.8.2",
@@ -44,7 +57,6 @@
     "mdns": "^2.5.1",
     "nicely-format": "^1.1.0",
     "open": "^7.1.0",
-    "sharp": "^0.25.4",
     "shortid": "^2.2.15",
     "smart-promisify": "^1.0.5",
     "subscriptions-transport-ws": "^0.9.17",

@@ -40,7 +40,7 @@ import SideNavMenuItem from './components/SideNavMenuItem.jsx'
 import SideNavLink from './components/SideNavLink.jsx'
 import ReactError from './components/ReactError.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
-import { Keyboard24, Light20, LightFilled20, Settings24, TreeViewAlt24, User20, View32 } from '@carbon/icons-react'
+import { Keyboard24, Light20, LightFilled20, Settings24, TreeViewAlt24, View32 } from '@carbon/icons-react'
 
 const Landing = lazy(() => import('./Landing/Landing.jsx'))
 const Login = lazy(() => import('./Login/Login.jsx'))
@@ -148,9 +148,9 @@ const BorealDirector = () => {
                       <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
                         {theme === 'light' ? <Light20 /> : <LightFilled20 />}
                       </HeaderGlobalAction>
-                      <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
+                      {/* <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
                         <User20 />
-                      </HeaderGlobalAction>
+                      </HeaderGlobalAction> */}
                     </>
                   }
                 </HeaderGlobalBar>

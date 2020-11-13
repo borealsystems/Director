@@ -1,7 +1,8 @@
 import { director } from '../network/graphql'
-import { directorCore } from '../network/mdns'
 import { writeTextToButton, writeImageToButton } from './graphics'
 import { findIndex } from 'lodash'
+import { updateBridgeMutationGQL, panelGQL, controllersQueryGQL } from './queries'
+import { config } from '../utils/config'
 import path from 'path'
 import log from '../utils/log'
 import writePanel from './utils/writePanel'
@@ -12,46 +13,19 @@ const { listStreamDecks, openStreamDeck } = require('elgato-stream-deck')
 
 const streamDecks = []
 
-const updateBridgeMutationGQL = `
-mutation updateBridge($bridge: bridgeUpdateInputType) {
-  updateBridge(bridge: $bridge)
-}`
-
-const panelGQL = `
-  query panel($id: String) {
-    panel(id: $id) {
-      id
-      label
-      buttons {
-        row
-        column
-        stack {
-          id
-          label
-          panelLabel
-          description
-        }
-      }
-    }
-  }`
-
-const controllersQueryGQL = `
-query controllers {
-  controllers {
-    manufacturer
-    model
-    serial
-    status
-    panel {
-      label
-      id
-    }
-    id
-    label
-  }
-}`
-
 let currentConnectionStatus
+
+const getLayout = model => {
+  switch (model) {
+    case 'mini':
+      return {
+        id: 'elgato-streamdeck-mini',
+        label: 'Elgato Streamdeck Mini',
+        rows: 2,
+        columns: 3
+      }
+  }
+}
 
 const updateStreamdecks = ({ type, force }) => {
   if ((currentConnectionStatus !== type) || force === true) {
@@ -62,9 +36,35 @@ const updateStreamdecks = ({ type, force }) => {
         listStreamDecks().map(device => {
           if (findIndex(streamDecks, (streamdeck) => streamdeck.path === device.path) === -1) {
             device.controller = openStreamDeck(device.path)
-            device.config = { manufacturer: 'elgato', model: device.model, serial: device.serialNumber }
+            device.config = {
+              manufacturer: 'elgato',
+              model: device.model,
+              serial: device.serialNumber,
+              type: {
+                id: 'bridged',
+                label: 'Bridged USB or Serial Controller'
+              },
+              layout: getLayout(device.model)
+            }
             streamDecks.push(device)
           }
+        })
+        break
+
+      case 'unconfigured':
+        streamDecks.map(device => {
+          device.controller.clearAllKeys()
+          writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
+          writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
+          writeTextToButton({ text: 'Configure Link', device: device, buttonIndex: 2 })
+          device.controller.on('down', keyIndex => {
+            if (keyIndex === 2) {
+              open('http://localhost:3010')
+              log('info', 'link/streamdeck', 'Opening Core Panel UI')
+            } else {
+              log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
+            }
+          })
         })
         break
 
@@ -72,7 +72,7 @@ const updateStreamdecks = ({ type, force }) => {
         streamDecks.map(device => {
           device.configured = false
           device.controller.clearAllKeys()
-          writeImageToButton(device, 0, path.resolve(__dirname, '../../../common/logos/Dark_Icon.svg'))
+          writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
           writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
           writeTextToButton({ text: 'Core Offline', device: device, buttonIndex: 2 })
         })
@@ -82,7 +82,7 @@ const updateStreamdecks = ({ type, force }) => {
         streamDecks.map(device => {
           device.configured = false
           device.controller.clearAllKeys()
-          writeImageToButton(device, 0, path.resolve(__dirname, '../../../common/logos/Dark_Icon.svg'))
+          writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
           writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
           writeTextToButton({ text: 'Link Closed', device: device, buttonIndex: 2 })
         })
@@ -92,7 +92,7 @@ const updateStreamdecks = ({ type, force }) => {
         streamDecks.map(device => {
           device.configured = false
           device.controller.clearAllKeys()
-          writeImageToButton(device, 0, path.resolve(__dirname, '../../../common/logos/Dark_Icon.svg'))
+          writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
           writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
           writeTextToButton({ text: 'Connecting', device: device, buttonIndex: 2 })
         })
@@ -105,13 +105,13 @@ const updateStreamdecks = ({ type, force }) => {
             log('info', 'link/streamdeck', `Core returned ${result.data.controllers.length} configured controller${result.data.controllers.length === 1 ? '' : 's'}`)
             streamDecks.map(device => {
               device.controller.clearAllKeys()
-              if (findIndex(result.data.controllers, controller => controller.serial === device.config.serial) === -1) {
-                writeImageToButton(device, 0, path.resolve(__dirname, '../../../common/logos/Dark_Icon.svg'))
+              if (findIndex(result.data.controllers, controller => controller.serial === device.config.serial) === -1 || result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel === undefined) {
+                writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
                 writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
                 writeTextToButton({ text: 'Configure Controller', device: device, buttonIndex: 2 })
                 device.controller.on('down', keyIndex => {
                   if (keyIndex === 2) {
-                    open(`http://${directorCore.address}:${directorCore.service.port}/config/controllers`)
+                    open(`http://${config.get('connection').host}:${config.get('connection').port}/config/controllers`)
                     log('info', 'link/streamdeck', 'Opening Core Panel UI')
                   } else {
                     log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
@@ -120,23 +120,39 @@ const updateStreamdecks = ({ type, force }) => {
                 director.query(updateBridgeMutationGQL, { bridge: { type: 'DirectorLink', version: '1.0.0', controllers: [...streamDecks.map(sd => { return sd.config })] } })
                   .toPromise()
                   .then(result => {
+                    if (result.error) log('error', 'link/streamdeck', result.error)
                     log('info', 'link/streamdeck', result.data.updateBridge)
                   })
               } else {
-                device.config.panel = result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel
-                director.query(panelGQL, { id: device.config.panel.id })
-                  .toPromise()
-                  .then(result => {
-                    device.controller.removeAllListeners('down')
-                    device.controller.removeAllListeners('up')
-                    device.controller.on('down', keyIndex => {
-                      handleButtonPress(device, keyIndex)
+                const currentController = result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)]
+                if (currentController.panel) {
+                  device.config.panel = currentController.panel
+                  director.query(panelGQL, { id: device.config.panel.id })
+                    .toPromise()
+                    .then(result => {
+                      device.controller.removeAllListeners('down')
+                      device.controller.removeAllListeners('up')
+                      device.controller.on('down', keyIndex => {
+                        handleButtonPress(device, keyIndex)
+                      })
+                      const buttons = []
+                      result.data.panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
+                      device.config.panel = { ...result.data.panel, buttons: buttons }
+                      writePanel({ panel: device.config.panel, device: device })
                     })
-                    const buttons = []
-                    result.data.panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
-                    device.config.panel = { ...result.data.panel, buttons: buttons }
-                    writePanel({ panel: device.config.panel, device: device })
+                } else {
+                  writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
+                  writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
+                  writeTextToButton({ text: 'Configure Controller', device: device, buttonIndex: 2 })
+                  device.controller.on('down', keyIndex => {
+                    if (keyIndex === 2) {
+                      open(`http://${config.get('connection').host}:${config.get('connection').port}/cores/${currentController.core}/realms/${currentController.realm}/config/controllers/${encodeURIComponent(currentController.id)}`)
+                      log('info', 'link/streamdeck', 'Opening Core Panel UI')
+                    } else {
+                      log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
+                    }
                   })
+                }
               }
             })
           })

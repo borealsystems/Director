@@ -42,13 +42,11 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] Blackmagic Design Router Panels
 - [ ] Ross Ultrix RCP
 - [ ] Aja Kuma Router Panels
-- [ ] Lawo vsmGEAR
-- [ ] L-S-B Panels (Mostly the same as vsmGEAR)
 
 ## License
 Boreal Director and all ancilary projects are licensed under the MIT License.
 
-Copyright © 2019 Boreal Systems
+Copyright © 2012 Boreal Systems
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
