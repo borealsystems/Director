@@ -23,7 +23,7 @@ const Notes = () => {
   if (result.fetching) {
     return (
       <>
-        <h5>{contextRealm.coreLabel} / {contextRealm.label}</h5><br/>
+        <h5>{contextRealm.coreLabel} {contextRealm.id === 'ROOT' ? 'root' : `/ ${contextRealm.label}` }</h5><br/>
         <InlineLoading />
       </>
     )
@@ -31,7 +31,7 @@ const Notes = () => {
   if (result.data) {
     return (
       <>
-        <h5>{contextRealm.coreLabel} / {contextRealm.label}</h5><br/>
+        <h5>{contextRealm.coreLabel} {contextRealm.id === 'ROOT' ? 'root' : `/ ${contextRealm.label}` }</h5><br/>
         <Markdown
           escapeHtml={true}
           source={result.data.realm.notes}

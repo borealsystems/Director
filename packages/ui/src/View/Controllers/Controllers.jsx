@@ -51,97 +51,95 @@ const Controllers = () => {
       )[page - 1]
 
     return (
-      <div>
-        <DataTable
-          rows={currentTableData ?? []}
-          headers={headers}
-          render={({
-            rows,
-            headers,
-            getHeaderProps,
-            getRowProps,
-            getTableProps,
-            getToolbarProps,
-            getTableContainerProps
-          }) => (
-            <TableContainer
-              title="Controllers"
-              description="A Controller is the thing you use to actually make things happen."
-              {...getTableContainerProps()}
-            >
-              <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
-                <TableToolbarContent>
-                  <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
-                  <Button renderIcon={Add24} onClick={() => {
-                    history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/new` })
-                  }}>New Controller</Button>
-                </TableToolbarContent>
-              </TableToolbar>
-              {rawData.length > 0 &&
-                <>
-                  <Table {...getTableProps()}>
-                    <TableHead>
-                      <TableRow>
-                        {headers.map((header, i) => (
-                          <TableHeader key={i} {...getHeaderProps({ header })}>
-                            {header.header}
-                          </TableHeader>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map((row, i) => (
-                        <TableRow key={i} {...getRowProps({ row })}>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>{cell.value}</TableCell>
-                          ))}
-                          <TableCell>
-                            <ModalStateManager
-                              LauncherContent={({ setOpen }) => (
-                                <OverflowMenu flipped>
-                                  <OverflowMenuItem itemText='Edit Controller' onClick={() => {
-                                    history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/${row.cells[0].value}` })
-                                  }} />
-                                  <OverflowMenuItem itemText='Delete Controller' isDelete disabled={!isDeletable(row.cells)} onClick={() => { console.log('FUCK'); setOpen(true) }} />
-                                </OverflowMenu>
-                              )}
-                              ModalContent={({ open, setOpen }) => (
-                                <DeleteObjectModal
-                                  open={open}
-                                  setOpen={setOpen}
-                                  type='device'
-                                  id={row.cells[0].value}
-                                  label={row.cells[1].value}
-                                  deleteFunction={deleteControllerMutation}
-                                  refreshFunction={refresh}
-                                />
-                              )} />
-                          </TableCell>
-                        </TableRow>
+      <DataTable
+        rows={currentTableData.map(controller => ({ panelLabel: controller.panel.label, ...controller })) ?? []}
+        headers={headers}
+        render={({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          getToolbarProps,
+          getTableContainerProps
+        }) => (
+          <TableContainer
+            title="Controllers"
+            description="A Controller is the thing you use to actually make things happen."
+            {...getTableContainerProps()}
+          >
+            <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+              <TableToolbarContent>
+                <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
+                <Button renderIcon={Add24} onClick={() => {
+                  history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/new` })
+                }}>New Controller</Button>
+              </TableToolbarContent>
+            </TableToolbar>
+            {rawData.length > 0 &&
+              <>
+                <Table {...getTableProps()}>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map((header, i) => (
+                        <TableHeader key={i} {...getHeaderProps({ header })}>
+                          {header.header}
+                        </TableHeader>
                       ))}
-                    </TableBody>
-                  </Table>
-                  <Pagination
-                    style={{ width: '100%' }}
-                    backwardText="Previous page"
-                    forwardText="Next page"
-                    itemsPerPageText="Items per page:"
-                    page={page}
-                    pageNumberText="Page Number"
-                    pageSize={pageSize}
-                    pageSizes={[10, 25, 50, 100]}
-                    totalItems={filteredTableData.length}
-                    onChange={(e) => {
-                      setPage(e.page)
-                      setPageSize(e.pageSize)
-                    }}
-                  />
-                </>
-              }
-            </TableContainer>
-          )}
-        />
-      </div>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row, i) => (
+                      <TableRow key={i} {...getRowProps({ row })}>
+                        {row.cells.map((cell) => (
+                          <TableCell key={cell.id}>{cell.value}</TableCell>
+                        ))}
+                        <TableCell>
+                          <ModalStateManager
+                            LauncherContent={({ setOpen }) => (
+                              <OverflowMenu flipped>
+                                <OverflowMenuItem itemText='Edit Controller' onClick={() => {
+                                  history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/${row.cells[0].value}` })
+                                }} />
+                                <OverflowMenuItem itemText='Delete Controller' isDelete disabled={!isDeletable(row.cells)} onClick={() => { setOpen(true) }} />
+                              </OverflowMenu>
+                            )}
+                            ModalContent={({ open, setOpen }) => (
+                              <DeleteObjectModal
+                                open={open}
+                                setOpen={setOpen}
+                                type='device'
+                                id={row.cells[0].value}
+                                label={row.cells[1].value}
+                                deleteFunction={deleteControllerMutation}
+                                refreshFunction={refresh}
+                              />
+                            )} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <Pagination
+                  style={{ width: '100%' }}
+                  backwardText="Previous page"
+                  forwardText="Next page"
+                  itemsPerPageText="Items per page:"
+                  page={page}
+                  pageNumberText="Page Number"
+                  pageSize={pageSize}
+                  pageSizes={[10, 25, 50, 100]}
+                  totalItems={filteredTableData.length}
+                  onChange={(e) => {
+                    setPage(e.page)
+                    setPageSize(e.pageSize)
+                  }}
+                />
+              </>
+            }
+          </TableContainer>
+        )}
+      />
     )
   }
 }

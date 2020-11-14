@@ -48,7 +48,7 @@ const Devices = () => {
     return (
       <div>
         <DataTable
-          rows={currentTableData}
+          rows={currentTableData.map(device => ({ providerLabel: device.provider.label, ...device })) ?? []}
           headers={headers}
           render={({
             rows,

@@ -49,7 +49,7 @@ const Devices = () => {
 
     return (
       <DataTable
-        rows={currentTableData ?? []}
+        rows={currentTableData.map(stack => ({ actionsCount: stack.actions?.length, ...stack })) ?? []}
         headers={headers}
         render={({
           rows,

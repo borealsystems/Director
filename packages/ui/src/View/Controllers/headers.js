@@ -20,7 +20,7 @@ export default [
     header: 'Serial Number'
   },
   { // TODO Awaiting Upstream
-    key: 'panel.label',
+    key: 'panelLabel',
     header: 'Panel'
   },
   {

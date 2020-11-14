@@ -102,6 +102,11 @@ const stacksQueryGQL = `query getAll($realm: String, $core: String ) {
     label
     panelLabel
     description
+    actions {
+      device {
+        id
+      }
+    }
   }
 }`
 

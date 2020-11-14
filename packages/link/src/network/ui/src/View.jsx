@@ -100,7 +100,7 @@ const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => 
       </Row>
       <br/><br/>
       <Row>
-        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }).then(result => console.log(result)) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
+        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
           {currentConnection.status ? 'Update & Reconnect' : 'Connect' }
         </Button>
       </Row>

@@ -38,7 +38,7 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] Ember+
 
 ### Hardware Control
-- [ ] Elgato Streamdeck (via DirectorLink)
+- [x] Elgato Streamdeck (via DirectorLink)
 - [ ] Blackmagic Design Router Panels
 - [ ] Ross Ultrix RCP
 - [ ] Aja Kuma Router Panels

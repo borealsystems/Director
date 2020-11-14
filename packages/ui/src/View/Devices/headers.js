@@ -16,7 +16,7 @@ export default [
     header: 'Location'
   },
   {
-    key: 'provider.label',
+    key: 'providerLabel',
     header: 'Provider'
   },
   {

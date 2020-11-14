@@ -14,6 +14,10 @@ const headers = [
   {
     key: 'description',
     header: 'Description'
+  },
+  {
+    key: 'actionsCount',
+    header: 'Actions'
   }
 ]
 

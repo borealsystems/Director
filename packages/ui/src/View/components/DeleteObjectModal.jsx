@@ -32,7 +32,6 @@ const DeleteObjectModal = ({ open, setOpen, type, id, label, deleteFunction, ref
         secondaryButtonText='Cancel'
         onRequestClose={() => setOpen(false)}
         onRequestSubmit={() => {
-          console.log('FUCK IT OFF')
           deleteFunction({ id: id })
             .then(setOpen(false))
             .then(

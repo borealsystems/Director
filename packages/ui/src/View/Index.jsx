@@ -146,7 +146,7 @@ const BorealDirector = () => {
                   { isAuthenticated &&
                     <>
                       <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
-                        {theme === 'light' ? <Light20 /> : <LightFilled20 />}
+                        {theme === 'dx--light' ? <Light20 /> : <LightFilled20 />}
                       </HeaderGlobalAction>
                       {/* <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
                         <User20 />

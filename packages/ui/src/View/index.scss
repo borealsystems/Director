@@ -42,6 +42,10 @@
   .coreSelect.bx--list-box--disabled .bx--list-box__menu-icon > svg {
     fill: #525252;
   }
+
+  .bx--data-table {
+    background: var(--cds-ui-03, #e0e0e0)
+  }
 }
 
 .bx--modal {
@@ -59,3 +63,4 @@
 .dx--table-modal-trigger div[role=presentation]#realmModalWrapper .bx--btn--primary { /* Hack to make wrapped modal button red */
   background-color: #da1e28;
 }
+

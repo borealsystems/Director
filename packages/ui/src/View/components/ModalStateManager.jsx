@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 const ModalStateManager = ({ LauncherContent, ModalContent }) => {
   const [open, setOpen] = useState(false)
-  console.log(open)
   return (
     <>
       {LauncherContent && <LauncherContent open={open} setOpen={setOpen} />}

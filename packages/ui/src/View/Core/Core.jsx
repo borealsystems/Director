@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, Form, InlineLoading, TextInput, Grid, Row, Column, InlineNotification, Toggle } from 'carbon-components-react'
+import { Button, Form, InlineLoading, TextInput, Grid, Row, Column } from 'carbon-components-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const Core = ({ updateAndSetRealm }) => {
@@ -80,16 +80,6 @@ const Core = ({ updateAndSetRealm }) => {
       <Grid>
         <Form>
           <Row>
-            <InlineNotification
-              style={{ width: '100%' }}
-              lowContrast={true}
-              kind='warning'
-              title='This interface is being overhauled'
-              subtitle='Items may move and/or break in the near future, please report bugs to Phabricator T96'
-              hideCloseButton={true}
-            />
-          </Row>
-          <Row>
             <Column>
               <h2>System Configuration</h2>
             </Column>
@@ -122,7 +112,8 @@ const Core = ({ updateAndSetRealm }) => {
               />
             </Column>
           </Row><br/>
-          <Row>
+          {/* THIS IS FOR AUTHENTICATION WHEN IT EXISTS */}
+          {/* <Row>
             <Column>
               <legend>Log In Page</legend>
             </Column>
@@ -151,7 +142,7 @@ const Core = ({ updateAndSetRealm }) => {
                 onChange={() => setCoreConfig({ ...coreConfig, helpdeskVisable: !coreConfig.helpdeskVisable })}
               />
             </Column>
-          </Row><br/>
+          </Row><br/> */}
           <Row>
             <Column>
               <Button

@@ -11,11 +11,7 @@ const Dashboard = () => {
   const tileHeight = '415px'
   return (
     <Grid style={{ maxWidth: '200rem' }}>
-      <Row>
-        <Column>
-          {/* <h2>Dashboard</h2> */}
-        </Column>
-      </Row><br/>
+      <span style={{ display: 'inline-block', height: '1rem' }}>&nbsp;</span>
       <Row>
         <Column lg={{ span: 6 }}>
           <Tile style={{ height: tileHeight }}>
