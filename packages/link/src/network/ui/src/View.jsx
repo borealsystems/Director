@@ -137,33 +137,33 @@ const View = () => {
     }
   }`)
 
-  if (result.error) return <GraphQLError error={result.error} />
-  if (result.fetching) return <Loading />
-  if (result.data) {
-    if (pause === false && result.data.connection && result.data.connection.status === false) setPause(true)
-    if (pause === true && result.data.connection && result.data.connection.status === true) setPause(false)
-    return (
-      <HeaderContainer
-        render={() => (
-          <>
-            <Header aria-label="BorealSystems Director">
-              <SkipToContent />
-              <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='Boreal Systems'>
-                Director Link
-              </HeaderName>
-              <HeaderNavigation aria-label="Boreal Systems Director">
-                <HeaderMenu aria-label="Development Build" menuLinkName={'This is a development build'}>
-                  <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                  <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
-                </HeaderMenu>
-              </HeaderNavigation>
-              <HeaderGlobalBar>
-                <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
-                  {theme === 'dx--light' ? <Light20 /> : <LightFilled20 />}
-                </HeaderGlobalAction>
-              </HeaderGlobalBar>
-            </Header>
-            <Content id="main-content">
+  if (result.data && pause === false && result.data.connection && result.data.connection.status === false) setPause(true)
+  if (result.data && pause === true && result.data.connection && result.data.connection.status === true) setPause(false)
+  return (
+    <HeaderContainer
+      render={() => (
+        <>
+          <Header aria-label="BorealSystems Director">
+            <SkipToContent />
+            <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='Boreal Systems'>
+              Director Link
+            </HeaderName>
+            <HeaderNavigation aria-label="Boreal Systems Director">
+              <HeaderMenu aria-label="Development Build" menuLinkName={'This is a development build'}>
+                <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
+                <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+              </HeaderMenu>
+            </HeaderNavigation>
+            <HeaderGlobalBar>
+              <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
+                {theme === 'dx--light' ? <Light20 /> : <LightFilled20 />}
+              </HeaderGlobalAction>
+            </HeaderGlobalBar>
+          </Header>
+          <Content id="main-content">
+            { result.error && <GraphQLError error={result.error} />}
+            { result.loading && <Loading /> }
+            { result.data &&
               <Grid>
                 <Row>
                   <ConnectionForm currentConnection={{ ...result.data.connection }} connectionMutation={connectionMutation} setPause={setPause}/>
@@ -172,12 +172,12 @@ const View = () => {
                   </Column>
                 </Row>
               </Grid>
-            </Content>
-          </>
-        )}
-      />
-    )
-  }
+            }
+          </Content>
+        </>
+      )}
+    />
+  )
 }
 
 export default View

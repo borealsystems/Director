@@ -61,7 +61,7 @@ const Logs = () => {
         { !logModalVisible &&
           <DataTable
             style={{ overflow: 'hidden' }}
-            rows={result.data.logs.reverse()}
+            rows={result.data.logs}
             headers={headers}
             shouldShowBorder={false}
             size='short'
@@ -108,7 +108,7 @@ const Logs = () => {
           onRequestClose={() => setLogModalVisible(false)}
         >
           <DataTable
-            rows={result.data.logs.reverse()}
+            rows={result.data.logs}
             headers={headers}
             shouldShowBorder={false}
             size='short'
