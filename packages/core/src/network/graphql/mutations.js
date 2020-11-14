@@ -2,7 +2,7 @@ import { registerBridge } from '../../bridges'
 import { updateController, deleteController } from '../../controllers'
 import { updateDevice, deleteDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
-import { updateStack, deleteStack, executeStack } from '../../stacks'
+import { updateStack, duplicateStack, deleteStack, executeStack } from '../../stacks'
 import { cores } from '../../db'
 
 import {
@@ -64,6 +64,18 @@ const mutations = new GraphQLObjectType({
       resolve: (parent, args) => {
         return updateStack(args.stack)
       }
+    },
+
+    duplicateStack: {
+      name: 'duplicateStackMutation',
+      description: 'Duplicate an existing stack',
+      type: GraphQLString,
+      args: {
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => duplicateStack(args.id)
     },
 
     deleteStack: {

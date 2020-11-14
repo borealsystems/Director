@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { Button, DataTable, DataTableSkeleton, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
-import { stacksQueryGQL, deleteStackGQL, executeStackMutationGQL } from './queries'
+import { stacksQueryGQL, deleteStackGQL, duplicateStackGQL, executeStackMutationGQL } from './queries'
 import { useHistory } from 'react-router-dom'
 import { Add24 } from '@carbon/icons-react'
 import ModalStateManager from '../components/ModalStateManager.jsx'
@@ -26,6 +26,7 @@ const Devices = () => {
   const history = useHistory()
 
   const [, deleteStackMutation] = useMutation(deleteStackGQL)
+  const [, duplicateStackMutation] = useMutation(duplicateStackGQL)
   const [, executeStackMutation] = useMutation(executeStackMutationGQL)
 
   if (result.error) return <GraphQLError error={result.error} />
@@ -93,6 +94,12 @@ const Devices = () => {
                             LauncherContent={({ setOpen }) => (
                               <OverflowMenu flipped>
                                 <OverflowMenuItem itemText='Edit Stack' onClick={() => history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/${row.cells[0].value}` })} />
+                                <OverflowMenuItem itemText='Duplicate Stack' onClick={() => {
+                                  duplicateStackMutation({ id: row.cells[0].value })
+                                    .then(result => {
+                                      if (result.data?.duplicateStack) history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/${result.data.duplicateStack}` })
+                                    })
+                                }} />
                                 <OverflowMenuItem itemText='Execute Stack' onClick={() => executeStackMutation({ id: row.cells[0].value })} />
                                 <OverflowMenuItem itemText='Delete Stack' isDelete onClick={() => setOpen(true)} />
                               </OverflowMenu>

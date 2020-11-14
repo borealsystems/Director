@@ -32,6 +32,30 @@ const updateStack = (_stack) => {
   })
 }
 
+const duplicateStack = _id => new Promise((resolve, reject) => {
+  const id = shortid.generate()
+  stacks.findOne({ id: _id })
+    .then(stack => {
+      delete stack._id
+      return stack
+    })
+    .then(stack => {
+      stacks.updateOne(
+        { id: id },
+        {
+          $set: {
+            ...stack,
+            id: id,
+            label: `Duplicate of ${stack.label}`
+          }
+        },
+        { upsert: true }
+      )
+    })
+    .then(resolve(id))
+    .catch(err => reject(err))
+})
+
 const deleteStack = (_id) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
@@ -66,4 +90,4 @@ const executeStack = (_id) => {
   })
 }
 
-export { updateStack, deleteStack, stacks, executeStack }
+export { updateStack, duplicateStack, deleteStack, stacks, executeStack }

@@ -105,6 +105,12 @@ const stacksQueryGQL = `query getAll($realm: String, $core: String ) {
   }
 }`
 
+const duplicateStackGQL = `
+  mutation duplicateStack($id: String) {
+    duplicateStack(id: $id)
+  }
+`
+
 const deleteStackGQL = `
   mutation deleteStack($id: String) {
     deleteStack(id: $id)
@@ -122,4 +128,4 @@ const executeStackMutationGQL = `mutation executeStack($id: String) {
   executeStack(id: $id)
 }`
 
-export { deviceFunctionQueryGQL, existingStackQueryGQL, newStackQueryGQL, stacksQueryGQL, deleteStackGQL, stackUpdateMutationGQL, executeStackMutationGQL }
+export { deviceFunctionQueryGQL, existingStackQueryGQL, newStackQueryGQL, stacksQueryGQL, deleteStackGQL, stackUpdateMutationGQL, executeStackMutationGQL, duplicateStackGQL }

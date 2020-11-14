@@ -177,7 +177,7 @@ const BorealDirector = () => {
               </Header>
               { result.loading && <Loading /> }
               <Content id="main-content">
-                <Suspense fallback={<Loading/>} >
+                <Suspense fallback={<Loading style={{ height: '98vh' }}/>} >
                   <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
                     <Row>
                       <Column>

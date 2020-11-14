@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet } from 'carbon-components-react'
 import { useMutation } from 'urql'
-import { omit } from 'lodash'
 import { useHistory } from 'react-router-dom'
 import globalContext from '../../globalContext'
 import Action from './Action.jsx'
@@ -39,15 +38,6 @@ const Stack = ({ id, _stack, providers, devices }) => {
     })
     const stackUpdateObject = { stack: { ...stack, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
     stackUpdateMutation(stackUpdateObject).then(history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }))
-  }
-
-  const duplicateStack = () => {
-    var actionsStripped = []
-    actions.forEach(action => {
-      actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
-    })
-    const stackUpdateObject = { stack: { ...omit(stack, 'id'), label: `Duplicate of ${stack.label}`, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
-    stackUpdateMutation(stackUpdateObject)
   }
 
   const setActionsProxy = (action, index) => {
@@ -226,9 +216,6 @@ const Stack = ({ id, _stack, providers, devices }) => {
               </Button>
             </ButtonSet>
             <ButtonSet>
-              <Button disabled={isNew} onClick={() => duplicateStack() } kind="secondary" style={buttonStyles}>
-                Duplicate
-              </Button>
               <Button disabled={actions.length === 0} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
                 { !isNew && <>Update</> }
                 { isNew && <>Create</> }
