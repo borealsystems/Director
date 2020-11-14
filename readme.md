@@ -44,7 +44,7 @@ The intention of this project is to create an open facility scale orchestration 
 - [ ] Aja Kuma Router Panels
 
 ## License
-Boreal Director is licensed under the BSDv3 License.
+Boreal Director is licensed under the GPLv3 License.
 Copyright (C) 2020 Boreal Systems - Oliver Herrmann, https://boreal.systems
 
 This program is free software: you can redistribute it and/or modify
