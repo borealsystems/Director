@@ -39,7 +39,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-standard": "^4.0.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "pkg": "^4.4.9"
   },
   "dependencies": {
     "apollo-client": "^2.6.10",
@@ -54,7 +55,6 @@
     "isomorphic-unfetch": "^3.0.0",
     "jimp": "^0.14.0",
     "lodash": "^4.17.15",
-    "mdns": "^2.5.1",
     "nicely-format": "^1.1.0",
     "open": "^7.1.0",
     "shortid": "^2.2.15",
