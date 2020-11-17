@@ -46,6 +46,16 @@
   .bx--data-table {
     background: var(--cds-ui-03, #e0e0e0)
   }
+
+  .dx--table-empty {
+    background: #ffffff
+  }
+}
+
+.dx--dark {
+  .dx--table-empty {
+    background: var(--cds-ui-01, #f4f4f4)
+  }
 }
 
 .bx--modal {
