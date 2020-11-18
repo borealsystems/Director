@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
-import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination } from 'carbon-components-react'
+import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination, Modal } from 'carbon-components-react'
 import { Add24 } from '@carbon/icons-react'
-import { devicesQueryGQL, deleteDeviceGQL } from './queries'
+import { devicesQueryGQL, deleteDeviceGQL, enableDeviceMutationGQL, disableDeviceMutationGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ModalStateManager from '../components/ModalStateManager.jsx'
 import globalContext from '../../globalContext'
@@ -20,6 +20,8 @@ const Devices = () => {
   })
 
   const [, deleteDeviceMutation] = useMutation(deleteDeviceGQL)
+  const [, enableDeviceMutation] = useMutation(enableDeviceMutationGQL)
+  const [, disableDeviceMutation] = useMutation(disableDeviceMutationGQL)
 
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -105,24 +107,53 @@ const Devices = () => {
                       })}
                       <TableCell>
                         { !row.cells[0].value.match(/CORE-/) &&
-                          <ModalStateManager
-                            LauncherContent={({ setOpen }) => (
-                              <OverflowMenu flipped>
-                                <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
+                          <OverflowMenu flipped>
+                            <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
+                            <ModalStateManager
+                              LauncherContent={({ setOpen }) => (
+                                <OverflowMenuItem itemText={row.cells[5].value ? 'Disable Device' : 'Enable Device'} onClick={() => {
+                                  row.cells[5].value
+                                    ? setOpen(true)
+                                    : enableDeviceMutation({ id: row.cells[0].value }).then(() => setTimeout(refresh, 500))
+                                }} />
+                              )}
+                              disableDeviceMutation
+                              ModalContent={({ open, setOpen }) => (
+                                <Modal
+                                  aria-label='Disable Modal'
+                                  modalHeading={`Are you sure you want to disable ${row.cells[1].value}`}
+                                  modalLabel='Disable Device'
+                                  open={open}
+                                  primaryButtonText='Disable'
+                                  secondaryButtonText='Cancel'
+                                  onRequestClose={() => setOpen(false)}
+                                  onRequestSubmit={() => {
+                                    disableDeviceMutation({ id: row.cells[0].value })
+                                      .then(() => {
+                                        setOpen(false)
+                                        setTimeout(refresh, 500)
+                                      })
+                                  }}
+                                >
+                                  Disabling this device means that Director will not attempt to connect to it or send any commands. Any Stack Actions involving this device will remain but they will be skipped when executed.
+                                </Modal>
+                              )} />
+                            <ModalStateManager
+                              LauncherContent={({ setOpen }) => (
                                 <OverflowMenuItem itemText='Delete Device' isDelete onClick={() => setOpen(true)} />
-                              </OverflowMenu>
-                            )}
-                            ModalContent={({ open, setOpen }) => (
-                              <DeleteObjectModal
-                                open={open}
-                                setOpen={setOpen}
-                                type='device'
-                                id={row.cells[0].value}
-                                label={row.cells[1].value}
-                                deleteFunction={deleteDeviceMutation}
-                                refreshFunction={refresh}
-                              />
-                            )} />
+                              )}
+                              ModalContent={({ open, setOpen }) => (
+                                <DeleteObjectModal
+                                  open={open}
+                                  setOpen={setOpen}
+                                  type='device'
+                                  id={row.cells[0].value}
+                                  label={row.cells[1].value}
+                                  deleteFunction={deleteDeviceMutation}
+                                  refreshFunction={refresh}
+                                />
+                              )} />
+                          </OverflowMenu>
                         }
                       </TableCell>
                     </TableRow>

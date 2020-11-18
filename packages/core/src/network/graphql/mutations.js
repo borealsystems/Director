@@ -1,6 +1,6 @@
 import { registerBridge } from '../../bridges'
 import { updateController, deleteController } from '../../controllers'
-import { updateDevice, deleteDevice } from '../../devices'
+import { updateDevice, deleteDevice, disableDevice, enableDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
 import { updateStack, duplicateStack, deleteStack, executeStack } from '../../stacks'
 import { cores } from '../../db'
@@ -49,6 +49,28 @@ const mutations = new GraphQLObjectType({
       },
       resolve: (parent, args) => {
         return deleteDevice(args.id)
+      }
+    },
+
+    disableDevice: {
+      name: 'disableDeviceMutationType',
+      type: GraphQLString,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: (parent, args) => {
+        return disableDevice(args.id)
+      }
+    },
+
+    enableDevice: {
+      name: 'enableDeviceMutationType',
+      type: GraphQLString,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: (parent, args) => {
+        return enableDevice(args.id)
       }
     },
 

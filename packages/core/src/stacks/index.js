@@ -73,16 +73,19 @@ const deleteStack = (_id) => {
 }
 
 // TODO: Facilitate delays and step timings WITH AN INTERNAL ACTION
-// TODO: Deal with offline, inactive, and deleted devices
 const executeStack = (_id) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
       .then(stack => {
         log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`)
-        stack.actions.map(action => {
+        stack.actions.map((action, index) => {
           const params = {}
           action.parameters.map(param => { params[param.id] = param.value })
-          deviceInstance[action.device.id].interface({ ...action, parameters: params })
+          if (deviceInstance[action.device.id]) {
+            deviceInstance[action.device.id].interface({ ...action, parameters: params })
+          } else {
+            log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
+          }
         })
         resolve(status.OK)
       })

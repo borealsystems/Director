@@ -5,13 +5,13 @@
   background-color: #161616 !important;
   border: none !important;
 }
+
 .coreSelect .bx--list-box__selection {
   visibility: hidden;
 }
 .coreSelect .bx--text-input {
   border: none !important;
 }
-
 
 .comboBoxNoClear .bx--list-box__selection {
   visibility: hidden;
@@ -20,6 +20,7 @@
 .clock .bx--tooltip__trigger.bx--tooltip__trigger--definition {
   font-size: 1rem;
   border-bottom: none;
+  margin-bottom: 0.4em;
 }
 
 .dx--light {
@@ -59,18 +60,6 @@
 }
 
 .bx--modal {
-  height: 95.3vh !important;
+  height: 100% !important;
+  width: 100% !important;
 }
-
-.dx--table-modal-trigger {
-  display: flex
-}
-
-.dx--table-modal-trigger div[role=presentation]#realmModalWrapper {
-  display: flex !important;
-}
-
-.dx--table-modal-trigger div[role=presentation]#realmModalWrapper .bx--btn--primary { /* Hack to make wrapped modal button red */
-  background-color: #da1e28;
-}
-

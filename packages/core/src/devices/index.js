@@ -53,18 +53,22 @@ const updateDevice = (_device) => {
 
 const instantiateDevice = (_id) => {
   devices.findOne({ id: _id }).then(device => {
-    const provider = providers.find((provider) => provider.id === device.provider.id)
-    const configuration = {}
-    device.configuration && device.configuration.map(conf => { configuration[conf.id] = conf.value })
-    if (deviceInstance[_id]) {
-      deviceInstance[_id].destroy()
-      deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
-      deviceInstance[_id].init()
+    if (device.enabled) {
+      const provider = providers.find((provider) => provider.id === device.provider.id)
+      const configuration = {}
+      device.configuration && device.configuration.map(conf => { configuration[conf.id] = conf.value })
+      if (deviceInstance[_id]) {
+        deviceInstance[_id].destroy()
+        deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
+        deviceInstance[_id].init()
+      } else {
+        deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
+        deviceInstance[_id].init()
+      }
+      log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${device.provider.label}`)
     } else {
-      deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
-      deviceInstance[_id].init()
+      log('info', 'core/lib/devices', `${_id} (${device.label}) is disabled, skipping initialisation`)
     }
-    log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${device.provider.label}`)
   })
 }
 
@@ -81,4 +85,45 @@ const deleteDevice = (_id) => {
   }
 }
 
-export { instantiateDevice, updateDevice, deleteDevice, deviceInstance, initDevices, cleanupDevices }
+const enableDevice = _id => new Promise((resolve, reject) => {
+  log('info', 'core/lib/devices', `Enabling ${_id}`)
+  if (_id.match(/CORE-/)) {
+    log('info', 'core/lib/devices', 'You Can\'t Enable Director!')
+    reject(new Error('Cannot Enable Director'))
+  } else {
+    devices.updateOne(
+      { id: _id },
+      {
+        $set: {
+          enabled: true
+        }
+      }
+    ).then(() => {
+      instantiateDevice(_id)
+      resolve(STATUS.OK)
+    })
+  }
+})
+
+const disableDevice = _id => new Promise((resolve, reject) => {
+  log('info', 'core/lib/devices', `Disabling ${_id}`)
+  if (_id.match(/CORE-/)) {
+    log('info', 'core/lib/devices', 'You Can\'t Disable Director!')
+    reject(new Error('Cannot Disable Director'))
+  } else {
+    devices.updateOne(
+      { id: _id },
+      {
+        $set: {
+          enabled: false
+        }
+      }
+    ).then(() => {
+      deviceInstance[_id].destroy()
+      delete deviceInstance[_id]
+      resolve(STATUS.OK)
+    })
+  }
+})
+
+export { instantiateDevice, updateDevice, deleteDevice, deviceInstance, initDevices, cleanupDevices, enableDevice, disableDevice }

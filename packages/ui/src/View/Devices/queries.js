@@ -74,4 +74,12 @@ const deviceMutationGQL = `mutation device($device: deviceUpdate) {
   }
 }`
 
-export { devicesQueryGQL, deleteDeviceGQL, newDeviceQuery, existingDeviceQuery, deviceMutationGQL }
+const enableDeviceMutationGQL = `mutation enableDevice($id: String) {
+  enableDevice(id:$id)
+}`
+
+const disableDeviceMutationGQL = `mutation disableDevice($id: String) {
+  disableDevice(id:$id)
+}`
+
+export { devicesQueryGQL, deleteDeviceGQL, newDeviceQuery, existingDeviceQuery, deviceMutationGQL, enableDeviceMutationGQL, disableDeviceMutationGQL }
