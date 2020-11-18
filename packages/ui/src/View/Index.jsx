@@ -175,10 +175,10 @@ const BorealDirector = () => {
                   </SideNav>
               }
             </Header>
-            <Content id="main-content">
+            <Content id="main-content" style={{ height: '95.2vh' }}>
               { result.error && <GraphQLError error={result.error} />}
               { result.loading && <Loading /> }
-              <Suspense fallback={<Loading style={{ height: '98vh' }}/>} >
+              <Suspense fallback={<Loading/>} >
                 <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
                   <Row>
                     <Column>

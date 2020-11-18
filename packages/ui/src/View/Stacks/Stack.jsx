@@ -4,9 +4,10 @@ import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonS
 import { useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import globalContext from '../../globalContext'
-import Action from './Action.jsx'
 import { executeStackMutationGQL, stackUpdateMutationGQL } from './queries'
 import { Add24, ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
+import Action from './Action.jsx'
+import Padding from '../components/Padding.jsx'
 
 const Stack = ({ id, _stack, providers, devices }) => {
   const isNew = id === 'new'
@@ -143,7 +144,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
             type='text'
             id='newstackName'
             placeholder='Required'
-            value={stack.label}
+            value={stack.label ?? ''}
             labelText='Stack Name'
             onClick={() => {}}
             onChange={(e) => { setStack({ ...stack, label: e.target.value }) }}
@@ -154,20 +155,21 @@ const Stack = ({ id, _stack, providers, devices }) => {
             type='text'
             id='newstackName'
             placeholder='Optional'
-            value={stack.panelLabel}
+            value={stack.panelLabel ?? ''}
             labelText='Stack Panel Label'
+            helperText='This is what will be displayed on panels, if left blank the stack name will be used'
             onClick={() => {}}
             onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value }) }}
           />
         </Column>
-      </Row><br/>
+      </Row>
       <Row>
         <Column>
           <TextInput
             type='text'
             id='newstackDescription'
             placeholder='Optional'
-            value={stack.description || undefined}
+            value={stack.description ?? ''}
             labelText='Stack Description'
             onClick={() => {}}
             onChange={(e) => { setStack({ ...stack, description: e.target.value }) }}
@@ -178,7 +180,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
         <Column>
           <h4>Stack Actions</h4>
         </Column>
-      </Row><br/>
+      </Row>
       <Row>
         <Column>
           <Accordion>
@@ -200,11 +202,12 @@ const Stack = ({ id, _stack, providers, devices }) => {
           </Accordion>
           { newActionVisibility &&
             <div style={{ marginLeft: '7.2em', marginRight: '1em' }}>
-              New Action<br/>
+              New Action
+              <Padding size={5}/>
               <Action new index={actions.length + 1} delete={deleteAction} setActions={setActionsProxy} providers={providers} devices={devices}></Action>
             </div>
           }
-          <br/>
+          <Padding size={5}/>
         </Column>
       </Row>
       <Row>
@@ -212,13 +215,13 @@ const Stack = ({ id, _stack, providers, devices }) => {
           <div style={{ float: 'right' }}>
             <ButtonSet style={{ marginRight: '1px', float: 'left' }}>
               <Button disabled={isNew} onClick={() => executeStackMutation({ id: stack.id }) } kind="secondary" style={buttonStyles}>
-                Execute
+                Execute Stack
               </Button>
             </ButtonSet>
             <ButtonSet>
-              <Button disabled={actions.length === 0} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
-                { !isNew && <>Update</> }
-                { isNew && <>Create</> }
+              <Button disabled={actions.length === 0 || !stack.label} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
+                { !isNew && <>Update Stack</> }
+                { isNew && <>Create Stack</> }
               </Button>
             </ButtonSet>
           </div>

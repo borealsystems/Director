@@ -33,10 +33,10 @@ const DeleteObjectModal = ({ open, setOpen, type, id, label, deleteFunction, ref
         onRequestClose={() => setOpen(false)}
         onRequestSubmit={() => {
           deleteFunction({ id: id })
-            .then(setOpen(false))
-            .then(
-              setTimeout(refreshFunction(), 1000)
-            )
+            .then(() => {
+              setOpen(false)
+              refreshFunction()
+            })
         }}
       />
     )

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
-import { Button, ButtonSet, ComboBox, TextInput, Form, FormGroup, ProgressIndicator, ProgressStep, Grid, Row, Column, InlineNotification, Loading } from 'carbon-components-react'
-import { ArrowRight24, Exit24, ArrowLeft24 } from '@carbon/icons-react'
+import { Button, ButtonSet, ComboBox, TextInput, Form, Grid, Row, Column, Loading, InlineLoading } from 'carbon-components-react'
+import { ArrowRight24, Exit24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import { omit } from 'lodash'
 import { useMutation } from 'urql'
@@ -14,7 +14,7 @@ const Panel = ({ id, result }) => {
 
   let initialPanel = {}
   if (isNew) {
-    initialPanel = {}
+    initialPanel = { currentButton: { row: 0, column: 0 } }
   } else {
     const thisPanel = isNew ? null : { ...result.data.panel }
     const buttons = []
@@ -22,32 +22,23 @@ const Panel = ({ id, result }) => {
     initialPanel = { ...thisPanel, buttons: buttons }
   }
   var [panel, setPanel] = useState(initialPanel)
-
-  const [configurationStep, setConfigurationStep] = useState(isNew ? 0 : 1)
-  const [errors, setErrors] = useState({
-    layoutType: ''
-  })
+  const [isLoading, setIsLoading] = useState(false)
 
   const [, panelUpdateMutation] = useMutation(panelUpdateMutationGQL)
 
   const updatePanel = () => {
+    setIsLoading(true)
     const stackUpdateObject = { panel: { ...omit(panel, 'currentButton'), realm: contextRealm.id, core: contextRealm.coreID } }
     panelUpdateMutation(stackUpdateObject)
-    history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` })
+      .then(result => {
+        if (result.data) {
+          setIsLoading(false)
+          history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` })
+        } else if (result.error) setIsLoading(false)
+      })
   }
 
-  const formOnChange = (field, value) => {
-    const scopedErrors = { ...errors }
-    switch (field) {
-      case 'layoutType':
-        scopedErrors.layoutType = !value ? 'Please select a panel layout type' : ''
-    }
-
-    setErrors(scopedErrors)
-    setPanel({ ...panel, [field]: value })
-  }
-
-  const matrix = (rows, cols, defaultValue) => {
+  const matrix = (rows, cols) => {
     var arr = []
     for (var i = 0; i < rows; i++) {
       arr.push([])
@@ -57,11 +48,6 @@ const Panel = ({ id, result }) => {
       }
     }
     return arr
-  }
-
-  const buildMatrix = () => {
-    setPanel({ ...panel, buttons: matrix(panel.layout.rows, panel.layout.columns, { }) })
-    setConfigurationStep(configurationStep + 1)
   }
 
   const getButtonColour = (button) => {
@@ -83,239 +69,194 @@ const Panel = ({ id, result }) => {
         <Grid>
           <Row>
             <Column>
-              <InlineNotification
-                style={{ width: '100%' }}
-                lowContrast={true}
-                kind='warning'
-                title='Unfinished Interface'
-                subtitle='This page does not have input validation yet'
-                hideCloseButton={true}
+              <h3>{ id === 'new' ? 'New Panel' : { ...panel }.label || ' ' }</h3><br/>
+            </Column>
+          </Row>
+          <Row>
+            <Column>
+              <TextInput
+                type='text'
+                id='panelName'
+                placeholder='Required'
+                value={panel.label}
+                labelText='Panel Label'
+                onClick={() => {}}
+                onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
               />
             </Column>
-          </Row>
+          </Row><br/>
           <Row>
             <Column>
-              <h1>{ id === 'new' ? 'New Panel' : { ...panel }.label || ' ' }</h1><br/>
-            </Column>
-          </Row>
-          <Row>
-            <Column>
-              <ProgressIndicator
-                vertical={false}
-                currentIndex={configurationStep}
-                spaceEqually={true}>
-                <ProgressStep
-                  label='Panel Layout'
-                />
-                <ProgressStep
-                  label="Panel Information"
-                />
-                <ProgressStep
-                  label="Panel Configuration"
-                />
-              </ProgressIndicator>
+              <TextInput
+                type='text'
+                id='panelDescription'
+                placeholder='Optional'
+                value={panel.description || undefined}
+                labelText='Panel Description'
+                onClick={() => {}}
+                onChange={(e) => { setPanel({ ...panel, description: e.target.value }) }}
+              />
             </Column>
           </Row><br/>
-          { configurationStep === 0 &&
-              <FormGroup legendText=''>
-                <Row>
-                  <Column>
-                    <ComboBox
-                      ariaLabel="Dropdown"
-                      invalid={errors.layoutType.length > 0}
-                      invalidText={errors.layoutType}
-                      id="panelLayoutType"
-                      placeholder='Are you using a controller or the shotbox?'
-                      selectedItem={panel.layoutType || ''}
-                      items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'shotbox', label: 'Custom Shotbox Layout' }]}
-                      onChange={(e) => { formOnChange('layoutType', e.selectedItem) }}
-                      titleText="Panel Layout Type (required)"
-                    /><br/>
-                  </Column>
-                </Row>
-                { !panel.layoutType &&
-                  <Row>
-                    <Column>
-                      <ComboBox
-                        disabled
-                        ariaLabel="Dropdown"
-                        id="disabled"
-                        placeholder='What layout is this panel?'
-                        selectedItem={''}
-                        items={[]}
-                        onChange={() => {}}
-                        titleText="Panel Layout (required)"
-                      />
-                    </Column>
-                  </Row>
-                }
-                { panel.layoutType && panel.layoutType.id === 'controller' &&
-                  <Row>
-                    <Column>
-                      <ComboBox
-                        ariaLabel="Dropdown"
-                        invalid={errors.layout}
-                        invalidText={errors.layout}
-                        id="panelLayout"
-                        placeholder='Filter...'
-                        selectedItem={panel.layout}
-                        items={result.data.controllerLayouts}
-                        onChange={(layout) => { setPanel({ ...panel, layout: layout.selectedItem }) }}
-                        titleText="Panel Layout (required)"
-                      />
-                    </Column>
-                  </Row>
-                }
-                { panel.layoutType && panel.layoutType.id === 'shotbox' &&
-                  <Row>
-                    <Column>
-                      <TextInput
-                        type='text'
-                        id='panelLayoutCustomY'
-                        placeholder='How many rows is this shotbox?'
-                        value={ panel.layout ? panel.layout.rows : undefined }
-                        labelText='Rows (required)'
-                        onClick={() => {}}
-                        onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.target.value } }) }}
-                      />
-                    </Column>
-                    <Column>
-                      <TextInput
-                        type='text'
-                        id='panelLayoutCustomX'
-                        placeholder='How many buttons in each row?'
-                        value={ panel.layout ? panel.layout.columns : undefined }
-                        labelText='Columns (required)'
-                        onClick={() => {}}
-                        onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.target.value } }) }}
-                      />
-                    </Column>
-                  </Row>
-                }
-              </FormGroup>
+          <Row>
+            <Column>
+              <ComboBox
+                ariaLabel="Dropdown"
+                id="panelLayoutType"
+                placeholder='Predefined layout or custom shotbox?'
+                selectedItem={panel.layoutType || ''}
+                items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'shotbox', label: 'Custom Shotbox Layout' }]}
+                onChange={(e) => { setPanel({ ...panel, layoutType: e.selectedItem }) }}
+                titleText="Panel Layout Type"
+              /><br/>
+            </Column>
+          </Row>
+          { !panel.layoutType &&
+            <Row>
+              <Column>
+                <ComboBox
+                  disabled
+                  ariaLabel="Dropdown"
+                  id="disabled"
+                  placeholder='What layout is this panel?'
+                  selectedItem={''}
+                  items={[]}
+                  onChange={() => {}}
+                  titleText="Panel Layout"
+                />
+              </Column>
+            </Row>
           }
-          { configurationStep === 1 &&
-            <FormGroup legendText=''>
-              <Row>
-                <Column>
-                  <TextInput
-                    type='text'
-                    id='panelName'
-                    placeholder='Required'
-                    value={panel.label}
-                    labelText='Panel Label'
-                    onClick={() => {}}
-                    onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
-                  />
-                </Column>
-              </Row><br/>
-              <Row>
-                <Column>
-                  <TextInput
-                    type='text'
-                    id='panelDescription'
-                    placeholder='Optional'
-                    value={panel.description || undefined}
-                    labelText='Panel Description'
-                    onClick={() => {}}
-                    onChange={(e) => { setPanel({ ...panel, description: e.target.value }) }}
-                  />
-                </Column>
-              </Row>
-            </FormGroup>
+          { panel.layoutType && panel.layoutType.id === 'controller' &&
+            <Row>
+              <Column>
+                <ComboBox
+                  ariaLabel="Dropdown"
+                  id="panelLayout"
+                  placeholder='Filter...'
+                  selectedItem={panel.layout}
+                  items={result.data.controllerLayouts}
+                  onChange={(layout) => {
+                    setPanel({ ...panel, layout: layout.selectedItem, buttons: matrix(layout.selectedItem.rows, layout.selectedItem.columns) })
+                  }}
+                  titleText="Panel Layout"
+                />
+              </Column>
+            </Row>
           }
-          { configurationStep === 2 &&
-              <FormGroup legendText=''>
-                <Row>
-                  <Column>
-                    <h4>Select a button to configure:</h4>
-                  </Column>
-                </Row>
-                <Grid style={{ padding: '1em' }} condensed>
-                  { panel.buttons && panel.buttons.map((row, rowIndex) => {
-                    return (
-                      <React.Fragment key={rowIndex}>
-                        <Row>
-                          { row.map((button, buttonIndex) => {
-                            return (
-                              <Column className="bx--button__field-wrapper" key={buttonIndex}>
-                                <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', maxWidth: '500em', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
-                                  <>
-                                    <h5>{button.stack?.id ? button.stack.panelLabel : ''}</h5>
-                                    {button.stack?.id ? button.stack.label : ''}<br/>
-                                    {button.stack?.id ? `ID: ${button.stack.id}` : ''}
-                                    {/* <br/><sub>{button.row},{button.column}</sub> */}
-                                  </>
-                                </Button>
-                              </Column>
-                            )
-                          })
-                          }
-                        </Row>
-                      </React.Fragment>
-                    )
-                  })}
-                  <br/>
-                </Grid>
-                { panel.currentButton &&
-                  <>
-                    <h4>Button Configuration for row {panel.currentButton.row + 1}, button {panel.currentButton.column + 1}:</h4>
-                    <br/>
-                    <div className="bx--row">
-                      <div className="bx--col">
-                        <ComboBox
-                          ariaLabel="Dropdown"
-                          id="buttonStackSelection"
-                          placeholder='Filter...'
-                          selectedItem={panel.currentButton.stack}
-                          items={result.data.stacks}
-                          itemToString={(item) => (item ? `${item.label}  |  ${item.panelLabel}` : null)}
-                          onChange={(stack) => {
-                            const panelIntermediate = { ...panel }
-                            panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = stack.selectedItem
-                            setPanel(panelIntermediate)
-                          }}
-                          titleText="Stack"
-                        />
-                      </div>
-                      <div className="bx--col">
-                        { panel.currentButton?.stack &&
-                          <Button onClick={(stack) => {
-                            const panelIntermediate = { ...panel }
-                            panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = null
-                            setPanel(panelIntermediate)
-                          }} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
-                            Clear Button
+          { panel.layoutType && panel.layoutType.id === 'shotbox' &&
+            <Row>
+              <Column>
+                <TextInput
+                  type='text'
+                  id='panelLayoutCustomY'
+                  placeholder='How many rows is this shotbox?'
+                  value={ panel.layout ? panel.layout.rows : undefined }
+                  labelText='Rows'
+                  onClick={() => {}}
+                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.target.value }, buttons: panel.layout?.columns ? matrix(e.target.value, panel.layout.columns) : undefined }) }}
+                />
+              </Column>
+              <Column>
+                <TextInput
+                  type='text'
+                  id='panelLayoutCustomX'
+                  placeholder='How many buttons in each row?'
+                  value={ panel.layout ? panel.layout.columns : undefined }
+                  labelText='Columns'
+                  onClick={() => {}}
+                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.target.value }, buttons: panel.layout?.rows ? matrix(panel.layout.rows, e.target.value) : undefined }) }}
+                />
+              </Column>
+            </Row>
+          }
+          <br/>
+          <Grid style={{ padding: '1em' }} condensed>
+            { panel.buttons && panel.buttons.map((row, rowIndex) => {
+              return (
+                <React.Fragment key={rowIndex}>
+                  <Row>
+                    { row.map((button, buttonIndex) => {
+                      return (
+                        <Column className="bx--button__field-wrapper" key={buttonIndex}>
+                          <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', maxWidth: '500em', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
+                            <>
+                              <h5>{button.stack?.id ? button.stack.panelLabel : ''}</h5>
+                              {button.stack?.id ? button.stack.label : ''}<br/>
+                              {button.stack?.id ? `ID: ${button.stack.id}` : ''}
+                            </>
                           </Button>
-                        }
-                        { !panel.currentButton?.stack &&
-                          <Button disabled onClick={() => {}} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
-                            Clear Button
-                          </Button>
-                        }
-                      </div>
-                    </div>
-                    <br/><br/>
-                  </>
-                }
-              </FormGroup>
+                        </Column>
+                      )
+                    })
+                    }
+                  </Row>
+                </React.Fragment>
+              )
+            })}
+            <br/>
+          </Grid>
+          { panel.layout?.rows && panel.layout?.columns && panel.currentButton &&
+            <>
+              <div className="bx--row">
+                <div className="bx--col">
+                  <ComboBox
+                    ariaLabel="Dropdown"
+                    id="buttonStackSelection"
+                    placeholder='Filter...'
+                    direction='top'
+                    selectedItem={panel.currentButton.stack}
+                    items={result.data.stacks}
+                    itemToString={(item) => (item ? `${item.label}  |  ${item.panelLabel}` : null)}
+                    onChange={(stack) => {
+                      const panelIntermediate = { ...panel }
+                      panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = stack.selectedItem
+                      setPanel(panelIntermediate)
+                    }}
+                    titleText="Stack"
+                  />
+                </div>
+                <div className="bx--col">
+                  { panel.currentButton?.stack &&
+                    <Button onClick={(stack) => {
+                      const panelIntermediate = { ...panel }
+                      panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = null
+                      setPanel(panelIntermediate)
+                    }} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
+                      Clear Button
+                    </Button>
+                  }
+                  { !panel.currentButton?.stack &&
+                    <Button disabled onClick={() => {}} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
+                      Clear Button
+                    </Button>
+                  }
+                </div>
+              </div>
+              <br/><br/>
+            </>
           }
           <Row>
-            <Column style={{ marginLeft: '64.4%' }}>
-              <ButtonSet>
-                <Button renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24} onClick={() => { configurationStep === 0 ? history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` }) : setConfigurationStep(configurationStep - 1) }} size='default' kind="secondary">
-                  { configurationStep === 0 ? 'Cancel' : 'Go Back' }
+            <Column>
+              <ButtonSet style={{ float: 'right', marginRight: '7em' }}>
+                <Button
+                  renderIcon={Exit24}
+                  onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` }) }}
+                  size='default' kind="secondary"
+                >
+                  Go Back
                 </Button>
-                  &nbsp;
-                <Button renderIcon={ArrowRight24} onClick={() => {
-                  switch (configurationStep) {
-                    case 0: buildMatrix(); break
-                    case 1: setConfigurationStep(2); break
-                    case 2: updatePanel(); break
-                  }
-                }} size='default' kind="primary">
-                  { configurationStep !== 2 ? 'Continue' : isNew ? 'Create Panel' : 'Update Panel' }
-                </Button>
+                { isLoading
+                  ? <InlineLoading description='Creating Panel' status='active' />
+                  : <Button
+                    disabled={!panel.buttons || !panel.label}
+                    renderIcon={ArrowRight24}
+                    onClick={() => { updatePanel() }}
+                    size='default'
+                    kind="primary">
+                    { isNew ? 'Create Panel' : 'Update Panel' }
+                  </Button>
+                }
               </ButtonSet>
             </Column>
           </Row>

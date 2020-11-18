@@ -135,7 +135,7 @@ const Action = (props) => {
                             id={parameter.id}
                             placeholder='Required'
                             labelText={parameter.label}
-                            value={getParameterValue(parameter.id)}
+                            value={getParameterValue(parameter.id) || null}
                             onClick={() => {}}
                             onChange={(e) => {
                               setParameter(e.target.value, parameter.id)
@@ -150,7 +150,7 @@ const Action = (props) => {
                             id={parameter.id}
                             placeholder='Filter...'
                             items={parameter.items}
-                            selectedItem={getParameterValue(parameter.id)}
+                            selectedItem={getParameterValue(parameter.id) || null}
                             onChange={(e) => {
                               setParameter(e.selectedItem, parameter.id)
                             }}
@@ -172,7 +172,7 @@ const Action = (props) => {
               props.setActions(action, -1)
               setAction(initialActionState)
             }} size='small' kind="primary">
-              Add
+              Add to Stack
             </Button>
           }
           { !props.new && actionComparisonStore !== action &&
@@ -181,20 +181,20 @@ const Action = (props) => {
                 props.setActions(action, props.index)
                 setActionComparisonStore(action)
               }} size='small' kind="primary">
-                Update
+                Update Action
               </Button>
               <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
-                Delete
+                Delete Action
               </Button>
             </>
           }
           { !props.new && actionComparisonStore === action &&
             <>
               <Button disabled size='small' kind="primary">
-                Update
+                Update Action
               </Button>
               <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
-                Delete
+                Delete Action
               </Button>
             </>
           }
