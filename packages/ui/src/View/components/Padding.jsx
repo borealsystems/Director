@@ -13,7 +13,7 @@ function Padding ({ size }) {
     '2.5rem',
     '3rem'
   ]
-  return <span style={{ display: 'inline-block', height: spacingScale[size] }}>&nbsp;</span>
+  return <span style={{ display: 'inline-block', height: spacingScale[size - 1] }}>&nbsp;</span>
 }
 
 Padding.propTypes = {

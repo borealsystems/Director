@@ -135,7 +135,9 @@ const Devices = () => {
                                       })
                                   }}
                                 >
-                                  Disabling this device means that Director will not attempt to connect to it or send any commands. Any Stack Actions involving this device will remain but they will be skipped when executed.
+                                  Disabling this device means that Director will not attempt to connect to it or send any commands.<br/>
+                                  Any Stack Actions involving this device will remain but they will be skipped when executed.<br/>
+                                  You will also not be able to create any new stacks using this device as there is no way to retrieve action data from an offline device.
                                 </Modal>
                               )} />
                             <ModalStateManager

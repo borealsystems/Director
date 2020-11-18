@@ -164,7 +164,12 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (p, args) => typeof deviceInstance[args.id].providerFunctions === 'function' ? deviceInstance[args.id].providerFunctions(args) : deviceInstance[args.id].providerFunctions
+      resolve: (p, args) => {
+        if (deviceInstance[args.id]) {
+          if (typeof deviceInstance[args.id].providerFunctions === 'function') return deviceInstance[args.id].providerFunctions(args)
+          else return deviceInstance[args.id].providerFunctions
+        } else return []
+      }
     },
 
     stacks: {
