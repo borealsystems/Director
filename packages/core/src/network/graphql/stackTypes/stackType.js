@@ -4,6 +4,7 @@ import {
   GraphQLList
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
+import deviceType from '../deviceTypes/deviceType'
 
 const stackType = new GraphQLObjectType({
   name: 'stackUpdateType',
@@ -37,27 +38,7 @@ const stackType = new GraphQLObjectType({
               type: GraphQLString
             },
             device: {
-              type: new GraphQLObjectType({
-                name: 'stackDeviceType',
-                fields: {
-                  id: {
-                    type: GraphQLString
-                  },
-                  label: {
-                    type: GraphQLString
-                  },
-                  provider: {
-                    type: new GraphQLObjectType({
-                      name: 'stackDeviceProviderType',
-                      fields: {
-                        id: {
-                          type: GraphQLString
-                        }
-                      }
-                    })
-                  }
-                }
-              })
+              type: deviceType
             },
             providerFunction: {
               type: new GraphQLObjectType({

@@ -41,7 +41,7 @@ const Action = (props) => {
     }
   }
 
-  if (!props.new && !action.device?.enabled) {
+  if (!props.new && action.device.enabled === false) {
     return (
       <>
         <Row>
@@ -53,7 +53,7 @@ const Action = (props) => {
     )
   }
 
-  if (props.new || action.device?.enabled) {
+  if (props.new || action.device.enabled === true) {
     return (
       <>
         <Row>
@@ -80,7 +80,7 @@ const Action = (props) => {
                     value={action.device.label}
                     onClick={() => {}}
                     onChange={() => {}}
-                    disabled
+                    readOnly
                   />
                 }
               </Column>
@@ -126,7 +126,7 @@ const Action = (props) => {
                     value={action.providerFunction.label}
                     onClick={() => {}}
                     onChange={null}
-                    disabled
+                    readOnly
                   />
                 }
               </Column>

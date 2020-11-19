@@ -8,6 +8,7 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
       device {
         id,
         label
+        enabled
         provider {
           id
         }
@@ -50,6 +51,7 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
       device {
         id,
         label
+        enabled
         provider {
           id
         }
