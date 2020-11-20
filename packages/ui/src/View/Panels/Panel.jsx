@@ -149,23 +149,23 @@ const Panel = ({ id, result }) => {
               <Column>
                 <TextInput
                   type='text'
-                  id='panelLayoutCustomY'
-                  placeholder='How many rows is this shotbox?'
-                  value={ panel.layout ? panel.layout.rows : undefined }
-                  labelText='Rows'
+                  id='panelLayoutCustomX'
+                  placeholder='How many columns?'
+                  value={ panel.layout ? panel.layout.columns : undefined }
+                  labelText='Columns'
                   onClick={() => {}}
-                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.target.value }, buttons: panel.layout?.columns ? matrix(e.target.value, panel.layout.columns) : undefined }) }}
+                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.target.value }, buttons: panel.layout?.rows ? matrix(panel.layout.rows, e.target.value) : undefined }) }}
                 />
               </Column>
               <Column>
                 <TextInput
                   type='text'
-                  id='panelLayoutCustomX'
-                  placeholder='How many buttons in each row?'
-                  value={ panel.layout ? panel.layout.columns : undefined }
-                  labelText='Columns'
+                  id='panelLayoutCustomY'
+                  placeholder='How many rows?'
+                  value={ panel.layout ? panel.layout.rows : undefined }
+                  labelText='Rows'
                   onClick={() => {}}
-                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.target.value }, buttons: panel.layout?.rows ? matrix(panel.layout.rows, e.target.value) : undefined }) }}
+                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.target.value }, buttons: panel.layout?.columns ? matrix(e.target.value, panel.layout.columns) : undefined }) }}
                 />
               </Column>
             </Row>

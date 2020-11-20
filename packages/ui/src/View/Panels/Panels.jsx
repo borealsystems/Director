@@ -83,7 +83,7 @@ const Panels = () => {
       return (
         <div>
           <DataTable
-            rows={currentTableData ?? []}
+            rows={currentTableData.map(panel => ({ ...panel, size: `${panel.layout.columns}x${panel.layout.rows}` })) ?? []}
             headers={headers}
             render={({
               rows,
@@ -128,6 +128,7 @@ const Panels = () => {
                                 LauncherContent={({ setOpen }) => (
                                   <OverflowMenu flipped>
                                     <OverflowMenuItem itemText='Edit Panel' onClick={() => history.push({ pathname: `panels/${row.cells[0].value}` })} />
+                                    <OverflowMenuItem itemText='Panel Shotbox' onClick={() => history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox/panel/${row.cells[0].value}` })} />
                                     <OverflowMenuItem itemText='Delete Panel' isDelete onClick={() => setOpen(true)} />
                                   </OverflowMenu>
                                 )}

@@ -96,7 +96,8 @@ const Devices = () => {
             getTableContainerProps
           }) => (
             <TableContainer
-              title="Stacks"
+              title='Stacks'
+              description='Stacks are an Action or group of Actions that can be executed by a Controller or a device that can control Director'
               {...getTableContainerProps()}
             >
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">

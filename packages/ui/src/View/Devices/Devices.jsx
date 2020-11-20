@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
-import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination, Modal } from 'carbon-components-react'
-import { Add24 } from '@carbon/icons-react'
+import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination, Modal, TooltipDefinition } from 'carbon-components-react'
+import { Add24, CheckmarkOutline24, Error24, InProgress24, Unknown24, WarningAlt24 } from '@carbon/icons-react'
 import { devicesQueryGQL, deleteDeviceGQL, enableDeviceMutationGQL, disableDeviceMutationGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ModalStateManager from '../components/ModalStateManager.jsx'
@@ -28,6 +28,32 @@ const Devices = () => {
   const [filter, setFilter] = useState('')
 
   const history = useHistory()
+
+  const STATUS = {
+    UNKNOWN: 'UNKNOWN',
+    CLOSED: 'Disconnected',
+    OK: 'OK',
+    CONNECTING: 'Connecting',
+    ERROR: 'Error',
+    WARNING: 'Warning'
+  }
+
+  const getStatusCellContent = value => {
+    switch (value) {
+      case STATUS.UNKNOWN:
+        return <TooltipDefinition direction='top' tooltipText='Status Unknown'><Unknown24/></TooltipDefinition>
+      case STATUS.CLOSED:
+        return <TooltipDefinition direction='top' tooltipText='Device Disconnected'><Error24/></TooltipDefinition>
+      case STATUS.OK:
+        return <TooltipDefinition direction='top' tooltipText='Device OK'><CheckmarkOutline24/></TooltipDefinition>
+      case STATUS.CONNECTING:
+        return <TooltipDefinition direction='top' tooltipText='Device Connecting'><InProgress24/></TooltipDefinition>
+      case STATUS.ERROR:
+        return <TooltipDefinition direction='top' tooltipText='Device Has Errors'><Error24/></TooltipDefinition>
+      case STATUS.WARNING:
+        return <TooltipDefinition direction='top' tooltipText='Device Has Warnings'><WarningAlt24/></TooltipDefinition>
+    }
+  }
 
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) return <DataTableSkeleton headers={headers} />
@@ -99,6 +125,15 @@ const Devices = () => {
                                 disabled
                                 labelText="checkbox"
                               />
+                            </TableCell>
+                          )
+                        } else if (cell.info.header === 'status') {
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              id={cell.id}
+                              className={`la-${cell.info.header}`}>
+                              {row.cells[5].value ? getStatusCellContent(cell.value) : null}
                             </TableCell>
                           )
                         } else {
