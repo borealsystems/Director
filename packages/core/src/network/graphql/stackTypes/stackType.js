@@ -1,7 +1,8 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLInt
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
 import deviceType from '../deviceTypes/deviceType'
@@ -39,6 +40,9 @@ const stackType = new GraphQLObjectType({
             },
             device: {
               type: deviceType
+            },
+            delay: {
+              type: GraphQLInt
             },
             providerFunction: {
               type: new GraphQLObjectType({

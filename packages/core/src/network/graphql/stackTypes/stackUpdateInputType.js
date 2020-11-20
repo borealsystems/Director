@@ -1,7 +1,8 @@
 import {
   GraphQLInputObjectType,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLInt
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
 
@@ -33,6 +34,9 @@ const stackUpdateInputType = new GraphQLInputObjectType({
           name: 'stackActionInputType',
           description: 'An action is something that happens on a device or piece of software',
           fields: {
+            delay: {
+              type: GraphQLInt
+            },
             device: {
               type: new GraphQLInputObjectType({
                 name: 'stackDeviceInputType',

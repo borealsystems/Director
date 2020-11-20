@@ -4,6 +4,7 @@ import shortid from 'shortid'
 import { stacks } from '../db'
 import { deviceInstance } from '../devices'
 import { stackWaterfall } from '../utils/waterfall'
+import { actionTimeouts } from '../utils/actionTimeouts'
 
 const updateStack = (_stack) => {
   return new Promise((resolve, reject) => {
@@ -72,7 +73,6 @@ const deleteStack = (_id) => {
   })
 }
 
-// TODO: Facilitate delays and step timings WITH AN INTERNAL ACTION
 const executeStack = (_id) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
@@ -82,7 +82,9 @@ const executeStack = (_id) => {
           const params = {}
           action.parameters.map(param => { params[param.id] = param.value })
           if (deviceInstance[action.device.id]) {
-            deviceInstance[action.device.id].interface({ ...action, parameters: params })
+            actionTimeouts.add(() => {
+              deviceInstance[action.device.id].interface({ ...action, parameters: params })
+            }, action.delay ?? 0)
           } else {
             log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
           }

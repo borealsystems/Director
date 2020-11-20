@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery } from 'urql'
 import PropTypes from 'prop-types'
-import { Button, Column, ComboBox, Row, TextInput } from 'carbon-components-react'
+import { Button, Column, ComboBox, Row, TextInput, NumberInput } from 'carbon-components-react'
 import { deviceFunctionQueryGQL } from './queries'
 import { WarningAlt16 } from '@carbon/icons-react'
 
@@ -59,6 +59,16 @@ const Action = (props) => {
         <Row>
           <Column>
             <Row>
+              <Column style={{ maxWidth: '13em' }}>
+                <NumberInput
+                  id='stackActionDelayInput'
+                  label='Action Delay (ms)'
+                  value={action.delay ?? 0}
+                  onChange={e => setAction({ ...action, delay: e.imaginaryTarget.valueAsNumber })}
+                  min={0}
+                  step={100}
+                />
+              </Column>
               <Column>
                 { props.new &&
                   <ComboBox
@@ -135,7 +145,7 @@ const Action = (props) => {
         </Row><br/>
         <Row>
           <Column>
-            { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters.length > 0 &&
+            { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters?.length > 0 &&
               result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
                 .map((parameter, index) => {
                   return (

@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet } from 'carbon-components-react'
+import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet, InlineLoading } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import globalContext from '../../globalContext'
-import { executeStackMutationGQL, stackUpdateMutationGQL } from './queries'
-import { Add24, ArrowDown16, ArrowUp16 } from '@carbon/icons-react'
+import { stackUpdateMutationGQL } from './queries'
+import { Add24, ArrowDown16, ArrowUp16, Exit24 } from '@carbon/icons-react'
 import Action from './Action.jsx'
 import Padding from '../components/Padding.jsx'
 
@@ -23,19 +23,19 @@ const Stack = ({ id, _stack, providers, devices }) => {
   const [stack, setStack] = useState(initialStack)
   const [actions, setActions] = useState(initialActions)
   const [newActionVisibility, setNewActionVisibility] = useState(isNew)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const [, executeStackMutation] = useMutation(executeStackMutationGQL)
   const [, stackUpdateMutation] = useMutation(stackUpdateMutationGQL)
 
   const history = useHistory()
 
   const submitButtonStyles = { minWidth: '15em', maxWidth: '15em' }
-  const buttonStyles = { ...submitButtonStyles, visibility: isNew ? 'hidden' : 'visible' }
 
   const updatestack = () => {
+    setIsLoading(true)
     var actionsStripped = []
     actions.forEach(action => {
-      actionsStripped.push({ ...action, device: { id: action.device.id, label: action.device.label, provider: { id: action.device.provider.id } }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
+      actionsStripped.push({ ...action, device: { id: action.device.id }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
     const stackUpdateObject = { stack: { ...stack, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
     stackUpdateMutation(stackUpdateObject).then(history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }))
@@ -212,19 +212,22 @@ const Stack = ({ id, _stack, providers, devices }) => {
       </Row>
       <Row>
         <Column>
-          <div style={{ float: 'right' }}>
-            <ButtonSet style={{ marginRight: '1px', float: 'left' }}>
-              <Button disabled={isNew} onClick={() => executeStackMutation({ id: stack.id }) } kind="secondary" style={buttonStyles}>
-                Execute Stack
-              </Button>
-            </ButtonSet>
-            <ButtonSet>
-              <Button disabled={actions.length === 0 || !stack.label} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
+          <ButtonSet style={{ float: 'right', marginRight: '5em' }}>
+            <Button
+              renderIcon={Exit24}
+              onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }) }}
+              size='default' kind="secondary"
+            >
+              Go Back
+            </Button>
+            { isLoading
+              ? <InlineLoading description='Updating Stack' status='active' />
+              : <Button disabled={actions.length === 0 || !stack.label} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
                 { !isNew && <>Update Stack</> }
                 { isNew && <>Create Stack</> }
               </Button>
-            </ButtonSet>
-          </div>
+            }
+          </ButtonSet>
         </Column>
       </Row>
     </Grid>

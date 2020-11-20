@@ -48,6 +48,7 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
     panelLabel
     description
     actions {
+      delay
       device {
         id,
         label
@@ -56,8 +57,8 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
           id
         }
       }
-      providerFunction {
-        id
+        providerFunction {
+          id
         label
       }
       parameters {
