@@ -20,10 +20,6 @@ export default [
     header: 'Provider'
   },
   {
-    key: 'enabled',
-    header: 'Enabled'
-  },
-  {
     key: 'status',
     header: 'Status'
   }

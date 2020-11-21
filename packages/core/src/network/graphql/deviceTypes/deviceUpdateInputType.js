@@ -1,7 +1,6 @@
 import {
   GraphQLString,
   GraphQLList,
-  GraphQLBoolean,
   GraphQLInputObjectType
 } from 'graphql'
 
@@ -19,9 +18,6 @@ const deviceUpdateInputType = new GraphQLInputObjectType({
     },
     description: {
       type: GraphQLString
-    },
-    enabled: {
-      type: GraphQLBoolean
     },
     status: {
       type: GraphQLString

@@ -8,7 +8,6 @@ const devicesQueryGQL = `query getDevicesAndProviders($realm: String, $core: Str
       id
       label
     }
-    enabled
     status
     configuration {
       id

@@ -2,13 +2,14 @@ import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination, Modal, TooltipDefinition } from 'carbon-components-react'
-import { Add24, CheckmarkOutline24, Error24, InProgress24, Unknown24, WarningAlt24 } from '@carbon/icons-react'
+import { Add24, CheckmarkOutline24, Error24, InProgress24, Undefined24, Unknown24, WarningAlt24 } from '@carbon/icons-react'
 import { devicesQueryGQL, deleteDeviceGQL, enableDeviceMutationGQL, disableDeviceMutationGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ModalStateManager from '../components/ModalStateManager.jsx'
 import globalContext from '../../globalContext'
 import headers from './headers'
 import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
+import STATUS from '../statusEnum'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
@@ -29,17 +30,10 @@ const Devices = () => {
 
   const history = useHistory()
 
-  const STATUS = {
-    UNKNOWN: 'UNKNOWN',
-    CLOSED: 'Disconnected',
-    OK: 'OK',
-    CONNECTING: 'Connecting',
-    ERROR: 'Error',
-    WARNING: 'Warning'
-  }
-
   const getStatusCellContent = value => {
     switch (value) {
+      case STATUS.DISABLED:
+        return <TooltipDefinition direction='top' tooltipText='Device Disabled'><Undefined24/></TooltipDefinition>
       case STATUS.UNKNOWN:
         return <TooltipDefinition direction='top' tooltipText='Status Unknown'><Unknown24/></TooltipDefinition>
       case STATUS.CLOSED:
@@ -146,10 +140,10 @@ const Devices = () => {
                             <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
                             <ModalStateManager
                               LauncherContent={({ setOpen }) => (
-                                <OverflowMenuItem itemText={row.cells[5].value ? 'Disable Device' : 'Enable Device'} onClick={() => {
-                                  row.cells[5].value
-                                    ? setOpen(true)
-                                    : enableDeviceMutation({ id: row.cells[0].value }).then(() => setTimeout(refresh, 500))
+                                <OverflowMenuItem itemText={row.cells[5].value === STATUS.DISABLED ? 'Enable Device' : 'Disable Device'} onClick={() => {
+                                  row.cells[5].value === STATUS.DISABLED
+                                    ? enableDeviceMutation({ id: row.cells[0].value }).then(() => setTimeout(refresh, 500))
+                                    : setOpen(true)
                                 }} />
                               )}
                               disableDeviceMutation

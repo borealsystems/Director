@@ -53,7 +53,7 @@ const updateDevice = (_device) => {
 
 const instantiateDevice = (_id) => {
   devices.findOne({ id: _id }).then(device => {
-    if (device.enabled) {
+    if (device.status !== STATUS.DISABLED) {
       const provider = providers.find((provider) => provider.id === device.provider.id)
       const configuration = {}
       device.configuration && device.configuration.map(conf => { configuration[conf.id] = conf.value })
@@ -95,7 +95,7 @@ const enableDevice = _id => new Promise((resolve, reject) => {
       { id: _id },
       {
         $set: {
-          enabled: true
+          status: STATUS.CLOSED
         }
       }
     ).then(() => {
@@ -115,7 +115,7 @@ const disableDevice = _id => new Promise((resolve, reject) => {
       { id: _id },
       {
         $set: {
-          enabled: false
+          status: STATUS.DISABLED
         }
       }
     ).then(() => {

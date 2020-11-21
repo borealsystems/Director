@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Button, Column, ComboBox, Row, TextInput, NumberInput } from 'carbon-components-react'
 import { deviceFunctionQueryGQL } from './queries'
 import { WarningAlt16 } from '@carbon/icons-react'
+import STATUS from '../statusEnum'
 
 const Action = (props) => {
   var initialActionState = {}
@@ -41,7 +42,7 @@ const Action = (props) => {
     }
   }
 
-  if (!props.new && action.device.enabled === false) {
+  if (!props.new && action.device.status === STATUS.DISABLED) {
     return (
       <>
         <Row>
@@ -53,7 +54,7 @@ const Action = (props) => {
     )
   }
 
-  if (props.new || action.device.enabled === true) {
+  if (props.new || action.device.status !== STATUS.DISABLED) {
     return (
       <>
         <Row>
@@ -76,7 +77,7 @@ const Action = (props) => {
                     id="actionDevice"
                     placeholder='Filter...'
                     value={action.device}
-                    items={props.devices.filter(device => device.enabled)}
+                    items={props.devices.filter(device => device.status !== STATUS.DISABLED)}
                     onChange={(device) => { setAction({ ...action, device: device.selectedItem }) }}
                     titleText="Device"
                   />

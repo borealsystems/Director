@@ -1,7 +1,6 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLBoolean,
   GraphQLList
 } from 'graphql'
 
@@ -38,9 +37,6 @@ const deviceType = new GraphQLObjectType({
           }
         }
       })
-    },
-    enabled: {
-      type: GraphQLBoolean
     },
     status: {
       type: GraphQLString
