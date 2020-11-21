@@ -1,0 +1,9 @@
+[submodule "packages/core/src/providers/deviceProviders/director-provider-resolume-arena"]
+	path = packages/core/src/providers/deviceProviders/director-provider-resolume-arena
+	url = https://phabricator.boreal.systems/diffusion/4/director-provider-resolume-arena.git
+[submodule "packages/core/src/providers/deviceProviders/director-provider-bitfocus-companion"]
+	path = packages/core/src/providers/deviceProviders/director-provider-bitfocus-companion
+	url = https://phabricator.boreal.systems/diffusion/5/director-provider-bitfocus-companion.git
+[submodule "packages/core/src/providers/deviceProviders/director-provider-harris-panacea"]
+	path = packages/core/src/providers/deviceProviders/director-provider-harris-panacea
+	url = https://phabricator.boreal.systems/diffusion/6/director-provider-harris-panacea.git
