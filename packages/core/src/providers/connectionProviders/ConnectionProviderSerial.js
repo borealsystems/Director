@@ -9,16 +9,24 @@ class ConnectionProviderSerial {
     this.device = _device
   }
 
+  static getItems = () => new Promise(resolve => {
+    SerialPort.list().then(data => resolve([...data.map((port, index) => ({ id: index, label: port.path, ...port }))]))
+  })
+
   static parameters = [
     {
+      inputType: 'comboBox',
       id: 'port',
-      label: 'Serial Port Path',
-      required: true
+      label: 'Serial Port',
+      required: true,
+      placeholder: 'Select a Serial Port',
+      tooltip: 'This device\'s connection provider needs to connect via a local serial port.',
+      items: this.getItems()
     }
   ]
 
   init = () => {
-    this.serialport = new SerialPort(this.device.configuration.port, { baudRate: 9600 }, error => {
+    this.serialport = new SerialPort(this.device.configuration.port.path, { baudRate: 9600 }, error => {
       if (error) {
         log('error', `virtual/device/${this.device.id} (${this.device.label})`, `${error}`)
         devices.updateOne({ id: this.device.id }, { $set: { status: STATUS.ERROR } })

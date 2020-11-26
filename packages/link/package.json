@@ -22,7 +22,8 @@
       "build/network/ui/dist/*",
       "build/network/ui/public/*",
       "build/streamdeck/graphics/circle_icon.png",
-      "../../node_modules/@jimp/plugin-print/fonts/open-sans/open-sans-16-white/*"
+      "../../node_modules/@jimp/plugin-print/fonts/open-sans/open-sans-16-white/*",
+      "../../node_modules/systray/traybin/tray_darwin_release"
     ]
   },
   "devDependencies": {

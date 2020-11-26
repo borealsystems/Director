@@ -5,6 +5,10 @@ class ProtocolProviderOSC extends ConnectionProviderOSC {
   static providerRegistration = {
     id: 'ProtocolProviderOSC',
     label: 'Protocol: OSC',
+    manufacturer: 'Generic',
+    protocol: 'OSC',
+    description: 'This generic OSC provider allows you to send custom commands to any device supporting OSC control.',
+    category: 'Protocol',
     parameters: this.parameters,
     constructor: ProtocolProviderOSC
   }

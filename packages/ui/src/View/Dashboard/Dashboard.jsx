@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import globalContext from '../../globalContext'
 
 import Logs from './Logs.jsx'
 import Status from './Status.jsx'
@@ -8,6 +9,7 @@ import Notes from './Notes.jsx'
 import { Grid, Row, Column, Tile, Link } from 'carbon-components-react'
 
 const Dashboard = () => {
+  const { contextRealm } = useContext(globalContext)
   const tileHeight = '415px'
   return (
     <Grid style={{ maxWidth: '200rem' }}>
@@ -21,9 +23,20 @@ const Dashboard = () => {
         <Column>
           <Tile style={{ height: tileHeight }}>
             <h5>Quick Links</h5><br/>
-            <p>
-                You can configure your quick links on your user profile that doesn&apos;t exist yet. <Link href='https://phabricator.boreal.systems/T7'>T7.</Link>
-            </p>
+            <ul>
+              <li>
+                <Link href={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices/new`}>New Device</Link>
+              </li>
+              <li>
+                <Link href={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/new`}>New Stack</Link>
+              </li>
+              <li>
+                <Link href={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels/new`}>New Panel</Link>
+              </li>
+              <li>
+                <Link href={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/new`}>New Virtual Controller</Link>
+              </li>
+            </ul>
           </Tile>
         </Column>
         <Column>

@@ -4,7 +4,12 @@ class ProtocolProviderRossTalk extends ConnectionProviderTCP {
   static providerRegistration = {
     id: 'ProtocolProviderRossTalk',
     label: 'Protocol: RossTalk',
+    manufacturer: 'Generic',
+    protocol: 'RossTalk',
+    description: 'This generic RossTalk provider allows you to send custom commands to any device supporting RossTalk control.',
+    category: 'Protocol',
     parameters: this.parameters,
+    defaults: [null, 7788],
     constructor: ProtocolProviderRossTalk
   }
 

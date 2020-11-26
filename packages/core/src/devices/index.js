@@ -76,9 +76,13 @@ const deleteDevice = (_id) => {
   if (_id.match(/CORE-/)) {
     log('info', 'core/lib/devices', 'You Can\'t Delete Director from Director!')
     return 'error'
-  } else {
+  } else if (deviceInstance[_id]) {
     deviceInstance[_id].destroy()
     delete deviceInstance[_id]
+    devices.deleteOne({ id: _id })
+    log('info', 'core/lib/devices', `Deleted Device ${_id}`)
+    return STATUS.OK
+  } else {
     devices.deleteOne({ id: _id })
     log('info', 'core/lib/devices', `Deleted Device ${_id}`)
     return STATUS.OK

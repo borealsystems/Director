@@ -11,16 +11,20 @@ class ConnectionProviderTCP {
 
   static parameters = [
     {
+      inputType: 'textInput',
       id: 'host',
       label: 'Host',
       required: true,
-      regex: REGEX.HOST
+      regex: REGEX.HOST,
+      placeholder: 'Device Host'
     },
     {
+      inputType: 'numberInput',
       id: 'port',
-      label: 'TCP Port',
+      label: 'Port',
       required: true,
-      regex: REGEX.PORT
+      regex: REGEX.PORT,
+      tooltip: 'This device\'s connection provider needs to connect to a port via TCP'
     }
   ]
 

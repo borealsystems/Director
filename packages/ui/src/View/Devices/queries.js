@@ -1,4 +1,4 @@
-const devicesQueryGQL = `query getDevicesAndProviders($realm: String, $core: String) {
+const devicesQueryGQL = `query devices($realm: String, $core: String) {
   devices(realm: $realm, core: $core) {
     id
     label
@@ -9,10 +9,6 @@ const devicesQueryGQL = `query getDevicesAndProviders($realm: String, $core: Str
       label
     }
     status
-    configuration {
-      id
-      value
-    }
   }
 }`
 
@@ -27,12 +23,21 @@ query providers {
   providers {
     id
     label
+    manufacturer
+    protocol
+    description
+    category
     parameters {
+      inputType
       required
       id
       label
       regex
+      placeholder
+      tooltip
+      items
     }
+    defaults
   }
 }
 `
@@ -42,12 +47,6 @@ query deviceAndProviders($id: String) {
   providers {
     id
     label
-    parameters {
-      required
-      id
-      label
-      regex
-    }
   }
   device(id:$id){
     id
@@ -62,6 +61,21 @@ query deviceAndProviders($id: String) {
     provider {
       id
       label
+      manufacturer
+      protocol
+      description
+      category
+      parameters {
+        inputType
+        required
+        id
+        label
+        regex
+        placeholder
+        tooltip
+        items
+      }
+      defaults
     }
   }
 }

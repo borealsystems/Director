@@ -3,6 +3,7 @@ import {
   GraphQLList,
   GraphQLInputObjectType
 } from 'graphql'
+import { GraphQLJSONObject } from 'graphql-type-json'
 
 const deviceUpdateInputType = new GraphQLInputObjectType({
   name: 'deviceUpdate',
@@ -43,17 +44,7 @@ const deviceUpdateInputType = new GraphQLInputObjectType({
     },
     configuration: {
       type: new GraphQLList(
-        new GraphQLInputObjectType({
-          name: 'deviceUpdateConfigurationObject',
-          fields: {
-            id: {
-              type: GraphQLString
-            },
-            value: {
-              type: GraphQLString
-            }
-          }
-        })
+        GraphQLJSONObject
       )
     }
   }

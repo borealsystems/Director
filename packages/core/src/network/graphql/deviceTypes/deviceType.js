@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLList
 } from 'graphql'
+import providerType from '../providerTypes/providerType'
 
 const deviceType = new GraphQLObjectType({
   name: 'Device',
@@ -26,17 +27,7 @@ const deviceType = new GraphQLObjectType({
       type: GraphQLString
     },
     provider: {
-      type: new GraphQLObjectType({
-        name: 'deviceProviderDetailType',
-        fields: {
-          id: {
-            type: GraphQLString
-          },
-          label: {
-            type: GraphQLString
-          }
-        }
-      })
+      type: providerType
     },
     status: {
       type: GraphQLString

@@ -133,7 +133,7 @@ const queries = new GraphQLObjectType({
         const coreFilter = args.core ? { core: args.core } : {}
         const devicesArray = await devices.find({ ...realmFilter, ...coreFilter }).toArray()
         const coresArray = args.realm === 'ROOT' ? [] : await devices.find({ 'provider.id': 'BorealSystems-DirectorInternal' }).toArray()
-        return [...devicesArray, ...coresArray]
+        return [...devicesArray.map(device => ({ ...device, provider: providers.find(provider => provider.id === device.provider.id) })), ...coresArray]
       }
     },
 
@@ -145,7 +145,8 @@ const queries = new GraphQLObjectType({
         id: { type: GraphQLString }
       },
       resolve: async (parent, args) => {
-        return await devices.findOne({ id: args.id })
+        const device = await devices.findOne({ id: args.id })
+        return { ...device, provider: providers.find(provider => provider.id === device.provider.id) }
       }
     },
 

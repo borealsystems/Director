@@ -11,16 +11,21 @@ class ConnectionProviderOSC {
 
   static parameters = [
     {
+      inputType: 'textInput',
       id: 'host',
       label: 'Host',
       required: true,
-      regex: REGEX.HOST
+      regex: REGEX.HOST,
+      placeholder: 'Device Address'
     },
     {
+      inputType: 'numberInput',
       id: 'port',
-      label: 'UDP Port',
+      label: 'Port',
       required: true,
-      regex: REGEX.PORT
+      regex: REGEX.PORT,
+      placeholder: 'Device Port',
+      tooltip: 'This device\'s connection provider needs to connect to a UDP OSC port'
     }
   ]
 

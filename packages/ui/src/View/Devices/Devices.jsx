@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import { Button, DataTable, DataTableSkeleton, Checkbox, OverflowMenu, OverflowMenuItem, Pagination, Modal, TooltipDefinition } from 'carbon-components-react'
-import { Add24, CheckmarkOutline24, Error24, InProgress24, Undefined24, Unknown24, WarningAlt24 } from '@carbon/icons-react'
+import { Add24, CheckmarkOutline24, Error24, InProgress24, Renew24, Undefined24, Unknown24, WarningAlt24 } from '@carbon/icons-react'
 import { devicesQueryGQL, deleteDeviceGQL, enableDeviceMutationGQL, disableDeviceMutationGQL } from './queries'
 import GraphQLError from '../components/GraphQLError.jsx'
 import ModalStateManager from '../components/ModalStateManager.jsx'
@@ -89,6 +89,7 @@ const Devices = () => {
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
+                  <Button renderIcon={Renew24} kind='ghost' iconDescription="Refresh Devices" hasIconOnly onClick={refresh}/>
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'devices/new' }) }}>New Device</Button>
                 </TableToolbarContent>
               </TableToolbar>
