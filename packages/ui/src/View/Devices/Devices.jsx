@@ -140,13 +140,27 @@ const Devices = () => {
                           <OverflowMenu flipped>
                             <OverflowMenuItem itemText='Edit Device' onClick={() => history.push({ pathname: `devices/${row.cells[0].value}` })} />
                             <ModalStateManager
-                              LauncherContent={({ setOpen }) => (
-                                <OverflowMenuItem itemText={row.cells[5].value === STATUS.DISABLED ? 'Enable Device' : 'Disable Device'} onClick={() => {
-                                  row.cells[5].value === STATUS.DISABLED
-                                    ? enableDeviceMutation({ id: row.cells[0].value }).then(() => setTimeout(refresh, 500))
-                                    : setOpen(true)
-                                }} />
-                              )}
+                              LauncherContent={({ setOpen }) => {
+                                switch (row.cells[5].value) {
+                                  case STATUS.DISABLED:
+                                    return <OverflowMenuItem itemText='Enable Device' onClick={() => enableDeviceMutation({ id: row.cells[0].value }).then(() => setTimeout(refresh, 500)) } />
+                                  case STATUS.CLOSED:
+                                    return (
+                                      <>
+                                        <OverflowMenuItem itemText='Reconnect Device' onClick={() => {
+                                          disableDeviceMutation({ id: row.cells[0].value })
+                                            .then(() => {
+                                              return enableDeviceMutation({ id: row.cells[0].value })
+                                            })
+                                            .then(() => setTimeout(refresh, 500))
+                                        }} />
+                                        <OverflowMenuItem itemText='Disable Device' onClick={() => setOpen(true)} />
+                                      </>
+                                    )
+                                  default:
+                                    return <OverflowMenuItem itemText='Disable Device' onClick={() => setOpen(true)} />
+                                }
+                              }}
                               disableDeviceMutation
                               ModalContent={({ open, setOpen }) => (
                                 <Modal
