@@ -34,8 +34,9 @@ const Action = (props) => {
   }
 
   const getParameterValue = id => {
-    if (action.parameters.length === 0) return ''
-    if (props.new) {
+    if (action.parameters.length === 0) {
+      return null
+    } else if (props.new) {
       return action.parameters.filter(p => p.id === id).value
     } else {
       return action.parameters.find(p => p.id === id).value
@@ -145,7 +146,7 @@ const Action = (props) => {
           </Column>
         </Row><br/>
         <Row>
-          <Column>
+          <Column sm={3}>
             { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters?.length > 0 &&
               result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
                 .map((parameter, index) => {
@@ -157,13 +158,11 @@ const Action = (props) => {
                             <TextInput
                               type='text'
                               id={parameter.id}
-                              placeholder='Required'
-                              labelText={parameter.label}
-                              value={getParameterValue(parameter.id) || null}
-                              onClick={() => {}}
-                              onChange={(e) => {
-                                setParameter(e.target.value, parameter.id)
-                              }}
+                              placeholder={parameter.placeholder}
+                              labelText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
+                              value={getParameterValue(parameter.id) || ''}
+                              helperText={parameter.tooltip}
+                              onChange={(e) => { setParameter(e.target.value, parameter.id) }}
                             />
                           </Column>
                         }
@@ -172,13 +171,27 @@ const Action = (props) => {
                             <ComboBox
                               ariaLabel="Dropdown"
                               id={parameter.id}
-                              placeholder='Filter...'
+                              titleText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
+                              helperText={parameter.tooltip}
+                              placeholder={parameter.placeholder}
                               items={parameter.items}
-                              selectedItem={getParameterValue(parameter.id) || null}
-                              onChange={(e) => {
-                                setParameter(e.selectedItem, parameter.id)
-                              }}
-                              titleText={parameter.label}
+                              selectedItem={getParameterValue(parameter.id) || ''}
+                              onChange={(e) => { setParameter(e.selectedItem, parameter.id) }}
+                            />
+                          </Column>
+                        }
+                        { parameter.inputType === 'numberInput' &&
+                          <Column>
+                            <NumberInput
+                              id={parameter.id}
+                              label={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
+                              helperText={parameter.tooltip}
+                              placeholder={parameter.placeholder}
+                              invalidText={parameter.invalidText ?? 'Input is invalid'}
+                              value={getParameterValue(parameter.id) || 0}
+                              onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setParameter(e.imaginaryTarget.valueAsNumber, parameter.id)}
+                              {...() => (parameter.min && { min: parameter.min })}
+                              {...() => (parameter.max && { max: parameter.max })}
                             />
                           </Column>
                         }
@@ -187,6 +200,14 @@ const Action = (props) => {
                     </React.Fragment>
                   )
                 })
+            }
+            { result.data && action.providerFunction && !result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters &&
+              <Row>
+                <Column>
+                  <br/><br/>
+                  <strong>This function has no configurable parameters</strong>
+                </Column>
+              </Row>
             }
           </Column>
           <Column>
@@ -224,7 +245,7 @@ const Action = (props) => {
             }
           </Column>
         </Row>
-        <br/><br/>
+        <br/>
       </>
     )
   }

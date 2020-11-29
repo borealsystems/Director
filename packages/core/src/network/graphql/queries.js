@@ -334,6 +334,9 @@ const queries = new GraphQLObjectType({
                   },
                   label: {
                     type: GraphQLString
+                  },
+                  itemType: {
+                    type: GraphQLString
                   }
                 }
               })
@@ -360,7 +363,7 @@ const queries = new GraphQLObjectType({
                 } else if (stack == null) {
                   resolve({ count: resolveArray.length, list: resolveArray })
                 } else {
-                  resolveArray.push({ id: stack.id, label: stack.label })
+                  resolveArray.push({ id: stack.id, label: stack.label, itemType: 'stack' })
                 }
               })
               break
@@ -369,9 +372,17 @@ const queries = new GraphQLObjectType({
                 if (err) {
                   reject(err)
                 } else if (panel == null) {
-                  resolve({ count: resolveArray.length, list: resolveArray })
+                  stacks.find({ actions: { $elemMatch: { parameters: { $elemMatch: { id: 'stack', 'value.id': args.id } } } } }).each((err, stack) => {
+                    if (err) {
+                      reject(err)
+                    } else if (stack == null) {
+                      resolve({ count: resolveArray.length, list: resolveArray })
+                    } else {
+                      resolveArray.push({ id: stack.id, label: stack.label, itemType: 'stack' })
+                    }
+                  })
                 } else {
-                  resolveArray.push({ id: panel.id, label: panel.label })
+                  resolveArray.push({ id: panel.id, label: panel.label, itemType: 'panel' })
                 }
               })
               break
@@ -382,7 +393,7 @@ const queries = new GraphQLObjectType({
                 } else if (controller == null) {
                   resolve({ count: resolveArray.length, list: resolveArray })
                 } else {
-                  resolveArray.push({ id: controller.id, label: controller.label })
+                  resolveArray.push({ id: controller.id, label: controller.label, itemType: 'controller' })
                 }
               })
               break

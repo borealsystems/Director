@@ -41,6 +41,27 @@ const stackWaterfall = (stack, isDelete) => {
         })
       }
     })
+    stacks.find({ actions: { $elemMatch: { parameters: { $elemMatch: { id: 'stack', 'value.id': stack.id } } } } }).each((err, _stack) => {
+      if (err) {
+        log('error', 'core/utils/waterfall', err)
+      } else if (_stack) {
+        stacks.updateOne(
+          { id: _stack.id },
+          {
+            $set: {
+              actions: _stack.actions.filter(action => (action.parameters[0]?.value?.id !== stack.id))
+            }
+          },
+          { upsert: true }
+        )
+          .then(() => {
+            return stacks.findOne({ id: _stack.id })
+          })
+          .then(stack => {
+            log('info', 'core/lib/panels', `Updated ${stack.id} (${stack.label})`)
+          })
+      }
+    })
   } else {
     panels.find({ buttons: { $elemMatch: { $elemMatch: { 'stack.id': stack.id } } } }).each((err, panel) => {
       if (err) {

@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLList
 } from 'graphql'
+import GraphQLJSON from 'graphql-type-json'
 import providerType from '../providerTypes/providerType'
 
 const deviceType = new GraphQLObjectType({
@@ -41,7 +42,7 @@ const deviceType = new GraphQLObjectType({
               type: GraphQLString
             },
             value: {
-              type: GraphQLString
+              type: GraphQLJSON
             }
           }
         })

@@ -4,7 +4,7 @@ import {
   GraphQLList
 } from 'graphql'
 
-import { GraphQLJSONObject } from 'graphql-type-json'
+import parameterType from '../parameterTypes/parameterType'
 
 const providerFunctionType = new GraphQLObjectType({
   name: 'providerFunction',
@@ -16,30 +16,7 @@ const providerFunctionType = new GraphQLObjectType({
       type: GraphQLString
     },
     parameters: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'functionParameter',
-          fields: {
-            label: {
-              type: GraphQLString
-            },
-            id: {
-              type: GraphQLString
-            },
-            inputType: {
-              type: GraphQLString
-            },
-            regex: {
-              type: GraphQLString
-            },
-            items: {
-              type: new GraphQLList(
-                GraphQLJSONObject
-              )
-            }
-          }
-        })
-      )
+      type: new GraphQLList(parameterType)
     }
   }
 })

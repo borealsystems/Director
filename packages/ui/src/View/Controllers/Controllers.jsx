@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { DataTable, DataTableSkeleton, Pagination, Button, OverflowMenu, OverflowMenuItem, Grid, Row, Column } from 'carbon-components-react'
-import { Add24 } from '@carbon/icons-react'
+import { Add24, Renew24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import { controllersQueryGQL, deleteControllerMutationGQL } from './queries'
 import ModalStateManager from '../components/ModalStateManager.jsx'
@@ -105,6 +105,7 @@ const Controllers = () => {
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
+                  <Button renderIcon={Renew24} kind='ghost' iconDescription="Refresh Stacks" hasIconOnly onClick={refresh}/>
                   <Button renderIcon={Add24} onClick={() => {
                     history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers/new` })
                   }}>New Controller</Button>

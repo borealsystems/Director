@@ -27,6 +27,8 @@ class ProtocolProviderBorealDirector {
             inputType: 'comboBox',
             label: 'Stack',
             id: 'stack',
+            placeholder: 'Stack',
+            required: true,
             items: async () => {
               const realmFilter = args.realm ? { realm: args.realm } : {}
               const coreFilter = args.core ? { core: args.core } : {}
@@ -45,8 +47,11 @@ class ProtocolProviderBorealDirector {
         parameters: [
           {
             inputType: 'textInput',
-            label: 'Log Content',
-            id: 'content'
+            id: 'content',
+            label: 'Log Message',
+            required: true,
+            placeholder: 'Message to add to log',
+            tooltip: 'This log content will appear in the global Director log, and will also be written to file.'
           }
         ]
       },
@@ -58,6 +63,8 @@ class ProtocolProviderBorealDirector {
             inputType: 'comboBox',
             label: 'Controller',
             id: 'controller',
+            required: true,
+            placeholder: 'Select a Controller',
             items: async () => {
               const realmFilter = args.realm ? { realm: args.realm } : {}
               const coreFilter = args.core ? { core: args.core } : {}
@@ -68,6 +75,8 @@ class ProtocolProviderBorealDirector {
             inputType: 'comboBox',
             label: 'Panel',
             id: 'panel',
+            required: true,
+            placeholder: 'Select a Panel',
             items: async () => {
               const realmFilter = args.realm ? { realm: args.realm } : {}
               const coreFilter = args.core ? { core: args.core } : {}

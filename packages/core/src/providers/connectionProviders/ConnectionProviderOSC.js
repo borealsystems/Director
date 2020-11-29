@@ -30,6 +30,7 @@ class ConnectionProviderOSC {
   ]
 
   init = () => {
+    const deviceProxy = this.device
     this.client = new osc.UDPPort({
       localAddress: '0.0.0.0',
       localPort: 0,
@@ -37,7 +38,7 @@ class ConnectionProviderOSC {
     })
     this.client.open()
     this.client.on('error', (error) => {
-      log('error', `virtual/device/${this.device.id} (${this.device.label})`, error)
+      log('error', `virtual/device/${deviceProxy.id} (${deviceProxy.label})`, error)
     })
     devices.updateOne({ id: this.device.id }, { $set: { status: STATUS.OK } })
   }

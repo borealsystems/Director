@@ -3,7 +3,7 @@ import { useQuery, useMutation } from 'urql'
 import { Button, Column, DataTable, DataTableSkeleton, Grid, OverflowMenu, OverflowMenuItem, Pagination, Row } from 'carbon-components-react'
 import { stacksQueryGQL, deleteStackGQL, duplicateStackGQL, executeStackMutationGQL } from './queries'
 import { useHistory } from 'react-router-dom'
-import { Add24 } from '@carbon/icons-react'
+import { Add24, Renew24 } from '@carbon/icons-react'
 import ModalStateManager from '../components/ModalStateManager.jsx'
 import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
@@ -40,7 +40,8 @@ const Devices = () => {
         ? e
         : e.label.toLowerCase().includes(filter.toLowerCase()) ||
          e.id.toLowerCase().includes(filter.toLowerCase()) ||
-         e.panelLabel?.toLowerCase().includes(filter.toLowerCase())
+         e.panelLabel?.toLowerCase().includes(filter.toLowerCase()) ||
+         e.description?.toLowerCase().includes(filter.toLowerCase())
     })
 
     const currentTableData = Array(Math.ceil(rawData.length / pageSize)).fill()
@@ -103,6 +104,7 @@ const Devices = () => {
               <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
+                  <Button renderIcon={Renew24} kind='ghost' iconDescription="Refresh Stacks" hasIconOnly onClick={refresh}/>
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/new` }) }}>New Stack</Button>
                 </TableToolbarContent>
               </TableToolbar>

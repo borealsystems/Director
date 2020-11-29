@@ -32,7 +32,6 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
       id
       label
     }
-    enabled
     status
     configuration {
       id
@@ -93,7 +92,13 @@ const deviceFunctionQueryGQL = `query deviceFunctions($id: String) {
       label
       inputType
       regex
-      items 
+      items
+      placeholder
+      tooltip
+      required
+      invalidText
+      min
+      max
     }
   }
 }`

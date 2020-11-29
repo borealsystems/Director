@@ -65,7 +65,7 @@ const instantiateDevice = (_id) => {
         deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
         deviceInstance[_id].init()
       }
-      log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${device.provider.label}`)
+      log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${provider.label}`)
     } else {
       log('info', 'core/lib/devices', `${_id} (${device.label}) is disabled, skipping initialisation`)
     }

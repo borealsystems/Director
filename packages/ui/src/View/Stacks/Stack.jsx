@@ -65,7 +65,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' style={{ paddingRight: 0 }} kind="ghost">
               <ArrowUp16 />
             </Button>
             <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
@@ -79,7 +79,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
               <ArrowUp16 />
             </Button>
             <Button onClick={() => {
@@ -96,7 +96,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' kind="ghost">
+            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
               <ArrowUp16 />
             </Button>
             <Button onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
@@ -110,7 +110,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' kind="ghost">
+            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
               <ArrowUp16 />
             </Button>
             <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
@@ -186,7 +186,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
           <Accordion>
             { actions && actions.map((item, index) =>
               <Row key={index}>
-                <Column style={{ maxWidth: '7.2em', paddingRight: 0, marginTop: '0.5em' }}>
+                <Column style={{ maxWidth: '7.5em', paddingRight: 0, marginTop: '0.5em' }}>
                   { getActionMoveButtons(index) }
                 </Column>
                 <Column style={{ paddingLeft: 0 }}>
@@ -196,12 +196,13 @@ const Stack = ({ id, _stack, providers, devices }) => {
                 </Column>
               </Row>
             )}
-            <Button renderIcon={Add24} size='small' style={{ marginLeft: '7em', visibility: newActionVisibility ? 'hidden' : 'visible', height: newActionVisibility ? '0' : '', minHeight: newActionVisibility ? '0' : '' }} onClick={() => { setNewActionVisibility(true) }}>
+            <Button renderIcon={Add24} size='small' style={{ marginLeft: '7em', marginTop: '1em', visibility: newActionVisibility ? 'hidden' : 'visible', height: newActionVisibility ? '0' : '', minHeight: newActionVisibility ? '0' : '' }} onClick={() => { setNewActionVisibility(true) }}>
               Add {actions.length === 0 ? 'An' : 'Another'} Action
             </Button>
           </Accordion>
+          <br/>
           { newActionVisibility &&
-            <div style={{ marginLeft: '7.2em', marginRight: '1em' }}>
+            <div style={{ marginLeft: '7.5em', marginRight: '1em' }}>
               New Action
               <Padding size={5}/>
               <Action new index={actions.length + 1} delete={deleteAction} setActions={setActionsProxy} providers={providers} devices={devices}></Action>
@@ -210,6 +211,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
           <Padding size={5}/>
         </Column>
       </Row>
+      <br/>
       <Row>
         <Column>
           <ButtonSet style={{ float: 'right', marginRight: '5em' }}>
