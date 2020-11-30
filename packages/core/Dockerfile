@@ -1,7 +1,7 @@
-FROM node:14-alpine
+FROM node:14
 WORKDIR /borealsystems/director/core
 ADD . .
-RUN yarn
+RUN npm_config_build_from_source=true yarn
 RUN yarn run build
 
 CMD yarn run prod
