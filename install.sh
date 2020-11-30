@@ -9,18 +9,18 @@ echo ""
 echo -e "${BOLD}Checking dependencies:${NC}"
 if ! command -v docker &> /dev/null
 then
-    echo -e "Docker [\u274c]${NC}"
+    echo -e "Docker [${RED}❌${NC}]"
     echo -e "${RED} FATAL:${NC} You need to install Docker before continuing"
     exit
 fi
-echo -e "Docker [${GREEN}\u2714${NC}]"
+echo -e "Docker [${GREEN}✔${NC}]"
 if ! command -v docker-compose &> /dev/null
 then
-    echo -e "docker-compose [\u274c]${NC}"
+    echo -e "docker-compose [${RED}❌${NC}]"
     echo -e "${RED} FATAL:${NC} You need to install docker-compose before continuing"
     exit
 fi
-echo -e "docker-compose [${GREEN}\u2714${NC}]"
+echo -e "docker-compose [${GREEN}✔${NC}]"
 echo ""
 echo -e "${BOLD}Cloning the git repository${NC}"
 git clone --recursive https://phabricator.boreal.systems/source/Director.git Director
