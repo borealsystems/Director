@@ -23,8 +23,8 @@ fi
 echo -e "docker-compose [${GREEN}\u2714${NC}]"
 echo ""
 echo -e "${BOLD}Cloning the git repository${NC}"
-git clone --recursive https://phabricator.boreal.systems/source/Director.git script
-cd script
+git clone --recursive https://phabricator.boreal.systems/source/Director.git Director
+cd Director
 echo ""
 echo -e "${BOLD}Building Director${NC}"
 docker-compose build --parallel
