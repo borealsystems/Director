@@ -8,7 +8,7 @@ function Clock ({ tz }) {
   useEffect(() => {
     const loop = setTimeout(() => {
       setTime(new Date())
-    }, 1000)
+    }, 100)
 
     const cleanup = () => {
       clearTimeout(loop)

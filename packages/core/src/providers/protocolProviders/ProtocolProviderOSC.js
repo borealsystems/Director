@@ -20,13 +20,17 @@ class ProtocolProviderOSC extends ConnectionProviderOSC {
       parameters: [
         {
           inputType: 'textInput',
-          label: 'OSC Address',
-          id: 'address'
+          id: 'address',
+          label: 'Address',
+          required: true,
+          placeholder: 'OSC Address'
         },
         {
           inputType: 'textInput',
+          id: 'string',
           label: 'Value',
-          id: 'string'
+          required: true,
+          placeholder: 'String to send'
         }
       ]
     },
@@ -36,13 +40,18 @@ class ProtocolProviderOSC extends ConnectionProviderOSC {
       parameters: [
         {
           inputType: 'textInput',
-          label: 'OSC Address',
-          id: 'address'
+          id: 'address',
+          label: 'Address',
+          required: true,
+          placeholder: 'OSC Address'
         },
         {
-          inputType: 'textInput',
-          label: 'Value',
+          inputType: 'numberInput',
           id: 'int',
+          label: 'Value',
+          required: true,
+          placeholder: 'Integer to send',
+          invalidText: 'This number is required to be a signed integer',
           regex: REGEX.SIGNEDINT
         }
       ]
@@ -53,13 +62,18 @@ class ProtocolProviderOSC extends ConnectionProviderOSC {
       parameters: [
         {
           inputType: 'textInput',
-          label: 'OSC Address',
-          id: 'address'
+          id: 'address',
+          label: 'Address',
+          required: true,
+          placeholder: 'OSC Address'
         },
         {
-          inputType: 'textInput',
-          label: 'Value',
+          inputType: 'numberInput',
           id: 'float',
+          label: 'Value',
+          required: true,
+          placeholder: 'Float to send',
+          invalidText: 'This number is required to be a float',
           regex: REGEX.SIGNEDFLOAT
         }
       ]
@@ -70,8 +84,10 @@ class ProtocolProviderOSC extends ConnectionProviderOSC {
       parameters: [
         {
           inputType: 'textInput',
-          label: 'OSC Address',
-          id: 'address'
+          id: 'address',
+          label: 'Address',
+          required: true,
+          placeholder: 'OSC Address'
         }
       ]
     }

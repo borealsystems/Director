@@ -26,9 +26,6 @@ import {
   HeaderNavigation,
   Loading,
   Row,
-  SideNav,
-  SideNavItems,
-  SideNavMenu,
   SkipToContent
 } from 'carbon-components-react'
 
@@ -36,11 +33,10 @@ import globalContext from '../globalContext'
 import './index.scss'
 
 import Clock from './components/Clock.jsx'
-import SideNavMenuItem from './components/SideNavMenuItem.jsx'
-import SideNavLink from './components/SideNavLink.jsx'
 import ReactError from './components/ReactError.jsx'
 import GraphQLError from './components/GraphQLError.jsx'
-import { Keyboard24, Light20, LightFilled20, Settings24, TreeViewAlt24, View32 } from '@carbon/icons-react'
+import { Light20, LightFilled20 } from '@carbon/icons-react'
+import SidebarNav from './components/SidebarNav.jsx'
 
 const Landing = lazy(() => import('./Landing/Landing.jsx'))
 const Login = lazy(() => import('./Login/Login.jsx'))
@@ -102,8 +98,6 @@ const BorealDirector = () => {
     setContextRealm({ ...contextRealm, ...realmUpdate })
   }
 
-  // if (result.error) return <GraphQLError error={result.error} />
-  // if (!result.error) {
   return (
     <div className="container bx--container02">
       <HeaderContainer
@@ -154,32 +148,13 @@ const BorealDirector = () => {
                   </>
                 }
               </HeaderGlobalBar>
-              { showSidebar &&
-                  <SideNav aria-label="Side navigation" isRail>
-                    <SideNavItems>
-                      <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} label="Dashboard" renderIcon={View32} />
-                      <SideNavMenu renderIcon={Settings24} title="Configure">
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices`} label="Devices"/>
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks`} label="Stacks"/>
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels`} label="Panels"/>
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers`} label="Controllers"/>
-                      </SideNavMenu>
-                      <SideNavMenu renderIcon={Keyboard24} title="Control">
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox`} label="Shotbox"/>
-                      </SideNavMenu>
-                      <SideNavMenu renderIcon={TreeViewAlt24} title="Core">
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/configuration`} label="Configuration"/>
-                        <SideNavMenuItem to={`/cores/${contextRealm.coreID}/realms`} label="Realms"/>
-                      </SideNavMenu>
-                    </SideNavItems>
-                  </SideNav>
-              }
+              { showSidebar && <SidebarNav/> }
             </Header>
-            <Content id="main-content" style={{ height: '95.2vh' }}>
+            <Content id="main-content" style={{ height: 'calc(100vh - 3.4em)' }}>
               { result.error && <GraphQLError error={result.error} />}
               { result.loading && <Loading /> }
               <Suspense fallback={<Loading/>} >
-                <Grid style={{ maxWidth: fullWidth ? '200rem' : '90rem' }}>
+                <Grid style={{ maxWidth: fullWidth ? '200rem' : '88rem' }}>
                   <Row>
                     <Column>
                       <ErrorBoundary fallback={<ReactError />}>
@@ -234,7 +209,6 @@ const BorealDirector = () => {
                               </Route>
                               <Route exact path="/" >
                                 <Redirect to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} />
-                                {/* <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} /> */}
                               </Route>
                             </>
                           }

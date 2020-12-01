@@ -35,11 +35,9 @@ const Action = (props) => {
 
   const getParameterValue = id => {
     if (action.parameters.length === 0) {
-      return null
-    } else if (props.new) {
-      return action.parameters.filter(p => p.id === id).value
+      return ''
     } else {
-      return action.parameters.find(p => p.id === id).value
+      return action.parameters.find(p => p.id === id)?.value || ''
     }
   }
 
@@ -74,13 +72,18 @@ const Action = (props) => {
               <Column>
                 { props.new &&
                   <ComboBox
-                    ariaLabel="Dropdown"
-                    id="actionDevice"
+                    ariaLabel='Dropdown'
+                    id='actionDevice'
                     placeholder='Filter...'
                     value={action.device}
                     items={props.devices.filter(device => device.status !== STATUS.DISABLED)}
-                    onChange={(device) => { setAction({ ...action, device: device.selectedItem }) }}
-                    titleText="Device"
+                    onChange={(device) => {
+                      device
+                        ? setAction({ ...action, device: device.selectedItem })
+                        : setAction({ ...action, device: undefined, providerFunction: undefined })
+                    }}
+                    onClick={() => { setAction(initialActionState) }}
+                    titleText='Device'
                   />
                 }
                 { !props.new &&
@@ -99,21 +102,21 @@ const Action = (props) => {
               <Column>
                 { !action.device &&
                   <ComboBox
-                    ariaLabel="Dropdown"
-                    id="newstackProvider"
+                    ariaLabel='Dropdown'
+                    id='newstackProvider'
                     placeholder='Filter...'
                     items={[]}
                     onChange={() => {}}
-                    titleText="Function"
+                    titleText='Function'
                     disabled
                   />
                 }
                 { action.device && props.new && !result.data &&
                   <ComboBox
-                    ariaLabel="Dropdown"
-                    id="newstackProvider"
+                    ariaLabel='Dropdown'
+                    id='newstackProvider'
                     placeholder='Filter...'
-                    titleText="Function"
+                    titleText='Function'
                     onChange={() => {}}
                     items={[]}
                     disabled
@@ -121,12 +124,16 @@ const Action = (props) => {
                 }
                 { action.device && props.new && result.data &&
                   <ComboBox
-                    ariaLabel="Dropdown"
-                    id="newstackProvider"
+                    ariaLabel='Dropdown'
+                    id='newstackProvider'
                     placeholder='Filter...'
                     items={result.data.deviceFunctions}
-                    onChange={(providerFunction) => { setAction({ ...action, providerFunction: { id: providerFunction.selectedItem.id, label: providerFunction.selectedItem.label } }) }}
-                    titleText="Function"
+                    onChange={(providerFunction) => {
+                      providerFunction.selectedItem
+                        ? setAction({ ...action, providerFunction: { id: providerFunction.selectedItem.id, label: providerFunction.selectedItem.label } })
+                        : setAction({ ...action, providerFunction: null })
+                    }}
+                    titleText='Function'
                   />
                 }
                 { action.device && !props.new &&
@@ -147,7 +154,7 @@ const Action = (props) => {
         </Row><br/>
         <Row>
           <Column sm={3}>
-            { result.data && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters?.length > 0 &&
+            { result.data && action.device && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters?.length > 0 &&
               result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
                 .map((parameter, index) => {
                   return (
@@ -160,7 +167,7 @@ const Action = (props) => {
                               id={parameter.id}
                               placeholder={parameter.placeholder}
                               labelText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
-                              value={getParameterValue(parameter.id) || ''}
+                              value={getParameterValue(parameter.id)}
                               helperText={parameter.tooltip}
                               onChange={(e) => { setParameter(e.target.value, parameter.id) }}
                             />
@@ -169,13 +176,13 @@ const Action = (props) => {
                         { parameter.inputType === 'comboBox' &&
                           <Column>
                             <ComboBox
-                              ariaLabel="Dropdown"
+                              ariaLabel='Dropdown'
                               id={parameter.id}
                               titleText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
                               helperText={parameter.tooltip}
                               placeholder={parameter.placeholder}
                               items={parameter.items}
-                              selectedItem={getParameterValue(parameter.id) || ''}
+                              selectedItem={getParameterValue(parameter.id)}
                               onChange={(e) => { setParameter(e.selectedItem, parameter.id) }}
                             />
                           </Column>
@@ -212,33 +219,35 @@ const Action = (props) => {
           </Column>
           <Column>
             <br/><br/>
-            { props.new && action.providerFunction &&
-              <Button onClick={() => {
-                props.setActions(action, -1)
-                setAction(initialActionState)
-              }} size='small' kind="primary">
+            { props.new &&
+              <Button
+                onClick={() => {
+                  props.setActions(action, -1)
+                  setAction(initialActionState)
+                }}
+                disabled={!action.providerFunction}
+                size='small'
+                kind='primary'
+                style={{ width: '13em', minWidth: '13em' }}
+              >
                 Add to Stack
               </Button>
             }
-            { !props.new && actionComparisonStore !== action &&
+            { !props.new &&
               <>
-                <Button onClick={() => {
-                  props.setActions(action, props.index)
-                  setActionComparisonStore(action)
-                }} size='small' kind="primary">
+                <Button
+                  onClick={() => {
+                    props.setActions(action, props.index)
+                    setActionComparisonStore(action)
+                  }}
+                  size='small'
+                  kind='primary'
+                  style={{ width: '13em', minWidth: '13em' }}
+                  disabled={actionComparisonStore === action}
+                >
                   Update Action
-                </Button>
-                <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
-                  Delete Action
-                </Button>
-              </>
-            }
-            { !props.new && actionComparisonStore === action &&
-              <>
-                <Button disabled size='small' kind="primary">
-                  Update Action
-                </Button>
-                <Button onClick={() => { props.delete(props.index) }} size='small' kind="danger" style={{ minWidth: '17%' }}>
+                </Button><br/>
+                <Button onClick={() => { props.delete(props.index) }} size='small' kind='danger' style={{ width: '13em', minWidth: '13em' }}>
                   Delete Action
                 </Button>
               </>

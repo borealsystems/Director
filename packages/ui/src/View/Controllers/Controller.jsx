@@ -22,6 +22,8 @@ const Controller = ({ id, _controller, layouts, panels }) => {
     )
   }
 
+  const getControllerTypes = () => isNew ? [] : [{ id: 'bridged', label: 'Bridged USB or Serial Controller' }]
+
   return (
     <Grid>
       <Row>
@@ -64,7 +66,7 @@ const Controller = ({ id, _controller, layouts, panels }) => {
             placeholder='Filter...'
             items={[
               { id: 'virtual', label: 'Virtual Controller' },
-              { id: 'bridged', label: 'Bridged USB or Serial Controller' }
+              ...getControllerTypes()
             ]}
             selectedItem={controller.type}
             onChange={(type) => { setController({ ...controller, type: type.selectedItem }) }}

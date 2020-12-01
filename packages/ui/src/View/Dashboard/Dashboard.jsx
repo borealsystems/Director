@@ -63,7 +63,7 @@ const Dashboard = () => {
           <Tile style={{ height: tileHeight }}>
             <h5>About Director</h5><br/>
             <p>
-                Director is a FOSS project from <Link href='https://boreal.system'>BorealSystems</Link>.
+                Director is a FOSS project from <Link href='https://boreal.systems'>BorealSystems</Link>.
               <br/><br/> We are very greatful for everyones support during ongoing development, in particular we would like to thank our contributers,
                 both <Link href='https://phabricator.boreal.systems/project/members/1/'>Code/Design</Link> and <Link href='https://www.patreon.com/borealsystems?fan_landing=true'>Financial</Link>,
                 as well as everyone on the Video Engineering Discord who provided much needed beta testing and motivation.

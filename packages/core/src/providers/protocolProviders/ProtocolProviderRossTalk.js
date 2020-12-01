@@ -20,8 +20,11 @@ class ProtocolProviderRossTalk extends ConnectionProviderTCP {
       parameters: [
         {
           inputType: 'textInput',
-          label: 'RossTalk Message',
-          id: 'message'
+          id: 'message',
+          label: 'Message',
+          required: true,
+          placeholder: 'Message to send',
+          tooltip: 'RossTalk messages usually consist of a keyword followed by parameters'
         }
       ]
     }

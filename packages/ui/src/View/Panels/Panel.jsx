@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Button, ButtonSet, ComboBox, TextInput, Form, Grid, Row, Column, Loading, InlineLoading } from 'carbon-components-react'
+import { Button, ButtonSet, ComboBox, TextInput, Form, Grid, Row, Column, Loading, InlineLoading, NumberInput } from 'carbon-components-react'
 import { ArrowRight24, Exit24 } from '@carbon/icons-react'
 import { useHistory } from 'react-router-dom'
 import { omit } from 'lodash'
@@ -132,7 +132,7 @@ const Panel = ({ id, result }) => {
               <Column>
                 <ComboBox
                   ariaLabel="Dropdown"
-                  id="panelLayout"
+                  id="panelLayoutController"
                   placeholder='Filter...'
                   selectedItem={panel.layout}
                   items={result.data.controllerLayouts}
@@ -147,25 +147,31 @@ const Panel = ({ id, result }) => {
           { panel.layoutType && panel.layoutType.id === 'shotbox' &&
             <Row>
               <Column>
-                <TextInput
-                  type='text'
+                <NumberInput
                   id='panelLayoutCustomX'
-                  placeholder='How many columns?'
-                  value={ panel.layout ? panel.layout.columns : undefined }
-                  labelText='Columns'
-                  onClick={() => {}}
-                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.target.value }, buttons: panel.layout?.rows ? matrix(panel.layout.rows, e.target.value) : undefined }) }}
+                  label='Columns'
+                  placeholder={0}
+                  invalidText='Please enter a value between 1 and 20'
+                  warn={panel.layout && panel.layout.columns > 10}
+                  warnText='It may be difficult to use a panel with more than 10 columns on some devices as the labels may not fit'
+                  value={panel.layout ? panel.layout.columns : undefined}
+                  onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', columns: e.imaginaryTarget.valueAsNumber }, buttons: panel.layout?.rows ? matrix(panel.layout.rows, e.imaginaryTarget.valueAsNumber) : undefined })}
+                  min={1}
+                  max={20}
                 />
               </Column>
               <Column>
-                <TextInput
-                  type='text'
+                <NumberInput
                   id='panelLayoutCustomY'
-                  placeholder='How many rows?'
-                  value={ panel.layout ? panel.layout.rows : undefined }
-                  labelText='Rows'
-                  onClick={() => {}}
-                  onChange={(e) => { setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.target.value }, buttons: panel.layout?.columns ? matrix(e.target.value, panel.layout.columns) : undefined }) }}
+                  label='Rows'
+                  placeholder={0}
+                  invalidText='Please enter a value between 1 and 30'
+                  warn={panel.layout && panel.layout.rows > 7}
+                  warnText='It may be difficult to use a panel with more than 7 rows on some devices as they will not all fit on the screen'
+                  value={panel.layout ? panel.layout.rows : undefined}
+                  onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setPanel({ ...panel, layout: { ...panel.layout, id: 'custom', rows: e.imaginaryTarget.valueAsNumber }, buttons: panel.layout?.columns ? matrix(e.imaginaryTarget.valueAsNumber, panel.layout.columns) : undefined })}
+                  min={1}
+                  max={30}
                 />
               </Column>
             </Row>
@@ -179,7 +185,7 @@ const Panel = ({ id, result }) => {
                     { row.map((button, buttonIndex) => {
                       return (
                         <Column className="bx--button__field-wrapper" key={buttonIndex}>
-                          <Button onClick={() => { setPanel({ ...panel, currentButton: button }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', maxWidth: '500em', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
+                          <Button onClick={() => { setPanel({ ...panel, currentButton: { ...button, stack: button.stack ?? null } }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', maxWidth: '500em', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
                             <>
                               <h5>{button.stack?.id ? button.stack.panelLabel : ''}</h5>
                               {button.stack?.id ? button.stack.label : ''}<br/>
@@ -205,7 +211,7 @@ const Panel = ({ id, result }) => {
                     id="buttonStackSelection"
                     placeholder='Filter...'
                     direction='top'
-                    selectedItem={panel.currentButton.stack}
+                    selectedItem={panel.currentButton.stack ?? ''}
                     items={result.data.stacks}
                     itemToString={(item) => (item ? `${item.label}  |  ${item.panelLabel}` : null)}
                     onChange={(stack) => {

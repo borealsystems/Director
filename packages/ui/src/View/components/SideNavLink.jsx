@@ -10,13 +10,13 @@ function CustomSideNavLink ({ label, to, renderIcon }) {
   const history = useHistory()
   if (match) {
     return (
-      <SideNavLink aria-current='page' renderIcon={renderIcon} onClick={() => { history.push(to) }}>
+      <SideNavLink large aria-current='page' renderIcon={renderIcon} onClick={() => { history.push(to) }}>
         {label}
       </SideNavLink>
     )
   } else {
     return (
-      <SideNavLink renderIcon={renderIcon} onClick={() => { history.push(to) }}>
+      <SideNavLink large renderIcon={renderIcon} onClick={() => { history.push(to) }}>
         {label}
       </SideNavLink>
     )

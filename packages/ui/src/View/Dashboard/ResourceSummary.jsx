@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from 'urql'
 import { InlineLoading } from 'carbon-components-react'
-import { Application20, Devices20, Document20, PanelExpansion20 } from '@carbon/icons-react'
+import { DataBase16, FolderDetails16, Application16, ResearchHintonPlot16 } from '@carbon/icons-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 
 const ResourceSummary = () => {
@@ -22,10 +22,10 @@ const ResourceSummary = () => {
   if (result.data) {
     return (
       <>
-        <Devices20 { ...offsetProp }/> {result.data.devices.length} Device{result.data.devices.length !== 1 ? 's' : ''}<br/>
-        <Document20 { ...offsetProp }/> {result.data.stacks.length} Stack{result.data.stacks.length !== 1 ? 's' : ''}<br/>
-        <PanelExpansion20 { ...offsetProp }/> {result.data.panels.length} Panel{result.data.panels.length !== 1 ? 's' : ''}<br/>
-        <Application20 { ...offsetProp }/> {result.data.controllers.length} Controller{result.data.controllers.length !== 1 ? 's' : ''}<br/>
+        <DataBase16 { ...offsetProp }/> {result.data.devices.length} Device{result.data.devices.length !== 1 ? 's' : ''}<br/>
+        <FolderDetails16 { ...offsetProp }/> {result.data.stacks.length} Stack{result.data.stacks.length !== 1 ? 's' : ''}<br/>
+        <Application16 { ...offsetProp }/> {result.data.panels.length} Panel{result.data.panels.length !== 1 ? 's' : ''}<br/>
+        <ResearchHintonPlot16 { ...offsetProp }/> {result.data.controllers.length} Controller{result.data.controllers.length !== 1 ? 's' : ''}<br/>
       </>
     )
   }
