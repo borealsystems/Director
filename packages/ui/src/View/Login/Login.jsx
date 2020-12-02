@@ -39,22 +39,22 @@ const Login = (props) => {
     return (<Loading />)
   } else {
     return (
-      <div className="container" style={{ backgroundColour: '#222222' }}>
+      <div className='container' style={{ backgroundColour: '#222222' }}>
         <HeaderContainer
           render={({ isSideNavExpanded, onClickSideNavExpand }) => (
             <>
-              <Header aria-label="BorealSystems Director">
+              <Header aria-label='BorealSystems Director'>
                 <SkipToContent />
                 <HeaderMenuButton
-                  aria-label="Open menu"
+                  aria-label='Open menu'
                   onClick={onClickSideNavExpand}
                   isActive={isSideNavExpanded}
                 />
-                <HeaderName href="/" prefix='BorealSystems'>
+                <HeaderName href='/' prefix='BorealSystems'>
                   Director
                 </HeaderName>
               </Header>
-              <Content id="main-content">
+              <Content id='main-content'>
                 <Grid>
                   <Row>
                     <Column sm={{ span: 1 }}>
@@ -93,7 +93,7 @@ const Login = (props) => {
                           </Row>
                           <br/>
                           <Row>
-                            <Button onClick={() => { props.auth(true) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
+                            <Button onClick={() => { props.auth(true) }} size='default' kind='primary' style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
                               Continue
                             </Button>
                           </Row>

@@ -40,7 +40,7 @@ const RealmModal = ({ realmData, render, updateRealmsQuery }) => {
       <Modal
         hasForm
         className='realmModalWrapper'
-        selectorPrimaryFocus="#realmLabel"
+        selectorPrimaryFocus='#realmLabel'
         modalHeading={`${realm.coreLabel} / ${realm.label}`}
         modalLabel={realm.id}
         primaryButtonText={realmModalSubmitting ? <>Submitting<InlineLoading/></> : 'Update'}

@@ -82,14 +82,14 @@ const Devices = () => {
             getTableContainerProps
           }) => (
             <TableContainer
-              title="Devices"
-              description="Devices are a piece of hardware or software configured to be controlled by BorealDirector."
+              title='Devices'
+              description='Devices are a piece of hardware or software configured to be controlled by BorealDirector.'
               {...getTableContainerProps()}
             >
-              <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+              <TableToolbar {...getToolbarProps()} aria-label='data table toolbar'>
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
-                  <Button renderIcon={Renew24} kind='ghost' iconDescription="Refresh Devices" hasIconOnly onClick={refresh}/>
+                  <Button renderIcon={Renew24} kind='ghost' iconDescription='Refresh Devices' hasIconOnly onClick={refresh}/>
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: 'devices/new' }) }}>New Device</Button>
                 </TableToolbarContent>
               </TableToolbar>
@@ -118,7 +118,7 @@ const Devices = () => {
                                 checked={cell.value}
                                 hideLabel
                                 disabled
-                                labelText="checkbox"
+                                labelText='checkbox'
                               />
                             </TableCell>
                           )
@@ -208,11 +208,11 @@ const Devices = () => {
               </Table>
               <Pagination
                 style={{ width: '100%' }}
-                backwardText="Previous page"
-                forwardText="Next page"
-                itemsPerPageText="Items per page:"
+                backwardText='Previous page'
+                forwardText='Next page'
+                itemsPerPageText='Items per page:'
                 page={page}
-                pageNumberText="Page Number"
+                pageNumberText='Page Number'
                 pageSize={pageSize}
                 pageSizes={[10, 25, 50, 100]}
                 totalItems={filteredTableData.length}

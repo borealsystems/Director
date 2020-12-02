@@ -45,7 +45,7 @@ const Logs = () => {
   if (result.fetching) return <DataTableSkeleton />
   if (result.data) {
     return (
-      <>
+      <div className='dx--dashboard-logs'>
         <h5>
           Logs
           <Button
@@ -60,7 +60,6 @@ const Logs = () => {
         <br />
         { !logModalVisible &&
           <DataTable
-            style={{ overflow: 'hidden' }}
             rows={result.data.logs}
             headers={headers}
             shouldShowBorder={false}
@@ -145,7 +144,7 @@ const Logs = () => {
             )}
           />
         </Modal>
-      </>
+      </div>
     )
   }
 }

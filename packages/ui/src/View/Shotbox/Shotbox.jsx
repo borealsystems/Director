@@ -61,15 +61,15 @@ const Shotbox = () => {
             <Row>
               <Column>
                 <ComboBox
-                  ariaLabel="Dropdown"
-                  id="panel"
+                  ariaLabel='Dropdown'
+                  id='panel'
                   label='Select a panel'
                   placeholder='Type to Filter...'
                   items={result.data.panels}
                   selectedItem={panel}
                   itemToString={(item) => (item.id ? `${item.label} (${item.id})` : null)}
                   onChange={(selection) => { selection.selectedItem === null ? setPanel({}) : resetPanel(selection.selectedItem) }}
-                  titleText="Panel"
+                  titleText='Panel'
                 />
               </Column>
             </Row>
@@ -96,15 +96,15 @@ const Shotbox = () => {
             <Row>
               <Column>
                 <ComboBox
-                  ariaLabel="Dropdown"
-                  id="controller"
+                  ariaLabel='Dropdown'
+                  id='controller'
                   label='Select a Controller'
                   placeholder='Type to Filter...'
                   items={result.data.controllers}
                   selectedItem={controller}
                   itemToString={(item) => (item.id ? `${item.label} (${item.id})` : null)}
                   onChange={(selection) => { selection.selectedItem === null ? setController({}) : resetController(selection.selectedItem) }}
-                  titleText="Controller"
+                  titleText='Controller'
                 />
               </Column>
             </Row>

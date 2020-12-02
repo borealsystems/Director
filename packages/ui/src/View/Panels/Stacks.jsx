@@ -96,10 +96,10 @@ const Devices = () => {
             getTableContainerProps
           }) => (
             <TableContainer
-              title="Stacks"
+              title='Stacks'
               {...getTableContainerProps()}
             >
-              <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+              <TableToolbar {...getToolbarProps()} aria-label='data table toolbar'>
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
                   <Button renderIcon={Add24} onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks/new` }) }}>New Stack</Button>
@@ -154,11 +154,11 @@ const Devices = () => {
               </Table>
               <Pagination
                 style={{ width: '100%' }}
-                backwardText="Previous page"
-                forwardText="Next page"
-                itemsPerPageText="Items per page:"
+                backwardText='Previous page'
+                forwardText='Next page'
+                itemsPerPageText='Items per page:'
                 page={page}
-                pageNumberText="Page Number"
+                pageNumberText='Page Number'
                 pageSize={pageSize}
                 pageSizes={[10, 25, 50, 100]}
                 totalItems={filteredTableData.length}

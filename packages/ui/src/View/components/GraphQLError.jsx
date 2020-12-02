@@ -7,36 +7,36 @@ const GraphQLError = (props) => {
     return (
       <ToastNotification
         hideCloseButton={true}
-        kind="error"
+        kind='error'
         lowContrast
-        notificationType="toast"
-        role="alert"
+        notificationType='toast'
+        role='alert'
         style={{
           marginBottom: '.5rem',
           minWidth: '30rem'
         }}
         caption={props.error.message}
-        subtitle="The UI cannot communicate with DirectorCore, please make sure you are connected to the network."
+        subtitle='The UI cannot communicate with DirectorCore, please make sure you are connected to the network.'
         timeout={0}
-        title="Network Error"
+        title='Network Error'
       />
     )
   } else if (props.error.graphQLErrors.length > 0) {
     return (
       <ToastNotification
         hideCloseButton={true}
-        kind="error"
+        kind='error'
         lowContrast
-        notificationType="toast"
-        role="alert"
+        notificationType='toast'
+        role='alert'
         style={{
           marginBottom: '.5rem',
           minWidth: '30rem'
         }}
         caption={JSON.stringify(props.error.graphQLErrors)}
-        subtitle="DirectorCore experienced an error, please contact your system administrator with the error below."
+        subtitle='DirectorCore experienced an error, please contact your system administrator with the error below.'
         timeout={0}
-        title="GraphQL Error"
+        title='GraphQL Error'
       />
     )
   }

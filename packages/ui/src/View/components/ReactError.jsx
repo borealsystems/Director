@@ -8,10 +8,10 @@ const ReactError = () => {
         <Column>
           <ToastNotification
             hideCloseButton={true}
-            kind="error"
+            kind='error'
             lowContrast
-            notificationType="toast"
-            role="alert"
+            notificationType='toast'
+            role='alert'
             style={{
               marginBottom: '.5rem',
               minWidth: '30rem'

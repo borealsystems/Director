@@ -70,7 +70,7 @@ const Realms = ({ updateRealmsQuery }) => {
       <>
         <Modal
           hasForm
-          selectorPrimaryFocus="#realmID"
+          selectorPrimaryFocus='#realmID'
           modalHeading={'New Realm'}
           primaryButtonText={newRealmModalSubitting ? <>Submitting<InlineLoading/></> : 'Create'}
           primaryButtonDisabled={newRealmModalSubitting || realmIDIsDuplicate || !newRealm.id || !newRealm.label}
@@ -146,11 +146,11 @@ const Realms = ({ updateRealmsQuery }) => {
             getTableContainerProps
           }) => (
             <TableContainer
-              title="Realms"
-              description="Realms are the second level organisation structure that allow you to seperate studios, auditoriums, and spaces in your facility."
+              title='Realms'
+              description='Realms are the second level organisation structure that allow you to seperate studios, auditoriums, and spaces in your facility.'
               {...getTableContainerProps()}
             >
-              <TableToolbar {...getToolbarProps()} aria-label="data table toolbar">
+              <TableToolbar {...getToolbarProps()} aria-label='data table toolbar'>
                 <TableToolbarContent>
                   {rows.length > 0 && <TableToolbarSearch placeHolderText='Filter Realms' onChange={onInputChange} />}
                   <Button renderIcon={Add24} onClick={() => { setNewRealmModalVisible(true) }}>New Realm</Button>
@@ -194,8 +194,8 @@ const Realms = ({ updateRealmsQuery }) => {
                         { row.cells[0].value !== 'ROOT' &&
                         <TooltipIcon tooltipText='Delete' direction='top'>
                           <ModalWrapper
-                            id="realmModalWrapper"
-                            selectorPrimaryFocus="button"
+                            id='realmModalWrapper'
+                            selectorPrimaryFocus='button'
                             triggerButtonKind='ghost'
                             renderTriggerButtonIcon={TrashCan24}
                             modalLabel='Delete Realm'

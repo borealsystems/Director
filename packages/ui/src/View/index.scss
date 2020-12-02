@@ -27,6 +27,10 @@
   width: 100%
 }
 
+.dx--dashboard-logs .bx--data-table-content {
+  overflow-x: clip !important;
+}
+
 .dx--light {
   .clock .bx--tooltip__trigger.bx--tooltip__trigger--definition {
     color: #f4f4f4;

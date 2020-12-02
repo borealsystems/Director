@@ -62,10 +62,10 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
     return (
       <ToastNotification
         hideCloseButton={true}
-        kind="warning"
+        kind='warning'
         lowContrast
-        notificationType="toast"
-        role="alert"
+        notificationType='toast'
+        role='alert'
         style={{
           marginBottom: '.5rem',
           minWidth: '30rem'

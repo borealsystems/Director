@@ -17,12 +17,12 @@ const Status = () => {
     return (
       <ToastNotification
         style={{ height: '24em', width: '26em', marginRight: 0 }}
-        subtitle=""
+        subtitle=''
         hideCloseButton={true}
         kind={result.data.status[0]}
         lowContrast
-        notificationType="toast"
-        role="alert"
+        notificationType='toast'
+        role='alert'
         caption={result.data.status[2]}
         timeout={0}
         title={result.data.status[1]}

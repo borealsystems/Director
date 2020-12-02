@@ -8,7 +8,7 @@ const ProviderTile = ({ providerDescription, onClick, currentDevice, disabled })
   if (!providerDescription.isPadding) {
     return (
       <ClickableTile className={ isCurrentProvider ? 'bx--tile--is-selected' : null} disabled={disabled} handleClick={ disabled ? () => {} : () => { onClick(providerDescription) }}>
-        <AspectRatio ratio="16x9">
+        <AspectRatio ratio='16x9'>
           <Grid style={{ marginLeft: '-1em' }}>
             <Row>
               <Column sm={3} style={{ marginLeft: '-1em' }}>

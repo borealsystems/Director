@@ -65,10 +65,10 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' style={{ paddingRight: 0 }} kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} size='small' style={{ paddingRight: 0 }} kind='ghost'>
               <ArrowUp16 />
             </Button>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind='ghost'>
               <ArrowDown16 />
             </Button>
           </div>
@@ -79,13 +79,13 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind='ghost'>
               <ArrowUp16 />
             </Button>
             <Button onClick={() => {
               const mutatedActionArray = arrayMove(actions, index, index + 1)
               setActions(mutatedActionArray)
-            }} size='small' kind="ghost">
+            }} size='small' kind='ghost'>
               <ArrowDown16 />
             </Button>
           </div>
@@ -96,10 +96,10 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
+            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind='ghost'>
               <ArrowUp16 />
             </Button>
-            <Button onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
+            <Button onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind='ghost'>
               <ArrowDown16 />
             </Button>
           </div>
@@ -110,10 +110,10 @@ const Stack = ({ id, _stack, providers, devices }) => {
       return (
         <>
           <div>
-            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind="ghost">
+            <Button onClick={() => { setActions(arrayMove(actions, index, index - 1)) }} style={{ paddingRight: 0 }} size='small' kind='ghost'>
               <ArrowUp16 />
             </Button>
-            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind="ghost">
+            <Button disabled onClick={() => { setActions(arrayMove(actions, index, index + 1)) }} size='small' kind='ghost'>
               <ArrowDown16 />
             </Button>
           </div>
@@ -218,13 +218,13 @@ const Stack = ({ id, _stack, providers, devices }) => {
             <Button
               renderIcon={Exit24}
               onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }) }}
-              size='default' kind="secondary"
+              size='default' kind='secondary'
             >
               Go Back
             </Button>
             { isLoading
               ? <InlineLoading description='Updating Stack' status='active' />
-              : <Button disabled={actions.length === 0 || !stack.label} onClick={() => { updatestack() }} kind="primary" style={submitButtonStyles}>
+              : <Button disabled={actions.length === 0 || !stack.label} onClick={() => { updatestack() }} kind='primary' style={submitButtonStyles}>
                 { !isNew && <>Update Stack</> }
                 { isNew && <>Create Stack</> }
               </Button>

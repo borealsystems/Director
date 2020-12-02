@@ -61,8 +61,8 @@ const Controller = ({ id, _controller, layouts, panels }) => {
         <Column>
           <ComboBox
             disabled={controller.type.id !== 'virtual'}
-            ariaLabel="Dropdown"
-            id="controllerType"
+            ariaLabel='Dropdown'
+            id='controllerType'
             placeholder='Filter...'
             items={[
               { id: 'virtual', label: 'Virtual Controller' },
@@ -70,42 +70,42 @@ const Controller = ({ id, _controller, layouts, panels }) => {
             ]}
             selectedItem={controller.type}
             onChange={(type) => { setController({ ...controller, type: type.selectedItem }) }}
-            titleText="Controller Type"
+            titleText='Controller Type'
           />
         </Column>
       </Row><br/>
       <Row>
         <Column>
           <ComboBox
-            ariaLabel="Dropdown"
-            id="controllerType"
+            ariaLabel='Dropdown'
+            id='controllerType'
             placeholder='Filter...'
             disabled={!controller.type || controller.type.id !== 'virtual'}
             items={layouts}
             selectedItem={controller.layout || ''}
             itemToString={item => item ? `${item.label} (${item.columns}x${item.rows})` : ''}
             onChange={(layout) => { setController({ ...controller, layout: layout.selectedItem }) }}
-            titleText="Controller Layout"
+            titleText='Controller Layout'
           />
         </Column>
       </Row><br/>
       <Row>
         <Column>
           <ComboBox
-            ariaLabel="Dropdown"
-            id="controllerPanel"
+            ariaLabel='Dropdown'
+            id='controllerPanel'
             placeholder='Filter...'
             disabled={!controller.layout}
             items={panels}
             selectedItem={controller.panel || ''}
             onChange={(panel) => { setController({ ...controller, panel: panel.selectedItem }) }}
-            titleText="Controller Panel Mapping"
+            titleText='Controller Panel Mapping'
           />
         </Column>
       </Row><br/><br/>
       <Row>
         <Column>
-          <Button disabled={!controller.panel || !controller.label} onClick={() => { updateController() }} kind="primary" style={{ float: 'right', minWidth: '15em', maxWidth: '15em' }}>
+          <Button disabled={!controller.panel || !controller.label} onClick={() => { updateController() }} kind='primary' style={{ float: 'right', minWidth: '15em', maxWidth: '15em' }}>
             { !isNew && <>Update</> }
             { isNew && <>Create</> }
           </Button>

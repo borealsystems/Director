@@ -90,7 +90,7 @@ const ConnectionForm = ({ currentConnection, connectionMutation, refresh }) => {
       </Row>
       <br/>
       <Row>
-        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }).then(refresh()) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
+        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }).then(refresh()) }} size='default' kind='primary' style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
           {currentConnection.status ? 'Update & Reconnect' : 'Connect' }
         </Button>
       </Row>
@@ -128,24 +128,24 @@ const View = () => {
     <HeaderContainer
       render={() => (
         <>
-          <Header aria-label="BorealSystems Director">
+          <Header aria-label='BorealSystems Director'>
             <SkipToContent />
             <HeaderName onClick={() => history.push({ pathname: '/' })} prefix='Boreal Systems'>
               Director Link
             </HeaderName>
-            <HeaderNavigation aria-label="Boreal Systems Director">
-              <HeaderMenu aria-label="Development Build" menuLinkName={'This is a development build'}>
-                <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+            <HeaderNavigation aria-label='Boreal Systems Director'>
+              <HeaderMenu aria-label='Development Build' menuLinkName={'This is a development build'}>
+                <HeaderMenuItem href='https://phabricator.boreal.systems'>Phabricator</HeaderMenuItem>
+                <HeaderMenuItem href='https://discord.gg/7kqpZRU'>Discord</HeaderMenuItem>
               </HeaderMenu>
             </HeaderNavigation>
             <HeaderGlobalBar>
-              <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
+              <HeaderGlobalAction aria-label='Theme' onClick={() => { toggleTheme() }}>
                 {theme === 'dx--light' ? <Light20 /> : <LightFilled20 />}
               </HeaderGlobalAction>
             </HeaderGlobalBar>
           </Header>
-          <Content id="main-content">
+          <Content id='main-content'>
             { result.error && <GraphQLError error={result.error} />}
             { result.loading && <Loading /> }
             { result.data &&

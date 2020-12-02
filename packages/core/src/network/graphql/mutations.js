@@ -24,6 +24,7 @@ import realmInputType from './coreTypes/realmInputType'
 import stackType from './stackTypes/stackType.js'
 import stackUpdateInputType from './stackTypes/stackUpdateInputType'
 import STATUS from '../../utils/statusEnum'
+import log from '../../utils/log'
 
 const mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -240,6 +241,7 @@ const mutations = new GraphQLObjectType({
             { $addToSet: { realms: { id: args.realm.id, label: args.realm.label, description: args.realm.description, notes: args.realm.notes } } }
           )
             .then(() => {
+              log('info', 'core/network/graphql', `Created Realm ${args.realm.id} (${args.realm.label})`)
               resolve(STATUS.OK)
             })
         })
@@ -262,6 +264,7 @@ const mutations = new GraphQLObjectType({
             { $set: { 'realms.$': { ...args.realm } } }
           )
             .then(() => {
+              log('info', 'core/network/graphql', `Updated Realm ${args.realm.id} (${args.realm.label})`)
               resolve(STATUS.OK)
             })
         })
@@ -284,6 +287,7 @@ const mutations = new GraphQLObjectType({
             { $pull: { realms: { id: args.realm.id } } }
           )
             .then(() => {
+              log('info', 'core/network/graphql', `Deleted Realm ${args.realm.id}`)
               resolve(STATUS.OK)
             })
         })

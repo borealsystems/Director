@@ -101,13 +101,13 @@ const Panel = ({ id, result }) => {
           <Row>
             <Column>
               <ComboBox
-                ariaLabel="Dropdown"
-                id="panelLayoutType"
+                ariaLabel='Dropdown'
+                id='panelLayoutType'
                 placeholder='Predefined layout or custom shotbox?'
                 selectedItem={panel.layoutType || ''}
                 items={[{ id: 'controller', label: 'Controller Layout' }, { id: 'shotbox', label: 'Custom Shotbox Layout' }]}
                 onChange={(e) => { setPanel({ ...panel, layoutType: e.selectedItem }) }}
-                titleText="Panel Layout Type"
+                titleText='Panel Layout Type'
               /><br/>
             </Column>
           </Row>
@@ -116,13 +116,13 @@ const Panel = ({ id, result }) => {
               <Column>
                 <ComboBox
                   disabled
-                  ariaLabel="Dropdown"
-                  id="disabled"
+                  ariaLabel='Dropdown'
+                  id='disabled'
                   placeholder='What layout is this panel?'
                   selectedItem={''}
                   items={[]}
                   onChange={() => {}}
-                  titleText="Panel Layout"
+                  titleText='Panel Layout'
                 />
               </Column>
             </Row>
@@ -131,15 +131,15 @@ const Panel = ({ id, result }) => {
             <Row>
               <Column>
                 <ComboBox
-                  ariaLabel="Dropdown"
-                  id="panelLayoutController"
+                  ariaLabel='Dropdown'
+                  id='panelLayoutController'
                   placeholder='Filter...'
                   selectedItem={panel.layout}
                   items={result.data.controllerLayouts}
                   onChange={(layout) => {
                     setPanel({ ...panel, layout: layout.selectedItem, buttons: matrix(layout.selectedItem.rows, layout.selectedItem.columns) })
                   }}
-                  titleText="Panel Layout"
+                  titleText='Panel Layout'
                 />
               </Column>
             </Row>
@@ -184,7 +184,7 @@ const Panel = ({ id, result }) => {
                   <Row>
                     { row.map((button, buttonIndex) => {
                       return (
-                        <Column className="bx--button__field-wrapper" key={buttonIndex}>
+                        <Column className='bx--button__field-wrapper' key={buttonIndex}>
                           <Button onClick={() => { setPanel({ ...panel, currentButton: { ...button, stack: button.stack ?? null } }) }} style={{ minWidth: '10px', padding: '10px', width: '100%', maxWidth: '500em', height: '8em', display: 'table' }} size='default' kind={getButtonColour(button)}>
                             <>
                               <h5>{button.stack?.id ? button.stack.panelLabel : ''}</h5>
@@ -204,11 +204,11 @@ const Panel = ({ id, result }) => {
           </Grid>
           { panel.layout?.rows && panel.layout?.columns && panel.currentButton &&
             <>
-              <div className="bx--row">
-                <div className="bx--col">
+              <div className='bx--row'>
+                <div className='bx--col'>
                   <ComboBox
-                    ariaLabel="Dropdown"
-                    id="buttonStackSelection"
+                    ariaLabel='Dropdown'
+                    id='buttonStackSelection'
                     placeholder='Filter...'
                     direction='top'
                     selectedItem={panel.currentButton.stack ?? ''}
@@ -219,21 +219,21 @@ const Panel = ({ id, result }) => {
                       panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = stack.selectedItem
                       setPanel(panelIntermediate)
                     }}
-                    titleText="Stack"
+                    titleText='Stack'
                   />
                 </div>
-                <div className="bx--col">
+                <div className='bx--col'>
                   { panel.currentButton?.stack &&
                     <Button onClick={(stack) => {
                       const panelIntermediate = { ...panel }
                       panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = null
                       setPanel(panelIntermediate)
-                    }} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
+                    }} size='small' style={{ marginTop: '25px', height: '40px' }} kind='danger'>
                       Clear Button
                     </Button>
                   }
                   { !panel.currentButton?.stack &&
-                    <Button disabled onClick={() => {}} size='small' style={{ marginTop: '25px', height: '40px' }} kind="danger">
+                    <Button disabled onClick={() => {}} size='small' style={{ marginTop: '25px', height: '40px' }} kind='danger'>
                       Clear Button
                     </Button>
                   }
@@ -248,7 +248,7 @@ const Panel = ({ id, result }) => {
                 <Button
                   renderIcon={Exit24}
                   onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels` }) }}
-                  size='default' kind="secondary"
+                  size='default' kind='secondary'
                 >
                   Go Back
                 </Button>
@@ -259,7 +259,7 @@ const Panel = ({ id, result }) => {
                     renderIcon={ArrowRight24}
                     onClick={() => { updatePanel() }}
                     size='default'
-                    kind="primary">
+                    kind='primary'>
                     { isNew ? 'Create Panel' : 'Update Panel' }
                   </Button>
                 }

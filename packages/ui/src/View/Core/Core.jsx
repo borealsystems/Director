@@ -134,7 +134,7 @@ const Core = ({ updateAndSetRealm }) => {
             </Column>
             <Column style={{ marginTop: '1em' }}>
               <Toggle
-                id="coreLoginHelpdeskVisableToggle"
+                id='coreLoginHelpdeskVisableToggle'
                 defaultToggled={coreConfig.helpdeskVisable}
                 labelA='Link Hidden'
                 labelB='Link Visible'
@@ -147,7 +147,7 @@ const Core = ({ updateAndSetRealm }) => {
             <Column>
               <Button
                 size='default'
-                kind="primary"
+                kind='primary'
                 onClick={() => {
                   coreMutation({ core: coreConfig })
                     .then(() => updateAndSetRealm({ core: { id: coreConfig.id, label: coreConfig.label } }))

@@ -127,7 +127,7 @@ const Device = ({ id, result }) => {
                       label='Device Provider'
                     />
                     <ProgressStep
-                      label="Device Configuration"
+                      label='Device Configuration'
                     />
                   </ProgressIndicator>
                 </Column>
@@ -141,8 +141,8 @@ const Device = ({ id, result }) => {
                 <Column sm={1} style={{ marginRight: '-1em' }}>
                   <ComboBox
                     id='newDeviceProviderFilterManufacturerComboBox'
-                    size="xl"
-                    placeholder="Filter Manufacturer"
+                    size='xl'
+                    placeholder='Filter Manufacturer'
                     items={[...new Set(
                       providers.map((p) => p.manufacturer)
                     )]}
@@ -156,7 +156,7 @@ const Device = ({ id, result }) => {
                   <Search
                     labelText='Filter Providers'
                     onChange={(e) => setFilter(e.target.value)}
-                    placeHolderText="Filter Providers"
+                    placeHolderText='Filter Providers'
                   />
                 </Column>
               </Row>
@@ -272,7 +272,7 @@ const Device = ({ id, result }) => {
                           { item.inputType === 'comboBox' &&
                             <Column>
                               <ComboBox
-                                ariaLabel="Dropdown"
+                                ariaLabel='Dropdown'
                                 id={`newDeviceParameter${item.id}`}
                                 placeholder={item.placeholder}
                                 items={item.items}
@@ -311,16 +311,16 @@ const Device = ({ id, result }) => {
                   renderIcon={ configurationStep === 0 ? Exit24 : ArrowLeft24}
                   onClick={() => { configurationStep === 0 ? history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices` }) : isNew ? setConfigurationStep(configurationStep - 1) : history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices` }) }}
                   size='default'
-                  kind="secondary"
+                  kind='secondary'
                   style={{ width: '18em' }}
                 >
                   { configurationStep === 0 ? 'Cancel' : 'Go Back' }
                 </Button>
                 { configurationStep === 0
-                  ? <Button style={{ width: '18em' }} disabled={!device.provider} renderIcon={ArrowRight24} onClick={() => { setConfigurationStep(1) }} size='default' kind="primary">
+                  ? <Button style={{ width: '18em' }} disabled={!device.provider} renderIcon={ArrowRight24} onClick={() => { setConfigurationStep(1) }} size='default' kind='primary'>
                     Continue
                   </Button>
-                  : <Button style={{ width: '18em' }} disabled={!device.label} renderIcon={ArrowRight24} onClick={() => { updateDevice() }} size='default' kind="primary">
+                  : <Button style={{ width: '18em' }} disabled={!device.label} renderIcon={ArrowRight24} onClick={() => { updateDevice() }} size='default' kind='primary'>
                     { isNew && !isLoading ? 'Create Device' : 'Update Device' }
                     { isLoading && <InlineLoading/> }
                   </Button>

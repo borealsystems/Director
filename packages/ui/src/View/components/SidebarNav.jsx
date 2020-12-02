@@ -14,26 +14,26 @@ const SidebarNav = () => {
   }
 
   return (
-    <SideNav aria-label="Side navigation" active={true} isRail expanded={sidebarPinned}>
+    <SideNav aria-label='Side navigation' active={true} isRail expanded={sidebarPinned}>
       <SideNavItems>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} label="Dashboard" renderIcon={Dashboard24} />
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} label='Dashboard' renderIcon={Dashboard24} />
         <br/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices`} label="Devices" renderIcon={DataBase24}/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks`} label="Stacks" renderIcon={FolderDetails24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/devices`} label='Devices' renderIcon={DataBase24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks`} label='Stacks' renderIcon={FolderDetails24}/>
         {/* eslint-disable-next-line camelcase */}
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels`} label="Panels" renderIcon={Application24}/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers`} label="Controllers" renderIcon={ResearchHintonPlot24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/panels`} label='Panels' renderIcon={Application24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/controllers`} label='Controllers' renderIcon={ResearchHintonPlot24}/>
         <br/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox`} label="Shotbox" renderIcon={Workspace24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox`} label='Shotbox' renderIcon={Workspace24}/>
         <br/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/configuration`} label="Core" renderIcon={DeploymentPolicy24}/>
-        <SideNavLink to={`/cores/${contextRealm.coreID}/realms`} label="Realms" renderIcon={Rocket24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/configuration`} label='Core' renderIcon={DeploymentPolicy24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/realms`} label='Realms' renderIcon={Rocket24}/>
         <Button
           renderIcon={Pin24}
           hasIconOnly
-          kind="ghost"
+          kind='secondary'
           onClick={sidebarPinHandler}
-          tooltipPosition="right"
+          tooltipPosition='right'
           iconDescription={sidebarPinned ? 'Unpin Sidebar' : 'Pin Open'}
           style={{ width: '48px', position: 'fixed', bottom: 0 }}
         />

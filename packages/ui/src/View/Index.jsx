@@ -99,26 +99,26 @@ const BorealDirector = () => {
   }
 
   return (
-    <div className="container bx--container02">
+    <div className='container bx--container02'>
       <HeaderContainer
         render={({ isSideNavExpanded, onClickSideNavExpand }) => (
           <>
-            <Header aria-label="BorealSystems Director">
+            <Header aria-label='BorealSystems Director'>
               <SkipToContent />
               <HeaderMenuButton
-                aria-label="Open menu"
+                aria-label='Open menu'
                 onClick={onClickSideNavExpand}
                 isActive={isSideNavExpanded}
               />
               <HeaderName onClick={() => history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/` })} prefix='Boreal Systems'>
                 Director
               </HeaderName>
-              <HeaderNavigation aria-label="Boreal Systems Director">
+              <HeaderNavigation aria-label='Boreal Systems Director'>
                 { showTopRealmSelect &&
                   <ComboBox
                     className='coreSelect'
-                    ariaLabel="Dropdown"
-                    id="panel"
+                    ariaLabel='Dropdown'
+                    id='panel'
                     label='Select a panel'
                     placeholder='Core'
                     disabled={!!disableTopRealmSelect}
@@ -128,9 +128,9 @@ const BorealDirector = () => {
                     onChange={(event) => { setContextRealm(event.selectedItem) }}
                   />
                 }
-                <HeaderMenu aria-label="Development Build" menuLinkName={'This is a development build'}>
-                  <HeaderMenuItem href="https://phabricator.boreal.systems">Phabricator</HeaderMenuItem>
-                  <HeaderMenuItem href="https://discord.gg/7kqpZRU">Discord</HeaderMenuItem>
+                <HeaderMenu aria-label='Development Build' menuLinkName={'This is a development build'}>
+                  <HeaderMenuItem href='https://phabricator.boreal.systems'>Phabricator</HeaderMenuItem>
+                  <HeaderMenuItem href='https://discord.gg/7kqpZRU'>Discord</HeaderMenuItem>
                 </HeaderMenu>
               </HeaderNavigation>
               <HeaderGlobalBar>
@@ -139,10 +139,10 @@ const BorealDirector = () => {
                 }
                 { isAuthenticated &&
                   <>
-                    <HeaderGlobalAction aria-label="Theme" onClick={() => { toggleTheme() }}>
+                    <HeaderGlobalAction aria-label='Theme' onClick={() => { toggleTheme() }}>
                       {theme === 'dx--light' ? <Light20 /> : <LightFilled20 />}
                     </HeaderGlobalAction>
-                    {/* <HeaderGlobalAction aria-label="User" onClick={() => { setAuthenticationState(false) }}>
+                    {/* <HeaderGlobalAction aria-label='User' onClick={() => { setAuthenticationState(false) }}>
                       <User20 />
                     </HeaderGlobalAction> */}
                   </>
@@ -150,7 +150,7 @@ const BorealDirector = () => {
               </HeaderGlobalBar>
               { showSidebar && <SidebarNav/> }
             </Header>
-            <Content id="main-content" style={{ height: 'calc(100vh - 3.4em)' }}>
+            <Content id='main-content' style={{ height: 'calc(100vh - 3.4em)' }}>
               { result.error && <GraphQLError error={result.error} />}
               { result.loading && <Loading /> }
               <Suspense fallback={<Loading/>} >
@@ -161,8 +161,8 @@ const BorealDirector = () => {
                         <Switch>
                           { !isAuthenticated && result.data &&
                                 <>
-                                  <Redirect to="/login" />
-                                  <Route exact path="/login">
+                                  <Redirect to='/login' />
+                                  <Route exact path='/login'>
                                     <Login auth={setAuthenticationState}/>
                                   </Route>
                                 </>
@@ -170,10 +170,10 @@ const BorealDirector = () => {
                           { isAuthenticated && result.data && !contextRealm.id &&
                             <>
                               {/* REDIRECTS */}
-                              <Route path="/:anything">
-                                <Redirect to="/" />
+                              <Route path='/:anything'>
+                                <Redirect to='/' />
                               </Route>
-                              <Route path="/" >
+                              <Route path='/' >
                                 <Landing realms={result.data.realms} realm={contextRealm} setRealm={setContextRealm} />
                               </Route>
                             </>
@@ -181,33 +181,33 @@ const BorealDirector = () => {
                           { isAuthenticated && result.data && contextRealm.id &&
                             <>
                               {/* CONFIGURE */}
-                              <Route exact path="/cores/:core/realms/:realm/config/devices/:id" component={Device} />
-                              <Route exact path="/cores/:core/realms/:realm/config/devices" component={Devices} />
-                              <Route exact path="/cores/:core/realms/:realm/config/stacks/:id" component={StackWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/config/stacks" component={Stacks} />
-                              <Route exact path="/cores/:core/realms/:realm/config/panels/:id" component={PanelWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/config/panels" component={Panels} />
-                              <Route exact path="/cores/:core/realms/:realm/config/controllers/:id" component={ControllerWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/config/controllers" component={Controllers} />
+                              <Route exact path='/cores/:core/realms/:realm/config/devices/:id' component={Device} />
+                              <Route exact path='/cores/:core/realms/:realm/config/devices' component={Devices} />
+                              <Route exact path='/cores/:core/realms/:realm/config/stacks/:id' component={StackWrapper} />
+                              <Route exact path='/cores/:core/realms/:realm/config/stacks' component={Stacks} />
+                              <Route exact path='/cores/:core/realms/:realm/config/panels/:id' component={PanelWrapper} />
+                              <Route exact path='/cores/:core/realms/:realm/config/panels' component={Panels} />
+                              <Route exact path='/cores/:core/realms/:realm/config/controllers/:id' component={ControllerWrapper} />
+                              <Route exact path='/cores/:core/realms/:realm/config/controllers' component={Controllers} />
                               {/* CONTROL */}
-                              <Route exact path="/cores/:core/realms/:realm/control/shotbox" component={Shotbox} />
-                              <Route exact path="/cores/:core/realms/:realm/control/shotbox/controller/:id" component={ShotboxControllerWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/control/shotbox/panel/:id" component={ShotboxPanelWrapper} />
-                              <Route exact path="/cores/:core/realms/:realm/control/flow" component={Flow} />
+                              <Route exact path='/cores/:core/realms/:realm/control/shotbox' component={Shotbox} />
+                              <Route exact path='/cores/:core/realms/:realm/control/shotbox/controller/:id' component={ShotboxControllerWrapper} />
+                              <Route exact path='/cores/:core/realms/:realm/control/shotbox/panel/:id' component={ShotboxPanelWrapper} />
+                              <Route exact path='/cores/:core/realms/:realm/control/flow' component={Flow} />
                               {/* CORE/REALM */}
-                              <Route exact path="/cores/:core/configuration">
+                              <Route exact path='/cores/:core/configuration'>
                                 <Core updateAndSetRealm={updateAndSetRealm} />
                               </Route>
-                              <Route exact path="/cores/:core/realms">
+                              <Route exact path='/cores/:core/realms'>
                                 <Realms updateRealmsQuery={reexecuteRealmsQuery} />
                               </Route>
                               {/* MONITOR */}
-                              <Route exact strict path="/cores/:core/realms/:realm/" component={Dashboard} />
+                              <Route exact strict path='/cores/:core/realms/:realm/' component={Dashboard} />
                               {/* REDIRECTS */}
-                              <Route exact path="/login">
-                                <Redirect to="/" />
+                              <Route exact path='/login'>
+                                <Redirect to='/' />
                               </Route>
-                              <Route exact path="/" >
+                              <Route exact path='/' >
                                 <Redirect to={`/cores/${contextRealm.coreID}/realms/${contextRealm.id}/`} />
                               </Route>
                             </>
