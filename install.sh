@@ -8,9 +8,13 @@ echo ""
 echo -e "${BOLD}Installing Boreal Systems Director${NC}"
 echo ""
 
+# kill script if on arch linux
+if [ -f "/etc/arch-release" ]; then
+    echo -e "${RED}${BOLD}This script is not supported on Arch Linux at this time.${NC}"
+    exit
+fi
+
 # checking if required dependencies exist
-
-
 echo -e "${BOLD}Checking dependencies:${NC}"
 if ! command -v docker &> /dev/null # checking for docker engine
 then
