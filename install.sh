@@ -9,6 +9,8 @@ echo -e "${BOLD}Installing Boreal Systems Director${NC}"
 echo ""
 
 # checking if required dependencies exist
+
+
 echo -e "${BOLD}Checking dependencies:${NC}"
 if ! command -v docker &> /dev/null # checking for docker engine
 then
@@ -16,7 +18,7 @@ then
     echo -e "${RED}FATAL:${NC} You need to install Docker before continuing"
     if [[ "$OSTYPE" == "linux"* ]]; then
         read -p "Would you like us to install Docker for you? [y/n] " -n 1 -r #ask if want to install thing
-        echo
+        echo ""
         if [[ $REPLY =~ ^[Yy]$ ]] #if yes reply
         then
             echo ""
@@ -25,7 +27,9 @@ then
             curl -fsSL https://get.docker.com -o get-docker.sh
             sudo sh get-docker.sh
             sudo usermod -aG docker $USER
-            echo -e "${RED}${BOLD}You will need to log out and back in or start a new terminal session to continue.${NC}" #usermod needs new session for changes to take place
+            echo -e "${RED}${BOLD}$USER has been added to the docker group. You will need to log out and back in or start a new terminal session to continue.${NC}" #usermod needs new session for changes to take place
+            exit
+        else
             exit
         fi
     elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -33,15 +37,18 @@ then
     else
         exit
     fi
+else
+    echo -e "Docker [${GREEN}✔${NC}]"
 fi
-echo -e "Docker [${GREEN}✔${NC}]"
+
 if ! command -v docker-compose &> /dev/null # checking for docker composse
 then
+    echo ""
     echo -e "docker-compose [${RED}❌${NC}]"
     echo -e "${RED}FATAL:${NC} You need to install docker-compose before continuing"
     if [[ "$OSTYPE" == "linux"* ]]; then
         read -p "Would you like us to install docker-compose for you? [y/n] " -n 1 -r #ask if want to install composing thing
-        echo
+        echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]
         then
             echo ""
@@ -49,15 +56,18 @@ then
             echo -e "${BOLD}Installing docker-compose:${NC}"
             sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
+        else
+            exit
         fi
     else
         exit
     fi
+else
+    echo -e "docker-compose [${GREEN}✔${NC}]"
+    echo ""
 fi
-echo -e "docker-compose [${GREEN}✔${NC}]"
-echo ""
-
 # cloning the git repo
+echo ""
 echo -e "${BOLD}Cloning the git repository${NC}"
 git clone --recursive https://phabricator.boreal.systems/source/Director.git Director
 cd Director
