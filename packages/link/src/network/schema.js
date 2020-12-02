@@ -15,10 +15,10 @@ const connectionType = new GraphQLObjectType({
     host: {
       type: GraphQLString
     },
-    port: {
-      type: GraphQLString
-    },
     status: {
+      type: GraphQLBoolean
+    },
+    https: {
       type: GraphQLBoolean
     }
   }
@@ -30,10 +30,10 @@ const connectionInputType = new GraphQLInputObjectType({
     host: {
       type: GraphQLString
     },
-    port: {
-      type: GraphQLString
-    },
     status: {
+      type: GraphQLBoolean
+    },
+    https: {
       type: GraphQLBoolean
     }
   }
@@ -68,7 +68,7 @@ var schema = new GraphQLSchema({
         },
         resolve: (parent, args) => {
           config.set('connection', args.connection)
-          initGQLClient(args.connection.host, args.connection.port)
+          initGQLClient(args.connection.host, args.connection.https)
           return 'OK'
         }
       }

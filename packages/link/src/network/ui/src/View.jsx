@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import {
   Column,
+  Checkbox,
   Content,
   Grid,
   Header,
@@ -30,7 +31,7 @@ import GraphQLError from './GraphQLError.jsx'
 
 import './index.scss'
 
-const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => {
+const ConnectionForm = ({ currentConnection, connectionMutation, refresh }) => {
   const [connection, setConnection] = useState(currentConnection)
   const [edited, setEdited] = useState({ host: false, port: false })
 
@@ -39,11 +40,7 @@ const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => 
       return true
     } else if (edited.host && connection.host === null) {
       return false
-    } else if (connection.host.match(/\b((([0-2]\d[0-5])|(\d{2})|(\d))\.){3}(([0-2]\d[0-5])|(\d{2})|(\d))\b/g)) {
-      return true
-    } else if (connection.host.match(/(([a-fA-F0-9]{1,4}|):){1,7}([a-fA-F0-9]{1,4}|:)/gm)) {
-      return true
-    } else if (connection.host.match(/^(?=^.{1,253}$)(([a-z\d]([a-z\d-]{0,62}[a-z\d])*[.]){1,3}[a-z]{1,61})$/gm)) {
+    } else if (connection.host.match(/(\b((25[0-5]|2[0-4]\d|[01]?\d{1,2}|\*)\.){3}(25[0-5]|2[0-4]\d|[01]?\d{1,2}|\*))|((([a-fA-F0-9]{1,4}|):){1,7}([a-fA-F0-9]{1,4}|:))|(^(?=^.{1,253}$)(([a-z\d]([a-z\d-]{0,62}[a-z\d])*[.]){1,3}[a-z]{1,61})$)/)) {
       return true
     } else return false
   }
@@ -58,7 +55,7 @@ const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => 
     }
   }
 
-  const isSubmitable = (currentConnection.host || edited.host) && (currentConnection.port || edited.port) && hostIsValid() && portIsValid()
+  const isSubmitable = (currentConnection.host || edited.host) && hostIsValid() && portIsValid()
 
   return (
     <Column sm={{ span: 1 }}>
@@ -84,23 +81,16 @@ const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => 
       </Row>
       <br/>
       <Row>
-        <TextInput
-          type='text'
-          id='port'
-          placeholder='3000'
-          value={connection.port || ''}
-          labelText='Port'
-          onChange={(e) => {
-            setConnection({ ...connection, port: e.target.value })
-            setEdited({ ...edited, port: true })
-          }}
-          invalid={!portIsValid()}
-          invalidText='Please enter a valid port'
+        <Checkbox
+          id='connectionHTTPSCheckbox'
+          checked={connection.https}
+          labelText='Connect via HTTPS'
+          onClick={() => setConnection({ ...connection, https: !connection.https })}
         />
       </Row>
-      <br/><br/>
+      <br/>
       <Row>
-        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
+        <Button disabled={!isSubmitable} onClick={() => { connectionMutation({ connection: connection }).then(refresh()) }} size='default' kind="primary" style={{ width: '100%', maxWidth: '100%' }} renderIcon={ArrowRight20}>
           {currentConnection.status ? 'Update & Reconnect' : 'Connect' }
         </Button>
       </Row>
@@ -111,34 +101,29 @@ const ConnectionForm = ({ currentConnection, connectionMutation, setPause }) => 
 ConnectionForm.propTypes = {
   currentConnection: PropTypes.object,
   connectionMutation: PropTypes.func,
-  setPause: PropTypes.func
+  refresh: PropTypes.func
 }
 
 const View = () => {
   const { theme, toggleTheme } = useContext(globalContext)
-  const [pause, setPause] = useState(false)
-  const [result] = useQuery({
+  const [result, refresh] = useQuery({
     query: `{ 
       connection {
         host
-        port
         status
+        https
       }
-    }`,
-    pollInterval: 10000,
-    pause: pause
+    }`
   })
 
   const [, connectionMutation] = useMutation(`mutation connectionMutation($connection: connectionInputType) {
     connection(connection: $connection) {
       host
-      port
       status
+      https
     }
   }`)
 
-  if (result.data && pause === false && result.data.connection && result.data.connection.status === false) setPause(true)
-  if (result.data && pause === true && result.data.connection && result.data.connection.status === true) setPause(false)
   return (
     <HeaderContainer
       render={() => (
@@ -166,7 +151,7 @@ const View = () => {
             { result.data &&
               <Grid>
                 <Row>
-                  <ConnectionForm currentConnection={{ ...result.data.connection }} connectionMutation={connectionMutation} setPause={setPause}/>
+                  <ConnectionForm currentConnection={{ ...result.data.connection }} connectionMutation={connectionMutation} refresh={refresh}/>
                   <Column>
                     <img src={splash} width='75%' style={{ marginLeft: '25%', marginTop: '10%' }}/>
                   </Column>

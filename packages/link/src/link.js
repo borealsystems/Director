@@ -8,9 +8,9 @@ import { config } from './utils/config'
 config.init().then(config => {
   initExpress()
   updateStreamdecks({ type: 'refresh' })
-  if (config.connection && config.connection.port && config.connection.port) {
+  if (config.connection && config.connection.host) {
     updateStreamdecks({ type: 'offline' })
-    initGQLClient(config.connection.host, config.connection.port)
+    initGQLClient(config.connection.host, config.connection.https)
   } else {
     updateStreamdecks({ type: 'unconfigured' })
   }

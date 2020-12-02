@@ -10,8 +10,9 @@ import log from '../utils/log'
 let director
 let subscriptionClient
 
-const initGQLClient = (address, port) => {
-  subscriptionClient = new SubscriptionClient(`ws://${address}:${port}/graphql`, { reconnect: true }, WebSocket)
+const initGQLClient = (address, https) => {
+  log('info', '/link/network/graphql', `Connecting to ${https ? 'https:' : 'http:'}//${address}/graphql`)
+  subscriptionClient = new SubscriptionClient(`${https ? 'wss:' : 'ws:'}//${address}/graphql`, { reconnect: true, keepAlive: 5000 }, WebSocket)
 
   subscriptionClient.onDisconnected(() => {
     updateStreamdecks({ type: 'offline' })
@@ -36,8 +37,10 @@ const initGQLClient = (address, port) => {
     config.set('connection', { ...config.get('connection'), status: true })
   })
 
+  subscriptionClient.onError(error => log('error', '/link/network/graphql', error))
+
   director = new Client({
-    url: `http://${address}:${port}/graphql`,
+    url: `${https ? 'https:' : 'http:'}//${address}/graphql`,
     requestPolicy: 'network-only',
     maskTypename: true,
     exchanges: [
@@ -70,10 +73,10 @@ const initGQLClient = (address, port) => {
     director.subscription(controllerUpdateGQL),
     subscribe(result => {
       if (result.error) {
-        log('error', 'link/src/network/graphql', result.error)
+        log('error', 'link/network/graphql', result.error)
       }
       if (result.data && streamDecks.find(sd => sd.config.serial === result.data.controller.serial)) {
-        log('info', 'link/src/network/graphql', result.data.controller.id)
+        log('info', 'link/network/graphql', result.data.controller.id)
         streamDecks[findIndex(streamDecks, (streamdeck) => streamdeck.config.serial === result.data.controller.serial)].config = result.data.controller
         updateStreamdecks({ type: 'connected', force: true })
       }

@@ -7,7 +7,7 @@ import BorealDirector from './View/Index.jsx'
 import globalContext from './globalContext'
 import './theme.scss'
 
-const subscriptionClient = new SubscriptionClient(`ws://${window.location.hostname}:${window.location.port}/graphql`, { reconnect: true })
+const subscriptionClient = new SubscriptionClient(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.hostname}:${window.location.port}/graphql`, { reconnect: true })
 
 const client = new Client({
   url: '/graphql',
