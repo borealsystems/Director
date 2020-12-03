@@ -1,7 +1,8 @@
 FROM node:14
 WORKDIR /borealsystems/director/core
 ADD . .
-RUN npm_config_build_from_source=true yarn
+RUN apt-get update && apt-get install udev -y
+RUN yarn
 RUN yarn run build
 
 CMD yarn run prod

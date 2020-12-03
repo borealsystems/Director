@@ -9,7 +9,6 @@
   "scripts": {
     "build": "babel src -d dist",
     "prod": "node dist/main.js",
-    "init": "babel-node src/init.js",
     "dev": "NODE_ENV=development nodemon --ignore src/ui --signal SIGHUP --exec babel-node src/main.js"
   },
   "devDependencies": {
