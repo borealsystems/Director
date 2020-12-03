@@ -1,0 +1,22 @@
+version: "3.4"
+services:
+  database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=DirectorCore
+      - MONGO_INITDB_ROOT_USERNAME=Director
+      - MONGO_INITDB_ROOT_PASSWORD=S3CuR3P4ssw0rd
+    volumes:
+      - ./database:/data/db
+  core:
+    image: borealsystems/director:achilles-core
+    environment: 
+      - DIRECTOR_CORE_CONFIG_LABEL=Director
+      - DIRECTOR_CORE_DB_HOST=database
+      - DIRECTOR_CORE_DB_DATABASE=DirectorCore
+      - DIRECTOR_CORE_DB_USERNAME=Director
+      - DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd
+  ui:
+    image: borealsystems/director:achilles-ui
+    ports:
+      - 3000:80
