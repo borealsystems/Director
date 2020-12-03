@@ -6,7 +6,7 @@ NC='\033[0m'
 BOLD='\033[1m'
 username=$USER
 echo ""
-echo -e "${BOLD}Installing Boreal Systems Director${NC}"
+echo -e "${BOLD}Installing Boreal Systems Director Canary${NC}"
 echo ""
 
 # checking if required dependencies exist
