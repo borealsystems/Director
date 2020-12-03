@@ -6,6 +6,8 @@ services:
       - MONGO_INITDB_DATABASE=DirectorCore
       - MONGO_INITDB_ROOT_USERNAME=Director
       - MONGO_INITDB_ROOT_PASSWORD=S3CuR3P4ssw0rd
+    volumes:
+      - ./database:/data/db
   core:
     build: ./packages/core
     environment: 
