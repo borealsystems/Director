@@ -37,7 +37,7 @@ const initGQLClient = (address, https) => {
     config.set('connection', { ...config.get('connection'), status: true })
   })
 
-  subscriptionClient.onError(error => log('error', '/link/network/graphql', error))
+  subscriptionClient.onError(error => log('error', '/link/network/graphql', error.message))
 
   director = new Client({
     url: `${https ? 'https:' : 'http:'}//${address}/graphql`,
