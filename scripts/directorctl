@@ -1,4 +1,6 @@
 #! /bin/bash
+VERSION=1.1.0
+# Oliver Herrmann <oliver@boreal.systems>
 
 # TERMINAL CONTROL CHARS
 RED='\033[0;31m'
@@ -17,8 +19,25 @@ case "$OSTYPE" in
   *)        echo "unknown: $OSTYPE"; exit ;;
 esac
 
-clear
-echo -e "${GREEN}Boreal Systems Director Lifecycle Management${NC}"
+function printHeader {
+  clear
+  echo -e "${GREEN}Boreal Systems Director Lifecycle Management v${VERSION}${NC}"
+  echo ""
+}
+
+function printhelp {
+  echo -e "${BOLD}Commands Available:${NC}" 
+  echo ""
+  echo -e "   install <stable|achilles|canary>" 
+  echo -e "   uninstall [purge]" 
+  echo -e "   start" 
+  echo -e "   restart" 
+  echo -e "   stop" 
+  echo -e "   status" 
+  echo -e "   help" 
+  echo ""
+  exit
+}
 
 if ! command -v docker &> /dev/null; then
   echo -e "${RED}Director requires Docker and docker-compose to be installed.${NC}"
@@ -30,31 +49,27 @@ if ! command -v docker-compose &> /dev/null; then
   exit
 fi
 
-if [ !$(which directorctl) ]; then
-  read -p "Would you like to install directorctl to your system? [y/N] " -n 1 -r # ask if want to install thing
-  echo ""
-  if [[ $REPLY =~ ^[Yy]$ ]] # If yes, install to path
-  then
-    echo REPLACE WITH INSTALLER
-  else
-    clear
-    echo -e "${GREEN}Boreal Systems Director Lifecycle Management${NC}"
-    echo ""
-  fi
-fi
+printHeader
 
-if [ $1 = 'install' ]; then # Handle Installs
+if [ $# -eq 0 ]; then # Handle No Parameters
+  printhelp
+elif [ $1 = 'install' ]; then # Handle Installs
+  if [ -f '/var/BorealSystems/Director/version' ]; then
     previousversion=$(</var/BorealSystems/Director/version)
+  else 
+    previousversion=$2
+  fi
   if [ $2 = 'stable' ]; then # For Stable
     echo -e "${RED}There is currently no Stable Release available for this platform${NC}"
-  
   elif [ $2 = 'achilles' ]; then # For Rolling Dev
     function achillesInstaller {
       if [[ $OS = MACOS || LINUX ]]; then 
-        echo ""
         echo -e "${BOLD}This script requires root access to create directories${NC}"
         echo ""
         sudo echo "Authenticated"
+        echo -e "${BOLD}Installing directorctl${NC}"
+        sudo curl -s https://get.boreal.systems/director -o /bin/directorctl
+        sudo chmod +x /bin/directorctl
         cd /var
         sudo mkdir BorealSystems > /dev/null
         cd BorealSystems
@@ -65,7 +80,7 @@ if [ $1 = 'install' ]; then # Handle Installs
         echo ""
         echo 'achilles' > version
         echo -e "${BOLD}Pulling docker-compose${NC}"
-        curl -fsSL https://raw.githubusercontent.com/borealsystems/Director/master/docker-compose.achilles.yml -o docker-compose.yml
+        curl -fsSL https://get.boreal.systems/docker/docker-compose.achilles.yml -o docker-compose.yml
         echo ""
         echo -e "${BOLD}Starting Director${NC}"
         docker-compose up -d
@@ -76,15 +91,16 @@ if [ $1 = 'install' ]; then # Handle Installs
         elif [[ $OS = MACOS ]]; then
           echo -e "${BOLD}Director UI available at $(ifconfig $(route get default | awk '/interface/' | awk '{print $2}') | awk '/inet /' | awk '{print $2}'):3000${NC}" 
         fi
+        echo -e "${BOLD}Manage Director with ${NC}${GREEN}directorctl${NC}"
         echo ""
       fi
     }
 
     if [[ $previousversion != $2 ]]; then 
       echo "This server previously had $previousversion installed but you are trying to install $2, this may result in data corruption, are you sure you want to continue?"
-      read -p "[y/n]" -n 1 -r #ask if want to install thing
+      read -p "[y/n]" -n 1 -r # ask if want to install thing
       echo ""
-      if [[ $REPLY =~ ^[Yy]$ ]] #if yes reply
+      if [[ $REPLY =~ ^[Yy]$ ]] # if yes reply
       then
         achillesInstaller
       else
@@ -103,7 +119,6 @@ elif [ $1 = 'start' ]; then # Handle startup
   docker-compose up -d
 
 elif [ $1 = 'stop' ]; then # Handle Shutdown
-  echo ""
   read -p "Are you sure you want to shutdown Director? This will disconnect all sessions and devices [y/N] " -n 1 -r # Confirm shutdown
   if [[ $REPLY =~ ^[Yy]$ ]] # If yes
   then
@@ -118,7 +133,6 @@ elif [ $1 = 'stop' ]; then # Handle Shutdown
   fi
 
 elif [ $1 = 'restart' ]; then # Handle Restart
-  echo ""
   read -p "Are you sure you want to restart Director? This will disconnect all sessions and devices [y/N] " -n 1 -r # Confirm restart
   echo ""
   if [[ $REPLY =~ ^[Yy]$ ]] # If yes
@@ -135,7 +149,6 @@ elif [ $1 = 'restart' ]; then # Handle Restart
   fi
 
 elif [ $1 = 'update' ]; then # Handle Update
-  echo ""
   read -p "Are you sure you want to update Director? This will disconnect all sessions and devices for several minutes [y/N] " -n 1 -r # Confirm restart
   if [[ $REPLY =~ ^[Yy]$ ]] # If yes
   then
@@ -153,6 +166,10 @@ elif [ $1 = 'update' ]; then # Handle Update
       echo ""
       docker-compose up -d
       echo ""
+      echo -e "${BOLD}Installing directorctl${NC}"
+      sudo curl -s https://get.boreal.systems/director -o /bin/directorctl
+      sudo chmod +x /bin/directorctl
+      echo ""
       echo -e "${BOLD}Update Complete [${GREEN}✔${NC}]${NC}" 
       echo ""
     elif [ $version = canary ]; then
@@ -163,7 +180,6 @@ elif [ $1 = 'update' ]; then # Handle Update
   fi
 
 elif [ $1 = 'uninstall' ]; then # Handle Uninstall
-  echo ""
   if [[ $2 = 'purge' ]]; then 
     echo -e "Are you sure you want to completely uninstall Director? This will remove all Director containers, images, ${RED}and database content${NC}."
   else
@@ -189,7 +205,7 @@ elif [ $1 = 'uninstall' ]; then # Handle Uninstall
       rm docker-compose.yml
       echo -e "${BOLD}Removed docker-compose.yml${NC}" 
       echo ""
-      echo -e "${BOLD}Removing database${NC}" 
+      echo -e "${BOLD}Removing database (requires sudo)${NC}" 
       sudo rm -rf ./database
       echo ""
       echo -e "${BOLD}Director has been uninstalled [${GREEN}✔${NC}]${NC}" 
@@ -212,13 +228,7 @@ elif [ $1 = 'status' ]; then # Handle Status
   echo ""
 
 elif [ $1 = 'help' ]; then # Handle help
-  echo -e "${BOLD}Commands Available:${NC}" 
-  echo ""
-  echo -e " install <stable|achilles|canary>" 
-  echo -e " uninstall [purge]" 
-  echo -e " start" 
-  echo -e " restart" 
-  echo -e " stop" 
-  echo -e " status" 
-  echo ""
+  printhelp
+else 
+  printhelp
 fi
