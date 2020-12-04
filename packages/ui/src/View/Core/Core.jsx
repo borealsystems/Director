@@ -108,7 +108,7 @@ const Core = ({ updateAndSetRealm }) => {
                 value={coreConfig.label}
                 labelText='Core Name'
                 required
-                onChange={(e) => { setCoreConfig({ ...coreConfig, label: e.target.value }) }}
+                onChange={(e) => { setCoreConfig({ ...coreConfig, label: e.target.value.slice(0, 25) }) }}
               />
             </Column>
           </Row><br/>

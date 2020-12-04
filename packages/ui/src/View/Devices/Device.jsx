@@ -201,7 +201,7 @@ const Device = ({ id, result }) => {
                       value={device.label ?? ''}
                       labelText='Device Name'
                       onClick={() => {}}
-                      onChange={(e) => { setDevice({ ...device, label: e.target.value }) }}
+                      onChange={(e) => { setDevice({ ...device, label: e.target.value.slice(0, 100) }) }}
                     /><br/>
                   </Column>
                   <Column>
@@ -212,7 +212,7 @@ const Device = ({ id, result }) => {
                       value={device.location || undefined}
                       labelText='Device Location (optional)'
                       onClick={() => {}}
-                      onChange={(e) => { setDevice({ ...device, location: e.target.value }) }}
+                      onChange={(e) => { setDevice({ ...device, location: e.target.value.slice(0, 100) }) }}
                     /><br/>
                   </Column>
                 </Row>
@@ -225,7 +225,7 @@ const Device = ({ id, result }) => {
                       value={device.description || undefined}
                       labelText='Device Decription (optional)'
                       onClick={() => {}}
-                      onChange={(e) => { setDevice({ ...device, description: e.target.value }) }}
+                      onChange={(e) => { setDevice({ ...device, description: e.target.value.slice(0, 250) }) }}
                     /><br/>
                   </Column>
                 </Row>

@@ -147,7 +147,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
             value={stack.label ?? ''}
             labelText='Stack Name'
             onClick={() => {}}
-            onChange={(e) => { setStack({ ...stack, label: e.target.value }) }}
+            onChange={(e) => { setStack({ ...stack, label: e.target.value.slice(0, 100) }) }}
           />
         </Column>
         <Column>
@@ -159,7 +159,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
             labelText='Stack Panel Label'
             helperText='This is what will be displayed on panels, if left blank the stack name will be used'
             onClick={() => {}}
-            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value }) }}
+            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value.slice(0, 12) }) }}
           />
         </Column>
       </Row>
@@ -172,7 +172,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
             value={stack.description ?? ''}
             labelText='Stack Description'
             onClick={() => {}}
-            onChange={(e) => { setStack({ ...stack, description: e.target.value }) }}
+            onChange={(e) => { setStack({ ...stack, description: e.target.value.slice(0, 250) }) }}
           />
         </Column>
       </Row><br/>

@@ -97,7 +97,7 @@ const Realms = ({ updateRealmsQuery }) => {
             invalid={realmIDIsDuplicate}
             invalidText='A Realm with this ID already exists, you cannot create more than one realm with the same ID'
             required
-            onChange={e => { setNewRealm({ ...newRealm, id: e.target.value.toUpperCase() }) }}
+            onChange={e => { setNewRealm({ ...newRealm, id: e.target.value.toUpperCase().slice(0, 15) }) }}
           /> <br />
           <TextInput
             type='text'
@@ -108,7 +108,7 @@ const Realms = ({ updateRealmsQuery }) => {
             warn={!!realmLabelIsDuplicate}
             warnText='A Realm with this name already exists, while you can create multiple realms with the same name, it may result in confusion'
             required
-            onChange={e => { setNewRealm({ ...newRealm, label: e.target.value }) }}
+            onChange={e => { setNewRealm({ ...newRealm, label: e.target.value.slice(0, 100) }) }}
           /> <br />
           <TextInput
             type='text'
@@ -116,7 +116,7 @@ const Realms = ({ updateRealmsQuery }) => {
             placeholder='Additional information about this Realm'
             value={newRealm.description ?? ''}
             labelText='Realm Description'
-            onChange={e => { setNewRealm({ ...newRealm, description: e.target.value }) }}
+            onChange={e => { setNewRealm({ ...newRealm, description: e.target.value.slice(0, 250) }) }}
           /><br/>
           <TextArea
             labelText='Realm Notes'

@@ -81,7 +81,7 @@ const Panel = ({ id, result }) => {
                 value={panel.label}
                 labelText='Panel Label'
                 onClick={() => {}}
-                onChange={(e) => { setPanel({ ...panel, label: e.target.value }) }}
+                onChange={(e) => { setPanel({ ...panel, label: e.target.value.slice(0, 100) }) }}
               />
             </Column>
           </Row><br/>
@@ -94,7 +94,7 @@ const Panel = ({ id, result }) => {
                 value={panel.description || undefined}
                 labelText='Panel Description'
                 onClick={() => {}}
-                onChange={(e) => { setPanel({ ...panel, description: e.target.value }) }}
+                onChange={(e) => { setPanel({ ...panel, description: e.target.value.slice(0, 250) }) }}
               />
             </Column>
           </Row><br/>
