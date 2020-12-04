@@ -111,7 +111,7 @@ elif [ $1 = 'install' ]; then # Handle Installs
     fi
 
   elif [ $2 = canary ]; then # For local build
-    echo -e "${RED}There is currently no Canary Release available for this platform${NC}"
+    bash <(curl -s https://raw.githubusercontent.com/borealsystems/Director/master/scripts/canary.sh)
   fi
 
 elif [ $1 = 'start' ]; then # Handle startup
