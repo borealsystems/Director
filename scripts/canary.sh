@@ -179,12 +179,12 @@ echo ""
 
 # building director
 echo -e "${BOLD}Building Director${NC}"
-docker-compose -f docker-compose.local.yml build --parallel
+docker-compose -f docker-compose.canary.yml build --parallel
 echo ""
 
 # Starting director
 echo -e "${BOLD}Starting Director${NC}"
-docker-compose -f docker-compose.local.yml up -d
+docker-compose -f docker-compose.canary.yml up -d
 
 # cheeky credits
 # script by https://phabricator.boreal.systems/p/chef/

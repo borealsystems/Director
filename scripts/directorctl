@@ -1,0 +1,224 @@
+#! /bin/bash
+
+# TERMINAL CONTROL CHARS
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+BOLD='\033[1m'
+username=$USER
+
+#REFERENCE
+case "$OSTYPE" in
+  solaris*) OS="SOLARIS" ;;
+  darwin*)  OS="MACOS" ;; 
+  linux*)   OS="LINUX" ;;
+  bsd*)     OS="BSD" ;;
+  msys*)    OS="WINDOWS" ;;
+  *)        echo "unknown: $OSTYPE"; exit ;;
+esac
+
+clear
+echo -e "${GREEN}Boreal Systems Director Lifecycle Management${NC}"
+
+if ! command -v docker &> /dev/null; then
+  echo -e "${RED}Director requires Docker and docker-compose to be installed.${NC}"
+  exit
+fi
+
+if ! command -v docker-compose &> /dev/null; then
+  echo -e "${RED}Director requires Docker and docker-compose to be installed.${NC}"
+  exit
+fi
+
+if [ !$(which directorctl) ]; then
+  read -p "Would you like to install directorctl to your system? [y/N] " -n 1 -r # ask if want to install thing
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]] # If yes, install to path
+  then
+    echo REPLACE WITH INSTALLER
+  else
+    clear
+    echo -e "${GREEN}Boreal Systems Director Lifecycle Management${NC}"
+    echo ""
+  fi
+fi
+
+if [ $1 = 'install' ]; then # Handle Installs
+    previousversion=$(</var/BorealSystems/Director/version)
+  if [ $2 = 'stable' ]; then # For Stable
+    echo -e "${RED}There is currently no Stable Release available for this platform${NC}"
+  
+  elif [ $2 = 'achilles' ]; then # For Rolling Dev
+    function achillesInstaller {
+      if [[ $OS = MACOS || LINUX ]]; then 
+        echo ""
+        echo -e "${BOLD}This script requires root access to create directories${NC}"
+        echo ""
+        sudo echo "Authenticated"
+        cd /var
+        sudo mkdir BorealSystems > /dev/null
+        cd BorealSystems
+        sudo mkdir Director > /dev/null
+        sudo chown -R $username Director 
+        cd Director
+        touch version
+        echo ""
+        echo 'achilles' > version
+        echo -e "${BOLD}Pulling docker-compose${NC}"
+        curl -fsSL https://raw.githubusercontent.com/borealsystems/Director/master/docker-compose.achilles.yml -o docker-compose.yml
+        echo ""
+        echo -e "${BOLD}Starting Director${NC}"
+        docker-compose up -d
+        echo ""
+        echo -e "${BOLD}Install & Startup Complete [${GREEN}✔${NC}]${NC}" 
+        if [[ $OS = LINUX ]]; then
+          echo -e "${BOLD}Director UI available at $(hostname -I | head -n1 | awk '{print $1;}'):3000${NC}" 
+        elif [[ $OS = MACOS ]]; then
+          echo -e "${BOLD}Director UI available at $(ifconfig $(route get default | awk '/interface/' | awk '{print $2}') | awk '/inet /' | awk '{print $2}'):3000${NC}" 
+        fi
+        echo ""
+      fi
+    }
+
+    if [[ $previousversion != $2 ]]; then 
+      echo "This server previously had $previousversion installed but you are trying to install $2, this may result in data corruption, are you sure you want to continue?"
+      read -p "[y/n]" -n 1 -r #ask if want to install thing
+      echo ""
+      if [[ $REPLY =~ ^[Yy]$ ]] #if yes reply
+      then
+        achillesInstaller
+      else
+        exit
+      fi
+    else
+      achillesInstaller
+    fi
+
+  elif [ $2 = canary ]; then # For local build
+    echo -e "${RED}There is currently no Canary Release available for this platform${NC}"
+  fi
+
+elif [ $1 = 'start' ]; then # Handle startup
+  cd /var/BorealSystems/Director
+  docker-compose up -d
+
+elif [ $1 = 'stop' ]; then # Handle Shutdown
+  echo ""
+  read -p "Are you sure you want to shutdown Director? This will disconnect all sessions and devices [y/N] " -n 1 -r # Confirm shutdown
+  if [[ $REPLY =~ ^[Yy]$ ]] # If yes
+  then
+      echo ""
+      cd /var/BorealSystems/Director
+      docker-compose down
+      echo ""
+      echo -e "${BOLD}Shutdown Complete [${GREEN}✔${NC}]${NC}" 
+      echo ""
+  else
+      exit
+  fi
+
+elif [ $1 = 'restart' ]; then # Handle Restart
+  echo ""
+  read -p "Are you sure you want to restart Director? This will disconnect all sessions and devices [y/N] " -n 1 -r # Confirm restart
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]] # If yes
+  then
+    cd /var/BorealSystems/Director
+    echo -e "${BOLD}Restarting Director${NC}" 
+    echo ""
+    docker-compose restart
+    echo ""
+    echo -e "${BOLD}Restart Complete [${GREEN}✔${NC}]${NC}" 
+    echo ""
+  else
+      exit
+  fi
+
+elif [ $1 = 'update' ]; then # Handle Update
+  echo ""
+  read -p "Are you sure you want to update Director? This will disconnect all sessions and devices for several minutes [y/N] " -n 1 -r # Confirm restart
+  if [[ $REPLY =~ ^[Yy]$ ]] # If yes
+  then
+    cd /var/BorealSystems/Director
+    version=$(<version)
+    echo ""
+    echo -e "${BOLD}Updating to latest $version release${NC}" 
+    if [ $version = 'stable' ]; then
+      echo "There is currently no Stable Release available for this platform"
+    elif [ $version == 'achilles' ]; then
+      echo ""
+      docker-compose pull
+      echo ""
+      echo -e "${BOLD}Restarting Director${NC}" 
+      echo ""
+      docker-compose up -d
+      echo ""
+      echo -e "${BOLD}Update Complete [${GREEN}✔${NC}]${NC}" 
+      echo ""
+    elif [ $version = canary ]; then
+      echo -e "${RED}There is currently no Canary Release available for this platform${NC}"
+    fi
+  else
+      exit
+  fi
+
+elif [ $1 = 'uninstall' ]; then # Handle Uninstall
+  echo ""
+  if [[ $2 = 'purge' ]]; then 
+    echo -e "Are you sure you want to completely uninstall Director? This will remove all Director containers, images, ${RED}and database content${NC}."
+  else
+    echo "Are you sure you want to completely uninstall Director? This will remove all Director containers and images, but will leave the database files in place in /var/BorealSystems/Director."
+  fi
+  read -p "[y/N] " -n 1 -r # Confirm Uninstall
+  if [[ $REPLY =~ ^[Yy]$ ]]; then # Confirmed
+    cd /var/BorealSystems/Director
+    version=$(<version)
+    echo ""
+    echo -e "${RED}Uninstalling BorealSystems Director${NC}" 
+    echo ""
+    if [[ $version = 'stable' || 'achilles' ]]; then
+      echo -e "${BOLD}Shutting Down Director${NC}" 
+      echo ""
+      docker-compose down
+      echo ""
+      echo -e "${BOLD}Removing Images${NC}" 
+      echo ""
+      docker image remove borealsystems/director:$version-core
+      docker image remove borealsystems/director:$version-ui
+      echo -e "${BOLD}Removing docker-compose.yml${NC}" 
+      rm docker-compose.yml
+      echo -e "${BOLD}Removed docker-compose.yml${NC}" 
+      echo ""
+      echo -e "${BOLD}Removing database${NC}" 
+      sudo rm -rf ./database
+      echo ""
+      echo -e "${BOLD}Director has been uninstalled [${GREEN}✔${NC}]${NC}" 
+      echo ""
+    elif [ $version = canary ]; then
+      echo -e "${RED}There is currently no Canary Release available for this platform${NC}"
+    fi
+    else
+      exit
+    fi
+
+elif [ $1 = 'status' ]; then # Handle Status
+  if [[ $(docker ps -a | grep 'director' | grep 'Exited') ]]; then
+    echo -e "${RED}One or more containers are in an error state [❌]${NC}"
+  elif [[ $(docker ps -a | grep 'director' | grep 'Up') ]]; then
+    echo -e "Director is not reporting errors [${GREEN}✔${NC}]"
+  else 
+    echo -e "Director is not running [${RED}❌${NC}]"
+  fi
+  echo ""
+
+elif [ $1 = 'help' ]; then # Handle help
+  echo -e "${BOLD}Commands Available:${NC}" 
+  echo ""
+  echo -e " install <stable|achilles|canary>" 
+  echo -e " uninstall [purge]" 
+  echo -e " start" 
+  echo -e " restart" 
+  echo -e " stop" 
+  echo -e " status" 
+  echo ""
+fi

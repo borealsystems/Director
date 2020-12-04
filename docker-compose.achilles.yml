@@ -8,6 +8,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=S3CuR3P4ssw0rd
     volumes:
       - ./database:/data/db
+    restart: always
   core:
     image: borealsystems/director:achilles-core
     environment: 
@@ -16,7 +17,9 @@ services:
       - DIRECTOR_CORE_DB_DATABASE=DirectorCore
       - DIRECTOR_CORE_DB_USERNAME=Director
       - DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd
+    restart: always
   ui:
     image: borealsystems/director:achilles-ui
+    restart: always
     ports:
       - 3000:80
