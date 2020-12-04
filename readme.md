@@ -1,47 +1,14 @@
 # BorealDirector
-
 The Canonical Repository is https://phabricator.boreal.systems/source/Director/
 
-Come chat: irc://irc.freenode.net/#BorealSystems
+# Deployment 
+https://phabricator.boreal.systems/w/director/deployment/
 
-# THIS IS NOT PRODUCTION READY
-While the core features are mostly stable, the device driver interfaces and the overall system architecture is NOT READY TO BE USED. Check in again at version 1.0.0.
+# Development
+https://phabricator.boreal.systems/w/director/developing/
 
-## Intent
-The intention of this project is to create an open facility scale orchestration and automation suite for broadcast and other live events with a practically limitless amount of actions that can be activated by numerous common network based control protocols and hardware panels. This project is not to be considered production ready, please utilize it cautiously whilst development continues.
-
-## Features
-### Core
-- [x] Devices
-- [x] Stacks
-- [x] Panels
-- [x] Controllers
-- [ ] Feedbacks
-- [x] Web Management
-- [ ] User Auth
-- [ ] User segmentation and access control (Playout, Edit Bay, Master Control, etc)
-- [ ] External auth providers
-- [ ] Time Based Automation
-- [ ] State Based Automation
-- [ ] Router Matrix/Flows
-
-### Software Control
-- [ ] HTTP
-- [ ] GraphQL
-- [ ] TCP
-- [ ] UDP
-- [ ] OSC
-- [ ] Artnet
-- [ ] sACN
-- [ ] MIDI
-- [ ] RossTalk
-- [ ] Ember+
-
-### Hardware Control
-- [x] Elgato Streamdeck (via DirectorLink)
-- [ ] Blackmagic Design Router Panels
-- [ ] Ross Ultrix RCP
-- [ ] Aja Kuma Router Panels
+# Device Support
+https://phabricator.boreal.systems/project/subprojects/10/
 
 ## License
 Boreal Director is licensed under the GPLv3 License.
