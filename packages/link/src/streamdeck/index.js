@@ -156,9 +156,12 @@ const updateStreamdecks = ({ type, force }) => {
                     writeImageToButton(device, 0, path.join(__dirname, './graphics/circle_icon.png'))
                     writeTextToButton({ text: 'Boreal Director', device: device, buttonIndex: 1 })
                     writeTextToButton({ text: 'Configure Controller', device: device, buttonIndex: 2 })
+                    if (!currentController.core) {
+                      updateStreamdecks({ type: 'connected', force: true })
+                    }
                     device.controller.on('down', keyIndex => {
                       if (keyIndex === 2) {
-                        open(`http://${config.get('connection').host}/cores/${currentController.core}/realms/${currentController.realm}/config/controllers/${encodeURIComponent(currentController.id)}`)
+                        open(`${config.get('connection') ? 'https:' : 'http:'}//${config.get('connection').host}/cores/${currentController.core}/realms/${currentController.realm}/config/controllers/${encodeURIComponent(currentController.id)}`)
                         log('info', 'link/streamdeck', 'Opening Core Panel UI')
                       } else {
                         log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
