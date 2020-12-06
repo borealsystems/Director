@@ -1,5 +1,5 @@
 #! /bin/bash
-VERSION=1.1.0
+VERSION=1.2.0
 # Oliver Herrmann <oliver@boreal.systems>
 
 # TERMINAL CONTROL CHARS
@@ -34,6 +34,7 @@ function printhelp {
   echo -e "   restart" 
   echo -e "   stop" 
   echo -e "   status" 
+  echo -e "   logs" 
   echo -e "   help" 
   echo ""
   exit
@@ -77,6 +78,7 @@ elif [ $1 = 'install' ]; then # Handle Installs
         sudo chown -R $username Director 
         cd Director
         touch version
+        touch logs.txt
         echo ""
         echo 'achilles' > version
         echo -e "${BOLD}Pulling docker-compose${NC}"
@@ -229,6 +231,10 @@ elif [ $1 = 'status' ]; then # Handle Status
 
 elif [ $1 = 'help' ]; then # Handle help
   printhelp
+
+elif [ $1 = 'logs' ]; then # Handle Logs
+  less /var/BorealSystems/Director/logs.txt
+
 else 
   printhelp
 fi

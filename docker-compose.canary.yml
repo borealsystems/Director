@@ -7,7 +7,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=Director
       - MONGO_INITDB_ROOT_PASSWORD=S3CuR3P4ssw0rd
     volumes:
-      - ./database:/data/db
+      - /var/BorealSystems/Director/database:/data/db
   core:
     build: ./packages/core
     environment: 
@@ -16,6 +16,10 @@ services:
       - DIRECTOR_CORE_DB_DATABASE=DirectorCore
       - DIRECTOR_CORE_DB_USERNAME=Director
       - DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd
+    volumes:
+      - type: bind
+        source: /var/BorealSystems/Director/logs.txt
+        target: /borealsystems/director/core/logs.txt
   ui:
     build: ./packages/ui
     ports:
