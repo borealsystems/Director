@@ -1,5 +1,5 @@
 #! /bin/bash
-VERSION=1.2.0
+VERSION=1.2.1
 # Oliver Herrmann <oliver@boreal.systems>
 
 # TERMINAL CONTROL CHARS
@@ -233,7 +233,7 @@ elif [ $1 = 'help' ]; then # Handle help
   printhelp
 
 elif [ $1 = 'logs' ]; then # Handle Logs
-  less /var/BorealSystems/Director/logs.txt
+  less +G /var/BorealSystems/Director/logs.txt
 
 else 
   printhelp
