@@ -27,18 +27,21 @@ function printHeader {
 
 function startup {
   cd /var/BorealSystems/Director
-  if [[ OSTYPE = 'MACOS' ]]; then
-    TZ=$(readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##')
+  if [[ $OS = MACOS ]]; then
+    TZ=$(readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##') docker-compose up -d
   else
-    TZ=$(cat /etc/timezone)
+    TZ=$(cat /etc/timezone) docker-compose up -d
   fi
-  docker-compose up -d
 }
 
 function shutdown {
   echo ""
   cd /var/BorealSystems/Director
-  docker-compose down
+  if [[ $OS = MACOS ]]; then
+    TZ=$(readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##') docker-compose down
+  else
+    TZ=$(cat /etc/timezone) docker-compose down
+  fi
   echo ""
   echo -e "${BOLD}Shutdown Complete [${GREEN}✔${NC}]${NC}" 
 }
@@ -124,7 +127,7 @@ elif [ $1 = 'install' ]; then # Handle Installs
         curl -fsSL https://get.boreal.systems/docker/docker-compose.achilles.yml -o docker-compose.yml
         echo ""
         echo -e "${BOLD}Starting Director${NC}"
-        docker-compose up -d
+        startup
         echo ""
         echo -e "${BOLD}Install & Startup Complete [${GREEN}✔${NC}]${NC}" 
         if [[ $OS = LINUX ]]; then
