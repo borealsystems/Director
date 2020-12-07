@@ -21,7 +21,6 @@ initDB()
           {
             id: process.env.DIRECTOR_CORE_ID,
             label: process.env.DIRECTOR_CORE_LABEL,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             helpdeskVisable: false,
             realms: [
               {

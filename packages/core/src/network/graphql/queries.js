@@ -43,18 +43,8 @@ const queries = new GraphQLObjectType({
     thisCore: {
       name: 'thisCore',
       description: 'Return this cores',
-      type: new GraphQLObjectType({
-        name: 'thisCoreType',
-        fields: {
-          id: {
-            type: GraphQLString
-          },
-          label: {
-            type: GraphQLString
-          }
-        }
-      }),
-      resolve: () => ({ id: process.env.DIRECTOR_CORE_ID, label: process.env.DIRECTOR_CORE_LABEL })
+      type: coreType,
+      resolve: () => ({ id: process.env.DIRECTOR_CORE_ID, label: process.env.DIRECTOR_CORE_LABEL, timezone: process.env.TZ })
     },
 
     cores: {

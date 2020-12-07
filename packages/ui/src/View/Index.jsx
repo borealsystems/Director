@@ -68,11 +68,11 @@ const BorealDirector = () => {
       cores {
         id
         label
-        timezone
       }
       thisCore {
         id
         label
+        timezone
       }
       realms {
         id
@@ -135,7 +135,7 @@ const BorealDirector = () => {
               </HeaderNavigation>
               <HeaderGlobalBar>
                 { result.data &&
-                    <Clock tz={result.data.cores[0].timezone} />
+                    <Clock tz={result.data.thisCore.timezone} />
                 }
                 { isAuthenticated &&
                   <>

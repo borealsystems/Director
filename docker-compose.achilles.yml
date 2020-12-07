@@ -17,7 +17,9 @@ services:
       - DIRECTOR_CORE_DB_DATABASE=DirectorCore
       - DIRECTOR_CORE_DB_USERNAME=Director
       - DIRECTOR_CORE_DB_PASSWORD=S3CuR3P4ssw0rd
+      - TZ=${TZ}
     volumes:
+      - '/etc/localtime:/etc/localtime:ro'
       - type: bind
         source: /var/BorealSystems/Director/logs.txt
         target: /borealsystems/director/core/logs.txt

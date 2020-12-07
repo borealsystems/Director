@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from 'urql'
 import { InlineLoading } from 'carbon-components-react'
 import { DataBase16, FolderDetails16, Application16, ResearchHintonPlot16 } from '@carbon/icons-react'
 import GraphQLError from '../components/GraphQLError.jsx'
+import globalContext from '../../globalContext'
 
 const ResourceSummary = () => {
+  const { contextRealm } = useContext(globalContext)
   const [result] = useQuery({
     query: `query resourceSummary($realm: String, $core: String) {
       devices(realm: $realm, core: $core) { id }
@@ -12,6 +14,7 @@ const ResourceSummary = () => {
       panels(realm: $realm, core: $core) { id }
       controllers(realm: $realm, core: $core) { id }
     }`,
+    variables: { realm: contextRealm.id, core: contextRealm.coreID },
     pollInterval: 10000
   })
 
