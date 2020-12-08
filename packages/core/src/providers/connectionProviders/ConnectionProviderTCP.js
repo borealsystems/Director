@@ -29,8 +29,7 @@ class ConnectionProviderTCP {
   ]
 
   init = () => {
-    this.socket = new net.Socket()
-    this.socket.connect(this.device.configuration.port, this.device.configuration.host)
+    this.socket = net.createConnection(this.device.configuration.port, this.device.configuration.host)
     this.socket.setKeepAlive(true, 0)
 
     this.socket.on('connect', () => {
