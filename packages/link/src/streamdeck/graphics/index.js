@@ -46,8 +46,13 @@ const writeTextToButton = ({ text, device, buttonIndex, background, color }) => 
     background: background,
     color: color || 'white'
   })
+    .then(buffer => {
+      if (device.model === 'mini') return buffer.slice(51, 19251)
+      if (device.model === 'xl') return buffer.slice(51, 27699)
+      if (device.model === 'original') return buffer.slice(51, 15603)
+    })
     .then(_buffer => {
-      device.controller.fillImage(buttonIndex, _buffer.slice(51, 19251))
+      device.controller.fillImage(buttonIndex, _buffer)
     })
 }
 
@@ -68,7 +73,10 @@ const writeImageToButton = (device, buttonIndex, path) => {
         .getBufferAsync('image/bmp')
     })
     .then(buffer => {
-      return buffer.slice(51, 19251) // remove header information
+      // console.log(device)
+      if (device.model === 'mini') return buffer.slice(51, 19251)
+      if (device.model === 'xl') return buffer.slice(51, 27699)
+      if (device.model === 'original') return buffer.slice(51, 15603)
     })
     .then(buffer => {
       device.controller.fillImage(buttonIndex, buffer)

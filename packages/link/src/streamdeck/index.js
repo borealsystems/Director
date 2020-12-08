@@ -24,6 +24,20 @@ const getLayout = model => {
         rows: 2,
         columns: 3
       }
+    case 'xl':
+      return {
+        id: 'elgato-streamdeck-xl',
+        label: 'Elgato Streamdeck XL',
+        rows: 4,
+        columns: 8
+      }
+    case 'original':
+      return {
+        id: 'elgato-streamdeck-original',
+        label: 'Elgato Streamdeck',
+        rows: 3,
+        columns: 5
+      }
   }
 }
 
