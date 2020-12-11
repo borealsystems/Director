@@ -24,7 +24,7 @@ const initGQLClient = (address, https) => {
   })
 
   subscriptionClient.onReconnected(() => {
-    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000)
+    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 500)
     config.set('connection', { ...config.get('connection'), status: true })
   })
 
@@ -33,7 +33,7 @@ const initGQLClient = (address, https) => {
   })
 
   subscriptionClient.onConnected(() => {
-    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 1000)
+    setTimeout(() => { updateStreamdecks({ type: 'connected' }) }, 500)
     config.set('connection', { ...config.get('connection'), status: true })
   })
 
@@ -78,7 +78,7 @@ const initGQLClient = (address, https) => {
       if (result.data && streamDecks.find(sd => sd.config.serial === result.data.controller.serial)) {
         log('info', 'link/network/graphql', result.data.controller.id)
         streamDecks[findIndex(streamDecks, (streamdeck) => streamdeck.config.serial === result.data.controller.serial)].config = result.data.controller
-        updateStreamdecks({ type: 'connected', force: true })
+        updateStreamdecks({ type: 'update', force: true, controller: result.data.controller.serial })
       }
     })
   )

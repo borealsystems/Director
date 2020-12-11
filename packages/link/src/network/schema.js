@@ -67,7 +67,7 @@ var schema = new GraphQLSchema({
           }
         },
         resolve: (parent, args) => {
-          config.set('connection', args.connection)
+          config.set('connection', { ...args.connection })
           initGQLClient(args.connection.host, args.connection.https)
           return 'OK'
         }

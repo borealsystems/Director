@@ -12,7 +12,7 @@
     "copy-builds": "sh copy-builds.sh",
     "copy-deps": "sh copy-deps.sh",
     "package": "rm -rf dist && pkg package.json --out-path dist && yarn workspace link run copy-deps",
-    "build": "rm -rf build && babel src/ -d build/ && cp -r src/network/ui/public build/network/ui/ && cp src/streamdeck/graphics/circle_icon.png build/streamdeck/graphics && cp src/network/ui/dist/*.svg build/network/ui/dist/ && rm -rf build/network/ui/src",
+    "build": "rm -rf build && babel src/ -d build/ && cp -r src/network/ui/public build/network/ui/ && cp src/network/ui/dist/*.svg build/network/ui/dist/ && rm -rf build/network/ui/src",
     "webpack": "rm -rf src/network/ui/dist && webpack --mode production src/network/ui/src/index.jsx",
     "dev": "NODE_ENV=development nodemon --signal SIGHUP --exec babel-node src/link.js"
   },
@@ -21,8 +21,6 @@
     "assets": [
       "build/network/ui/dist/*",
       "build/network/ui/public/*",
-      "build/streamdeck/graphics/circle_icon.png",
-      "../../node_modules/@jimp/plugin-print/fonts/open-sans/open-sans-16-white/*",
       "../../node_modules/systray/traybin/tray_darwin_release"
     ]
   },
@@ -44,6 +42,7 @@
     "pkg": "^4.4.9"
   },
   "dependencies": {
+    "@julusian/jpeg-turbo": "^0.5.6",
     "apollo-client": "^2.6.10",
     "babel-preset-es2015": "^6.24.1",
     "chalk": "^3.0.0",
@@ -54,11 +53,12 @@
     "graphql": "^14.6.0",
     "graphql-request": "1.8.2",
     "isomorphic-unfetch": "^3.0.0",
-    "jimp": "^0.14.0",
+    "jimp": "^0.16.1",
     "lodash": "^4.17.15",
     "nicely-format": "^1.1.0",
     "open": "^7.1.0",
     "shortid": "^2.2.15",
+    "skia-canvas": "^0.9.19",
     "smart-promisify": "^1.0.5",
     "subscriptions-transport-ws": "^0.9.17",
     "systray": "^1.0.5",

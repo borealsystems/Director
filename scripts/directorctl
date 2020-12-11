@@ -1,5 +1,5 @@
 #! /bin/bash
-VERSION=1.3.0
+VERSION=1.3.2
 # Oliver Herrmann <oliver@boreal.systems>
 
 # TERMINAL CONTROL CHARS

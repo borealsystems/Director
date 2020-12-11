@@ -15,10 +15,10 @@ const initExpress = () => {
 
   app.use(cors())
 
-  dev && app.use(middleware(
-    webpack(webpackConfiguration),
-    { publicPath: '/dist' }
-  ))
+  // dev && app.use(middleware(
+  //   webpack(webpackConfiguration),
+  //   { publicPath: '/dist' }
+  // ))
 
   app.use('/graphql', graphqlHTTP({
     schema: schema,

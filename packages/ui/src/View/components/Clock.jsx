@@ -16,16 +16,18 @@ function Clock ({ tz }) {
     return cleanup
   })
 
-  return (
-    <TooltipDefinition
-      style={{ paddingLeft: '1.4em', width: '9em', borderBottom: 'none' }}
-      className='bx--header__action clock'
-      tooltipText='Time synced to Core'
-      align='center'
-    >
-      {time.toLocaleTimeString('en-US', { timeZone: tz })}
-    </TooltipDefinition>
-  )
+  if (tz) {
+    return (
+      <TooltipDefinition
+        style={{ paddingLeft: '1.4em', width: '9em', borderBottom: 'none' }}
+        className='bx--header__action clock'
+        tooltipText='Time synced to Core'
+        align='center'
+      >
+        {time.toLocaleTimeString('en-US', { timeZone: tz })}
+      </TooltipDefinition>
+    )
+  } else return null
 }
 
 export default Clock
