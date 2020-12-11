@@ -122,10 +122,13 @@ const mutations = new GraphQLObjectType({
       args: {
         id: {
           type: GraphQLString
+        },
+        controller: {
+          type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return executeStack(args.id)
+      resolve: (p, args) => {
+        return executeStack(args.id, args.controller)
       }
     },
 

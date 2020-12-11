@@ -79,7 +79,7 @@ const registerStreamdecks = () => new Promise((resolve, reject) => {
 const updateStreamdecks = ({ type, force, serial }) => {
   if ((currentConnectionStatus !== type) || force === true) {
     currentConnectionStatus = type
-    log('info', 'link/streamdeck', `Update Type: ${type}`)
+    log('debug', 'link/streamdeck', `Update Type: ${type}`)
     switch (currentConnectionStatus) {
       case 'refresh' :
         return true
@@ -204,8 +204,8 @@ const updateStreamdecks = ({ type, force, serial }) => {
             if (result.error) {
               log('error', 'link/streamdeck', result.error)
             } else {
-              const device = streamDecks.find(device => device.serial === serial)
-              log('info', 'link/streamdeck', `Updating panel on ${device.id}`)
+              const device = streamDecks.find(device => device.config.serial === serial)
+              log('info', 'link/streamdeck', `Updating panel on ${device.config.id}`)
               device.controller.clearAllKeys()
               device.controller.removeAllListeners('down')
               if (findIndex(result.data.controllers, controller => controller.serial === device.config.serial) === -1 || result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel === undefined) {

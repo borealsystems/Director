@@ -68,7 +68,7 @@ class ProtocolProviderBorealDirector {
             items: async () => {
               const realmFilter = args.realm ? { realm: args.realm } : {}
               const coreFilter = args.core ? { core: args.core } : {}
-              return await controllers.find({ ...realmFilter, ...coreFilter }).toArray()
+              return [{ id: 'current', label: 'Current Controller' }, ...await controllers.find({ ...realmFilter, ...coreFilter }).toArray()]
             }
           },
           {
@@ -110,7 +110,9 @@ class ProtocolProviderBorealDirector {
         break
 
       case 'assignControllerPanel':
-        controllers.findOne({ id: _action.parameters.controller.id })
+        // eslint-disable-next-line no-case-declarations
+        const id = _action.parameters.controller.id === 'current' ? _action.controller : _action.parameters.controller.id
+        controllers.findOne({ id: id })
           .then((controller, err) => {
             if (err) {
               log('error', 'core/lib/controllers', err)
@@ -130,7 +132,7 @@ class ProtocolProviderBorealDirector {
             if (err) {
               log('error', 'core/lib/controllers', err)
             } else {
-              return controllers.findOne({ id: _action.parameters.controller.id })
+              return controllers.findOne({ id: id })
             }
           })
           .then((controller) => {

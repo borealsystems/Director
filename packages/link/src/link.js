@@ -14,7 +14,6 @@ config.init()
   })
   .then(() => config.get('connection'))
   .then(connection => {
-    console.log(connection)
     if (connection && connection.host) {
       updateStreamdecks({ type: 'offline' })
       initGQLClient(connection.host, connection.https)

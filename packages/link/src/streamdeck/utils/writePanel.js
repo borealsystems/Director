@@ -9,7 +9,10 @@ const writePanel = ({ panel, device }) => {
         try {
           writeTextToButton({ text: button.stack.panelLabel || button.stack.label, device: device, buttonIndex: buttonLUT[device.config.manufacturer][device.config.model].forward[rowIndex][buttonIndex] })
         } catch (e) {
-          log('warn', 'link/streamdeck/writePanel', `Error writing panel (${device.config.panel.id}, ${device.config.panel.label}) to device, panel is probably a different size: ${e}`)
+          if (e.name === 'TypeError') {
+          } else {
+            log('warn', 'link/streamdeck/writePanel', `Error writing panel (${device.config.panel.id}, ${device.config.panel.label}) to device, panel is probably a different size: ${e}`)
+          }
         }
       }
     })

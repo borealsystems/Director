@@ -76,9 +76,8 @@ const initGQLClient = (address, https) => {
         log('error', 'link/network/graphql', result.error)
       }
       if (result.data && streamDecks.find(sd => sd.config.serial === result.data.controller.serial)) {
-        log('info', 'link/network/graphql', result.data.controller.id)
         streamDecks[findIndex(streamDecks, (streamdeck) => streamdeck.config.serial === result.data.controller.serial)].config = result.data.controller
-        updateStreamdecks({ type: 'update', force: true, controller: result.data.controller.serial })
+        updateStreamdecks({ type: 'update', force: true, serial: result.data.controller.serial })
       }
     })
   )

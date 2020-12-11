@@ -73,7 +73,7 @@ const deleteStack = (_id) => {
   })
 }
 
-const executeStack = (_id) => {
+const executeStack = (_id, _controller) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
       .then(stack => {
@@ -83,7 +83,7 @@ const executeStack = (_id) => {
           action.parameters.map(param => { params[param.id] = param.value })
           if (deviceInstance[action.device.id]) {
             actionTimeouts.add(() => {
-              deviceInstance[action.device.id].interface({ ...action, parameters: params })
+              deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: _controller })
             }, action.delay ?? 0)
           } else {
             log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)

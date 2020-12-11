@@ -2,22 +2,21 @@ import { director } from '../../network/graphql'
 import buttonLUT from './buttonLUT'
 import log from '../../utils/log'
 
-const executeStackMutationGQL = `mutation executeStack($id: String) {
-  executeStack(id: $id)
+const executeStackMutationGQL = `mutation executeStack($id: String, $controller: String) {
+  executeStack(id: $id, controller: $controller)
 }`
 
 const handleButtonPress = (device, index) => {
   // Totally readable, goes through LUT and translates the button ID for the specified device to the row/column IDs, and then returns the stack ID from the panel
   const stack = device.config.panel.buttons[buttonLUT[device.config.manufacturer][device.config.model].reverse[index].row][buttonLUT[device.config.manufacturer][device.config.model].reverse[index].column].stack
   if (stack !== null) {
-    log('info', 'link/streamdeck/handleButtonPress', `Executing Stack ${stack.id} (${stack.label})`)
-    director.query(executeStackMutationGQL, { id: stack.id })
+    director.query(executeStackMutationGQL, { id: stack.id, controller: `${device.config.manufacturer}-${device.config.model}-${device.config.serial}` })
       .toPromise()
       .then(result => {
         if (result.error) {
-          log('info', 'core/lib/stacks', result.error)
+          log('info', 'link/streamdeck/handleButtonPress', result.error)
         } else {
-          log('info', 'core/lib/stacks', result.data.executeStack)
+          log('info', 'link/streamdeck/handleButtonPress', `Executed Stack ${stack.id} (${stack.label})`)
         }
       })
   }
