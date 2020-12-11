@@ -213,7 +213,7 @@ const Panel = ({ id, result }) => {
                     direction='top'
                     selectedItem={panel.currentButton.stack ?? ''}
                     items={result.data.stacks}
-                    itemToString={(item) => (item ? `${item.label}  |  ${item.panelLabel}` : null)}
+                    itemToString={(item) => (item ? `${item.label}  ${item.panelLabel ? `|  ${item.panelLabel}` : ''}` : null)}
                     onChange={(stack) => {
                       const panelIntermediate = { ...panel }
                       panelIntermediate.buttons[panel.currentButton.row][panel.currentButton.column].stack = stack.selectedItem
