@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from 'urql'
 import omit from 'lodash/omit'
@@ -12,8 +12,10 @@ import {
 } from 'carbon-components-react'
 
 import { updateRealmMutationGQL } from './realmQueries'
+import globalContext from '../../globalContext'
 
 const RealmModal = ({ realmData, render, updateRealmsQuery }) => {
+  const { contextRealm, setContextRealm } = useContext(globalContext)
   const [realm, setRealm] = useState({ ...realmData })
   const [realmModalSubmitting, setRealmModalSubitting] = useState(false)
   const [realmModalVisible, setRealmModalVisible] = useState(false)
@@ -29,6 +31,7 @@ const RealmModal = ({ realmData, render, updateRealmsQuery }) => {
         setRealmModalSubitting(false)
         if (!response.error) {
           updateRealmsQuery()
+          if (contextRealm.id === realm.id) setContextRealm({ ...contextRealm, ...realmUpdateObject })
           setRealmModalVisible(false)
         }
       })

@@ -30,7 +30,7 @@ import RealmModal from './RealmModal.jsx'
 const Realms = ({ updateRealmsQuery }) => {
   const { contextRealm, setContextRealm } = useContext(globalContext)
   const [newRealmModalVisible, setNewRealmModalVisible] = useState(false)
-  const [newRealmModalSubitting, setNewRealmModalSubitting] = useState(false)
+  const [newRealmModalSubmitting, setnewRealmModalSubmitting] = useState(false)
   const [newRealm, setNewRealm] = useState({})
 
   const [newRealmMutationResult, newRealmMutation] = useMutation(createRealmMutationGQL)
@@ -44,18 +44,16 @@ const Realms = ({ updateRealmsQuery }) => {
   const realmIDIsDuplicate = result.data?.realms.find(realm => realm.id === newRealm.id)
   const realmLabelIsDuplicate = result.data?.realms.find(realm => realm.label === newRealm.label)
 
-  if (contextRealm.id !== 'ROOT') setContextRealm({ ...contextRealm, id: 'ROOT' })
-
   const closeNewRealmModal = () => {
     setNewRealmModalVisible(false)
     setNewRealm({})
   }
 
   const submitAndCloseRealm = () => {
-    setNewRealmModalSubitting(true)
+    setnewRealmModalSubmitting(true)
     newRealmMutation({ realm: { ...newRealm, coreID: contextRealm.coreID } })
       .then((response) => {
-        setNewRealmModalSubitting(false)
+        setnewRealmModalSubmitting(false)
         if (!response.error) {
           updateRealmsQuery()
           closeNewRealmModal()
@@ -72,8 +70,8 @@ const Realms = ({ updateRealmsQuery }) => {
           hasForm
           selectorPrimaryFocus='#realmID'
           modalHeading={'New Realm'}
-          primaryButtonText={newRealmModalSubitting ? <>Submitting<InlineLoading/></> : 'Create'}
-          primaryButtonDisabled={newRealmModalSubitting || realmIDIsDuplicate || !newRealm.id || !newRealm.label}
+          primaryButtonText={newRealmModalSubmitting ? <>Submitting<InlineLoading/></> : 'Create'}
+          primaryButtonDisabled={newRealmModalSubmitting || realmIDIsDuplicate || !newRealm.id || !newRealm.label}
           secondaryButtonText='Cancel'
           open={newRealmModalVisible}
           onRequestClose={closeNewRealmModal}
@@ -165,7 +163,7 @@ const Realms = ({ updateRealmsQuery }) => {
                       </TableHeader>
                     ))}
                     <TableHeader>
-                      Modify
+                      Edit
                     </TableHeader>
                   </TableRow>
                 </TableHead>
@@ -209,6 +207,7 @@ const Realms = ({ updateRealmsQuery }) => {
                                   if (!res.error) {
                                     reexecute()
                                     updateRealmsQuery()
+                                    if (contextRealm.id === row.cells[0].value) setContextRealm({ ...contextRealm, id: rows[0].cells[0].value, label: rows[0].cells[3].value })
                                     resolve(true)
                                   } else reject(res.error)
                                 })

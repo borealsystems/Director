@@ -150,7 +150,7 @@ const Core = ({ updateAndSetRealm }) => {
                 kind='primary'
                 onClick={() => {
                   coreMutation({ core: coreConfig })
-                    .then(() => updateAndSetRealm({ core: { id: coreConfig.id, label: coreConfig.label } }))
+                    .then(() => updateAndSetRealm({ coreID: coreConfig.id, coreLabel: coreConfig.label }))
                 }}>
                 Update
               </Button>
