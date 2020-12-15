@@ -3,7 +3,7 @@ import { updateController, deleteController } from '../../controllers'
 import { updateDevice, deleteDevice, disableDevice, enableDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
 import { updateStack, duplicateStack, deleteStack, executeStack } from '../../stacks'
-import { cores } from '../../db'
+import { controllers, cores, devices, panels, stacks } from '../../db'
 
 import {
   GraphQLObjectType,
@@ -285,6 +285,10 @@ const mutations = new GraphQLObjectType({
       },
       resolve: (parent, args) => {
         return new Promise((resolve, reject) => {
+          devices.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
+          stacks.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
+          panels.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
+          controllers.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
           cores.updateOne(
             { id: args.realm.coreID },
             { $pull: { realms: { id: args.realm.id } } }
