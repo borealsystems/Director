@@ -26,9 +26,9 @@ function printHeader {
 }
 
 function startup {
-  cd /var/BorealSystems/Director
+  cd /opt/BorealSystems/Director
   if [[ $OS = MACOS ]]; then
-    TZ=$(readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##') docker-compose up -d
+    TZ=$(readlink /etc/localtime | sed 's#/opt/db/timezone/zoneinfo/##') docker-compose up -d
   else
     TZ=$(cat /etc/timezone) docker-compose up -d
   fi
@@ -36,9 +36,9 @@ function startup {
 
 function shutdown {
   echo ""
-  cd /var/BorealSystems/Director
+  cd /opt/BorealSystems/Director
   if [[ $OS = MACOS ]]; then
-    TZ=$(readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##') docker-compose down
+    TZ=$(readlink /etc/localtime | sed 's#/opt/db/timezone/zoneinfo/##') docker-compose down
   else
     TZ=$(cat /etc/timezone) docker-compose down
   fi
@@ -96,8 +96,8 @@ elif [ $1 = 'install' ]; then # Handle Installs
     echo ""
     exit
   fi
-  if [ -f '/var/BorealSystems/Director/version' ]; then
-    previousversion=$(</var/BorealSystems/Director/version)
+  if [ -f '/opt/BorealSystems/Director/version' ]; then
+    previousversion=$(</opt/BorealSystems/Director/version)
   else 
     previousversion=$2
   fi
@@ -112,7 +112,7 @@ elif [ $1 = 'install' ]; then # Handle Installs
         echo -e "${BOLD}Installing directorctl${NC}"
         sudo curl -s https://get.boreal.systems/director -o /bin/directorctl
         sudo chmod +x /bin/directorctl
-        cd /var
+        cd /opt
         sudo mkdir BorealSystems > /dev/null
         cd BorealSystems
         sudo mkdir Director > /dev/null
@@ -175,7 +175,7 @@ elif [ $1 = 'restart' ]; then # Handle Restart
   echo ""
   if [[ $REPLY =~ ^[Yy]$ ]] # If yes
   then
-    cd /var/BorealSystems/Director
+    cd /opt/BorealSystems/Director
     echo -e "${BOLD}Restarting Director${NC}" 
     echo ""
     docker-compose restart
@@ -190,7 +190,7 @@ elif [ $1 = 'update' ]; then # Handle Update
   read -p "Are you sure you want to update Director? This will disconnect all sessions and devices for several minutes [y/N] " -n 1 -r # Confirm restart
   if [[ $REPLY =~ ^[Yy]$ ]] # If yes
   then
-    cd /var/BorealSystems/Director
+    cd /opt/BorealSystems/Director
     version=$(<version)
     echo ""
     echo -e "${BOLD}Updating to latest $version release${NC}" 
@@ -222,11 +222,11 @@ elif [ $1 = 'uninstall' ]; then # Handle Uninstall
     PURGE=true
     echo -e "Are you sure you want to completely uninstall Director? This will remove all Director containers, images, ${RED}and database content${NC}."
   else
-    echo "Are you sure you want to completely uninstall Director? This will remove all Director containers and images, but will leave the database files in place in /var/BorealSystems/Director."
+    echo "Are you sure you want to completely uninstall Director? This will remove all Director containers and images, but will leave the database files in place in /opt/BorealSystems/Director."
   fi
   read -p "[y/N] " -n 1 -r # Confirm Uninstall
   if [[ $REPLY =~ ^[Yy]$ ]]; then # Confirmed
-    cd /var/BorealSystems/Director
+    cd /opt/BorealSystems/Director
     version=$(<version)
     echo ""
     echo -e "${RED}Uninstalling BorealSystems Director${NC}" 
@@ -248,7 +248,7 @@ elif [ $1 = 'uninstall' ]; then # Handle Uninstall
         echo -e "${BOLD}Removing database (requires sudo)${NC}" 
         sudo rm -rf ./database
         echo ""
-        sudo rm -rf /var/BorealSystems/Director
+        sudo rm -rf /opt/BorealSystems/Director
       fi
       echo -e "${BOLD}Director has been uninstalled [${GREEN}✔${NC}]${NC}" 
       echo ""
@@ -271,7 +271,7 @@ elif [ $1 = 'status' ]; then # Handle Status
 
 elif [ $1 = 'backup' ]; then # Handle DB Backup
   echo -e "Backing up Director database"
-  cp -r /var/BorealSystems/Director/database .
+  cp -r /opt/BorealSystems/Director/database .
   sudo chmod -R 777 ./database
   zip -r DirectorDB_$(date +"%Y-%m-%d") ./database > /dev/null
   rm -rf ./database
@@ -324,7 +324,7 @@ elif [ $1 = 'help' ]; then # Handle help
   printhelp
 
 elif [ $1 = 'logs' ]; then # Handle Logs
-  less +G /var/BorealSystems/Director/logs.txt
+  less +G /opt/BorealSystems/Director/logs.txt
 
 else 
   printhelp
