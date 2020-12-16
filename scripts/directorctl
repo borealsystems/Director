@@ -1,5 +1,5 @@
-#! /bin/bash
-VERSION=1.3.2
+#! /usr/local/bin/bash
+VERSION=1.3.4
 # Oliver Herrmann <oliver@boreal.systems>
 
 # TERMINAL CONTROL CHARS
@@ -110,8 +110,8 @@ elif [ $1 = 'install' ]; then # Handle Installs
         echo ""
         sudo echo "Authenticated"
         echo -e "${BOLD}Installing directorctl${NC}"
-        sudo curl -s https://get.boreal.systems/director -o /bin/directorctl
-        sudo chmod +x /bin/directorctl
+        sudo curl -s https://get.boreal.systems/director -o /usr/local/bin/directorctl
+        sudo chmod +x /usr/local/bin/directorctl
         cd /opt
         sudo mkdir BorealSystems > /dev/null
         cd BorealSystems
@@ -205,8 +205,8 @@ elif [ $1 = 'update' ]; then # Handle Update
       docker-compose up -d
       echo ""
       echo -e "${BOLD}Installing directorctl${NC}"
-      sudo curl -s https://get.boreal.systems/director -o /bin/directorctl
-      sudo chmod +x /bin/directorctl
+      sudo curl -s https://get.boreal.systems/director -o /usr/local/bin/directorctl
+      sudo chmod +x /usr/local/bin/directorctl
       echo ""
       echo -e "${BOLD}Update Complete [${GREEN}✔${NC}]${NC}" 
       echo ""
