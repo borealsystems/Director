@@ -37,11 +37,7 @@ const ShotboxPanelWrapper = ({ inline, match: { params: { id } } }) => {
     return <Loading />
   }
   if (panel.id) {
-    return (
-      <>
-        <ShotboxPanel inline={inline} panel={panel} />
-      </>
-    )
+    return <ShotboxPanel inline={inline} panel={panel} />
   }
 }
 

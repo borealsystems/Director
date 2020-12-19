@@ -77,7 +77,7 @@ const Shotbox = () => {
             { panel.id &&
               <>
                 <Row>
-                  <Column>
+                  <Column style={{ padding: 0, marginLeft: '1em', marginRight: '1em' }}>
                     <br/><br/>
                     <ShotboxPanelWrapper inline={true} match={{ params: { id: panel.id } }} />
                   </Column>
@@ -112,7 +112,7 @@ const Shotbox = () => {
             { controller.id &&
               <>
                 <Row>
-                  <Column>
+                  <Column style={{ padding: 0, marginLeft: '1em', marginRight: '1em' }}>
                     <br/><br/>
                     <ShotboxControllerWrapper inline={true} match={{ params: { id: controller.id } }} />
                   </Column>

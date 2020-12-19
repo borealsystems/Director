@@ -16,38 +16,42 @@ const ShotboxPanel = ({ inline, panel }) => {
     executeStack(id: $executeID)
   }`
 
-  // eslint-disable-next-line no-unused-vars
-  var [executeStackMutationResult, executeStackMutation] = useMutation(executeStackMutationGQL)
+  var [, executeStackMutation] = useMutation(executeStackMutationGQL)
   return (
-    <Grid style={{ width: '100%' }} condensed>
+    <Grid style={{ width: '100%', margin: 0, padding: 0 }} condensed>
       { !inline &&
-        <Row>
+        <Row style={{ marginLeft: '0.1em' }}>
           <Column>
             <h1>{panel.label}</h1>
             <br/><br/>
           </Column>
         </Row>
       }
-      { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
-        return (
-          <Row key={rowIndex}>
-            { row.map((button, buttonIndex) => (
-              <Column key={buttonIndex}>
-                <Button onClick={() => {
-                  executeStackMutation({ executeID: button.stack.id })
-                }} style={{ minWidth: '10px', maxWidth: '50em', padding: '10px', width: '100%', height: '8em', display: 'table' }} size='default' { ...getEnabledProps(button) }>
-                  <>
-                    <h5>{button.stack?.id ? button.stack.panelLabel ? button.stack.panelLabel : button.stack.label : ' '}</h5>
-                    {button.stack?.id ? button.stack.panelLabel ? button.stack.label : ' ' : ' '}<br/>
-                    {button.stack?.id ? `ID: ${button.stack.id}` : ' '}
-                  </>
-                </Button>
-              </Column>
-            ))
-            }
-          </Row>
-        )
-      })}
+      <div style={{ overflow: 'auto' }}>
+        { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
+          return (
+            <Row key={rowIndex} style={{ flexWrap: 'nowrap', margin: 0, padding: 0 }}>
+              { row.map((button, buttonIndex) => (
+                <Column key={buttonIndex} style={{ minWidth: `${88 / row.length}em` }}>
+                  <Button
+                    onClick={() => {
+                      executeStackMutation({ executeID: button.stack.id })
+                    }}
+                    style={{ width: '100%', maxWidth: '100%', height: '6em' }}
+                    size='default'
+                    { ...getEnabledProps(button) }
+                  >
+                    <>
+                      <h5>{button.stack?.id ? button.stack.panelLabel ? button.stack.panelLabel : button.stack.label : ' '}</h5>
+                    </>
+                  </Button>
+                </Column>
+              ))
+              }
+            </Row>
+          )
+        })}
+      </div>
       <br/>
     </Grid>
   )

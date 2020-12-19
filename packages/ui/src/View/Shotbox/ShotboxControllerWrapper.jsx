@@ -50,7 +50,7 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
       <>
         { !inline &&
           <>
-            <strong style={{ marginLeft: '2em' }}>Virtual Controller: {controller.label}</strong>
+            <strong>Controller: {controller.label}</strong>
             <br/><br/>
           </>
         }
@@ -72,7 +72,7 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
         }}
         caption='Please contact your system administrator if this is unexpected'
         timeout={0}
-        title='There is no panel Mapped to this Controller'
+        title='There is no Panel mapped to this Controller'
       />
     )
   }
