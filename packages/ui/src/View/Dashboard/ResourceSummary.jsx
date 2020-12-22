@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { useQuery } from 'urql'
 import { InlineLoading } from 'carbon-components-react'
-import { DataBase16, FolderDetails16, Application16, ResearchHintonPlot16 } from '@carbon/icons-react'
+import { DataBase16, FolderDetails16, Application16, Apps16 } from '@carbon/icons-react'
 import GraphQLError from '../components/GraphQLError.jsx'
 import globalContext from '../../globalContext'
 
@@ -28,7 +28,7 @@ const ResourceSummary = () => {
         <DataBase16 { ...offsetProp }/> {result.data.devices.length} Device{result.data.devices.length !== 1 ? 's' : ''}<br/>
         <FolderDetails16 { ...offsetProp }/> {result.data.stacks.length} Stack{result.data.stacks.length !== 1 ? 's' : ''}<br/>
         <Application16 { ...offsetProp }/> {result.data.panels.length} Panel{result.data.panels.length !== 1 ? 's' : ''}<br/>
-        <ResearchHintonPlot16 { ...offsetProp }/> {result.data.controllers.length} Controller{result.data.controllers.length !== 1 ? 's' : ''}<br/>
+        <Apps16 { ...offsetProp }/> {result.data.controllers.length} Controller{result.data.controllers.length !== 1 ? 's' : ''}<br/>
       </>
     )
   }
