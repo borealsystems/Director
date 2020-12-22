@@ -15,18 +15,23 @@ const Status = () => {
   if (result.fetching) return <InlineLoading />
   if (result.data) {
     return (
-      <ToastNotification
-        style={{ height: '24em', width: '26em', marginRight: 0 }}
-        subtitle=''
-        hideCloseButton={true}
-        kind={result.data.status[0]}
-        lowContrast
-        notificationType='toast'
-        role='alert'
-        caption={result.data.status[2]}
-        timeout={0}
-        title={result.data.status[1]}
-      />
+      <>
+        <h5>{result.data.status[1]}</h5>
+        <br/>
+        {result.data.status[2]}
+      </>
+      // <ToastNotification
+      //   style={{ width: '100%', marginRight: 0 }}
+      //   subtitle=''
+      //   hideCloseButton={true}
+      //   kind={result.data.status[0]}
+      //   lowContrast
+      //   notificationType='toast'
+      //   role='alert'
+      //   caption={result.data.status[2]}
+      //   timeout={0}
+      //   title={result.data.status[1]}
+      // />
     )
   }
 }

@@ -1,3 +1,7 @@
+.bx--number {
+  width: 100%
+}
+
 .coreSelect {
   width: 25em !important;
   height: 3.35em !important;
@@ -23,12 +27,12 @@
   margin-bottom: 0.4em;
 }
 
-.bx--number {
-  width: 100%
-}
-
 .dx--dashboard-logs .bx--data-table-content {
   overflow-x: clip !important;
+}
+
+.dx--table-empty {
+  height: 88vh;
 }
 
 .dx--light {
@@ -67,7 +71,33 @@
   }
 }
 
+.dx--content {
+  max-width: 100% !important;
+  margin-right: 2em !important;
+  margin-left: 20em !important;
+}
+
 .bx--modal {
+  margin-left: 18em !important;
   height: 100% !important;
-  width: 100% !important;
+  width: 86.2% !important;
+}
+
+.bx--modal.is-visible {
+  width: 87.2% !important;
+}
+
+@media only screen and (max-width: 1055px) {
+  .dx--content {
+    max-width: 100% !important;
+    margin-right: -1em !important;
+    margin-left: 2em !important;
+    transition: margin-left 0.1s ease-in-out, margin-right 0.1s ease-in-out;
+  }
+  
+  .bx--modal {
+    margin-left: 3em !important;
+    height: 100% !important;
+    width: 96% !important;
+  }
 }

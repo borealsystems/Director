@@ -86,10 +86,9 @@ const BorealDirector = () => {
 
   const matchShotbox = useRouteMatch('/cores/:core/realms/:realm/control/shotbox/:id')
   const matchRoot = useRouteMatch({ path: '/', exact: true })
-  const matchDashboard = useRouteMatch({ path: '/cores/:core/realms/:realm/', exact: true, strict: true })
 
   const showSidebar = isAuthenticated && result.data && !matchShotbox && !matchRoot && contextRealm.coreID
-  const fullWidth = matchDashboard || matchRoot
+  const fullWidth = matchRoot
   const showTopRealmSelect = result.data && contextRealm.id && result.data?.realms.length > 0 && !matchRoot && !matchShotbox
   const disableTopRealmSelect = useRouteMatch({ path: '/cores/:core/realms', exact: true, strict: true })
 
@@ -148,13 +147,13 @@ const BorealDirector = () => {
                   </>
                 }
               </HeaderGlobalBar>
-              { showSidebar && <SidebarNav/> }
+              { showSidebar && <SidebarNav onClick={onClickSideNavExpand} isActive={isSideNavExpanded}/> }
             </Header>
             <Content id='main-content' style={{ height: 'calc(100vh - 3.4em)' }}>
               { result.error && <GraphQLError error={result.error} />}
               { result.loading && <Loading /> }
               <Suspense fallback={<Loading/>} >
-                <Grid style={{ maxWidth: fullWidth ? '200rem' : '88rem' }}>
+                <Grid className='dx--content'>
                   <Row>
                     <Column>
                       <ErrorBoundary fallback={<ReactError />}>

@@ -12,15 +12,22 @@ const Dashboard = () => {
   const { contextRealm } = useContext(globalContext)
   const tileHeight = '415px'
   return (
-    <Grid style={{ maxWidth: '200rem' }}>
-      <span style={{ display: 'inline-block', height: '1rem' }}>&nbsp;</span>
+    <Grid style={{ margin: 0, padding: 0 }}>
       <Row>
-        <Column lg={{ span: 6 }}>
+        <Column lg={{ span: 8 }} style={{ marginBottom: '2em' }}>
           <Tile style={{ height: tileHeight }}>
             <Notes />
           </Tile>
         </Column>
-        <Column>
+        <Column lg={{ span: 4 }} sm={{ span: 2 }} style={{ marginBottom: '2em' }}>
+          <Tile style={{ height: tileHeight }}>
+            <Status />
+            <br/><br/>
+            <h5>Resource summary</h5>
+            <ResourceSummary/>
+          </Tile>
+        </Column>
+        <Column lg={{ span: 4 }} sm={{ span: 2 }} style={{ marginBottom: '2em' }}>
           <Tile style={{ height: tileHeight }}>
             <h5>Quick Links</h5><br/>
             <ul>
@@ -39,27 +46,12 @@ const Dashboard = () => {
             </ul>
           </Tile>
         </Column>
-        <Column>
-          <Tile style={{ height: tileHeight }}>
-            <h5>Resource summary</h5>
-            <ResourceSummary/>
-          </Tile>
-        </Column>
-      </Row>
-      <span style={{ display: 'inline-block', height: '2rem' }}>&nbsp;</span>
-      <Row>
-        <Column>
-          <Tile style={{ height: tileHeight }}>
-            <h5>System Status</h5>
-            <Status />
-          </Tile>
-        </Column>
-        <Column lg={{ span: 6 }}>
+        <Column lg={{ span: 8 }} style={{ marginBottom: '2em' }}>
           <Tile style={{ height: tileHeight, overflow: 'hidden' }}>
             <Logs />
           </Tile>
         </Column>
-        <Column>
+        {/* <Column>
           <Tile style={{ height: tileHeight }}>
             <h5>About Director</h5><br/>
             <p>
@@ -71,7 +63,7 @@ const Dashboard = () => {
               <br/><br/> Thank you for using Director.
             </p>
           </Tile>
-        </Column>
+        </Column> */}
       </Row>
     </Grid>
   )
