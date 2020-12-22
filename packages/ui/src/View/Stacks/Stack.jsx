@@ -202,7 +202,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
           </Accordion>
           <br/>
           { newActionVisibility &&
-            <div style={{ marginLeft: '7.5em', marginRight: '1em' }}>
+            <div>
               New Action
               <Padding size={5}/>
               <Action new index={actions.length + 1} delete={deleteAction} setActions={setActionsProxy} providers={providers} devices={devices}></Action>
@@ -232,6 +232,7 @@ const Stack = ({ id, _stack, providers, devices }) => {
           </ButtonSet>
         </Column>
       </Row>
+      <Row style={{ marginBottom: '5em' }}/>
     </Grid>
   )
 }
