@@ -20,7 +20,7 @@ const ProviderTile = ({ providerDescription, onClick, currentDevice, disabled })
             </Row>
             <br/>
             <Row>
-              <Column style={{ marginLeft: '-1em' }}>
+              <Column style={{ marginLeft: '-1em', height: '8em', overflow: 'auto' }}>
                 {providerDescription.description}
               </Column>
             </Row>

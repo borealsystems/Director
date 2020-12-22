@@ -165,7 +165,7 @@ const Device = ({ id, result }) => {
               <Row
                 style={{
                   maxHeight: '55vh',
-                  overflowY: 'scroll',
+                  overflowY: 'auto',
                   marginRight: '-2.2em'
                 }}
               >
@@ -328,6 +328,7 @@ const Device = ({ id, result }) => {
               </ButtonSet>
             </Column>
           </Row>
+          <Row style={{ marginBottom: '5em' }}/>
         </Grid>
       </Form>
     )
