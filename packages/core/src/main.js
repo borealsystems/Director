@@ -1,6 +1,6 @@
 import { initDevices, cleanupDevices } from './devices'
 import { initProviders } from './providers'
-import { initApollo } from './network/apollo'
+import { initApollo, initRossTalk} from './network'
 import { initBridges } from './bridges'
 import { initDB, cores, devices } from './db'
 import STATUS from './utils/statusEnum'
@@ -10,6 +10,7 @@ import fs from 'fs'
 require('dotenv').config()
 
 initApollo()
+initRossTalk()
 initBridges()
 initDB()
   .then(() => {
