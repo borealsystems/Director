@@ -14,8 +14,8 @@ const initApollo = () => {
   })
 
   apollo.listen({ port: port }).then(({ url, subscriptionsUrl }) => {
-    log('info', 'core/lib/network/apollo', `Apollo 🚀 Server ready at ${url}`)
-    log('info', 'core/lib/network/apollo', `🚀 Subscriptions ready at ${subscriptionsUrl}`)
+    log('info', 'core/network/apollo', `Apollo 🚀 Server ready at ${url}`)
+    log('info', 'core/network/apollo', `🚀 Subscriptions ready at ${subscriptionsUrl}`)
   })
 }
 

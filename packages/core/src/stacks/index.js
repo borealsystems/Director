@@ -25,7 +25,7 @@ const updateStack = (_stack) => {
         return stacks.findOne({ id: id })
       })
       .then(stack => {
-        log('info', 'core/lib/stacks', `${_stack.id ? 'Updated' : 'Created'} ${stack.id} (${stack.label})`)
+        log('info', 'core/stacks', `${_stack.id ? 'Updated' : 'Created'} ${stack.id} (${stack.label})`)
         stackWaterfall(stack)
         resolve(stack)
       })
@@ -65,7 +65,7 @@ const deleteStack = (_id) => {
         return stack
       })
       .then(stack => {
-        log('info', 'core/lib/stacks', `Deleted Stack ${stack.id} (${stack.label})`)
+        log('info', 'core/stacks', `Deleted Stack ${stack.id} (${stack.label})`)
         stackWaterfall(stack, true)
         resolve(status.OK)
       })
@@ -77,9 +77,9 @@ const executeStack = (_id, _controller) => {
   return new Promise((resolve, reject) => {
     stacks.findOne({ id: _id })
       .then(stack => {
-        if (_controller === 'RossTalk') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) via RossTalk`) }
-        else if (_controller === 'Shotbox') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) via Shotbox`) }
-        else { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`) }
+        if (_controller === 'RossTalk') { log('info', 'core/stacks', `Executing Stack ${stack.id} (${stack.label}) via RossTalk`) }
+        else if (_controller === 'Shotbox') { log('info', 'core/stacks', `Executing Stack ${stack.id} (${stack.label}) via Shotbox`) }
+        else { log('info', 'core/stacks', `Executing Stack ${stack.id} (${stack.label})`) }
         stack.actions.map((action, index) => {
           const params = {}
           action.parameters.map(param => { params[param.id] = param.value })
@@ -88,7 +88,7 @@ const executeStack = (_id, _controller) => {
               deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: _controller })
             }, action.delay ?? 0)
           } else {
-            log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
+            log('warn', 'core/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
           }
         })
         resolve(status.OK)

@@ -7,12 +7,12 @@ const port = 7788
 
 const initRossTalk = () => new Promise(resolve => {
   server.listen(port, () => {
-    log('info', 'core/lib/network/rosstalk', `🚀 RossTalk Server ready at tcp://0.0.0.0:${port}`)
+    log('info', 'core/network/rosstalk', `🚀 RossTalk Server ready at tcp://0.0.0.0:${port}`)
     resolve()
   })
 
   server.on('error', err => {
-    log('error', 'core/lib/network/rosstalk', err)
+    log('error', 'core/network/rosstalk', err)
   })
 
   server.on('connection', (socket) => {

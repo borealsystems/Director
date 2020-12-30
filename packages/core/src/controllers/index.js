@@ -22,7 +22,7 @@ const registerController = (_controller) => {
       { upsert: true }
     )
       .then(() => {
-        log('info', 'core/lib/controllers', `Registered ${id}`)
+        log('info', 'core/controllers', `Registered ${id}`)
         resolve(controllers.findOne({ id: id }))
       })
       .catch(e => reject(e))
@@ -52,7 +52,7 @@ const updateController = (_controller) => {
         return controllers.findOne({ id: id })
       })
       .then((controller) => {
-        log('info', 'core/lib/controllers', _controller.id ? `Updated ${id}` : `Created ${id}`)
+        log('info', 'core/controllers', _controller.id ? `Updated ${id}` : `Created ${id}`)
         pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
       })
       .catch(e => reject(e))
@@ -61,7 +61,7 @@ const updateController = (_controller) => {
 
 const deleteController = id => new Promise((resolve, reject) => {
   controllers.deleteOne({ id: id })
-  log('info', 'core/lib/controllers', `Deleted Controller ${id}`)
+  log('info', 'core/controllers', `Deleted Controller ${id}`)
   resolve(STATUS.OK)
 })
 

@@ -8,7 +8,7 @@ const deviceInstance = {}
 
 const initDevices = () => {
   return new Promise((resolve, reject) => {
-    log('info', 'core/lib/devices', 'Loading Devices')
+    log('info', 'core/devices', 'Loading Devices')
     devices.find({ core: process.env.DIRECTOR_CORE_ID }).forEach(device => {
       instantiateDevice(device.id)
     })
@@ -44,7 +44,7 @@ const updateDevice = (_device) => {
       })
       .then(device => {
         instantiateDevice(device.id)
-        log('info', 'core/lib/devices', `Updated ${device.id} (${device.label})`)
+        log('info', 'core/devices', `Updated ${device.id} (${device.label})`)
         resolve(device)
       })
       .catch(e => reject(e))
@@ -65,34 +65,34 @@ const instantiateDevice = (_id) => {
         deviceInstance[_id] = new provider.constructor({ ...device, configuration: configuration })
         deviceInstance[_id].init()
       }
-      log('info', 'core/lib/devices', `Loaded ${_id} (${device.label}) with ${provider.label}`)
+      log('info', 'core/devices', `Loaded ${_id} (${device.label}) with ${provider.label}`)
     } else {
-      log('info', 'core/lib/devices', `${_id} (${device.label}) is disabled, skipping initialisation`)
+      log('info', 'core/devices', `${_id} (${device.label}) is disabled, skipping initialisation`)
     }
   })
 }
 
 const deleteDevice = (_id) => {
   if (_id.match(/CORE-/)) {
-    log('info', 'core/lib/devices', 'You Can\'t Delete Director from Director!')
+    log('info', 'core/devices', 'You Can\'t Delete Director from Director!')
     return 'error'
   } else if (deviceInstance[_id]) {
     deviceInstance[_id].destroy()
     delete deviceInstance[_id]
     devices.deleteOne({ id: _id })
-    log('info', 'core/lib/devices', `Deleted Device ${_id}`)
+    log('info', 'core/devices', `Deleted Device ${_id}`)
     return STATUS.OK
   } else {
     devices.deleteOne({ id: _id })
-    log('info', 'core/lib/devices', `Deleted Device ${_id}`)
+    log('info', 'core/devices', `Deleted Device ${_id}`)
     return STATUS.OK
   }
 }
 
 const enableDevice = _id => new Promise((resolve, reject) => {
-  log('info', 'core/lib/devices', `Enabling ${_id}`)
+  log('info', 'core/devices', `Enabling ${_id}`)
   if (_id.match(/CORE-/)) {
-    log('info', 'core/lib/devices', 'You Can\'t Enable Director!')
+    log('info', 'core/devices', 'You Can\'t Enable Director!')
     reject(new Error('Cannot Enable Director'))
   } else {
     devices.updateOne(
@@ -110,9 +110,9 @@ const enableDevice = _id => new Promise((resolve, reject) => {
 })
 
 const disableDevice = _id => new Promise((resolve, reject) => {
-  log('info', 'core/lib/devices', `Disabling ${_id}`)
+  log('info', 'core/devices', `Disabling ${_id}`)
   if (_id.match(/CORE-/)) {
-    log('info', 'core/lib/devices', 'You Can\'t Disable Director!')
+    log('info', 'core/devices', 'You Can\'t Disable Director!')
     reject(new Error('Cannot Disable Director'))
   } else {
     devices.updateOne(

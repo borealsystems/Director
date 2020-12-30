@@ -34,7 +34,7 @@ const stackWaterfall = (stack, isDelete) => {
                   return panels.findOne({ id: panel.id })
                 })
                 .then(panel => {
-                  log('info', 'core/lib/panels', `Updating ${panel.id} (${panel.label})`)
+                  log('info', 'core/panels', `Updating ${panel.id} (${panel.label})`)
                 })
             }
           })
@@ -58,7 +58,7 @@ const stackWaterfall = (stack, isDelete) => {
             return stacks.findOne({ id: _stack.id })
           })
           .then(stack => {
-            log('info', 'core/lib/panels', `Updated ${stack.id} (${stack.label})`)
+            log('info', 'core/panels', `Updated ${stack.id} (${stack.label})`)
           })
       }
     })
@@ -87,7 +87,7 @@ const stackWaterfall = (stack, isDelete) => {
                   return panels.findOne({ id: panel.id })
                 })
                 .then(panel => {
-                  log('info', 'core/lib/panels', `${!panel.id ? 'Creating' : 'Updating'} ${panel.id} (${panel.label})`)
+                  log('info', 'core/panels', `${!panel.id ? 'Creating' : 'Updating'} ${panel.id} (${panel.label})`)
                 })
             }
           })

@@ -24,7 +24,7 @@ const updatePanel = (_panel) => {
         return panels.findOne({ id: id })
       })
       .then(panel => {
-        log('info', 'core/lib/panels', `${!panel.id ? 'Created' : 'Updated'} ${panel.id} (${panel.label})`)
+        log('info', 'core/panels', `${!panel.id ? 'Created' : 'Updated'} ${panel.id} (${panel.label})`)
         panelWaterfall(panel)
         resolve(panel)
       })
@@ -40,7 +40,7 @@ const deletePanel = (_id) => {
         return panel
       })
       .then(panel => {
-        log('info', 'core/lib/panels', `Deleted panel ${panel.id} (${panel.label})`)
+        log('info', 'core/panels', `Deleted panel ${panel.id} (${panel.label})`)
         panelWaterfall(panel, true)
         resolve(status.OK)
       })

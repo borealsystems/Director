@@ -118,7 +118,7 @@ class ProtocolProviderBorealDirector {
           controllers.findOne({ id: id })
           .then((controller, err) => {
             if (err) {
-              log('error', 'core/lib/controllers', err)
+              log('error', 'core/controllers', err)
             } else {
               controllers.updateOne(
                 { id: controller.id },
@@ -133,13 +133,13 @@ class ProtocolProviderBorealDirector {
             })
             .then(err => {
               if (err) {
-                log('error', 'core/lib/controllers', err)
+                log('error', 'core/controllers', err)
               } else {
                 return controllers.findOne({ id: id })
               }
             })
             .then((controller) => {
-              log('info', 'core/lib/controllers', `Updated ${controller.id} (${controller.label})`)
+              log('info', 'core/controllers', `Updated ${controller.id} (${controller.label})`)
               pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
             })
           }
