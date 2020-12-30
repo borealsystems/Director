@@ -112,7 +112,10 @@ class ProtocolProviderBorealDirector {
       case 'assignControllerPanel':
         // eslint-disable-next-line no-case-declarations
         const id = _action.parameters.controller.id === 'current' ? _action.controller : _action.parameters.controller.id
-        controllers.findOne({ id: id })
+        if (id === 'Shotbox' || id === 'RossTalk') {
+          log('warn', `virtual/device/${this.device.id} (${this.device.label})`, 'Not a controller, Skipping remap')
+        } else {
+          controllers.findOne({ id: id })
           .then((controller, err) => {
             if (err) {
               log('error', 'core/lib/controllers', err)
@@ -125,20 +128,21 @@ class ProtocolProviderBorealDirector {
                   }
                 },
                 { upsert: true }
-              )
-            }
-          })
-          .then(err => {
-            if (err) {
-              log('error', 'core/lib/controllers', err)
-            } else {
-              return controllers.findOne({ id: id })
-            }
-          })
-          .then((controller) => {
-            log('info', 'core/lib/controllers', `Updated ${controller.id}`)
-            pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
-          })
+                )
+              }
+            })
+            .then(err => {
+              if (err) {
+                log('error', 'core/lib/controllers', err)
+              } else {
+                return controllers.findOne({ id: id })
+              }
+            })
+            .then((controller) => {
+              log('info', 'core/lib/controllers', `Updated ${controller.id} (${controller.label})`)
+              pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
+            })
+          }
         break
     }
   }

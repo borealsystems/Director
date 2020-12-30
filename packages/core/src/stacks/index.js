@@ -75,18 +75,17 @@ const deleteStack = (_id) => {
 
 const executeStack = (_id, _controller) => {
   return new Promise((resolve, reject) => {
-    let controller
-    if (_controller !== 'Shotbox' && _controller !== 'RossTalk') { controller = _controller }
     stacks.findOne({ id: _id })
       .then(stack => {
-        if (_controller === 'RossTalk') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) with RossTalk`) }
+        if (_controller === 'RossTalk') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) via RossTalk`) }
+        else if (_controller === 'Shotbox') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) via Shotbox`) }
         else { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`) }
         stack.actions.map((action, index) => {
           const params = {}
           action.parameters.map(param => { params[param.id] = param.value })
           if (deviceInstance[action.device.id]) {
             actionTimeouts.add(() => {
-              deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: controller })
+              deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: _controller })
             }, action.delay ?? 0)
           } else {
             log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
