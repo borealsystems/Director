@@ -50,11 +50,11 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
       <>
         { !inline &&
           <>
-            <strong>Controller: {controller.label}</strong>
+            <strong style={{ marginLeft: inline ? 0 : '-9.7em' }}>Controller: {controller.label}</strong>
             <br/><br/>
           </>
         }
-        <ShotboxPanelWrapper inline={inline} match={{ params: { id: controller.panel.id } }} />
+        <ShotboxPanelWrapper inline={inline} match={{ params: { id: controller.panel.id } }} controller={controller.id} />
       </>
     )
   }

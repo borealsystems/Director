@@ -5,7 +5,7 @@ import { useQuery } from 'urql'
 import ShotboxPanel from './ShotboxPanel.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
 
-const ShotboxPanelWrapper = ({ inline, match: { params: { id } } }) => {
+const ShotboxPanelWrapper = ({ inline, match: { params: { id } }, controller }) => {
   const [panel, setPanel] = useState({})
   const [result] = useQuery({
     query: `query panelData($id: String) {
@@ -37,13 +37,14 @@ const ShotboxPanelWrapper = ({ inline, match: { params: { id } } }) => {
     return <Loading />
   }
   if (panel.id) {
-    return <ShotboxPanel inline={inline} panel={panel} />
+    return <ShotboxPanel inline={inline} panel={panel} controller={controller} />
   }
 }
 
 ShotboxPanelWrapper.propTypes = {
   match: PropTypes.object,
-  inline: PropTypes.bool
+  inline: PropTypes.bool,
+  controller: PropTypes.string
 }
 
 export default ShotboxPanelWrapper

@@ -11,14 +11,14 @@ const getEnabledProps = (button) => {
   }
 }
 
-const ShotboxPanel = ({ inline, panel }) => {
-  const executeStackMutationGQL = `mutation executeStack($executeID: String) {
-    executeStack(id: $executeID)
+const ShotboxPanel = ({ inline, panel, controller }) => {
+  const executeStackMutationGQL = `mutation executeStack($executeID: String, $controller: String) {
+    executeStack(id: $executeID, controller: $controller)
   }`
 
   var [, executeStackMutation] = useMutation(executeStackMutationGQL)
   return (
-    <Grid style={{ width: '100%', margin: 0, padding: 0 }} condensed>
+    <Grid style={{ width: '100%', margin: 0, marginLeft: inline ? 0 : '-10em', padding: 0 }} condensed>
       { !inline &&
         <Row style={{ marginLeft: '0.1em' }}>
           <Column>
@@ -35,7 +35,8 @@ const ShotboxPanel = ({ inline, panel }) => {
                 <Column key={buttonIndex} style={{ minWidth: `${88 / row.length}em` }}>
                   <Button
                     onClick={() => {
-                      executeStackMutation({ executeID: button.stack.id })
+                      console.log(controller)
+                      executeStackMutation({ executeID: button.stack.id, controller: controller ? controller : 'Shotbox' })
                     }}
                     style={{ width: '100%', maxWidth: '100%', height: '6em' }}
                     size='default'
@@ -59,7 +60,8 @@ const ShotboxPanel = ({ inline, panel }) => {
 
 ShotboxPanel.propTypes = {
   panel: PropTypes.object,
-  inline: PropTypes.bool
+  inline: PropTypes.bool,
+  controller: PropTypes.string
 }
 
 export default ShotboxPanel

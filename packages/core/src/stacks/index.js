@@ -1,7 +1,7 @@
 import log from '../utils/log'
 import status from '../utils/statusEnum'
 import shortid from 'shortid'
-import { stacks } from '../db'
+import { stacks, controllers } from '../db'
 import { deviceInstance } from '../devices'
 import { stackWaterfall } from '../utils/waterfall'
 import { actionTimeouts } from '../utils/actionTimeouts'
@@ -75,15 +75,18 @@ const deleteStack = (_id) => {
 
 const executeStack = (_id, _controller) => {
   return new Promise((resolve, reject) => {
+    let controller
+    if (_controller !== 'Shotbox' && _controller !== 'RossTalk') { controller = _controller }
     stacks.findOne({ id: _id })
       .then(stack => {
-        log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`)
+        if (_controller === 'RossTalk') { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label}) with RossTalk`) }
+        else { log('info', 'core/lib/stacks', `Executing Stack ${stack.id} (${stack.label})`) }
         stack.actions.map((action, index) => {
           const params = {}
           action.parameters.map(param => { params[param.id] = param.value })
           if (deviceInstance[action.device.id]) {
             actionTimeouts.add(() => {
-              deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: _controller })
+              deviceInstance[action.device.id].interface({ ...action, parameters: params, controller: controller })
             }, action.delay ?? 0)
           } else {
             log('warn', 'core/lib/stacks', `${stack.id} (${stack.label}) action ${index + 1} failed, ${action.device.id} (${action.device.label}) not initialised`)
