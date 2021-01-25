@@ -47,7 +47,7 @@ const Core = lazy(() => import('./Core/Core.jsx'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard.jsx'))
 const Device = lazy(() => import('./Devices/DeviceWrapper.jsx'))
 const Devices = lazy(() => import('./Devices/Devices.jsx'))
-const Flow = lazy(() => import('./Flow/Flow.jsx'))
+const Executer = lazy(() => import('./Executer/Executer.jsx'))
 const PanelWrapper = lazy(() => import('./Panels/PanelWrapper.jsx'))
 const Panels = lazy(() => import('./Panels/Panels.jsx'))
 const Realms = lazy(() => import('./Realms/Realms.jsx'))
@@ -192,7 +192,7 @@ const BorealDirector = () => {
                               <Route exact path='/cores/:core/realms/:realm/control/shotbox' component={Shotbox} />
                               <Route exact path='/cores/:core/realms/:realm/control/shotbox/controller/:id' component={ShotboxControllerWrapper} />
                               <Route exact path='/cores/:core/realms/:realm/control/shotbox/panel/:id' component={ShotboxPanelWrapper} />
-                              <Route exact path='/cores/:core/realms/:realm/control/flow' component={Flow} />
+                              <Route exact path='/cores/:core/realms/:realm/control/executer' component={Executer} />
                               {/* CORE/REALM */}
                               <Route exact path='/cores/:core/configuration'>
                                 <Core updateAndSetRealm={updateAndSetRealm} />

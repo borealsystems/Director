@@ -97,4 +97,16 @@ const executeStack = (_id, _controller) => {
   })
 }
 
-export { updateStack, duplicateStack, deleteStack, stacks, executeStack }
+const executeAction = _action => new Promise(resolve => {
+  log('info', 'core/stacks', `Executing Action ${_action.providerFunction.label} on ${_action.device.label}`)
+  const params = {}
+  _action.parameters?.map(param => { params[param.id] = param.value })
+  if (deviceInstance[_action.device.id]) {
+    deviceInstance[_action.device.id].interface({ ..._action, parameters: params, controller: null })
+  } else {
+    log('warn', 'core/stacks', `Action ${_action.providerFunction.label} on ${_action.device.label} failed, Device not initialised`)
+  }
+  resolve(status.OK)
+})
+
+export { updateStack, duplicateStack, deleteStack, stacks, executeStack, executeAction }

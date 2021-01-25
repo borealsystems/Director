@@ -2,7 +2,7 @@ import { registerBridge } from '../../bridges'
 import { updateController, deleteController } from '../../controllers'
 import { updateDevice, deleteDevice, disableDevice, enableDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
-import { updateStack, duplicateStack, deleteStack, executeStack } from '../../stacks'
+import { updateStack, duplicateStack, deleteStack, executeStack, executeAction } from '../../stacks'
 import { controllers, cores, devices, panels, stacks } from '../../db'
 
 import {
@@ -22,7 +22,7 @@ import panelType from './panelTypes/panelType'
 import panelUpdateInputType from './panelTypes/panelUpdateInputType'
 import realmInputType from './coreTypes/realmInputType'
 import stackType from './stackTypes/stackType.js'
-import stackUpdateInputType from './stackTypes/stackUpdateInputType'
+import stackUpdateInputType, { actionInputType } from './stackTypes/stackUpdateInputType'
 import STATUS from '../../utils/statusEnum'
 import log from '../../utils/log'
 
@@ -130,6 +130,18 @@ const mutations = new GraphQLObjectType({
       resolve: (p, args) => {
         return executeStack(args.id, args.controller)
       }
+    },
+
+    executeAction: {
+      name: 'Execure Action',
+      description: 'Execute an arbitrary action with parameters outside of a stack context',
+      type: GraphQLString,
+      args: {
+        action: {
+          type: actionInputType
+        }
+      },
+      resolve: (p, args) => executeAction(args.action)
     },
 
     updatePanel: {

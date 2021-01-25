@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Button, Column, ComboBox, Row, TextInput, NumberInput } from 'carbon-components-react'
 import { deviceFunctionQueryGQL } from './queries'
 import { WarningAlt16 } from '@carbon/icons-react'
+import ActionParameter from './ActionParameter.jsx'
 import STATUS from '../statusEnum'
 
 const Action = (props) => {
@@ -156,57 +157,7 @@ const Action = (props) => {
           <Column sm={3}>
             { result.data && action.device && action.providerFunction && result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters?.length > 0 &&
               result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters
-                .map((parameter, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <Row>
-                        { parameter.inputType === 'textInput' &&
-                          <Column>
-                            <TextInput
-                              type='text'
-                              id={parameter.id}
-                              placeholder={parameter.placeholder}
-                              labelText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
-                              value={getParameterValue(parameter.id)}
-                              helperText={parameter.tooltip}
-                              onChange={(e) => { setParameter(e.target.value, parameter.id) }}
-                            />
-                          </Column>
-                        }
-                        { parameter.inputType === 'comboBox' &&
-                          <Column>
-                            <ComboBox
-                              ariaLabel='Dropdown'
-                              id={parameter.id}
-                              titleText={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
-                              helperText={parameter.tooltip}
-                              placeholder={parameter.placeholder}
-                              items={parameter.items}
-                              selectedItem={getParameterValue(parameter.id)}
-                              onChange={(e) => { setParameter(e.selectedItem, parameter.id) }}
-                            />
-                          </Column>
-                        }
-                        { parameter.inputType === 'numberInput' &&
-                          <Column>
-                            <NumberInput
-                              id={parameter.id}
-                              label={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
-                              helperText={parameter.tooltip}
-                              placeholder={parameter.placeholder}
-                              invalidText={parameter.invalidText ?? 'Input is invalid'}
-                              value={getParameterValue(parameter.id) || 0}
-                              onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setParameter(e.imaginaryTarget.valueAsNumber, parameter.id)}
-                              {...() => (parameter.min && { min: parameter.min })}
-                              {...() => (parameter.max && { max: parameter.max })}
-                            />
-                          </Column>
-                        }
-                      </Row>
-                      <br/>
-                    </React.Fragment>
-                  )
-                })
+                .map((parameter, index) => <ActionParameter key={JSON.stringify(parameter)} parameter={parameter} setParameter={setParameter} getParameterValue={getParameterValue}/>)
             }
             { result.data && action.providerFunction && !result.data.deviceFunctions.find(providerFunction => providerFunction.id === action.providerFunction.id).parameters &&
               <Row>
