@@ -168,7 +168,7 @@ function Executer () {
                   }
                 </Column>
               </Row><br/>
-              {deviceFunction.parameters?.length > 0 && deviceFunction.parameters.map((parameter, index) => <ActionParameter key={JSON.stringify(parameter)} parameter={parameter} setParameter={setParameter} getParameterValue={getParameterValue}/>)}
+              {deviceFunction.parameters?.length > 0 && deviceFunction.parameters.map((parameter, index) => <ActionParameter key={index} parameter={parameter} setParameter={setParameter} getParameterValue={getParameterValue}/>)}
               <Row>
                 <Button 
                   style={{ width: "10em", marginLeft: "calc(50% - 5em)", marginTop: '1em' }}

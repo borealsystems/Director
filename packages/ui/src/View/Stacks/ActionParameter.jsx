@@ -1,5 +1,5 @@
 import React from 'react'
-import { Column, ComboBox, Row, TextInput, NumberInput } from 'carbon-components-react'
+import { Column, ComboBox, Row, TextInput, NumberInput, MultiSelect } from 'carbon-components-react'
 
 const ActionParameter = ({parameter, getParameterValue, setParameter}) => (
   <>
@@ -43,6 +43,21 @@ const ActionParameter = ({parameter, getParameterValue, setParameter}) => (
             onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setParameter(e.imaginaryTarget.valueAsNumber, parameter.id)}
             {...() => (parameter.min && { min: parameter.min })}
             {...() => (parameter.max && { max: parameter.max })}
+          />
+        </Column>
+      }
+      { parameter.inputType === 'multiSelect' &&
+        <Column>
+          <label className='bx--label'>{`${parameter.label} ${parameter.required ? '' : '(optional)'}`}</label>
+          <MultiSelect
+            id={parameter.id}
+            label={`${parameter.label} ${parameter.required ? '' : '(optional)'}`}
+            helperText={parameter.tooltip}
+            placeholder={parameter.placeholder}
+            invalidText={parameter.invalidText ?? 'Input is invalid'}
+            initialSelectedItems={getParameterValue(parameter.id) || []}
+            items={parameter.items}
+            onChange={(e) => { setParameter(e.selectedItems, parameter.id) }}
           />
         </Column>
       }
