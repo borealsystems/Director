@@ -7,9 +7,9 @@
 [submodule "packages/core/src/providers/deviceProviders/director-provider-harris-panacea"]
 	path = packages/core/src/providers/deviceProviders/director-provider-harris-panacea
 	url = https://phabricator.boreal.systems/diffusion/6/director-provider-harris-panacea.git
-[submodule "packages/core/src/providers/deviceProviders/director-provider-ross-carbonite-black-plus"]
-	path = packages/core/src/providers/deviceProviders/director-provider-ross-carbonite-black-plus
-	url = https://phabricator.boreal.systems/diffusion/8/director-provider-ross-carbonite-black-plus.git
 [submodule "packages/core/src/providers/deviceProviders/director-provider-ross-nk-ips"]
 	path = packages/core/src/providers/deviceProviders/director-provider-ross-nk-ips
 	url = https://phabricator.boreal.systems/diffusion/9/director-provider-ross-nk-ips.git
+[submodule "packages/core/src/providers/deviceProviders/director-provider-ross-carbonite-black-plus"]
+	path = packages/core/src/providers/deviceProviders/director-provider-ross-carbonite-black-plus
+	url = https://phabricator.boreal.systems/diffusion/8/director-provider-ross-carbonite-black-plus.git
