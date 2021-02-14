@@ -37,7 +37,7 @@ const ShotboxPanel = ({ inline, panel, controller }) => {
                     onClick={() => {
                       executeStackMutation({ executeID: button.stack.id, controller: controller ? controller.id : 'Shotbox' })
                     }}
-                    style={{ width: '100%', maxWidth: '100%', height: '6em' }}
+                    style={{ width: '100%', maxWidth: '100%', height: '6em', backgroundColor: button.stack?.colour?.id }}
                     size='default'
                     { ...getEnabledProps(button) }
                   >

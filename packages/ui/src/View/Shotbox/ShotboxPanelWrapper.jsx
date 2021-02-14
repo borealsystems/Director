@@ -4,26 +4,12 @@ import { Loading } from 'carbon-components-react'
 import { useQuery } from 'urql'
 import ShotboxPanel from './ShotboxPanel.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
+import { panelQueryGQL } from './queries'
 
 const ShotboxPanelWrapper = ({ inline, match: { params: { id } }, controller }) => {
   const [panel, setPanel] = useState({})
   const [result] = useQuery({
-    query: `query panelData($id: String) {
-      panel(id: $id) {
-        id
-        label
-        buttons {
-          row
-          column
-          stack {
-            id
-            label
-            panelLabel
-            description
-          }
-        }
-      }
-    }`,
+    query: panelQueryGQL,
     variables: { id: id },
     pause: controller?.panel?.buttons ?? !id
   })

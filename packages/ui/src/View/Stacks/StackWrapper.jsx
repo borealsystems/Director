@@ -17,7 +17,7 @@ const StackWrapper = ({ match: { params: { id } } }) => {
 
   if (result.error) return <GraphQLError error={result.error} />
   if (result.fetching) { return <Loading /> }
-  if (result.data) { return <Stack id={id} _stack={result.data.stack} devices={result.data.devices} /> }
+  if (result.data) { return <Stack id={id} _stack={result.data.stack} devices={result.data.devices} stackPanelColours={result.data.stackPanelColours} /> }
 }
 
 export default StackWrapper

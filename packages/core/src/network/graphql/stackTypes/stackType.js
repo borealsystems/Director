@@ -6,6 +6,7 @@ import {
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
 import deviceType from '../deviceTypes/deviceType'
+import stackPanelColourType from './stackPanelColourType'
 
 const stackType = new GraphQLObjectType({
   name: 'stackUpdateType',
@@ -28,6 +29,9 @@ const stackType = new GraphQLObjectType({
     },
     core: {
       type: GraphQLString
+    },
+    colour: {
+      type: stackPanelColourType
     },
     actions: {
       type: new GraphQLList(

@@ -27,6 +27,9 @@ const controllerSubscriptionGQL = `subscription controller {
           label
           panelLabel
           description
+          colour {
+            id
+          }
         }
       }
     }
@@ -34,4 +37,24 @@ const controllerSubscriptionGQL = `subscription controller {
   }
 }`
 
-export { controllerSubscriptionGQL }
+const panelQueryGQL = `query panelData($id: String) {
+  panel(id: $id) {
+    id
+    label
+    buttons {
+      row
+      column
+      stack {
+        id
+        label
+        panelLabel
+        description
+        colour {
+          id
+        }
+      }
+    }
+  }
+}`
+
+export { controllerSubscriptionGQL, panelQueryGQL }

@@ -5,6 +5,7 @@ import {
   GraphQLInt
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
+import stackPanelColourInputType from './stackPanelColourInputType'
 
 const actionInputType = new GraphQLInputObjectType({
   name: 'stackActionInputType',
@@ -91,6 +92,9 @@ const stackUpdateInputType = new GraphQLInputObjectType({
     },
     core: {
       type: GraphQLString
+    },
+    colour: {
+      type: stackPanelColourInputType
     },
     actions: {
       type: new GraphQLList(

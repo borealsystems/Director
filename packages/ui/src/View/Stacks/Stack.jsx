@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet, InlineLoading } from 'carbon-components-react'
+import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet, InlineLoading, ComboBox } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import globalContext from '../../globalContext'
@@ -9,7 +9,7 @@ import { Add24, ArrowDown16, ArrowUp16, Exit24 } from '@carbon/icons-react'
 import Action from './Action.jsx'
 import Padding from '../components/Padding.jsx'
 
-const Stack = ({ id, _stack, providers, devices }) => {
+const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
   const isNew = id === 'new'
   const { contextRealm } = useContext(globalContext)
   const initialStack = id === 'new' ? {} : _stack
@@ -30,6 +30,8 @@ const Stack = ({ id, _stack, providers, devices }) => {
   const history = useHistory()
 
   const submitButtonStyles = { minWidth: '15em', maxWidth: '15em' }
+
+  if (!stack.colour) setStack({ ...stack, colour: stackPanelColours[5] })
 
   const updatestack = () => {
     setIsLoading(true)
@@ -133,46 +135,73 @@ const Stack = ({ id, _stack, providers, devices }) => {
     <Grid>
       <Row>
         <Column>
-          <h3>
+          <h3 style={{ marginTop: '0.8em', textAlign: 'center'}}>
             {isNew ? 'New Stack' : stack.label}
           </h3>
+        </Column>
+        <Column style={{ textAlign: 'center'}}>
+          <Button
+            style={{ width: '12em', height: '6em', backgroundColor: stack.colour ? stack.colour.id : null }}
+            size='default'
+            kind='primary'
+          >
+            { isNew 
+              ? 'New Stack' 
+              : <h5>{stack?.id ? stack.panelLabel ? stack.panelLabel : stack.label : ' '}</h5>
+            }
+          </Button>
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
+          <h4>Stack Information</h4>
         </Column>
       </Row><br/>
       <Row>
         <Column>
           <TextInput
             type='text'
-            id='newstackName'
+            id='stackName'
             placeholder='Required'
             value={stack.label ?? ''}
             labelText='Stack Name'
-            onClick={() => {}}
             onChange={(e) => { setStack({ ...stack, label: e.target.value.slice(0, 100) }) }}
           />
         </Column>
         <Column>
           <TextInput
             type='text'
-            id='newstackName'
-            placeholder='Optional'
-            value={stack.panelLabel ?? ''}
-            labelText='Stack Panel Label'
-            helperText='This is what will be displayed on panels, if left blank the stack name will be used'
-            onClick={() => {}}
-            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value.slice(0, 12) }) }}
-          />
-        </Column>
-      </Row>
-      <Row>
-        <Column>
-          <TextInput
-            type='text'
-            id='newstackDescription'
+            id='stackDescription'
             placeholder='Optional'
             value={stack.description ?? ''}
             labelText='Stack Description'
             onClick={() => {}}
             onChange={(e) => { setStack({ ...stack, description: e.target.value.slice(0, 250) }) }}
+          />
+        </Column>
+      </Row><br/>
+      <Row>
+        <Column>
+          <TextInput
+            type='text'
+            id='stackPaneLabel'
+            placeholder='Optional'
+            value={stack.panelLabel ?? ''}
+            labelText='Stack Panel Label'
+            helperText='This is what will be displayed on panels, if left blank the stack name will be used'
+            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value.slice(0, 12) }) }}
+          />
+        </Column>
+        <Column>
+          <ComboBox
+            ariaLabel='Dropdown'
+            id='stackPanelColour'
+            titleText='Panel Colour'
+            placeholder='Colour'
+            helperText='This is the background colour for this stack when shown on a Panel'
+            items={stackPanelColours}
+            selectedItem={stack.colour}
+            onChange={(e) => { setStack({ ...stack, colour: e.selectedItem}) }}
           />
         </Column>
       </Row><br/>

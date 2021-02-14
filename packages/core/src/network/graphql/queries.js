@@ -24,7 +24,8 @@ import panelType from './panelTypes/panelType'
 import providerType from './providerTypes/providerType'
 import providerFunctionType from './providerTypes/providerFunctionType'
 import realmType from './coreTypes/realmType'
-import stackType from './stackTypes/stackType.js'
+import stackType from './stackTypes/stackType'
+import stackPanelColourType from './stackTypes/stackPanelColourType'
 
 const queries = new GraphQLObjectType({
   name: 'Queries',
@@ -217,6 +218,22 @@ const queries = new GraphQLObjectType({
             .catch(e => reject(e))
         })
       }
+    },
+
+    stackPanelColours: {
+      name: 'stackPanelColours',
+      description: 'All possible stack panel colours',
+      type: new GraphQLList(stackPanelColourType),
+      resolve: () => [
+        { id: '#da1e28', label: 'Red' },
+        { id: '#D96120', label: 'Orange'},
+        { id: '#C6A324', label: 'Yellow' },
+        { id: '#24a148', label: 'Green' },
+        { id: '#1bb69f', label: 'Blue-Green'},
+        { id: '#0043ce', label: 'Blue' },
+        { id: '#AB20D9', label: 'Purple'},
+        { id: '#D920B4', label: 'Pink'}
+      ]
     },
 
     panels: {

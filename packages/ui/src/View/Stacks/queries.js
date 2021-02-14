@@ -4,6 +4,10 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
     label
     panelLabel
     description
+    colour {
+      id
+      label
+    }
     actions {
       device {
         id,
@@ -22,6 +26,10 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
         value
       }
     }
+  }
+  stackPanelColours {
+    id
+    label
   }
   devices(core: $core, realm: $realm) {
     id
@@ -46,6 +54,10 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
     label
     panelLabel
     description
+    colour {
+      id
+      label
+    }
     actions {
       delay
       device {
@@ -65,6 +77,10 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
         value
       }
     }
+  }
+  stackPanelColours {
+    id
+    label
   }
   devices(core: $core, realm: $realm) {
     id
