@@ -3,6 +3,7 @@ import { pubsub } from '../network/graphql/schema'
 import { cores, devices, stacks, panels, controllers } from '../db'
 import log from './log'
 import { omit } from 'lodash'
+import { publishControllerUpdate } from '../controllers'
 
 const deviceWaterfall = (device, isDelete) => {
   log('error', 'core/utils/waterfall', 'Device Waterfall not yet implemented')
@@ -111,15 +112,13 @@ const panelWaterfall = async (panel, isDelete) => {
         { upsert: true }
       )
         .then(() => {
-          return controllers.findOne({ id: controller.id })
-        })
-        .then(controller => {
-          pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
+          publishControllerUpdate(controller.id)
         })
     })
   } else {
     controllerArray.map((controller, index) => {
-      pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
+      publishControllerUpdate(controller.id)
+      log('info', 'core/waterfall', `Updated ${controller.id} (${controller.label})`)
     })
   }
 }

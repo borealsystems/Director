@@ -1,6 +1,6 @@
 import { executeStack } from '../../stacks'
 import { devices, controllers, panels, stacks } from '../../db'
-import { pubsub } from '../../network/graphql/schema'
+import { publishControllerUpdate } from '../../controllers'
 import { actionTimeouts } from '../../utils/actionTimeouts'
 import log from '../../utils/log'
 import STATUS from '../../utils/statusEnum'
@@ -131,17 +131,7 @@ class ProtocolProviderBorealDirector {
                 )
               }
             })
-            .then(err => {
-              if (err) {
-                log('error', 'core/controllers', err)
-              } else {
-                return controllers.findOne({ id: id })
-              }
-            })
-            .then((controller) => {
-              log('info', 'core/controllers', `Updated ${controller.id} (${controller.label})`)
-              pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
-            })
+            .then(() => publishControllerUpdate(id))
           }
         break
     }

@@ -1,4 +1,4 @@
-import { controllers } from '../db'
+import { controllers, panels } from '../db'
 import { pubsub } from '../network/graphql/schema'
 import log from '../utils/log'
 import shortid from 'shortid'
@@ -48,21 +48,32 @@ const updateController = (_controller) => {
       },
       { upsert: true }
     )
-      .then(() => {
-        return controllers.findOne({ id: id })
-      })
+      .then(() => (publishControllerUpdate(id)))
       .then((controller) => {
-        log('info', 'core/controllers', _controller.id ? `Updated ${id}` : `Created ${id}`)
-        pubsub.publish('CONTROLLER_UPDATE', { controller: controller })
+        log('info', 'core/controllers', _controller.id ? `Updated ${id} (${controller.label}, ${controller.panel.label})` : `Created ${id}`)
       })
       .catch(e => reject(e))
   })
 }
 
-const deleteController = id => new Promise((resolve, reject) => {
+const deleteController = id => new Promise(resolve => {
   controllers.deleteOne({ id: id })
   log('info', 'core/controllers', `Deleted Controller ${id}`)
   resolve(STATUS.OK)
+})
+
+const publishControllerUpdate = id => new Promise((resolve, reject) => {
+  let controllerData
+  let panelData
+  let update
+  controllers.findOne({ id: id })
+    .then(controller => controllerData = controller)
+    .then(() => (panels.findOne({ id: controllerData.panel.id})))
+    .then(panel => panelData = panel)
+    .then(() => update = { controller: { ...controllerData, panel: { ...panelData} }})
+    .then(() => pubsub.publish('CONTROLLER_UPDATE', update))
+    .catch((e) => reject(e))
+    .finally(() => resolve(update))
 })
 
 const controllerLayouts = [
@@ -71,4 +82,4 @@ const controllerLayouts = [
   { id: 'elgato-streamdeck-xl', label: 'Elgato Streamdeck XL', rows: 4, columns: 8 }
 ]
 
-export { registerController, updateController, deleteController, controllerLayouts }
+export { registerController, updateController, deleteController, publishControllerUpdate, controllerLayouts }

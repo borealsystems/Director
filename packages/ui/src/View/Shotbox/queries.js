@@ -1,17 +1,36 @@
 const controllerSubscriptionGQL = `subscription controller {
   controller {
-    id
     label
-    layout {
-      id
-      label
-      rows
-      columns
-    }
+    manufacturer
+    model
+    serial
+    status
     panel {
       id
       label
+      description
+      layout {
+        id
+        label
+        rows
+        columns
+      }
+      layoutType {
+        id
+        label
+      }
+      buttons {
+        row
+        column
+        stack {
+          id
+          label
+          panelLabel
+          description
+        }
+      }
     }
+    id
   }
 }`
 
