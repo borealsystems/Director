@@ -25,7 +25,7 @@ const ShotboxPanelWrapper = ({ inline, match: { params: { id } }, controller }) 
       }
     }`,
     variables: { id: id },
-    pause: !id
+    pause: controller?.panel?.buttons ?? !id
   })
 
   if (result.error) { return <GraphQLError error={result.error} /> }
@@ -36,7 +36,10 @@ const ShotboxPanelWrapper = ({ inline, match: { params: { id } }, controller }) 
     setPanel({ ...result.data.panel, buttons: buttons })
     return <Loading />
   }
-  if (panel.id) {
+  if (controller?.panel?.buttons) {
+    return <ShotboxPanel inline={inline} panel={controller.panel} controller={controller} />
+  }
+  if (!controller?.panel?.buttons && panel.id) {
     return <ShotboxPanel inline={inline} panel={panel} controller={controller} />
   }
 }
@@ -44,7 +47,7 @@ const ShotboxPanelWrapper = ({ inline, match: { params: { id } }, controller }) 
 ShotboxPanelWrapper.propTypes = {
   match: PropTypes.object,
   inline: PropTypes.bool,
-  controller: PropTypes.string
+  controller: PropTypes.object
 }
 
 export default ShotboxPanelWrapper

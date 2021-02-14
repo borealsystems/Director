@@ -30,13 +30,12 @@ const ShotboxPanel = ({ inline, panel, controller }) => {
       <div style={{ overflow: 'auto' }}>
         { panel.buttons !== undefined && panel.buttons.map((row, rowIndex) => {
           return (
-            <Row key={rowIndex} style={{ flexWrap: 'nowrap', margin: 0, padding: 0 }}>
+            <Row key={rowIndex} style={{ flexWrap: 'nowrap', margin: 0, padding: 0, width: '100%' }}>
               { row.map((button, buttonIndex) => (
-                <Column key={buttonIndex} style={{ minWidth: `${88 / row.length}em` }}>
+                <Column key={buttonIndex} style={{ minWidth: `${100 / row.length}%` }}>
                   <Button
                     onClick={() => {
-                      console.log(controller)
-                      executeStackMutation({ executeID: button.stack.id, controller: controller ? controller : 'Shotbox' })
+                      executeStackMutation({ executeID: button.stack.id, controller: controller ? controller.id : 'Shotbox' })
                     }}
                     style={{ width: '100%', maxWidth: '100%', height: '6em' }}
                     size='default'
@@ -61,7 +60,7 @@ const ShotboxPanel = ({ inline, panel, controller }) => {
 ShotboxPanel.propTypes = {
   panel: PropTypes.object,
   inline: PropTypes.bool,
-  controller: PropTypes.string
+  controller: PropTypes.object
 }
 
 export default ShotboxPanel

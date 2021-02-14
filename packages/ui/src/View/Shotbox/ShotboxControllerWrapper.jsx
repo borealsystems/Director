@@ -33,6 +33,7 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
   // eslint-disable-next-line no-unused-vars
   const [controllerUpdateSubscription] = useSubscription({ query: controllerSubscriptionGQL }, (messages = [], response) => {
     if (response.controller.id === controller.id) {
+      console.log('subscription: ', response)
       refresh()
       setController({ ...response })
     }
@@ -54,7 +55,7 @@ const ShotboxControllerWrapper = ({ inline, match: { params: { id } } }) => {
             <br/><br/>
           </>
         }
-        <ShotboxPanelWrapper inline={inline} match={{ params: { id: controller.panel.id } }} controller={controller.id} />
+        <ShotboxPanelWrapper inline={inline} match={{ params: { id: controller.panel.id } }} controller={controller} />
       </>
     )
   }

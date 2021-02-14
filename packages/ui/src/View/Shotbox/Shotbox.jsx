@@ -84,7 +84,7 @@ const Shotbox = () => {
                 </Row>
                 <Row>
                   <Column>
-                    <Button style={{ marginTop: '1.1em' }} renderIcon={Popup16} onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox/panel/${panel.id}` }) } } >
+                    <Button style={{ marginTop: '1.1em' }} renderIcon={Popup16} onClick={() => { window.open(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox/panel/${panel.id}`, '_blank') } } >
                       Open In New Tab
                     </Button>
                   </Column>
@@ -119,7 +119,7 @@ const Shotbox = () => {
                 </Row>
                 <Row>
                   <Column>
-                    <Button style={{ marginTop: '1.1em' }} renderIcon={Popup16} onClick={() => { history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox/controller/${controller.id}` }) } } >
+                    <Button style={{ marginTop: '1.1em' }} renderIcon={Popup16} onClick={() => { window.open(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/cores/${contextRealm.coreID}/realms/${contextRealm.id}/control/shotbox/controller/${controller.id}`, '_blank'); console.log() } } >
                       Open In New Tab
                     </Button>
                   </Column>
