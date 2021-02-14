@@ -14,7 +14,13 @@ const getBuffer = canvas => {
     .data
 }
 
-const writeTextToButton = ({ text, device, buttonIndex, background, color }) => {
+const writeTextToButton = ({
+  text,
+  device,
+  buttonIndex,
+  background,
+  color
+}) => {
   const font = {
     original: 'bold 8pt Menlo',
     mini: 'bold 9pt Menlo',
@@ -26,9 +32,9 @@ const writeTextToButton = ({ text, device, buttonIndex, background, color }) => 
   const canvas = new Canvas(width, height)
   const ctx = canvas.getContext('2d')
 
-  ctx.fillStyle = background = '#0f62fe'
+  ctx.fillStyle = background ?? '#0043ce'
   ctx.fillRect(0, 0, width, height)
-  ctx.fillStyle = color = 'white'
+  ctx.fillStyle = color ?? 'white'
   ctx.font = font[device.model]
   ctx.textAlign = 'center'
   ctx.textBaseline = 'ideographic'

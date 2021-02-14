@@ -58,6 +58,7 @@ const registerStreamdecks = () => new Promise((resolve, reject) => {
         }
         device.controller.clearAllKeys()
         device.controller.removeAllListeners('down')
+        device.controller.setBrightness(100)
         device.controller.on('error', err => {
           log('error', 'link/streamdeck', err)
           // eslint-disable-next-line eqeqeq
@@ -76,12 +77,12 @@ const registerStreamdecks = () => new Promise((resolve, reject) => {
   }
 })
 
-const updateStreamdecks = ({ type, force, serial }) => {
+const updateStreamdecks = ({ type, force, serial, panel }) => {
   if ((currentConnectionStatus !== type) || force === true) {
     currentConnectionStatus = type
     log('debug', 'link/streamdeck', `Update Type: ${type}`)
     switch (currentConnectionStatus) {
-      case 'refresh' :
+      case 'refresh':
         return true
 
       case 'unconfigured':
@@ -198,68 +199,82 @@ const updateStreamdecks = ({ type, force, serial }) => {
         break
 
       case 'update':
-        director.query(controllersQueryGQL)
-          .toPromise()
-          .then(result => {
-            if (result.error) {
-              log('error', 'link/streamdeck', result.error)
-            } else {
-              const device = streamDecks.find(device => device.config.serial === serial)
-              log('info', 'link/streamdeck', `Updating panel on ${device.config.id}`)
-              device.controller.clearAllKeys()
-              device.controller.removeAllListeners('down')
-              if (findIndex(result.data.controllers, controller => controller.serial === device.config.serial) === -1 || result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel === undefined) {
-                writeTextToButton({ text: 'Boreal\nDirector', device: device, buttonIndex: 0 })
-                writeTextToButton({ text: 'Configure\nController', device: device, buttonIndex: 1 })
-                device.controller.on('down', keyIndex => {
-                  if (keyIndex === 1) {
-                    open(`http://${config.get('connection').host}/config/controllers`)
-                    log('info', 'link/streamdeck', 'Opening Core Panel UI')
-                  } else {
-                    log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
-                  }
-                })
-                director.query(updateBridgeMutationGQL, { bridge: { type: 'DirectorLink', version: '1.0.0', controllers: [...streamDecks.map(sd => { return sd.config })] } })
-                  .toPromise()
-                  .then(result => {
-                    if (result.error) log('error', 'link/streamdeck', result.error)
-                    log('info', 'link/streamdeck', result.data.updateBridge)
-                  })
+        if (panel) {
+          const device = streamDecks.find(device => device.config.serial === serial)
+          log('info', 'link/streamdeck', `Updating panel on ${device.config.id}`)
+          device.controller.clearAllKeys()
+          device.controller.removeAllListeners('down')
+          device.controller.on('down', keyIndex => {
+            handleButtonPress(device, keyIndex)
+          })
+          const buttons = []
+          panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
+          device.config.panel = { ...panel, buttons: buttons }
+          writePanel({ panel: device.config.panel, device: device })
+        } else {
+          director.query(controllersQueryGQL)
+            .toPromise()
+            .then(result => {
+              if (result.error) {
+                log('error', 'link/streamdeck', result.error)
               } else {
-                const currentController = result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)]
-                if (currentController.panel) {
-                  device.config.panel = currentController.panel
-                  director.query(panelGQL, { id: device.config.panel.id })
-                    .toPromise()
-                    .then(result => {
-                      device.controller.removeAllListeners('down')
-                      device.controller.removeAllListeners('up')
-                      device.controller.on('down', keyIndex => {
-                        handleButtonPress(device, keyIndex)
-                      })
-                      const buttons = []
-                      result.data.panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
-                      device.config.panel = { ...result.data.panel, buttons: buttons }
-                      writePanel({ panel: device.config.panel, device: device })
-                    })
-                } else {
+                const device = streamDecks.find(device => device.config.serial === serial)
+                log('info', 'link/streamdeck', `Updating panel on ${device.config.id}`)
+                device.controller.clearAllKeys()
+                device.controller.removeAllListeners('down')
+                if (findIndex(result.data.controllers, controller => controller.serial === device.config.serial) === -1 || result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)].panel === undefined) {
                   writeTextToButton({ text: 'Boreal\nDirector', device: device, buttonIndex: 0 })
                   writeTextToButton({ text: 'Configure\nController', device: device, buttonIndex: 1 })
-                  if (!currentController.core) {
-                    updateStreamdecks({ type: 'connected', force: true })
-                  }
                   device.controller.on('down', keyIndex => {
                     if (keyIndex === 1) {
-                      open(`${config.get('connection') ? 'https:' : 'http:'}//${config.get('connection').host}/cores/${currentController.core}/realms/${currentController.realm}/config/controllers/${encodeURIComponent(currentController.id)}`)
+                      open(`http://${config.get('connection').host}/config/controllers`)
                       log('info', 'link/streamdeck', 'Opening Core Panel UI')
                     } else {
                       log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
                     }
                   })
+                  director.query(updateBridgeMutationGQL, { bridge: { type: 'DirectorLink', version: '1.0.0', controllers: [...streamDecks.map(sd => { return sd.config })] } })
+                    .toPromise()
+                    .then(result => {
+                      if (result.error) log('error', 'link/streamdeck', result.error)
+                      log('info', 'link/streamdeck', result.data.updateBridge)
+                    })
+                } else {
+                  const currentController = result.data.controllers[findIndex(result.data.controllers, controller => controller.serial === device.config.serial)]
+                  if (currentController.panel) {
+                    device.config.panel = currentController.panel
+                    director.query(panelGQL, { id: device.config.panel.id })
+                      .toPromise()
+                      .then(result => {
+                        device.controller.removeAllListeners('down')
+                        device.controller.removeAllListeners('up')
+                        device.controller.on('down', keyIndex => {
+                          handleButtonPress(device, keyIndex)
+                        })
+                        const buttons = []
+                        result.data.panel.buttons.map(row => { buttons.push(Object.keys(row).map((key) => { return row[key] })) })
+                        device.config.panel = { ...result.data.panel, buttons: buttons }
+                        writePanel({ panel: device.config.panel, device: device })
+                      })
+                  } else {
+                    writeTextToButton({ text: 'Boreal\nDirector', device: device, buttonIndex: 0 })
+                    writeTextToButton({ text: 'Configure\nController', device: device, buttonIndex: 1 })
+                    if (!currentController.core) {
+                      updateStreamdecks({ type: 'connected', force: true })
+                    }
+                    device.controller.on('down', keyIndex => {
+                      if (keyIndex === 1) {
+                        open(`${config.get('connection') ? 'https:' : 'http:'}//${config.get('connection').host}/cores/${currentController.core}/realms/${currentController.realm}/config/controllers/${encodeURIComponent(currentController.id)}`)
+                        log('info', 'link/streamdeck', 'Opening Core Panel UI')
+                      } else {
+                        log('info', 'link/streamdeck', `${device.serialNumber} Press: ${keyIndex}`)
+                      }
+                    })
+                  }
                 }
               }
-            }
-          })
+            })
+        }
         break
     }
   }
