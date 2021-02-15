@@ -229,10 +229,11 @@ const queries = new GraphQLObjectType({
         { id: '#D96120', label: 'Orange'},
         { id: '#C6A324', label: 'Yellow' },
         { id: '#24a148', label: 'Green' },
-        { id: '#1bb69f', label: 'Blue-Green'},
+        { id: '#1a8978', label: 'Cyan'},
         { id: '#0043ce', label: 'Blue' },
         { id: '#AB20D9', label: 'Purple'},
-        { id: '#D920B4', label: 'Pink'}
+        { id: '#D920B4', label: 'Pink'},
+        { id: '#000000', label: 'Black'}
       ]
     },
 
