@@ -7,7 +7,7 @@ const writePanel = ({ panel, device }) => {
     row.map((button, buttonIndex) => {
       if (button.stack !== null) {
         try {
-          writeTextToButton({ text: button.stack.panelLabel || button.stack.label, device: device, buttonIndex: buttonLUT[device.config.manufacturer][device.config.model].forward[rowIndex][buttonIndex] })
+          writeTextToButton({ text: button.stack.panelLabel || button.stack.label, device: device, buttonIndex: buttonLUT[device.config.manufacturer][device.config.model].forward[rowIndex][buttonIndex], background: button.stack.colour?.id })
         } catch (e) {
           if (e.name === 'TypeError') {
           } else {

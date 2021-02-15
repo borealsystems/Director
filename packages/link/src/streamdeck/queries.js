@@ -12,6 +12,10 @@ const panelGQL = `
         row
         column
         stack {
+          colour {
+            id
+            label
+          }
           id
           label
           panelLabel
@@ -39,4 +43,34 @@ query controllers {
   }
 }`
 
-export { updateBridgeMutationGQL, panelGQL, controllersQueryGQL }
+const controllerUpdateSubscriptionGQL = `
+    subscription controller {
+      controller {
+        label
+        manufacturer
+        model
+        serial
+        status
+        panel {
+          id
+          label
+          buttons {
+            row
+            column
+            stack {
+              colour {
+                id
+                label
+              }
+              id
+              label
+              panelLabel
+              description
+            }
+          }
+        }
+        id
+      }
+    }`
+
+export { updateBridgeMutationGQL, panelGQL, controllersQueryGQL, controllerUpdateSubscriptionGQL }

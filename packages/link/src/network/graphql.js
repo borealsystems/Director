@@ -6,6 +6,7 @@ import { updateStreamdecks, streamDecks } from '../streamdeck'
 import { config } from '../utils/config'
 import WebSocket from 'ws'
 import log from '../utils/log'
+import { controllerUpdateSubscriptionGQL } from '../streamdeck/queries'
 
 let director
 let subscriptionClient
@@ -53,31 +54,15 @@ const initGQLClient = (address, https) => {
     ]
   })
 
-  const controllerUpdateGQL = `
-    subscription controller {
-      controller {
-        label
-        manufacturer
-        model
-        serial
-        status
-        panel {
-          id
-          label
-        }
-        id
-      }
-    }`
-
   pipe(
-    director.subscription(controllerUpdateGQL),
+    director.subscription(controllerUpdateSubscriptionGQL),
     subscribe(result => {
       if (result.error) {
         log('error', 'link/network/graphql', result.error)
       }
       if (result.data && streamDecks.find(sd => sd.config.serial === result.data.controller.serial)) {
         streamDecks[findIndex(streamDecks, (streamdeck) => streamdeck.config.serial === result.data.controller.serial)].config = result.data.controller
-        updateStreamdecks({ type: 'update', force: true, serial: result.data.controller.serial })
+        updateStreamdecks({ type: 'update', force: true, serial: result.data.controller.serial, panel: result.data.controller.panel.buttons ? result.data.controller.panel : null })
       }
     })
   )
