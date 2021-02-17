@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { Button, SideNav, SideNavItems } from 'carbon-components-react'
-import { Application24, Dashboard24, DataBase24, DeploymentPolicy24, FolderDetails24, Apps24, Rocket24, Workspace24, FunctionMath24 } from '@carbon/icons-react'
+import { SideNav, SideNavItems } from 'carbon-components-react'
+import { Application24, Dashboard24, DataBase24, DeploymentPolicy24, FolderDetails24, Apps24, Rocket24, Workspace24, FunctionMath24, Tag24 } from '@carbon/icons-react'
 import globalContext from '../../globalContext'
 import SideNavLink from './SideNavLink.jsx'
 import useWindowDimensions from '../hooks/useWindowDimensions'
@@ -24,6 +24,7 @@ const SidebarNav = ({ isActive }) => {
         <br/>
         <SideNavLink to={`/cores/${contextRealm.coreID}/configuration`} label='Core' renderIcon={DeploymentPolicy24}/>
         <SideNavLink to={`/cores/${contextRealm.coreID}/realms`} label='Realms' renderIcon={Rocket24}/>
+        <SideNavLink to={`/cores/${contextRealm.coreID}/tags`} label='Tags' renderIcon={Tag24}/>
       </SideNavItems>
     </SideNav>
   )

@@ -6,7 +6,8 @@ import {
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
 import deviceType from '../deviceTypes/deviceType'
-import stackPanelColourType from './stackPanelColourType'
+import globalColourType from '../coreTypes/globalColourType'
+import tagType from '../tagTypes/tagType'
 
 const stackType = new GraphQLObjectType({
   name: 'stackUpdateType',
@@ -31,7 +32,10 @@ const stackType = new GraphQLObjectType({
       type: GraphQLString
     },
     colour: {
-      type: stackPanelColourType
+      type: globalColourType
+    },
+    tags: {
+      type: new GraphQLList(tagType)
     },
     actions: {
       type: new GraphQLList(

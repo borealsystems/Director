@@ -56,6 +56,7 @@ const ShotboxControllerWrapper = lazy(() => import('./Shotbox/ShotboxControllerW
 const ShotboxPanelWrapper = lazy(() => import('./Shotbox/ShotboxPanelWrapper.jsx'))
 const Stacks = lazy(() => import('./Stacks/Stacks.jsx'))
 const StackWrapper = lazy(() => import('./Stacks/StackWrapper.jsx'))
+const Tags = lazy(() => import('./Tags/Tags.jsx'))
 
 const BorealDirector = () => {
   const [isAuthenticated, setAuthenticationState] = useState(true)
@@ -199,6 +200,9 @@ const BorealDirector = () => {
                               </Route>
                               <Route exact path='/cores/:core/realms'>
                                 <Realms updateRealmsQuery={reexecuteRealmsQuery} />
+                              </Route>
+                              <Route exact path='/cores/:core/tags'>
+                                <Tags />
                               </Route>
                               {/* MONITOR */}
                               <Route exact strict path='/cores/:core/realms/:realm/' component={Dashboard} />

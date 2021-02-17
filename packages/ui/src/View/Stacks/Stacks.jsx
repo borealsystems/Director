@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useMutation } from 'urql'
-import { Button, Column, DataTable, DataTableSkeleton, Grid, OverflowMenu, OverflowMenuItem, Pagination, Row } from 'carbon-components-react'
+import { Button, Column, ComboBox, DataTable, DataTableSkeleton, Grid, OverflowMenu, OverflowMenuItem, Pagination, Row, Tag } from 'carbon-components-react'
 import { stacksQueryGQL, deleteStackGQL, duplicateStackGQL, executeStackMutationGQL } from './queries'
 import { useHistory } from 'react-router-dom'
-import { Add24, Renew24 } from '@carbon/icons-react'
+import { Add24, Renew24, Tag16 } from '@carbon/icons-react'
 import ModalStateManager from '../components/ModalStateManager.jsx'
 import DeleteObjectModal from '../components/DeleteObjectModal.jsx'
 import GraphQLError from '../components/GraphQLError.jsx'
@@ -14,7 +14,7 @@ import image from './undraw_completed_steps_yurw.svg'
 
 const { Table, TableContainer, TableHead, TableHeader, TableRow, TableBody, TableCell, TableToolbar, TableToolbarContent, TableToolbarSearch } = DataTable
 
-const Devices = () => {
+const Stacks = () => {
   const { contextRealm } = useContext(globalContext)
   const [result, refresh] = useQuery({
     query: stacksQueryGQL,
@@ -24,6 +24,7 @@ const Devices = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [filter, setFilter] = useState('')
+  const [tagFilter, setTagFilter] = useState({})
 
   const history = useHistory()
 
@@ -35,13 +36,16 @@ const Devices = () => {
   if (result.fetching) return <DataTableSkeleton headers={headers} />
   if (result.data) {
     const rawData = result.data.stacks
+    
     const filteredTableData = rawData.filter(e => {
       return filter === ''
         ? e
         : e.label.toLowerCase().includes(filter.toLowerCase()) ||
          e.id.toLowerCase().includes(filter.toLowerCase()) ||
          e.panelLabel?.toLowerCase().includes(filter.toLowerCase()) ||
-         e.description?.toLowerCase().includes(filter.toLowerCase())
+         e.description?.toLowerCase().includes(filter.toLowerCase()) ||
+         e.tags?.filter(t => t.label.toLowerCase().includes(filter.toLowerCase())).length > 0 ||
+         e.tags?.filter(t => t.id.toLowerCase().includes(filter.toLowerCase())).length > 0
     })
 
     const currentTableData = Array(Math.ceil(rawData.length / pageSize)).fill()
@@ -101,7 +105,7 @@ const Devices = () => {
               description='Stacks are an Action or group of Actions that can be executed by a Controller or a device that can control Director'
               {...getTableContainerProps()}
             >
-              <TableToolbar {...getToolbarProps()} aria-label='data table toolbar'>
+              <TableToolbar style={{ overflow: 'visible' }} {...getToolbarProps()} aria-label='data table toolbar'>
                 <TableToolbarContent>
                   <TableToolbarSearch onChange={(e) => setFilter(e.target.value)} />
                   <Button renderIcon={Renew24} kind='ghost' iconDescription='Refresh Stacks' hasIconOnly onClick={refresh}/>
@@ -116,6 +120,11 @@ const Devices = () => {
                         {header.header}
                       </TableHeader>
                     ))}
+                      <TableHeader style={{ width: '20em' }}>
+                        Tags
+                      </TableHeader>
+                      <TableHeader style={{ width: '5em' }}>
+                      </TableHeader>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -124,6 +133,13 @@ const Devices = () => {
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>{cell.value}</TableCell>
                       ))}
+                      <TableCell>
+                        {currentTableData[i]?.tags?.map((tag, index) => (
+                          <Tag key={tag.id} size='sm' renderIcon={Tag16} style={{ color: 'white', backgroundColor: tag.colour.id.concat('E5') }}>
+                            {tag.label}
+                          </Tag>
+                        ))}
+                      </TableCell>
                       <TableCell>
                         <ModalStateManager
                           LauncherContent={({ setOpen }) => (
@@ -178,4 +194,4 @@ const Devices = () => {
   }
 }
 
-export default Devices
+export default Stacks

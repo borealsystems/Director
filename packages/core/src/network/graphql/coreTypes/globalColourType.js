@@ -1,10 +1,10 @@
 import {
-  GraphQLInputObjectType,
+  GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
 
-const stackPanelColourInputType = new GraphQLInputObjectType({
-  name: 'stackPanelColourInputType',
+const globalColourType = new GraphQLObjectType({
+  name: 'globalColourType',
   description: 'A Colour',
   fields: {
     id: {
@@ -16,4 +16,4 @@ const stackPanelColourInputType = new GraphQLInputObjectType({
   }
 })
 
-export default stackPanelColourInputType
+export default globalColourType

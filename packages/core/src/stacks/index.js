@@ -1,7 +1,7 @@
 import log from '../utils/log'
 import status from '../utils/statusEnum'
 import shortid from 'shortid'
-import { stacks, controllers } from '../db'
+import { stacks } from '../db'
 import { deviceInstance } from '../devices'
 import { stackWaterfall } from '../utils/waterfall'
 import { actionTimeouts } from '../utils/actionTimeouts'
@@ -109,4 +109,5 @@ const executeAction = _action => new Promise(resolve => {
   resolve(status.OK)
 })
 
-export { updateStack, duplicateStack, deleteStack, stacks, executeStack, executeAction }
+import stackResolvers from './resolvers'
+export { updateStack, duplicateStack, deleteStack, stacks, executeStack, executeAction, stackResolvers }

@@ -3,6 +3,7 @@ import { updateController, deleteController } from '../../controllers'
 import { updateDevice, deleteDevice, disableDevice, enableDevice } from '../../devices'
 import { updatePanel, deletePanel } from '../../panels'
 import { updateStack, duplicateStack, deleteStack, executeStack, executeAction } from '../../stacks'
+import { updateTag, deleteTag } from '../../tags'
 import { controllers, cores, devices, panels, stacks } from '../../db'
 
 import {
@@ -23,6 +24,8 @@ import panelUpdateInputType from './panelTypes/panelUpdateInputType'
 import realmInputType from './coreTypes/realmInputType'
 import stackType from './stackTypes/stackType.js'
 import stackUpdateInputType, { actionInputType } from './stackTypes/stackUpdateInputType'
+import tagType from './tagTypes/tagType'
+import tagInputType from './tagTypes/tagInputType'
 import STATUS from '../../utils/statusEnum'
 import log from '../../utils/log'
 
@@ -310,6 +313,34 @@ const mutations = new GraphQLObjectType({
               resolve(STATUS.OK)
             })
         })
+      }
+    },
+
+    updateTag: {
+      name: 'updateTagMutation',
+      description: 'Creates or updates a Tag',
+      type: tagType,
+      args: {
+        tag: {
+          type: tagInputType
+        }
+      },
+      resolve: (parent, args) => {
+        return updateTag(args.tag)
+      }
+    },
+
+    deleteTag: {
+      name: 'deleteTagMutation',
+      description: 'Removes a Tag from existance',
+      type: GraphQLString,
+      args: {
+        id: {
+          type: GraphQLString
+        }
+      },
+      resolve: (parent, args) => {
+        return deleteTag(args.id)
       }
     }
   }

@@ -1,4 +1,4 @@
-const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
+const newStackQueryGQL = `query getAll($realm: String, $core: String) {
   stacks(core: $core, realm: $realm) {
     id
     label
@@ -7,6 +7,14 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
     colour {
       id
       label
+    }
+    tags {
+      id
+      label
+      colour {
+        id
+        label
+      }
     }
     actions {
       device {
@@ -27,7 +35,15 @@ const newStackQueryGQL = `query getAll($realm: String, $core: String ) {
       }
     }
   }
-  stackPanelColours {
+  tags(core: $core, realm: $realm) {
+    id
+    label
+    colour {
+      id
+      label
+    }
+  }
+  globalColours {
     id
     label
   }
@@ -58,6 +74,14 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
       id
       label
     }
+    tags {
+      id
+      label
+      colour {
+        id
+        label
+      }
+    }
     actions {
       delay
       device {
@@ -78,7 +102,15 @@ const existingStackQueryGQL = `query existingStack($id: String, $realm: String, 
       }
     }
   }
-  stackPanelColours {
+  tags(core: $core, realm: $realm) {
+    id
+    label
+    colour {
+      id
+      label
+    }
+  }
+  globalColours {
     id
     label
   }
@@ -129,6 +161,22 @@ const stacksQueryGQL = `query getAll($realm: String, $core: String ) {
       device {
         id
       }
+    }
+    tags {
+      id
+      label
+      colour {
+        id
+        label
+      }
+    }
+  }
+  tags(core: $core, realm: $realm) {
+    id
+    label
+    colour {
+      id
+      label
     }
   }
 }`

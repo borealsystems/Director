@@ -2,8 +2,9 @@ import { bridges } from '../../bridges'
 import { logs } from '../../utils/log'
 import { providers } from '../../providers'
 import { deviceInstance } from '../../devices'
-import { cores, devices, stacks, panels, controllers } from '../../db'
+import { cores, devices, stacks, panels, controllers, tags } from '../../db'
 import { controllerLayouts } from '../../controllers'
+import { stackResolvers } from '../../stacks'
 
 import {
   GraphQLObjectType,
@@ -25,7 +26,8 @@ import providerType from './providerTypes/providerType'
 import providerFunctionType from './providerTypes/providerFunctionType'
 import realmType from './coreTypes/realmType'
 import stackType from './stackTypes/stackType'
-import stackPanelColourType from './stackTypes/stackPanelColourType'
+import globalColourType from './coreTypes/globalColourType'
+import tagType from './tagTypes/tagType'
 
 const queries = new GraphQLObjectType({
   name: 'Queries',
@@ -176,25 +178,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (p, args) => new Promise((resolve, reject) => {
-        const realmFilter = args.realm ? { realm: args.realm } : {}
-        const coreFilter = args.core ? { core: args.core } : {}
-        const resolveArray = []
-        stacks.find({ ...realmFilter, ...coreFilter }).each((err, stack) => {
-          if (err) {
-            reject(err)
-          } else if (stack == null) {
-            resolve(resolveArray)
-          } else {
-            resolveArray.push({
-              ...stack,
-              ...stack.actions.map(action => {
-                action.device = devices.findOne({ id: action.device.id })
-              })
-            })
-          }
-        })
-      })
+      resolve: stackResolvers.stacksQuery
     },
 
     stack: {
@@ -206,24 +190,13 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          stacks.findOne({ id: args.id })
-            .then(stack => resolve({
-              ...stack,
-              ...stack.actions.map(action => {
-                action.device = devices.findOne({ id: action.device.id })
-              })
-            }))
-            .catch(e => reject(e))
-        })
-      }
+      resolve: stackResolvers.stackQuery
     },
 
-    stackPanelColours: {
-      name: 'stackPanelColours',
-      description: 'All possible stack panel colours',
-      type: new GraphQLList(stackPanelColourType),
+    globalColours: {
+      name: 'globalColours',
+      description: 'All possible colours',
+      type: new GraphQLList(globalColourType),
       resolve: () => [
         { id: '#da1e28', label: 'Red' },
         { id: '#D96120', label: 'Orange'},
@@ -235,6 +208,25 @@ const queries = new GraphQLObjectType({
         { id: '#D920B4', label: 'Pink'},
         { id: '#000000', label: 'Black'}
       ]
+    },
+
+    tags: {
+      name: 'tags',
+      description: 'All Configured Tags for this Realm',
+      type: new GraphQLList(tagType),
+      args: {
+        realm: {
+          type: GraphQLString
+        },
+        core: {
+          type: GraphQLString
+        }
+      },
+      resolve: async (p, args) => {
+        const realmFilter = args.realm ? { realm: args.realm } : {}
+        const coreFilter = args.core ? { core: args.core } : {}
+        return await tags.find({ ...realmFilter, ...coreFilter }).toArray()
+      }
     },
 
     panels: {

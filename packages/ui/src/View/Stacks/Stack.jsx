@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet, InlineLoading, ComboBox } from 'carbon-components-react'
+import { AccordionItem, Accordion, Button, TextInput, Grid, Row, Column, ButtonSet, InlineLoading, ComboBox, MultiSelect } from 'carbon-components-react'
 import { useMutation } from 'urql'
 import { useHistory } from 'react-router-dom'
 import globalContext from '../../globalContext'
@@ -9,7 +9,7 @@ import { Add24, ArrowDown16, ArrowUp16, Exit24 } from '@carbon/icons-react'
 import Action from './Action.jsx'
 import Padding from '../components/Padding.jsx'
 
-const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
+const Stack = ({ id, _stack, providers, devices, globalColours, tags }) => {
   const isNew = id === 'new'
   const { contextRealm } = useContext(globalContext)
   const initialStack = id === 'new' ? {} : _stack
@@ -31,7 +31,7 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
 
   const submitButtonStyles = { minWidth: '15em', maxWidth: '15em' }
 
-  if (!stack.colour) setStack({ ...stack, colour: stackPanelColours[5] })
+  if (!stack.colour) setStack({ ...stack, colour: globalColours[5] })
 
   const updatestack = () => {
     setIsLoading(true)
@@ -39,7 +39,15 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
     actions.forEach(action => {
       actionsStripped.push({ ...action, device: { id: action.device.id }, providerFunction: { id: action.providerFunction.id, label: action.providerFunction.label }, parameters: action.parameters })
     })
-    const stackUpdateObject = { stack: { ...stack, actions: actionsStripped, realm: contextRealm.id, core: contextRealm.coreID } }
+    const stackUpdateObject = {
+      stack: {
+        ...stack,
+        actions: actionsStripped,
+        realm: contextRealm.id,
+        core: contextRealm.coreID,
+        tags: stack.tags.map(tag => tag.id)
+      } 
+    }
     stackUpdateMutation(stackUpdateObject).then(history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }))
   }
 
@@ -158,7 +166,7 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
         </Column>
       </Row><br/>
       <Row>
-        <Column>
+        <Column lg={3}>
           <TextInput
             type='text'
             id='stackName'
@@ -166,6 +174,17 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
             value={stack.label ?? ''}
             labelText='Stack Name'
             onChange={(e) => { setStack({ ...stack, label: e.target.value.slice(0, 100) }) }}
+          />
+        </Column>
+        <Column lg={3}>
+          <TextInput
+            type='text'
+            id='stackPaneLabel'
+            placeholder='Optional'
+            value={stack.panelLabel ?? ''}
+            labelText='Stack Panel Label'
+            helperText='This is what will be displayed on panels, if left blank the stack name will be used'
+            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value.slice(0, 12) }) }}
           />
         </Column>
         <Column>
@@ -182,14 +201,13 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
       </Row><br/>
       <Row>
         <Column>
-          <TextInput
-            type='text'
-            id='stackPaneLabel'
-            placeholder='Optional'
-            value={stack.panelLabel ?? ''}
-            labelText='Stack Panel Label'
-            helperText='This is what will be displayed on panels, if left blank the stack name will be used'
-            onChange={(e) => { setStack({ ...stack, panelLabel: e.target.value.slice(0, 12) }) }}
+          <MultiSelect
+            id='stackTags'
+            label={stack.tags?.length > 0 ? stack.tags.length === 1 ? stack.tags[0]?.label : `${stack.tags?.[0]?.label} + ${stack.tags?.length - 1} others` : 'Select Tags'}
+            titleText='Stack Tags'
+            initialSelectedItems={stack.tags || []}
+            items={tags}
+            onChange={(e) => { setStack({ ...stack, tags: e.selectedItems }) }}
           />
         </Column>
         <Column>
@@ -199,7 +217,7 @@ const Stack = ({ id, _stack, providers, devices, stackPanelColours }) => {
             titleText='Panel Colour'
             placeholder='Colour'
             helperText='This is the background colour for this stack when shown on a Panel'
-            items={stackPanelColours}
+            items={globalColours}
             selectedItem={stack.colour}
             onChange={(e) => { setStack({ ...stack, colour: e.selectedItem}) }}
           />
@@ -270,7 +288,9 @@ Stack.propTypes = {
   id: PropTypes.string,
   _stack: PropTypes.object,
   providers: PropTypes.array,
-  devices: PropTypes.array
+  devices: PropTypes.array,
+  globalColours: PropTypes.array,
+  tags: PropTypes.array
 }
 
 export default Stack

@@ -5,7 +5,8 @@ import {
   GraphQLInt
 } from 'graphql'
 import GraphQLJSON from 'graphql-type-json'
-import stackPanelColourInputType from './stackPanelColourInputType'
+import globalColourInputType from '../coreTypes/globalColourInputType'
+import tagInputType from '../tagTypes/tagInputType'
 
 const actionInputType = new GraphQLInputObjectType({
   name: 'stackActionInputType',
@@ -87,6 +88,9 @@ const stackUpdateInputType = new GraphQLInputObjectType({
     description: {
       type: GraphQLString
     },
+    tags: {
+      type: new GraphQLList(GraphQLString)
+    },
     realm: {
       type: GraphQLString
     },
@@ -94,7 +98,7 @@ const stackUpdateInputType = new GraphQLInputObjectType({
       type: GraphQLString
     },
     colour: {
-      type: stackPanelColourInputType
+      type: globalColourInputType
     },
     actions: {
       type: new GraphQLList(
