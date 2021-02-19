@@ -1,10 +1,10 @@
-import { bridges } from '../../bridges'
-import { logs } from '../../utils/log'
-import { providers } from '../../providers'
-import { deviceInstance } from '../../devices'
-import { cores, devices, stacks, panels, controllers, tags } from '../../db'
-import { controllerLayouts } from '../../controllers'
-import { stackResolvers } from '../../stacks'
+import { bridgeResolvers } from '../../bridges/bridgeResolvers'
+import { controllerResolvers } from '../../controllers/controllerResolvers'
+import { deviceResolvers } from '../../devices/deviceResolvers'
+import { stackResolvers } from '../../stacks/stackResolvers'
+import { panelResolvers } from '../../panels/panelResolvers'
+import { coreResolvers } from '../../coreResolvers'
+import { tagResolvers } from '../../tags/tagResolvers'
 
 import {
   GraphQLObjectType,
@@ -38,45 +38,28 @@ const queries = new GraphQLObjectType({
       type: new GraphQLList(
         GraphQLString
       ),
-      resolve: () => {
-        return ['success', 'All Systems Go', 'Director is operating as intended and is not reporting any errors.']
-      }
+      resolve: coreResolvers.statusQueryResolver
     },
 
     thisCore: {
       name: 'thisCore',
       description: 'Return this cores',
       type: coreType,
-      resolve: () => ({ id: process.env.DIRECTOR_CORE_ID, label: process.env.DIRECTOR_CORE_LABEL, timezone: process.env.TZ })
+      resolve: coreResolvers.thisCoreQueryResolver
     },
 
     cores: {
       name: 'cores',
       description: 'Return cores',
       type: new GraphQLList(coreType),
-      resolve: async () => {
-        return await cores.find({}).toArray()
-      }
+      resolve: coreResolvers.coresQueryResolver
     },
 
     realms: {
       name: 'realmsQuery',
       description: 'Return realms',
       type: new GraphQLList(realmType),
-      resolve: () => new Promise((resolve, reject) => {
-        const realmsArray = []
-        cores.find({}).each((err, core) => {
-          if (err) {
-            reject(err)
-          } else if (core == null) {
-            resolve(realmsArray)
-          } else {
-            core.realms.map((realm, realmIndex) => {
-              realmsArray.push({ ...realm, coreID: core.id, coreLabel: core.label })
-            })
-          }
-        })
-      })
+      resolve: coreResolvers.realmsQueryResolver
     },
 
     realm: {
@@ -87,26 +70,21 @@ const queries = new GraphQLObjectType({
         realm: { type: GraphQLString },
         core: { type: GraphQLString }
       },
-      resolve: async (parent, args) => {
-        const core = await cores.findOne({ id: args.core, 'realms.id': args.realm })
-        return core.realms.find(realm => realm.id === args.realm)
-      }
+      resolve: coreResolvers.realmQueryResolver
     },
 
     logs: {
       name: 'Get Logs',
       description: 'Returns an array of logs from the core',
       type: new GraphQLList(logType),
-      resolve: () => { return logs }
+      resolve: coreResolvers.logsQueryResolver
     },
 
     providers: {
       name: 'Get Communication Providers',
       description: 'Returns all available communication providers, the backend of a device and what defines available actions',
       type: new GraphQLList(providerType),
-      resolve: () => {
-        return providers
-      }
+      resolve: coreResolvers.providersQueryResolver
     },
 
     devices: {
@@ -121,13 +99,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: async (p, args) => {
-        const realmFilter = args.realm ? { realm: args.realm } : {}
-        const coreFilter = args.core ? { core: args.core } : {}
-        const devicesArray = await devices.find({ ...realmFilter, ...coreFilter }).toArray()
-        const coresArray = args.realm === 'ROOT' ? [] : await devices.find({ 'provider.id': 'ProtocolProviderBorealDirector' }).toArray()
-        return [...devicesArray.map(device => ({ ...device, provider: providers.find(provider => provider.id === device.provider.id) })), ...coresArray]
-      }
+      resolve: deviceResolvers.devicesQueryResolver
     },
 
     device: {
@@ -137,10 +109,7 @@ const queries = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: async (parent, args) => {
-        const device = await devices.findOne({ id: args.id })
-        return { ...device, provider: providers.find(provider => provider.id === device.provider.id) }
-      }
+      resolve: deviceResolvers.deviceQueryResolver
     },
 
     deviceFunctions: {
@@ -158,12 +127,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (p, args) => {
-        if (deviceInstance[args.id]) {
-          if (typeof deviceInstance[args.id].providerFunctions === 'function') return deviceInstance[args.id].providerFunctions(args)
-          else return deviceInstance[args.id].providerFunctions
-        } else return []
-      }
+      resolve: deviceResolvers.deviceFunctionsQueryResolver
     },
 
     stacks: {
@@ -197,17 +161,7 @@ const queries = new GraphQLObjectType({
       name: 'globalColours',
       description: 'All possible colours',
       type: new GraphQLList(globalColourType),
-      resolve: () => [
-        { id: '#da1e28', label: 'Red' },
-        { id: '#D96120', label: 'Orange'},
-        { id: '#C6A324', label: 'Yellow' },
-        { id: '#24a148', label: 'Green' },
-        { id: '#1a8978', label: 'Cyan'},
-        { id: '#0043ce', label: 'Blue' },
-        { id: '#AB20D9', label: 'Purple'},
-        { id: '#D920B4', label: 'Pink'},
-        { id: '#000000', label: 'Black'}
-      ]
+      resolve: coreResolvers.globalColoursQueryResolver
     },
 
     tags: {
@@ -222,11 +176,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: async (p, args) => {
-        const realmFilter = args.realm ? { realm: args.realm } : {}
-        const coreFilter = args.core ? { core: args.core } : {}
-        return await tags.find({ ...realmFilter, ...coreFilter }).toArray()
-      }
+      resolve: tagResolvers.tagsQueryResolver
     },
 
     panels: {
@@ -241,11 +191,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: async (p, args) => {
-        const realmFilter = args.realm ? { realm: args.realm } : {}
-        const coreFilter = args.core ? { core: args.core } : {}
-        return await panels.find({ ...realmFilter, ...coreFilter }).toArray()
-      }
+      resolve: panelResolvers.panelsQuery
     },
 
     panel: {
@@ -255,27 +201,21 @@ const queries = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          panels.findOne({ id: args.id })
-            .then(panel => resolve(panel))
-            .catch(e => reject(e))
-        })
-      }
+      resolve: panelResolvers.panelQuery
     },
 
     getBridges: {
       name: 'Get Bridges',
       description: 'Returns all connected bridges',
       type: new GraphQLList(bridgeType),
-      resolve: () => { return bridges }
+      resolve: bridgeResolvers.getBridgesQueryResolver
     },
 
     controllerLayouts: {
       name: 'Get Controller Layouts',
       description: 'Returns an array of controller layouts',
       type: new GraphQLList(controllerLayoutType),
-      resolve: () => { return controllerLayouts }
+      resolve: controllerResolvers.controllerLayoutsQueryResolver
     },
 
     controllers: {
@@ -290,11 +230,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: async (p, args) => {
-        const realmFilter = args.realm ? { realm: args.realm } : {}
-        const coreFilter = args.core ? { core: args.core } : {}
-        return await controllers.find({ ...realmFilter, ...coreFilter }).toArray()
-      }
+      resolve: controllerResolvers.controllersQueryResolver
     },
 
     controller: {
@@ -306,13 +242,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          controllers.findOne({ id: args.id })
-            .then(panel => resolve(panel))
-            .catch(e => reject(e))
-        })
-      }
+      resolve: controllerResolvers.controllerQueryResolver
     },
 
     dependents: {
@@ -352,54 +282,7 @@ const queries = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          const resolveArray = []
-          switch (args.type) {
-            case 'device':
-              stacks.find({ actions: { $elemMatch: { 'device.id': args.id } } }).each((err, stack) => {
-                if (err) {
-                  reject(err)
-                } else if (stack == null) {
-                  resolve({ count: resolveArray.length, list: resolveArray })
-                } else {
-                  resolveArray.push({ id: stack.id, label: stack.label, itemType: 'stack' })
-                }
-              })
-              break
-            case 'stack':
-              panels.find({ buttons: { $elemMatch: { $elemMatch: { 'stack.id': args.id } } } }).each((err, panel) => {
-                if (err) {
-                  reject(err)
-                } else if (panel == null) {
-                  stacks.find({ actions: { $elemMatch: { parameters: { $elemMatch: { id: 'stack', 'value.id': args.id } } } } }).each((err, stack) => {
-                    if (err) {
-                      reject(err)
-                    } else if (stack == null) {
-                      resolve({ count: resolveArray.length, list: resolveArray })
-                    } else {
-                      resolveArray.push({ id: stack.id, label: stack.label, itemType: 'stack' })
-                    }
-                  })
-                } else {
-                  resolveArray.push({ id: panel.id, label: panel.label, itemType: 'panel' })
-                }
-              })
-              break
-            case 'panel':
-              controllers.find({ 'panel.id': args.id }).each((err, controller) => {
-                if (err) {
-                  reject(err)
-                } else if (controller == null) {
-                  resolve({ count: resolveArray.length, list: resolveArray })
-                } else {
-                  resolveArray.push({ id: controller.id, label: controller.label, itemType: 'controller' })
-                }
-              })
-              break
-          }
-        })
-      }
+      resolve: coreResolvers.dependentsQueryResolver
     }
   }
 })

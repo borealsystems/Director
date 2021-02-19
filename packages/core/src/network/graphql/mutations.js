@@ -1,10 +1,10 @@
-import { registerBridge } from '../../bridges'
-import { updateController, deleteController } from '../../controllers'
-import { updateDevice, deleteDevice, disableDevice, enableDevice } from '../../devices'
-import { updatePanel, deletePanel } from '../../panels'
-import { updateStack, duplicateStack, deleteStack, executeStack, executeAction } from '../../stacks'
-import { updateTag, deleteTag } from '../../tags'
-import { controllers, cores, devices, panels, stacks } from '../../db'
+import { bridgeResolvers } from '../../bridges/bridgeResolvers'
+import { controllerResolvers } from '../../controllers/controllerResolvers'
+import { deviceResolvers } from '../../devices/deviceResolvers'
+import { stackResolvers } from '../../stacks/stackResolvers'
+import { panelResolvers } from '../../panels/panelResolvers'
+import { coreResolvers } from '../../coreResolvers'
+import { tagResolvers } from '../../tags/tagResolvers'
 
 import {
   GraphQLObjectType,
@@ -26,8 +26,6 @@ import stackType from './stackTypes/stackType.js'
 import stackUpdateInputType, { actionInputType } from './stackTypes/stackUpdateInputType'
 import tagType from './tagTypes/tagType'
 import tagInputType from './tagTypes/tagInputType'
-import STATUS from '../../utils/statusEnum'
-import log from '../../utils/log'
 
 const mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -41,9 +39,7 @@ const mutations = new GraphQLObjectType({
           type: deviceUpdateInputType
         }
       },
-      resolve: (parent, args) => {
-        return updateDevice(args.device)
-      }
+      resolve: deviceResolvers.deviceMutationResolver
     },
 
     deleteDevice: {
@@ -51,9 +47,7 @@ const mutations = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: (parent, args) => {
-        return deleteDevice(args.id)
-      }
+      resolve: deviceResolvers.deleteDeviceMutationResolver
     },
 
     disableDevice: {
@@ -62,9 +56,7 @@ const mutations = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: (parent, args) => {
-        return disableDevice(args.id)
-      }
+      resolve: deviceResolvers.disableDeviceMutationResolver
     },
 
     enableDevice: {
@@ -73,9 +65,7 @@ const mutations = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: (parent, args) => {
-        return enableDevice(args.id)
-      }
+      resolve: deviceResolvers.enableDeviceMutationResolver
     },
 
     updateStack: {
@@ -87,9 +77,7 @@ const mutations = new GraphQLObjectType({
           type: stackUpdateInputType
         }
       },
-      resolve: (parent, args) => {
-        return updateStack(args.stack)
-      }
+      resolve: stackResolvers.updateStackMutationResolver
     },
 
     duplicateStack: {
@@ -101,7 +89,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => duplicateStack(args.id)
+      resolve: stackResolvers.duplicateStackMutationResolver
     },
 
     deleteStack: {
@@ -113,9 +101,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return deleteStack(args.id)
-      }
+      resolve: stackResolvers.deleteStackMutationResolver
     },
 
     executeStack: {
@@ -130,9 +116,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (p, args) => {
-        return executeStack(args.id, args.controller)
-      }
+      resolve: stackResolvers.executeStackMutationResolver
     },
 
     executeAction: {
@@ -144,7 +128,7 @@ const mutations = new GraphQLObjectType({
           type: actionInputType
         }
       },
-      resolve: (p, args) => executeAction(args.action)
+      resolve: stackResolvers.executeActionMutationResolver
     },
 
     updatePanel: {
@@ -156,9 +140,7 @@ const mutations = new GraphQLObjectType({
           type: panelUpdateInputType
         }
       },
-      resolve: (parent, args) => {
-        return updatePanel(args.panel)
-      }
+      resolve: panelResolvers.panelMutationResolver
     },
 
     deletePanel: {
@@ -170,9 +152,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return deletePanel(args.id)
-      }
+      resolve: panelResolvers.deletePanelMutationResolver
     },
 
     updateBridge: {
@@ -184,13 +164,7 @@ const mutations = new GraphQLObjectType({
           type: bridgeUpdateInputType
         }
       },
-      resolve: (parent, args, context, info) => {
-        var clientIP = context.req.headers['x-forwarded-for'] || context.req.connection.remoteAddress
-        if (clientIP.substr(0, 7) === '::ffff:') {
-          clientIP = clientIP.substr(7)
-        }
-        return registerBridge({ ...args.bridge, address: clientIP })
-      }
+      resolve: bridgeResolvers.updateBridgeMutationResolver
     },
 
     controller: {
@@ -202,9 +176,7 @@ const mutations = new GraphQLObjectType({
           type: controllerInputType
         }
       },
-      resolve: (parent, args) => {
-        return updateController(args.controller)
-      }
+      resolve: controllerResolvers.controllerMutationResolver
     },
 
     deleteController: {
@@ -216,9 +188,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return deleteController(args.id)
-      }
+      resolve: controllerResolvers.deleteControllerMutationResolver
     },
 
     core: {
@@ -230,17 +200,7 @@ const mutations = new GraphQLObjectType({
           type: coreInputType
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          cores.updateOne({ id: args.core.id }, { $set: args.core })
-            .then(() => {
-              return cores.findOne({ id: args.core.id })
-            })
-            .then(core => {
-              resolve(core)
-            })
-        })
-      }
+      resolve: coreResolvers.coreMutationResolver
     },
 
     createRealm: {
@@ -252,18 +212,7 @@ const mutations = new GraphQLObjectType({
           type: realmInputType
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          cores.updateOne(
-            { id: args.realm.coreID },
-            { $addToSet: { realms: { id: args.realm.id, label: args.realm.label, description: args.realm.description, notes: args.realm.notes } } }
-          )
-            .then(() => {
-              log('info', 'core/network/graphql', `Created Realm ${args.realm.id} (${args.realm.label})`)
-              resolve(STATUS.OK)
-            })
-        })
-      }
+      resolve: coreResolvers.createRealmMutationResolver
     },
 
     updateRealm: {
@@ -275,18 +224,7 @@ const mutations = new GraphQLObjectType({
           type: realmInputType
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          cores.updateOne(
-            { id: args.realm.coreID, 'realms.id': args.realm.id },
-            { $set: { 'realms.$': { ...args.realm } } }
-          )
-            .then(() => {
-              log('info', 'core/network/graphql', `Updated Realm ${args.realm.id} (${args.realm.label})`)
-              resolve(STATUS.OK)
-            })
-        })
-      }
+      resolve: coreResolvers.updateRealmMutationResolver
     },
 
     deleteRealm: {
@@ -298,22 +236,7 @@ const mutations = new GraphQLObjectType({
           type: realmInputType
         }
       },
-      resolve: (parent, args) => {
-        return new Promise((resolve, reject) => {
-          devices.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
-          stacks.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
-          panels.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
-          controllers.updateMany({ core: process.env.DIRECTOR_CORE_ID, realm: args.realm.id }, { $set: { realm: 'ROOT' } })
-          cores.updateOne(
-            { id: args.realm.coreID },
-            { $pull: { realms: { id: args.realm.id } } }
-          )
-            .then(() => {
-              log('info', 'core/network/graphql', `Deleted Realm ${args.realm.id}`)
-              resolve(STATUS.OK)
-            })
-        })
-      }
+      resolve: coreResolvers.deleteRealmMutationResolver
     },
 
     updateTag: {
@@ -325,9 +248,7 @@ const mutations = new GraphQLObjectType({
           type: tagInputType
         }
       },
-      resolve: (parent, args) => {
-        return updateTag(args.tag)
-      }
+      resolve: tagResolvers.updateTagMutationResolver
     },
 
     deleteTag: {
@@ -339,9 +260,7 @@ const mutations = new GraphQLObjectType({
           type: GraphQLString
         }
       },
-      resolve: (parent, args) => {
-        return deleteTag(args.id)
-      }
+      resolve: tagResolvers.deleteTagMutationResolver
     }
   }
 })

@@ -1,13 +1,7 @@
-import { pubsub } from '../network/graphql/schema'
-// eslint-disable-next-line no-unused-vars
-import { cores, devices, stacks, panels, controllers } from '../db'
+import { stacks, panels, controllers } from '../db'
 import log from './log'
 import { omit } from 'lodash'
-import { publishControllerUpdate } from '../controllers'
-
-const deviceWaterfall = (device, isDelete) => {
-  log('error', 'core/utils/waterfall', 'Device Waterfall not yet implemented')
-}
+import { publishControllerUpdate } from "../controllers"
 
 const stackWaterfall = (stack, isDelete) => {
   if (isDelete) {
@@ -123,4 +117,4 @@ const panelWaterfall = async (panel, isDelete) => {
   }
 }
 
-export { deviceWaterfall, stackWaterfall, panelWaterfall }
+export { stackWaterfall, panelWaterfall }

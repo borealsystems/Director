@@ -1,6 +1,6 @@
 // import db from '../db'
 import log from '../utils/log'
-import { registerController } from '../controllers'
+import { registerController } from "../controllers/registerController"
 import { uniqBy } from 'lodash'
 
 let bridges = []

@@ -109,5 +109,4 @@ const executeAction = _action => new Promise(resolve => {
   resolve(status.OK)
 })
 
-import stackResolvers from './resolvers'
-export { updateStack, duplicateStack, deleteStack, stacks, executeStack, executeAction, stackResolvers }
+export { updateStack, duplicateStack, deleteStack, stacks, executeStack, executeAction }

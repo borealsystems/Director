@@ -1,6 +1,7 @@
 import { devices, stacks, tags } from '../db'
+import { updateStack, duplicateStack, deleteStack, executeStack, executeAction} from '.'
 
-const resolvers = {
+const stackResolvers = {
   stacksQuery: (p, args) => new Promise((resolve, reject) => {
     const realmFilter = args.realm ? { realm: args.realm } : {}
     const coreFilter = args.core ? { core: args.core } : {}
@@ -40,7 +41,13 @@ const resolvers = {
         }))
         .catch(e => reject(e))
     })
-  }
+  },
+
+  updateStackMutationResolver: (parent, args) => updateStack(args.stack),
+  duplicateStackMutationResolver: (parent, args) => duplicateStack(args.id),
+  deleteStackMutationResolver: (parent, args) => deleteStack(args.id),
+  executeStackMutationResolver: (parent, args) => executeStack(args.id, args.controller),
+  executeActionMutationResolver: (parent, args) => executeAction(args.action)
 }
 
-export default resolvers
+export { stackResolvers }

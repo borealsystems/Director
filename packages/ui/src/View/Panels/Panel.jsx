@@ -28,7 +28,14 @@ const Panel = ({ id, result }) => {
 
   const updatePanel = () => {
     setIsLoading(true)
-    const stackUpdateObject = { panel: { ...omit(panel, 'currentButton'), realm: contextRealm.id, core: contextRealm.coreID } }
+    const stackUpdateObject = {
+      panel: {
+        ...omit(panel, 'currentButton'),
+        realm: contextRealm.id,
+        core: contextRealm.coreID,
+        // buttons: panel.buttons.map(row => row.map(button => button.stack = { id: button.stack.id }))
+      }
+    }
     panelUpdateMutation(stackUpdateObject)
       .then(result => {
         if (result.data) {
