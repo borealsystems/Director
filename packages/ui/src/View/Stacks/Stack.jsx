@@ -45,7 +45,7 @@ const Stack = ({ id, _stack, providers, devices, globalColours, tags }) => {
         actions: actionsStripped,
         realm: contextRealm.id,
         core: contextRealm.coreID,
-        tags: stack.tags.map(tag => tag.id)
+        tags: stack.tags?.map(tag => tag.id)
       } 
     }
     stackUpdateMutation(stackUpdateObject).then(history.push({ pathname: `/cores/${contextRealm.coreID}/realms/${contextRealm.id}/config/stacks` }))
