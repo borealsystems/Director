@@ -1,3 +1,4 @@
+import { tags } from '../db'
 import { updateTag, deleteTag } from '.'
 
 const tagResolvers = {
@@ -6,7 +7,7 @@ const tagResolvers = {
     const coreFilter = args.core ? { core: args.core } : {}
     return await tags.find({ ...realmFilter, ...coreFilter }).toArray()
   },
-  
+
   updateTagMutationResolver: (parent, args) => updateTag(args.tag),
   deleteTagMutationResolver: (parent, args) => deleteTag(args.id)
 }

@@ -1,3 +1,4 @@
+import { devices } from '../db'
 import { updateDevice, deleteDevice, disableDevice, enableDevice, deviceInstance } from '.'
 import { providers } from '../providers'
 

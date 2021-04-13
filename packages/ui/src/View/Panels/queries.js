@@ -44,6 +44,18 @@ const existingPanelGQL = `query panel($id: String, $realm: String, $core: String
     label
     panelLabel
     description
+    tags {
+      id
+      label
+      colour {
+        id
+        label
+      }
+    }
+    colour {
+      id
+      label
+    }
   }
   panel(id: $id) {
     id
@@ -67,6 +79,18 @@ const existingPanelGQL = `query panel($id: String, $realm: String, $core: String
         label
         panelLabel
         description
+        tags {
+          id
+          label
+          colour {
+            id
+            label
+          }
+        }
+        colour {
+          id
+          label
+        }
       }
     }
   }
@@ -84,6 +108,18 @@ const newPanelGQL = `query panels($realm: String, $core: String) {
     label
     panelLabel
     description
+    tags {
+      id
+      label
+      colour {
+        id
+        label
+      }
+    }
+    colour {
+      id
+      label
+    }
   }
   controllerLayouts {
     id
