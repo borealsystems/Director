@@ -17,6 +17,18 @@ const ActionParameter = ({parameter, getParameterValue, setParameter}) => (
           />
         </Column>
       }
+      { parameter.inputType === 'textAreaInput' &&
+        <Column>
+          <TextArea
+            ariaLabel='TextAreaInput'
+            id={`newDeviceParameter${parameter.id}`}
+            placeholder={parameter.placeholder}
+            value={getParameterValue(parameter.id)}
+            onChange={(e) => { setParameter(e.target.value, parameter.id) }}
+            labelText={parameter.label}
+          />
+        </Column>
+      }
       { parameter.inputType === 'comboBox' &&
         <Column>
           <ComboBox
@@ -43,7 +55,7 @@ const ActionParameter = ({parameter, getParameterValue, setParameter}) => (
             onChange={e => !isNaN(e.imaginaryTarget.valueAsNumber) && setParameter(e.imaginaryTarget.valueAsNumber, parameter.id)}
             {...() => (parameter.min && { min: parameter.min })}
             {...() => (parameter.max && { max: parameter.max })}
-          />
+            />
         </Column>
       }
       { parameter.inputType === 'multiSelect' &&

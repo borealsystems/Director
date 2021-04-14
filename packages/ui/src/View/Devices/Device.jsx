@@ -3,6 +3,7 @@ import {
   Button,
   ButtonSet,
   TextInput,
+  TextArea,
   Form,
   FormGroup,
   ProgressIndicator,
@@ -254,6 +255,18 @@ const Device = ({ id, result }) => {
                               />
                             </Column>
                           }
+                          { item.inputType === 'textAreaInput' &&
+                            <Column>
+                              <TextArea
+                                ariaLabel='TextAreaInput'
+                                id={`newDeviceParameter${item.id}`}
+                                placeholder={item.placeholder}
+                                value={configuration[item.id] ? configuration[item.id].value : (device.provider?.defaults?.[index] ?? '')}
+                                onChange={(e) => { setConfiguration({ ...configuration, [item.id]: { id: item.id, value: e.target.value } }) }}
+                                labelText={item.label}
+                              />
+                            </Column>
+                          }
                           { item.inputType === 'numberInput' &&
                             <Column>
                               <NumberInput
@@ -282,7 +295,7 @@ const Device = ({ id, result }) => {
                               />
                             </Column>
                           }
-                          { (item.inputType !== 'textInput' && item.inputType !== 'numberInput' && item.inputType !== 'comboBox') &&
+                          { (item.inputType !== 'textInput' && item.inputType !== 'textAreaInput' && item.inputType !== 'numberInput' && item.inputType !== 'comboBox') &&
                             <Column>
                               This Provider has input types ({item.id}: {item.inputType ?? 'null'}) this version of Core cannot configure, please open an issue for this provider.
                             </Column>
