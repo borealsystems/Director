@@ -1,6 +1,6 @@
 {
   "name": "core",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "The core application for the Boreal Director orchestation suite",
   "main": "index.js",
   "repository": "https://github.com/borealsystems/Director",
