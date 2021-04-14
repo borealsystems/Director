@@ -7596,6 +7596,11 @@ nicely-format@^1.1.0:
     ansi-styles "^2.2.1"
     esutils "^2.0.2"
 
+nkips@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/nkips/-/nkips-1.1.2.tgz#5f3f0bda7744b56b5c6b68f1b81e7e7aa1797452"
+  integrity sha512-44PF+nmygxkxGiSThGoqIorY0fdv9jhTWxSolyGMOhwO/6NJjQF21o2hZMthVFtIBqOKRLtsPLjgSPSIp1y1Vw==
+
 node-abi@^2.19.3, node-abi@^2.7.0:
   version "2.19.3"
   resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.19.3.tgz#252f5dcab12dad1b5503b2d27eddd4733930282d"
