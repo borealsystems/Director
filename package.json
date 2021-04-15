@@ -2,7 +2,7 @@
   "name": "borealdirector",
   "version": "0.0.0-alpha",
   "repository": "https://github.com/borealsystems/Director.git",
-  "author": "Oliver Herrmann <oliver@monoxane.io>",
+  "author": "Oliver Herrmann <oliver@boreal.systems>",
   "license": "MIT",
   "private": true,
   "workspaces": [
