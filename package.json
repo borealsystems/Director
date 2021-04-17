@@ -3,7 +3,7 @@
   "version": "0.0.0-alpha",
   "repository": "https://github.com/borealsystems/Director.git",
   "author": "Oliver Herrmann <oliver@boreal.systems>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "private": true,
   "workspaces": [
     "packages/*",

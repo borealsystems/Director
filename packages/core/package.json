@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/borealsystems/Director",
   "author": "Oliver Herrmann",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "babel src -d dist",
     "prod": "node dist/main.js",

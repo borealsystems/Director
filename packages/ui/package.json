@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "repository": "https://github.com/borealsystems/Director",
   "author": "Oliver Herrmann",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "webpack --mode production src",
     "analyze": "source-map-explorer 'dist/*.js'",

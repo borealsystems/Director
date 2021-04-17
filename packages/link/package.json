@@ -6,7 +6,7 @@
   "bin": "build/link.js",
   "repository": "https://github.com/borealsystems/Director",
   "author": "Oliver Herrmann",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "release": "yarn workspace link run webpack && yarn workspace link run build && yarn workspace link run package && yarn workspace link run copy-builds && rm -rf build",
     "copy-builds": "sh copy-builds.sh",
