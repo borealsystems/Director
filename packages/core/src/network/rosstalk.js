@@ -17,8 +17,9 @@ const initRossTalk = () => new Promise(resolve => {
 
   server.on('connection', (socket) => {
     socket.on('data', (chunk) => {
+      console.log(chunk.toString())
       const match = chunk.toString().match(/(GPI [A-z,0-9]{9})/g)
-      if (match.length > 0) {
+      if (match?.[0]) {
         executeStack(match[0].slice(4), 'RossTalk')
       }
     })
