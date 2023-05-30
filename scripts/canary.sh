@@ -173,7 +173,7 @@ fi
 # cloning the git repo
 echo ""
 echo -e "${BOLD}Cloning the git repository${NC}"
-git clone --recursive https://phabricator.boreal.systems/source/Director.git Director
+git clone --recursive https://github.com/borealsystems/Director.git Director
 cd Director
 echo ""
 
@@ -186,5 +186,4 @@ echo ""
 echo -e "${BOLD}Starting Director${NC}"
 docker-compose -f docker-compose.canary.yml up -d
 
-# cheeky credits
-# script by https://phabricator.boreal.systems/p/chef/
+# https://github.com/sgtbradley
